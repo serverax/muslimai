@@ -28,10 +28,6 @@ impl Guardrails {
         }
     }
 
-    pub fn threshold(&self) -> f32 {
-        self.similarity_threshold
-    }
-
     /// Pure decision: does the top similarity score clear the threshold?
     pub fn evaluate_score(&self, top_score: f32) -> GuardrailResult {
         if top_score < self.similarity_threshold {
