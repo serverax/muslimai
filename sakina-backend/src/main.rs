@@ -52,6 +52,14 @@ async fn main() -> std::io::Result<()> {
     let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
     let citations = std::sync::Arc::new(services::CitationEngine::new(pool.clone()));
 
+    // Background worker: drain the outbox (marks chunk_indexed events Sent).
+    let relay = services::OutboxRelay::new(pool.clone());
+    tokio::spawn(async move {
+        if let Err(e) = relay.relay_events().await {
+            tracing::error!("outbox relay stopped: {}", e);
+        }
+    });
+
     // Start HTTP server
     info!("Starting HTTP server on 0.0.0.0:8080");
 
