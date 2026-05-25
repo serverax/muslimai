@@ -7,6 +7,7 @@ mod handlers;
 mod models;
 mod services;
 mod middleware;
+mod error;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -46,12 +47,20 @@ async fn main() -> std::io::Result<()> {
 
     info!("Connected to PostgreSQL");
 
+    // Phase 1 services — wired into handlers via app_data.
+    let router = std::sync::Arc::new(services::SemanticRouter::new());
+    let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
+    let citations = std::sync::Arc::new(services::CitationEngine::new(pool.clone()));
+
     // Start HTTP server
     info!("Starting HTTP server on 0.0.0.0:8080");
 
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))
+            .app_data(web::Data::new(router.clone()))
+            .app_data(web::Data::new(guardrails.clone()))
+            .app_data(web::Data::new(citations.clone()))
             .wrap(Logger::default())
             .wrap(crate::middleware::AuditMiddleware)
             .service(
