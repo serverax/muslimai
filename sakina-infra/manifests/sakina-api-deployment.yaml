@@ -1,0 +1,146 @@
+# Project Sakina API Deployment & Service
+# CPU-only, 3 replicas, liveness probe on /v1/health
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-api
+  namespace: sakina-api
+  labels:
+    app: sakina-api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: sakina-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-api
+  namespace: sakina-api
+  labels:
+    app: sakina-api
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: sakina-api
+  template:
+    metadata:
+      labels:
+        app: sakina-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: sakina-api
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: api
+        image: sakina-backend-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        env:
+        - name: RUST_LOG
+          value: "sakina_backend=info,actix_web=info"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: connection-string
+        - name: QDRANT_URL
+          value: "http://qdrant.sakina-data.svc.cluster.local:6333"
+        - name: BRAND_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: sakina-brand-config
+              key: BRAND_NAME
+        - name: BRAND_TAGLINE
+          valueFrom:
+            configMapKeyRef:
+              name: sakina-brand-config
+              key: BRAND_TAGLINE
+        livenessProbe:
+          httpGet:
+            path: /v1/health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /v1/health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      nodeSelector:
+        kubernetes.io/os: linux
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - sakina-api
+              topologyKey: kubernetes.io/hostname
+---
+# ServiceAccount for the API
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sakina-api
+  namespace: sakina-api
+---
+# Secret for database credentials
+# In actual deployment, use sealed-secrets or external-secrets
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-credentials
+  namespace: sakina-api
+type: Opaque
+stringData:
+  connection-string: "postgres://sakina_user:sakina_password@postgres.sakina-data.svc.cluster.local:5432/sakina"

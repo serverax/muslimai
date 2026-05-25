@@ -1,0 +1,54 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - 'sakina-backend/**'
+      - '.github/workflows/backend-ci.yml'
+  pull_request:
+    paths:
+      - 'sakina-backend/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: sakina_test
+          POSTGRES_USER: sakina_user
+          POSTGRES_PASSWORD: sakina_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Run tests
+        run: |
+          cd sakina-backend
+          cargo test --verbose
+
+      - name: Check formatting
+        run: |
+          cd sakina-backend
+          cargo fmt -- --check
+
+      - name: Run clippy
+        run: |
+          cd sakina-backend
+          cargo clippy -- -D warnings
+
+      - name: Build Docker image
+        run: |
+          cd sakina-backend
+          docker build -f Dockerfile.api -t sakina-backend-api:latest .

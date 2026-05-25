@@ -1,0 +1,65 @@
+name: sakina_frontend
+description: "Project Sakina - Islamic AI Mobile App"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.16.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.4.0
+  riverpod_annotation: ^2.3.0
+
+  # Local storage
+  sqflite: ^2.3.0
+  path: ^1.8.3
+
+  # Encryption
+  encrypt: ^5.0.0
+
+  # Networking
+  http: ^1.1.0
+
+  # Internationalization
+  intl: ^0.19.0
+
+  # UI/Material
+  flutter_localizations:
+    sdk: flutter
+
+  # JSON serialization
+  json_serializable: ^6.7.0
+  json_annotation: ^4.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.0
+  riverpod_generator: ^2.3.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/translations/
+
+  fonts:
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/Amiri-Regular.ttf
+        - asset: assets/fonts/Amiri-Bold.ttf
+          weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700

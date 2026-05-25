@@ -1,0 +1,46 @@
+# Dependencies
+target/
+dist/
+node_modules/
+.dart_tool/
+build/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.local
+*.key
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Kubernetes
+/manifests/*.yaml.bak
+kubeconfig
+
+# Node/npm
+package-lock.json
+yarn.lock
+
+# Cache
+.cargo/
+.flutter-cli/
+
+# Build artifacts
+*.apk
+*.ipa
+*.so

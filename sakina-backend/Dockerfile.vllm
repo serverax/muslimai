@@ -1,0 +1,17 @@
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y python3.11 python3-pip
+
+RUN pip install vllm torch transformers
+
+RUN huggingface-cli download tiiuae/Falcon-7B --local-dir ./models/falcon-7b
+
+EXPOSE 8000
+
+CMD ["python3", "-m", "vllm.entrypoints.openai.api_server", \
+     "--model", "./models/falcon-7b", \
+     "--quantization", "awq", \
+     "--gpu-memory-utilization", "0.90", \
+     "--max-model-len", "8192"]

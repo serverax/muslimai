@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: sakina
+      POSTGRES_USER: sakina_user
+      POSTGRES_PASSWORD: sakina_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../sakina-backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  vllm:
+    image: sakina-backend-vllm:latest
+    build:
+      context: ../sakina-backend
+      dockerfile: Dockerfile.vllm
+    ports:
+      - "8000:8000"
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+
+  api:
+    image: sakina-backend-api:latest
+    build:
+      context: ../sakina-backend
+      dockerfile: Dockerfile.api
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      LOG_LEVEL: info
+      BRAND_NAME: SAKINA
+      BRAND_TAGLINE: "Trustworthy. Private. Islamic."
+      BRAND_COLOR_PRIMARY: "#1B6B5E"
+      LOG_PREFIX: "[SAKINA]"
+    depends_on:
+      - postgres
+      - qdrant
+      - vllm
+
+volumes:
+  postgres-data:
+  qdrant-data:
