@@ -24,6 +24,10 @@ futures-util = "0.3"
 name = "sakina-api"
 path = "src/main.rs"
 
+[[bin]]
+name = "sakina-ingest"
+path = "src/bin/ingest.rs"
+
 [profile.release]
 opt-level = 3
 lto = true

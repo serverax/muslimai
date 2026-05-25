@@ -2,12 +2,7 @@ use actix_web::{web, App, HttpServer, middleware::Logger};
 use sqlx::postgres::PgPool;
 use tracing::info;
 
-mod brand;
-mod handlers;
-mod models;
-mod services;
-mod middleware;
-mod error;
+use sakina_backend::{brand, handlers, middleware, services};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -70,7 +65,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(guardrails.clone()))
             .app_data(web::Data::new(citations.clone()))
             .wrap(Logger::default())
-            .wrap(crate::middleware::AuditMiddleware)
+            .wrap(middleware::AuditMiddleware)
             .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
