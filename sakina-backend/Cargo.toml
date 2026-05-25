@@ -19,10 +19,11 @@ opentelemetry = "0.32.0"
 opentelemetry_sdk = "0.32.0"
 opentelemetry-stdout = "0.32.0"
 tracing-opentelemetry = "0.33.0"
-# NOTE: thiserror, anyhow, qdrant-client, tonic, prost, sha2 were removed to keep
-# the dependency tree compilable within this machine's memory. Re-add them per
-# Phase 1/2 when their code lands (qdrant-client for guardrails, etc.), ideally
-# building with `cargo check -j 2` to cap peak memory.
+reqwest = { version = "0.12", default-features = false, features = ["json"] }
+# NOTE: Qdrant is accessed via its REST API (reqwest, http) instead of the
+# qdrant-client gRPC crate, to avoid the tonic dependency tree / OOM. vLLM
+# embeddings also use reqwest. sha2 stays omitted (std-hasher placeholder); see
+# git history for the trimmed deps.
 
 [[bin]]
 name = "sakina-api"

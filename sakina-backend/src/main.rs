@@ -53,6 +53,15 @@ async fn main() -> std::io::Result<()> {
         }
     });
 
+    // RAG dependencies: Qdrant via REST + vLLM embeddings via HTTP (lazy — no
+    // connection until a request actually uses them).
+    let qdrant = web::Data::new(services::QdrantVectorDB::new(
+        "http://localhost:6333",
+        "verified_knowledge",
+    ));
+    let embeddings =
+        web::Data::new(services::EmbeddingsService::new("http://localhost:8000"));
+
     // Start HTTP server
     info!("Starting HTTP server on 0.0.0.0:8080");
 
@@ -62,6 +71,8 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(router.clone()))
             .app_data(web::Data::new(guardrails.clone()))
             .app_data(web::Data::new(citations.clone()))
+            .app_data(qdrant.clone())
+            .app_data(embeddings.clone())
             .wrap(Logger::default())
             .wrap(middleware::AuditMiddleware)
             .service(
