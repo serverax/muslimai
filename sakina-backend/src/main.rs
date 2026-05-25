@@ -1,6 +1,6 @@
 use actix_web::{web, App, HttpServer, middleware::Logger};
 use sqlx::postgres::PgPool;
-use log::info;
+use tracing::info;
 
 mod brand;
 mod handlers;
@@ -10,7 +10,9 @@ mod middleware;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::INFO)
+        .init();
 
     // Project Sakina brand banner (single source of truth: src/brand.rs)
     let (motto_en, motto_ar) = brand::get_brand_motto();
@@ -51,6 +53,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(pool.clone()))
             .wrap(Logger::default())
+            .wrap(crate::middleware::AuditMiddleware)
             .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))

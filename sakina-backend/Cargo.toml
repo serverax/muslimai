@@ -12,8 +12,9 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 uuid = { version = "1.6", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
-log = "0.4"
-env_logger = "0.11"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+futures-util = "0.3"
 # NOTE: thiserror, anyhow, qdrant-client, tonic, prost, sha2 were removed to keep
 # the dependency tree compilable within this machine's memory. Re-add them per
 # Phase 1/2 when their code lands (qdrant-client for guardrails, etc.), ideally
