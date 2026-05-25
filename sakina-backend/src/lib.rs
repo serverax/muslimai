@@ -4,6 +4,7 @@ pub mod models;
 pub mod services;
 pub mod middleware;
 pub mod error;
+pub mod telemetry;
 
 #[cfg(test)]
 mod tests {

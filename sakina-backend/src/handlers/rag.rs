@@ -6,6 +6,7 @@ use crate::error::ApiError;
 use crate::models::{RagQuery, RagResponse, SourceReference};
 use crate::services::{CitationEngine, Guardrails, SemanticRouter};
 
+#[tracing::instrument(skip_all)]
 pub async fn query_rag(
     router: web::Data<Arc<SemanticRouter>>,
     guardrails: web::Data<Arc<Guardrails>>,

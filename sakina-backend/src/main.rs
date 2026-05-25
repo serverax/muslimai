@@ -2,13 +2,11 @@ use actix_web::{web, App, HttpServer, middleware::Logger};
 use sqlx::postgres::PgPool;
 use tracing::info;
 
-use sakina_backend::{brand, handlers, middleware, services};
+use sakina_backend::{brand, handlers, middleware, services, telemetry};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
-        .init();
+    telemetry::init();
 
     // Project Sakina brand banner (single source of truth: src/brand.rs)
     let (motto_en, motto_ar) = brand::get_brand_motto();
