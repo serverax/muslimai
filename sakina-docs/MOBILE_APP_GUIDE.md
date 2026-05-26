@@ -69,6 +69,14 @@ flutter build appbundle --release --dart-define=SAKINA_API_BASE_URL=https://api.
 - Android and iOS platform scaffolds with app ID/bundle ID `com.sakinaai.app`,
   display name `SakinaAI`, branded launcher icons, and branded launch screens.
 
+## CI
+- `.github/workflows/frontend-ci.yml` runs `flutter pub get`,
+  `flutter analyze`, `flutter test`, Android debug APK build, and Android
+  release app bundle build.
+- CI uploads `sakinaai-debug-apk` and `sakinaai-release-aab` artifacts.
+- Store release signing still requires a CI-provided `android/key.properties`
+  file and keystore secret; do not commit signing keys.
+
 ## Publishing (procedure, not yet done)
 - **Google Play:** create a signed release (`key.properties` + keystore), `flutter build appbundle --release`, upload the `.aab` to the Play Console internal track.
 - **App Store:** archive in Xcode (or `flutter build ipa`), upload via Transporter/`xcrun altool`, submit through App Store Connect.

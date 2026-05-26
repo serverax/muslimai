@@ -1,4 +1,4 @@
-name: Frontend CI
+name: Mobile CI
 
 on:
   push:
@@ -8,32 +8,60 @@ on:
   pull_request:
     paths:
       - 'sakina-frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: stable
+  SAKINA_API_BASE_URL: https://api.sakinaapp.com
 
 jobs:
-  build:
+  verify-mobile:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sakina-frontend
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          channel: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Flutter version
+        run: flutter --version
 
       - name: Get dependencies
-        run: |
-          cd sakina-frontend
-          flutter pub get
+        run: flutter pub get
 
       - name: Analyze
-        run: |
-          cd sakina-frontend
-          flutter analyze
+        run: flutter analyze
 
       - name: Run tests
-        run: |
-          cd sakina-frontend
-          flutter test
+        run: flutter test
 
-      - name: Build APK
-        run: |
-          cd sakina-frontend
-          flutter build apk --release
+      - name: Build debug APK
+        run: >
+          flutter build apk --debug
+          --dart-define=SAKINA_API_BASE_URL=${{ env.SAKINA_API_BASE_URL }}
+
+      - name: Build release app bundle
+        run: >
+          flutter build appbundle --release
+          --dart-define=SAKINA_API_BASE_URL=${{ env.SAKINA_API_BASE_URL }}
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: sakinaai-debug-apk
+          path: sakina-frontend/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+
+      - name: Upload release app bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: sakinaai-release-aab
+          path: sakina-frontend/build/app/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
