@@ -4,7 +4,7 @@ import '../config/brand_config.dart';
 class BrandHeader extends StatelessWidget {
   final bool isArabic;
 
-  const BrandHeader({Key? key, this.isArabic = false}) : super(key: key);
+  const BrandHeader({super.key, this.isArabic = false});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,8 @@ class BrandHeader extends StatelessWidget {
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontFamily: isArabic ? SakinaBrand.fontArabic : SakinaBrand.fontEnglish,
+              fontFamily:
+                  isArabic ? SakinaBrand.fontArabic : SakinaBrand.fontEnglish,
             ),
           ),
           const SizedBox(height: 8),
@@ -41,7 +42,8 @@ class BrandHeader extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               color: Colors.white70,
-              fontFamily: isArabic ? SakinaBrand.fontArabic : SakinaBrand.fontEnglish,
+              fontFamily:
+                  isArabic ? SakinaBrand.fontArabic : SakinaBrand.fontEnglish,
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -54,7 +56,7 @@ class BrandHeader extends StatelessWidget {
 class BrandValuesList extends StatelessWidget {
   final bool isArabic;
 
-  const BrandValuesList({Key? key, this.isArabic = false}) : super(key: key);
+  const BrandValuesList({super.key, this.isArabic = false});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,10 @@ class BrandValuesList extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.check_circle, color: Color(SakinaBrand.colorPrimary)),
+                  const Icon(
+                    Icons.check_circle,
+                    color: Color(SakinaBrand.colorPrimary),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(

@@ -1,10 +1,10 @@
 # Mobile App Guide — Project Sakina (Flutter)
 
 > **Status (honest):** the Flutter app compiles (`flutter analyze` clean) and its
-> unit/widget tests pass on Flutter 3.44 / Dart 3.12. It has **not**
-> been built into an APK/IPA or run on a device/simulator in this environment
-> (no Android SDK, no device, and iOS builds require macOS). The steps below are
-> the build/publish *procedure*.
+> unit/widget tests pass on Flutter 3.44 / Dart 3.12. Android debug APK builds
+> successfully in this environment. It has **not** been run on a device/simulator,
+> signed for store release, or built for iOS (iOS builds require macOS). The
+> steps below are the build/publish procedure.
 
 ## Verify (works anywhere with the Flutter SDK)
 ```bash
@@ -18,23 +18,24 @@ flutter test           # expect: all tests pass (LocalDB, Sync crypto, ApiServic
 ```bash
 flutter doctor                      # resolve any Android toolchain issues
 flutter doctor --android-licenses   # accept licenses (interactive)
-flutter build apk --release         # -> build/app/outputs/flutter-apk/app-release.apk
+flutter build apk --debug --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
+flutter build apk --release --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
 # Install on a connected device:
 adb install build/app/outputs/flutter-apk/app-release.apk
 ```
-> The `android/` folder here is **not** a full `flutter create` scaffold (it was
-> only partially generated). Run `flutter create .` in `sakina-frontend/` to
-> regenerate the platform scaffolding before the first APK build.
+Android application ID: `com.sakinaai.app`. Store/CI release builds still need
+real signing credentials; the checked-in scaffold does not contain private keys.
 
 ## Build iOS (IPA) — **requires macOS + Xcode**
 ```bash
 # On a Mac:
-flutter build ios --release
+flutter build ios --release --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
 # or run on a simulator:
 flutter run -d "iPhone 15 Pro"
 ```
-iOS cannot be built on Windows/Linux. Likewise, run `flutter create .` first to
-generate the `ios/` scaffold.
+iOS bundle ID: `com.sakinaai.app`. iOS cannot be built on Windows/Linux, and
+App Store builds require a valid Apple team, signing certificate, and
+provisioning profile.
 
 ## Pointing the app at the backend
 `lib/config/api_config.dart` sets `baseUrl` from the `SAKINA_API_BASE_URL`
