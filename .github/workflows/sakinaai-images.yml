@@ -65,15 +65,19 @@ jobs:
           - name: sakinaai-api
             context: sakina-backend
             dockerfile: sakina-backend/Dockerfile.api
+            build_on_pr: true
           - name: sakinaai-vllm
             context: sakina-backend
             dockerfile: sakina-backend/Dockerfile.vllm
+            build_on_pr: false
           - name: sakinaai-admin-web
             context: sakina-dashboard
             dockerfile: sakina-dashboard/Dockerfile
+            build_on_pr: false
           - name: sakinaai-worker
             context: sakina-worker
             dockerfile: sakina-worker/Dockerfile
+            build_on_pr: false
 
     steps:
       - uses: actions/checkout@v4
@@ -83,6 +87,15 @@ jobs:
         run: echo "repo=${REGISTRY}/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.name }}" >> "$GITHUB_OUTPUT"
 
       - uses: docker/setup-buildx-action@v3
+
+      - name: Check image sources
+        id: sources
+        run: |
+          if [ -d "${{ matrix.context }}" ] && [ -f "${{ matrix.dockerfile }}" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Log in to GHCR
         if: github.event_name != 'pull_request'
@@ -94,6 +107,7 @@ jobs:
 
       - uses: docker/metadata-action@v5
         id: meta
+        if: steps.sources.outputs.exists == 'true'
         with:
           images: ${{ steps.image.outputs.repo }}
           tags: |
@@ -102,6 +116,7 @@ jobs:
             type=ref,event=tag
 
       - name: Build image
+        if: steps.sources.outputs.exists == 'true' && (github.event_name != 'pull_request' || matrix.build_on_pr == true)
         uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.context }}
@@ -109,3 +124,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Skip image build
+        if: steps.sources.outputs.exists != 'true' || (github.event_name == 'pull_request' && matrix.build_on_pr != true)
+        run: |
+          echo "Skipping ${{ matrix.name }} for this run (missing context/dockerfile or PR-scope optimization)."
