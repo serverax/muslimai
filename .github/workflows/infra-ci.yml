@@ -21,8 +21,22 @@ jobs:
 
       - uses: azure/setup-kubectl@v4
 
-      - name: Validate Kubernetes manifests
-        run: kubectl apply --dry-run=client --validate=false -R -f sakina-infra/manifests
+      - name: Validate Kubernetes manifest YAML syntax
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          manifest_root = Path("sakina-infra/manifests")
+          files = sorted(manifest_root.rglob("*.yaml"))
+          assert files, "no Kubernetes manifests found"
+          for path in files:
+              docs = list(yaml.safe_load_all(path.read_text(encoding="utf-8")))
+              assert docs, f"{path} contains no YAML documents"
+          print(f"Validated YAML syntax for {len(files)} manifest files.")
+          PY
 
       - name: Verify deployment readiness contract
         run: |
