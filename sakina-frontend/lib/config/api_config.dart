@@ -1,5 +1,12 @@
 class ApiConfig {
-  static const String baseUrl = 'http://localhost:8080';
+  /// Public API base used by release builds.
+  ///
+  /// Override for local/staging builds with:
+  /// `--dart-define=SAKINA_API_BASE_URL=http://10.0.2.2:8080`
+  static const String baseUrl = String.fromEnvironment(
+    'SAKINA_API_BASE_URL',
+    defaultValue: 'https://api.sakinaapp.com',
+  );
 
   static const String healthEndpoint = '/health';
   static const String ragQueryEndpoint = '/rag/query';

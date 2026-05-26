@@ -3,9 +3,14 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:sakina_frontend/config/api_config.dart';
 import 'package:sakina_frontend/services/api_service.dart';
 
 void main() {
+  test('default API base URL points at production ingress host', () {
+    expect(ApiConfig.baseUrl, 'https://api.sakinaapp.com');
+  });
+
   test('query() parses RagResponse (answer + sources + confidence)', () async {
     final mock = MockClient((req) async {
       expect(req.url.toString(), 'http://test/v1/rag/query');

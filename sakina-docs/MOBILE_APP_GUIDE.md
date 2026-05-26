@@ -37,10 +37,16 @@ iOS cannot be built on Windows/Linux. Likewise, run `flutter create .` first to
 generate the `ios/` scaffold.
 
 ## Pointing the app at the backend
-`lib/config/api_config.dart` sets `baseUrl` (default `http://localhost:8080/v1`).
-`ApiService` is constructed with a `baseUrl`; for a device hitting a local
-backend, use your machine's LAN IP (not `localhost`) and ensure the API is
-reachable.
+`lib/config/api_config.dart` sets `baseUrl` from the `SAKINA_API_BASE_URL`
+compile-time value. Release builds default to `https://api.sakinaapp.com`.
+For a device hitting a local backend, use a build override and a reachable host
+(Android emulator example below uses `10.0.2.2`, not `localhost`):
+
+```bash
+flutter run --dart-define=SAKINA_API_BASE_URL=http://10.0.2.2:8080
+flutter build apk --release --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
+flutter build appbundle --release --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
+```
 
 ## What the app does (implemented)
 - `LocalDBService` — SQLCipher-encrypted local message store.
