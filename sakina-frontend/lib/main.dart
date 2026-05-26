@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'design/app_theme.dart';
 import 'providers/preferences.dart';
-import 'screens/chat_screen.dart';
+import 'screens/app_shell.dart';
 
 void main() {
   runApp(const ProviderScope(child: SakinaApp()));
@@ -37,7 +37,7 @@ class SakinaApp extends ConsumerWidget {
           child: child!,
         );
       },
-      home: const ChatScreen(),
+      home: const SakinaShell(),
     );
   }
 }
