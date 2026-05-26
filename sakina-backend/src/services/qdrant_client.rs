@@ -77,7 +77,10 @@ impl QdrantVectorDB {
 
 /// Pure threshold filter (unit-tested without a live Qdrant).
 pub fn filter_by_threshold(points: Vec<ScoredPoint>, threshold: f32) -> Vec<ScoredPoint> {
-    points.into_iter().filter(|p| p.score >= threshold).collect()
+    points
+        .into_iter()
+        .filter(|p| p.score >= threshold)
+        .collect()
 }
 
 #[cfg(test)]
@@ -85,7 +88,11 @@ mod tests {
     use super::*;
 
     fn point(score: f32) -> ScoredPoint {
-        ScoredPoint { id: serde_json::json!(1), score, payload: None }
+        ScoredPoint {
+            id: serde_json::json!(1),
+            score,
+            payload: None,
+        }
     }
 
     #[test]

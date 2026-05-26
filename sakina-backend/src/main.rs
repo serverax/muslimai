@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpServer, middleware::Logger};
+use actix_web::{middleware::Logger, web, App, HttpServer};
 use sqlx::postgres::PgPool;
 use tracing::info;
 
@@ -12,9 +12,22 @@ async fn main() -> std::io::Result<()> {
     let (motto_en, motto_ar) = brand::get_brand_motto();
     info!("[{}] {}", brand::SAKINA.name, brand::SAKINA.tagline);
     info!("[{}] Vision: {}", brand::SAKINA.name, brand::SAKINA.vision);
-    info!("[{}] Mission: {}", brand::SAKINA.name, brand::SAKINA.mission);
-    info!("[{}] Promise: {}", brand::SAKINA.name, brand::get_brand_promise());
-    info!("[{}] Motto: {} / {}", brand::SAKINA.name, motto_en, motto_ar);
+    info!(
+        "[{}] Mission: {}",
+        brand::SAKINA.name,
+        brand::SAKINA.mission
+    );
+    info!(
+        "[{}] Promise: {}",
+        brand::SAKINA.name,
+        brand::get_brand_promise()
+    );
+    info!(
+        "[{}] Motto: {} / {}",
+        brand::SAKINA.name,
+        motto_en,
+        motto_ar
+    );
     for value in brand::SAKINA.values {
         info!("[{}] Value: {}", brand::SAKINA.name, value);
     }
@@ -31,8 +44,9 @@ async fn main() -> std::io::Result<()> {
     info!("[{}] Starting Sakina API Server", brand::SAKINA.name);
 
     // Database connection
-    let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgres://sakina_user:sakina_password@localhost:5432/sakina".to_string());
+    let database_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| {
+        "postgres://sakina_user:sakina_password@localhost:5432/sakina".to_string()
+    });
 
     let pool = PgPool::connect(&database_url)
         .await
@@ -59,8 +73,7 @@ async fn main() -> std::io::Result<()> {
         "http://localhost:6333",
         "verified_knowledge",
     ));
-    let embeddings =
-        web::Data::new(services::EmbeddingsService::new("http://localhost:8000"));
+    let embeddings = web::Data::new(services::EmbeddingsService::new("http://localhost:8000"));
 
     // Start HTTP server
     info!("Starting HTTP server on 0.0.0.0:8080");
@@ -75,28 +88,37 @@ async fn main() -> std::io::Result<()> {
             .app_data(embeddings.clone())
             .wrap(Logger::default())
             .wrap(middleware::AuditMiddleware)
+            .route("/health", web::get().to(handlers::health::health_check))
+            .route("/ready", web::get().to(handlers::health::readiness_check))
             .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
+                    .route("/ready", web::get().to(handlers::health::readiness_check))
                     .service(
                         web::scope("/users")
                             .route("", web::post().to(handlers::user::create_user))
-                            .route("/{user_id}", web::get().to(handlers::user::get_user))
+                            .route("/{user_id}", web::get().to(handlers::user::get_user)),
                     )
                     .service(
                         web::scope("/rag")
-                            .route("/query", web::post().to(handlers::rag::query_rag))
+                            .route("/query", web::post().to(handlers::rag::query_rag)),
                     )
-                    .route("/classify", web::post().to(handlers::classify::classify_intent))
+                    .route(
+                        "/classify",
+                        web::post().to(handlers::classify::classify_intent),
+                    )
                     .service(
                         web::scope("/sync")
                             .route("/backup", web::post().to(handlers::sync::upload_backup))
-                            .route("/backup/{user_id}", web::get().to(handlers::sync::download_backup))
+                            .route(
+                                "/backup/{user_id}",
+                                web::get().to(handlers::sync::download_backup),
+                            ),
                     )
-                    .service(
-                        web::scope("/dashboard")
-                            .route("/guardrails", web::get().to(handlers::dashboard::get_guardrails))
-                    )
+                    .service(web::scope("/dashboard").route(
+                        "/guardrails",
+                        web::get().to(handlers::dashboard::get_guardrails),
+                    )),
             )
     })
     .bind("0.0.0.0:8080")?

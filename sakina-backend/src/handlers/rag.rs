@@ -79,7 +79,10 @@ pub async fn query_rag(
     // 6. Answer generation (vLLM completion) — placeholder until wired.
     let answer = format!(
         "Based on verified Islamic sources: {}",
-        sources.first().map(|s| s.title.as_str()).unwrap_or("(no source)")
+        sources
+            .first()
+            .map(|s| s.title.as_str())
+            .unwrap_or("(no source)")
     );
 
     Ok(HttpResponse::Ok().json(RagResponse {

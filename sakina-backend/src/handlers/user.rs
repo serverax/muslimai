@@ -1,8 +1,8 @@
+use crate::models::User;
 use actix_web::{web, HttpResponse};
+use serde_json::json;
 use sqlx::PgPool;
 use uuid::Uuid;
-use crate::models::User;
-use serde_json::json;
 
 pub async fn create_user(
     _pool: web::Data<PgPool>,
@@ -10,7 +10,10 @@ pub async fn create_user(
 ) -> HttpResponse {
     let user_id = Uuid::new_v4();
     let pub_key = body.get("pub_key").and_then(|v| v.as_str()).unwrap_or("");
-    let madhhab = body.get("madhhab_preference").and_then(|v| v.as_str()).unwrap_or("hanafi");
+    let madhhab = body
+        .get("madhhab_preference")
+        .and_then(|v| v.as_str())
+        .unwrap_or("hanafi");
 
     // TODO: Insert into database
     let _ = User {
@@ -28,10 +31,7 @@ pub async fn create_user(
     }))
 }
 
-pub async fn get_user(
-    _pool: web::Data<PgPool>,
-    user_id: web::Path<Uuid>,
-) -> HttpResponse {
+pub async fn get_user(_pool: web::Data<PgPool>, user_id: web::Path<Uuid>) -> HttpResponse {
     HttpResponse::Ok().json(json!({
         "id": user_id.into_inner(),
         "message": "User handler stub"

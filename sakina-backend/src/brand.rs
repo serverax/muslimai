@@ -35,10 +35,10 @@ pub struct Colors {
 
 pub const BRAND_COLORS: Colors = Colors {
     primary: "#1B6B5E",    // Islamic Green
-    background: "#F5F5F5",  // Light
-    text: "#212121",        // Dark
-    accent: "#E8F5E9",      // Soft Green
-    error: "#D32F2F",       // Alert Red
+    background: "#F5F5F5", // Light
+    text: "#212121",       // Dark
+    accent: "#E8F5E9",     // Soft Green
+    error: "#D32F2F",      // Alert Red
 };
 
 pub fn get_brand_promise() -> &'static str {
@@ -48,6 +48,6 @@ pub fn get_brand_promise() -> &'static str {
 pub fn get_brand_motto() -> (&'static str, &'static str) {
     (
         "Authentic. Private. Trusted.", // English
-        "أصيل. خاص. موثوق",              // Arabic
+        "أصيل. خاص. موثوق",             // Arabic
     )
 }

@@ -54,7 +54,9 @@ impl EmbeddingsService {
             .await?;
         match resp.data.into_iter().next() {
             Some(d) => Ok(d.embedding),
-            None => Err("vLLM returned an empty embeddings response".to_string().into()),
+            None => Err("vLLM returned an empty embeddings response"
+                .to_string()
+                .into()),
         }
     }
 }
@@ -65,7 +67,10 @@ mod tests {
 
     #[test]
     fn request_serializes() {
-        let req = EmbeddingRequest { input: "test".to_string(), model: "m".to_string() };
+        let req = EmbeddingRequest {
+            input: "test".to_string(),
+            model: "m".to_string(),
+        };
         let json = serde_json::to_string(&req).unwrap();
         assert!(json.contains("\"input\":\"test\""));
         assert!(json.contains("\"model\":\"m\""));

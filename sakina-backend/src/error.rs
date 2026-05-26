@@ -19,8 +19,7 @@ impl ResponseError for ApiError {
     }
 
     fn error_response(&self) -> HttpResponse {
-        HttpResponse::build(self.status_code())
-            .json(serde_json::json!({ "error": self.0 }))
+        HttpResponse::build(self.status_code()).json(serde_json::json!({ "error": self.0 }))
     }
 }
 
