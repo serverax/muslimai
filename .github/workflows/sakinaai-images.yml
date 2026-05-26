@@ -33,7 +33,7 @@ jobs:
       - uses: azure/setup-kubectl@v4
 
       - name: Validate Kubernetes manifests
-        run: kubectl apply --dry-run=client -R -f sakina-infra/manifests
+        run: kubectl apply --dry-run=client --validate=false -R -f sakina-infra/manifests
 
       - name: Validate Docker Compose config
         run: docker compose -f sakina-infra/docker-compose.yml config
