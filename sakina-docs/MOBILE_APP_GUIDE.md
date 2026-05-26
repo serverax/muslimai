@@ -1,10 +1,11 @@
 # Mobile App Guide — Project Sakina (Flutter)
 
 > **Status (honest):** the Flutter app compiles (`flutter analyze` clean) and its
-> unit/widget tests pass on Flutter 3.44 / Dart 3.12. Android debug APK builds
-> successfully in this environment. It has **not** been run on a device/simulator,
-> signed for store release, or built for iOS (iOS builds require macOS). The
-> steps below are the build/publish procedure.
+> unit/widget tests pass on Flutter 3.44 / Dart 3.12. Android debug APK and
+> release app bundle builds complete successfully in this environment. It has
+> **not** been run on a device/simulator, signed with store credentials, or
+> built for iOS (iOS builds require macOS). The steps below are the
+> build/publish procedure.
 
 ## Verify (works anywhere with the Flutter SDK)
 ```bash
@@ -20,11 +21,14 @@ flutter doctor                      # resolve any Android toolchain issues
 flutter doctor --android-licenses   # accept licenses (interactive)
 flutter build apk --debug --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
 flutter build apk --release --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
+flutter build appbundle --release --dart-define=SAKINA_API_BASE_URL=https://api.sakinaapp.com
 # Install on a connected device:
 adb install build/app/outputs/flutter-apk/app-release.apk
 ```
 Android application ID: `com.sakinaai.app`. Store/CI release builds still need
 real signing credentials; the checked-in scaffold does not contain private keys.
+Use `sakina-frontend/android/key.properties.example` as the template for a
+local or CI-provided `android/key.properties` file.
 
 ## Build iOS (IPA) — **requires macOS + Xcode**
 ```bash
@@ -62,6 +66,8 @@ flutter build appbundle --release --dart-define=SAKINA_API_BASE_URL=https://api.
   support for Arabic and Urdu.
 - Typed asset-slot registry for brand, tab hero, onboarding, and store-listing
   assets.
+- Android and iOS platform scaffolds with app ID/bundle ID `com.sakinaai.app`,
+  display name `SakinaAI`, branded launcher icons, and branded launch screens.
 
 ## Publishing (procedure, not yet done)
 - **Google Play:** create a signed release (`key.properties` + keystore), `flutter build appbundle --release`, upload the `.aab` to the Play Console internal track.
