@@ -5,6 +5,10 @@
 build/
 .packages
 
+# IDE / editor
+.idea/
+*.iml
+
 # Android (generated / machine-specific)
 android/local.properties
 android/.gradle/

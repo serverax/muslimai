@@ -56,7 +56,10 @@ mod tests {
     #[tokio::test]
     async fn classify_returns_fiqh_stub() {
         let router = SemanticRouter::new();
-        let result = router.classify("Is music permissible in Islam?").await.unwrap();
+        let result = router
+            .classify("Is music permissible in Islam?")
+            .await
+            .unwrap();
         assert!(matches!(result.intent, QueryIntent::FiqhQuery));
         assert_eq!(result.confidence, 0.95);
         assert_eq!(result.routing_decision, "RAG");

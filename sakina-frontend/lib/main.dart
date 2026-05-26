@@ -1,22 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'config/theme.dart';
-import 'screens/chat_screen.dart';
+
+import 'design/app_theme.dart';
+import 'l10n/app_localizations.dart';
+import 'providers/preferences.dart';
+import 'screens/app_shell.dart';
 
 void main() {
   runApp(const ProviderScope(child: SakinaApp()));
 }
 
-class SakinaApp extends StatelessWidget {
-  const SakinaApp({Key? key}) : super(key: key);
+class SakinaApp extends ConsumerWidget {
+  const SakinaApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(preferencesProvider);
+
     return MaterialApp(
       title: 'Project Sakina',
-      theme: SakinaTheme.buildLightTheme(false),
-      darkTheme: SakinaTheme.buildDarkTheme(false),
-      home: const ChatScreen(),
+      debugShowCheckedModeBanner: false,
+      theme: SakinaAppTheme.light(
+        highContrast: prefs.highContrast,
+        reduceOrnament: prefs.reduceOrnament,
+      ),
+      darkTheme: SakinaAppTheme.dark(
+        highContrast: prefs.highContrast,
+        reduceOrnament: prefs.reduceOrnament,
+      ),
+      themeMode: prefs.themeMode,
+      locale: prefs.locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localeResolutionCallback: (locale, supportedLocales) {
+        return AppLocalizations.resolve(locale, supportedLocales);
+      },
+      // Apply the user's text-scale preference globally.
+      builder: (context, child) {
+        final mq = MediaQuery.of(context);
+        return MediaQuery(
+          data: mq.copyWith(textScaler: TextScaler.linear(prefs.textScale)),
+          child: child!,
+        );
+      },
+      home: const SakinaShell(),
     );
   }
 }
