@@ -76,6 +76,9 @@ flutter build appbundle --release --dart-define=SAKINA_API_BASE_URL=https://api.
 - CI uploads `sakinaai-debug-apk` and `sakinaai-release-aab` artifacts.
 - Store release signing still requires a CI-provided `android/key.properties`
   file and keystore secret; do not commit signing keys.
+- `.github/workflows/sakinaai-images.yml` builds the API, admin web, and worker
+  container images expected by `sakinaai-infra.sh`; it pushes to GHCR on `main`,
+  tags, or manual dispatch.
 
 ## Publishing (procedure, not yet done)
 - **Google Play:** create a signed release (`key.properties` + keystore), `flutter build appbundle --release`, upload the `.aab` to the Play Console internal track.

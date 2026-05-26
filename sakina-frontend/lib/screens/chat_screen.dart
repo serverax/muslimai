@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../chat/chat_controller.dart';
 import '../design/tokens.dart';
+import '../l10n/app_localizations.dart';
 import '../widgets/citation_widget.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   late final ChatController _chatController;
   late final bool _ownsController;
 
@@ -46,21 +48,40 @@ class _ChatScreenState extends State<ChatScreen> {
     final send = _chatController.send(message);
     setState(() {});
     await send;
-    if (mounted) setState(() {});
+    if (mounted) {
+      setState(() {});
+      _scrollToBottom();
+    }
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Project Sakina'),
+        title: Text(l10n.chatTitle),
       ),
       body: Column(
         children: [
           Expanded(
-            child: _ChatMessageList(controller: _chatController),
+            child: _ChatMessageList(
+              controller: _chatController,
+              emptyMessage: l10n.askFirstQuestion,
+              scrollController: _scrollController,
+            ),
           ),
-          if (_chatController.errorMessage case final error?)
+          if (_chatController.errorType case final errorType?)
             Padding(
               padding: const EdgeInsets.fromLTRB(
                 SakinaSpacing.md,
@@ -69,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 SakinaSpacing.sm,
               ),
               child: Text(
-                error,
+                _localizedError(l10n, errorType),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
@@ -81,7 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: _controller,
                     decoration: InputDecoration(
-                      hintText: 'Ask your question...',
+                      hintText: l10n.askQuestionHint,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -106,9 +127,23 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  String _localizedError(AppLocalizations l10n, ChatErrorType errorType) {
+    switch (errorType) {
+      case ChatErrorType.historyUnavailable:
+        return l10n.chatHistoryUnavailable;
+      case ChatErrorType.authFailed:
+        return l10n.chatAuthFailed;
+      case ChatErrorType.rateLimited:
+        return l10n.chatRateLimited;
+      case ChatErrorType.serviceUnavailable:
+        return l10n.chatServiceUnavailable;
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     if (_ownsController) {
       _chatController.close();
     }
@@ -117,20 +152,27 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class _ChatMessageList extends StatelessWidget {
-  const _ChatMessageList({required this.controller});
+  const _ChatMessageList({
+    required this.controller,
+    required this.emptyMessage,
+    required this.scrollController,
+  });
 
   final ChatController controller;
+  final String emptyMessage;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
     final messages = controller.messages;
     if (messages.isEmpty) {
-      return const Center(
-        child: Text('Ask your first question to begin.'),
+      return Center(
+        child: Text(emptyMessage),
       );
     }
 
     return ListView.builder(
+      controller: scrollController,
       padding: const EdgeInsets.all(SakinaSpacing.sm),
       itemCount: messages.length,
       itemBuilder: (context, index) {

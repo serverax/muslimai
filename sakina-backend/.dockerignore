@@ -1,7 +1,5 @@
 target/
 .git/
-.env
+.github/
+Dockerfile.*
 *.log
-.idea/
-.vscode/
-Cargo.lock

@@ -47,6 +47,8 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: ChatScreen(
           controller: ChatController(
             backend: _WidgetTestBackend(),

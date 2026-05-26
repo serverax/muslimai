@@ -1,5 +1,5 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use sqlx::postgres::PgPool;
+use sqlx::postgres::PgPoolOptions;
 use tracing::info;
 
 use sakina_backend::{brand, handlers, middleware, services, telemetry};
@@ -44,11 +44,17 @@ async fn main() -> std::io::Result<()> {
     info!("[{}] Starting Sakina API Server", brand::SAKINA.name);
 
     // Database connection
-    let database_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| {
-        "postgres://sakina_user:sakina_password@localhost:5432/sakina".to_string()
-    });
-
-    let pool = PgPool::connect(&database_url)
+    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let api_token = std::env::var("SAKINA_API_TOKEN").expect("SAKINA_API_TOKEN must be set");
+    let pool_max_connections = std::env::var("DATABASE_MAX_CONNECTIONS")
+        .ok()
+        .and_then(|v| v.parse::<u32>().ok())
+        .unwrap_or(20);
+    let pool = PgPoolOptions::new()
+        .max_connections(pool_max_connections)
+        .acquire_timeout(std::time::Duration::from_secs(10))
+        .idle_timeout(std::time::Duration::from_secs(300))
+        .connect(&database_url)
         .await
         .expect("Failed to connect to database");
 
@@ -58,6 +64,12 @@ async fn main() -> std::io::Result<()> {
     let router = std::sync::Arc::new(services::SemanticRouter::new());
     let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
     let citations = std::sync::Arc::new(services::CitationEngine::new(pool.clone()));
+    let rag_services = web::Data::new(handlers::rag::RagServices {
+        router: router.clone(),
+        guardrails: guardrails.clone(),
+        citations: citations.clone(),
+    });
+    let router_data = web::Data::new(router.clone());
 
     // Background worker: drain the outbox (marks chunk_indexed events Sent).
     let relay = services::OutboxRelay::new(pool.clone());
@@ -69,11 +81,18 @@ async fn main() -> std::io::Result<()> {
 
     // RAG dependencies: Qdrant via REST + vLLM embeddings via HTTP (lazy — no
     // connection until a request actually uses them).
+    let qdrant_url =
+        std::env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6333".to_string());
+    let qdrant_collection =
+        std::env::var("QDRANT_COLLECTION").unwrap_or_else(|_| "verified_knowledge".to_string());
+    let vllm_url =
+        std::env::var("VLLM_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
     let qdrant = web::Data::new(services::QdrantVectorDB::new(
-        "http://localhost:6333",
-        "verified_knowledge",
+        &qdrant_url,
+        &qdrant_collection,
     ));
-    let embeddings = web::Data::new(services::EmbeddingsService::new("http://localhost:8000"));
+    let embeddings = web::Data::new(services::EmbeddingsService::new(&vllm_url));
+    let llm = web::Data::new(services::LlmService::new(&vllm_url));
 
     // Start HTTP server
     info!("Starting HTTP server on 0.0.0.0:8080");
@@ -81,21 +100,38 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))
-            .app_data(web::Data::new(router.clone()))
-            .app_data(web::Data::new(guardrails.clone()))
-            .app_data(web::Data::new(citations.clone()))
+            .app_data(rag_services.clone())
+            .app_data(router_data.clone())
             .app_data(qdrant.clone())
             .app_data(embeddings.clone())
+            .app_data(llm.clone())
+            .app_data(
+                web::JsonConfig::default()
+                    .limit(256 * 1024)
+                    .error_handler(|err, _| {
+                        actix_web::error::InternalError::from_response(
+                            err,
+                            actix_web::HttpResponse::BadRequest().json(serde_json::json!({
+                                "error": "invalid or oversized request payload"
+                            })),
+                        )
+                        .into()
+                    }),
+            )
             .wrap(Logger::default())
             .wrap(middleware::AuditMiddleware)
+            .wrap(middleware::AuthMiddleware::new(api_token.clone()))
             .route("/health", web::get().to(handlers::health::health_check))
             .route("/ready", web::get().to(handlers::health::readiness_check))
+            .route("/metrics", web::get().to(handlers::metrics::metrics))
             .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
                     .route("/ready", web::get().to(handlers::health::readiness_check))
+                    .route("/metrics", web::get().to(handlers::metrics::metrics))
                     .service(
                         web::scope("/users")
+                            .route("/pubkey", web::get().to(handlers::user::get_server_pubkey))
                             .route("", web::post().to(handlers::user::create_user))
                             .route("/{user_id}", web::get().to(handlers::user::get_user)),
                     )
@@ -109,7 +145,10 @@ async fn main() -> std::io::Result<()> {
                     )
                     .service(
                         web::scope("/sync")
-                            .route("/backup", web::post().to(handlers::sync::upload_backup))
+                            .route(
+                                "/backup/{user_id}",
+                                web::post().to(handlers::sync::upload_backup),
+                            )
                             .route(
                                 "/backup/{user_id}",
                                 web::get().to(handlers::sync::download_backup),

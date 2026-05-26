@@ -24,16 +24,24 @@ spec:
               mountPath: /qdrant/storage
           livenessProbe:
             httpGet:
-              path: /health
+              path: /
               port: 6333
             initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 6333
+            initialDelaySeconds: 10
             periodSeconds: 10
   volumeClaimTemplates:
     - metadata:
         name: qdrant-storage
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: local-storage
+        # Use cloud-managed CSI storage in production clusters.
+        # For kind/local dev, override this with local-storage if needed.
+        storageClassName: managed-csi
         resources:
           requests:
             storage: 5Gi

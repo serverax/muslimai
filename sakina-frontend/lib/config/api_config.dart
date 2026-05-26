@@ -7,6 +7,7 @@ class ApiConfig {
     'SAKINA_API_BASE_URL',
     defaultValue: 'https://api.sakinaapp.com',
   );
+  static const String apiToken = String.fromEnvironment('SAKINA_API_TOKEN');
 
   static const String healthEndpoint = '/health';
   static const String ragQueryEndpoint = '/rag/query';

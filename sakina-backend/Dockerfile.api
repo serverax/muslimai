@@ -1,15 +1,22 @@
-FROM rust:1.75-slim as builder
+FROM rust:1-slim AS builder
 
 WORKDIR /app
 COPY . .
 
-RUN apt-get update && apt-get install -y libpq-dev
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libpq-dev pkg-config ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 RUN cargo build --release
 
 FROM debian:bookworm-slim
 
-RUN apt-get update && apt-get install -y libpq5 ca-certificates
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libpq5 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+RUN groupadd --system sakina && useradd --system --gid sakina --create-home --home-dir /home/sakina sakina
 COPY --from=builder /app/target/release/sakina-api /usr/local/bin/
+COPY --from=builder /app/target/release/sakina-ingest /usr/local/bin/
 
 EXPOSE 8080
+USER sakina
 CMD ["sakina-api"]

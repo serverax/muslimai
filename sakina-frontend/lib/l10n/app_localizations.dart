@@ -60,6 +60,17 @@ class AppLocalizations {
   String get quranSummary => _t('quranSummary');
   String get prayerSummary => _t('prayerSummary');
   String get parentSummary => _t('parentSummary');
+  String get heroTitle => _t('heroTitle');
+  String get heroArabicTagline => _t('heroArabicTagline');
+  String get chatTitle => _t('chatTitle');
+  String get askQuestionHint => _t('askQuestionHint');
+  String get askFirstQuestion => _t('askFirstQuestion');
+  String get comingSoon => _t('comingSoon');
+  String get comingSoonSummary => _t('comingSoonSummary');
+  String get chatHistoryUnavailable => _t('chatHistoryUnavailable');
+  String get chatAuthFailed => _t('chatAuthFailed');
+  String get chatRateLimited => _t('chatRateLimited');
+  String get chatServiceUnavailable => _t('chatServiceUnavailable');
 
   String _t(String key) {
     final language = _strings[locale.languageCode] ?? _strings['en']!;
@@ -107,6 +118,19 @@ const _strings = <String, Map<String, String>>{
     'quranSummary': 'Reading, memorization, and reflection tools.',
     'prayerSummary': 'Prayer times, qibla, and worship routines.',
     'parentSummary': 'Guardian view for progress and settings.',
+    'heroTitle': 'Your Muslim AI Companion',
+    'heroArabicTagline': 'رفيقك المسلم بالذكاء الاصطناعي',
+    'chatTitle': 'Sakina AI Companion',
+    'askQuestionHint': 'Ask your question...',
+    'askFirstQuestion': 'Ask your first question to begin.',
+    'comingSoon': 'Coming Soon',
+    'comingSoonSummary':
+        'This module is in active development for the chat-first launch.',
+    'chatHistoryUnavailable': 'Chat history is unavailable on this device.',
+    'chatAuthFailed': 'Authentication failed. Please check your app configuration.',
+    'chatRateLimited': 'You are sending messages too quickly. Please wait a moment.',
+    'chatServiceUnavailable':
+        'Sakina could not reach the guidance service. Please try again.',
   },
   'ar': {
     'appTitle': 'مشروع سكينة',
@@ -129,6 +153,18 @@ const _strings = <String, Map<String, String>>{
     'quranSummary': 'أدوات للقراءة والحفظ والتدبر.',
     'prayerSummary': 'أوقات الصلاة والقبلة وروتين العبادة.',
     'parentSummary': 'واجهة ولي الأمر للمتابعة والإعدادات.',
+    'heroTitle': 'رفيقك المسلم بالذكاء الاصطناعي',
+    'heroArabicTagline': 'رفيقك المسلم بالذكاء الاصطناعي',
+    'chatTitle': 'رفيق سكينة الذكي',
+    'askQuestionHint': 'اكتب سؤالك...',
+    'askFirstQuestion': 'ابدأ بسؤالك الأول.',
+    'comingSoon': 'قريبًا',
+    'comingSoonSummary': 'هذا القسم قيد التطوير ضمن إصدار الدردشة أولًا.',
+    'chatHistoryUnavailable': 'سجل المحادثة غير متاح على هذا الجهاز.',
+    'chatAuthFailed': 'فشلت المصادقة. يرجى التحقق من إعدادات التطبيق.',
+    'chatRateLimited': 'تُرسل الرسائل بسرعة كبيرة. يرجى الانتظار قليلًا.',
+    'chatServiceUnavailable':
+        'تعذّر الوصول إلى خدمة الإرشاد من سكينة. حاول مرة أخرى.',
   },
   'ur': {
     'appTitle': 'پروجیکٹ سکینہ',
@@ -151,6 +187,20 @@ const _strings = <String, Map<String, String>>{
     'quranSummary': 'پڑھنے، حفظ، اور غور و فکر کے اوزار۔',
     'prayerSummary': 'نماز کے اوقات، قبلہ، اور عبادت کے معمولات۔',
     'parentSummary': 'پیش رفت اور ترتیبات کے لیے والدین کا منظر۔',
+    'heroTitle': 'Aap ka Muslim AI Saathi',
+    'heroArabicTagline': 'رفيقك المسلم بالذكاء الاصطناعي',
+    'chatTitle': 'سکینہ اے آئی ساتھی',
+    'askQuestionHint': 'اپنا سوال لکھیں...',
+    'askFirstQuestion': 'شروع کرنے کے لیے اپنا پہلا سوال پوچھیں۔',
+    'comingSoon': 'جلد آرہا ہے',
+    'comingSoonSummary': 'یہ ماڈیول چیٹ-فرسٹ ریلیز کے لیے زیرِ ترقی ہے۔',
+    'chatHistoryUnavailable': 'اس ڈیوائس پر چیٹ ہسٹری دستیاب نہیں ہے۔',
+    'chatAuthFailed':
+        'تصدیق ناکام ہوگئی۔ براہ کرم ایپ کی ترتیبات چیک کریں۔',
+    'chatRateLimited':
+        'آپ بہت تیزی سے پیغامات بھیج رہے ہیں۔ براہ کرم کچھ دیر انتظار کریں۔',
+    'chatServiceUnavailable':
+        'سکینہ رہنمائی سروس تک رسائی نہ ہو سکی۔ دوبارہ کوشش کریں۔',
   },
   'tr': {
     'appTitle': 'Project Sakina',
@@ -173,6 +223,21 @@ const _strings = <String, Map<String, String>>{
     'quranSummary': 'Okuma, ezber ve tefekkur araclari.',
     'prayerSummary': 'Namaz vakitleri, kible ve ibadet rutinleri.',
     'parentSummary': 'Ilerleme ve ayarlar icin veli gorunumu.',
+    'heroTitle': 'Musluman AI Yol Arkadasiniz',
+    'heroArabicTagline': 'رفيقك المسلم بالذكاء الاصطناعي',
+    'chatTitle': 'Sakina AI Yardimcisi',
+    'askQuestionHint': 'Sorunuzu yazin...',
+    'askFirstQuestion': 'Baslamak icin ilk sorunuzu sorun.',
+    'comingSoon': 'Yakinda',
+    'comingSoonSummary':
+        'Bu modul, sohbet odakli ilk surum icin aktif gelistiriliyor.',
+    'chatHistoryUnavailable': 'Sohbet gecmisi bu cihazda kullanilamiyor.',
+    'chatAuthFailed':
+        'Kimlik dogrulama basarisiz. Lutfen uygulama ayarlarinizi kontrol edin.',
+    'chatRateLimited':
+        'Cok hizli mesaj gonderiyorsunuz. Lutfen kisa bir sure bekleyin.',
+    'chatServiceUnavailable':
+        'Sakina rehberlik servisine ulasilamadi. Lutfen tekrar deneyin.',
   },
   'id': {
     'appTitle': 'Project Sakina',
@@ -195,5 +260,19 @@ const _strings = <String, Map<String, String>>{
     'quranSummary': 'Alat membaca, menghafal, dan refleksi.',
     'prayerSummary': 'Waktu salat, kiblat, dan rutinitas ibadah.',
     'parentSummary': 'Tampilan wali untuk progres dan pengaturan.',
+    'heroTitle': 'Pendamping AI Muslim Anda',
+    'heroArabicTagline': 'رفيقك المسلم بالذكاء الاصطناعي',
+    'chatTitle': 'Pendamping AI Sakina',
+    'askQuestionHint': 'Tuliskan pertanyaan Anda...',
+    'askFirstQuestion': 'Ajukan pertanyaan pertama Anda untuk memulai.',
+    'comingSoon': 'Segera Hadir',
+    'comingSoonSummary':
+        'Modul ini sedang dikembangkan aktif untuk peluncuran chat-first.',
+    'chatHistoryUnavailable': 'Riwayat chat tidak tersedia di perangkat ini.',
+    'chatAuthFailed': 'Autentikasi gagal. Periksa konfigurasi aplikasi Anda.',
+    'chatRateLimited':
+        'Anda mengirim pesan terlalu cepat. Harap tunggu sebentar.',
+    'chatServiceUnavailable':
+        'Sakina tidak dapat menjangkau layanan panduan. Coba lagi.',
   },
 };

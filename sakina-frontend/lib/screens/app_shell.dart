@@ -19,9 +19,23 @@ class _SakinaShellState extends State<SakinaShell> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final luxury = Theme.of(context).extension<SakinaLuxury>()!;
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.appTitle),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: SakinaSpacing.md),
+            child: Chip(
+              avatar: const Icon(Icons.auto_awesome, size: 16),
+              label: Text(
+                l10n.comingSoon,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              side: BorderSide(color: luxury.gold.withValues(alpha: 0.4)),
+            ),
+          ),
+        ],
       ),
       body: IndexedStack(
         index: _selectedIndex,
@@ -101,19 +115,37 @@ class HomeDashboard extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(SakinaSpacing.lg),
           children: [
-            Text(
-              l10n.home,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w700,
-              ),
+            _HeroPanel(
+              title: l10n.heroTitle,
+              subtitleArabic: l10n.heroArabicTagline,
+              description: l10n.homeSummary,
             ),
-            const SizedBox(height: SakinaSpacing.sm),
-            Text(
-              l10n.homeSummary,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+            const SizedBox(height: SakinaSpacing.md),
+            Wrap(
+              spacing: SakinaSpacing.sm,
+              runSpacing: SakinaSpacing.sm,
+              children: [
+                _FeaturePill(
+                  icon: Icons.mosque_outlined,
+                  label: l10n.prayer,
+                ),
+                _FeaturePill(
+                  icon: Icons.menu_book_outlined,
+                  label: l10n.quran,
+                ),
+                _FeaturePill(
+                  icon: Icons.question_answer_outlined,
+                  label: l10n.openCompanionChat,
+                ),
+                _FeaturePill(
+                  icon: Icons.auto_awesome_outlined,
+                  label: l10n.tutoring,
+                ),
+                _FeaturePill(
+                  icon: Icons.family_restroom_outlined,
+                  label: l10n.parent,
+                ),
+              ],
             ),
             const SizedBox(height: SakinaSpacing.lg),
             Card(
@@ -146,17 +178,17 @@ class HomeDashboard extends StatelessWidget {
             _DashboardTile(
               icon: Icons.school_outlined,
               title: l10n.continueLearning,
-              subtitle: l10n.continueLearningSummary,
+              subtitle: l10n.comingSoonSummary,
             ),
             _DashboardTile(
               icon: Icons.menu_book_outlined,
               title: l10n.quranFocus,
-              subtitle: l10n.quranFocusSummary,
+              subtitle: l10n.comingSoonSummary,
             ),
             _DashboardTile(
               icon: Icons.mosque_outlined,
               title: l10n.prayerRhythm,
-              subtitle: l10n.prayerRhythmSummary,
+              subtitle: l10n.comingSoonSummary,
             ),
           ],
         ),
@@ -202,7 +234,7 @@ class PlaceholderTab extends StatelessWidget {
                 ),
                 const SizedBox(height: SakinaSpacing.sm),
                 Text(
-                  summary,
+                  '$summary\n\n${AppLocalizations.of(context).comingSoonSummary}',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
@@ -240,6 +272,85 @@ class _DashboardTile extends StatelessWidget {
         title: Text(title),
         subtitle: Text(subtitle),
       ),
+    );
+  }
+}
+
+class _HeroPanel extends StatelessWidget {
+  const _HeroPanel({
+    required this.title,
+    required this.subtitleArabic,
+    required this.description,
+  });
+
+  final String title;
+  final String subtitleArabic;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final luxury = theme.extension<SakinaLuxury>()!;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(SakinaRadius.lg),
+        border: Border.all(color: luxury.gold.withValues(alpha: 0.35)),
+        gradient: LinearGradient(
+          colors: [
+            luxury.patternColor.withValues(alpha: 0.95),
+            theme.colorScheme.surface.withValues(alpha: 0.95),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      padding: const EdgeInsets.all(SakinaSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: SakinaSpacing.sm),
+          Text(
+            subtitleArabic,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: luxury.gold,
+            ),
+          ),
+          const SizedBox(height: SakinaSpacing.sm),
+          Text(
+            description,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FeaturePill extends StatelessWidget {
+  const _FeaturePill({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final luxury = Theme.of(context).extension<SakinaLuxury>()!;
+    return Chip(
+      avatar: Icon(icon, size: 16, color: luxury.gold),
+      label: Text(label),
+      side: BorderSide(color: luxury.gold.withValues(alpha: 0.3)),
     );
   }
 }

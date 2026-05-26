@@ -3,10 +3,19 @@ import 'dart:convert';
 import '../config/api_config.dart';
 import '../services/api_service.dart';
 import '../services/local_db_service.dart' as local_db;
+import '../services/secure_key_service.dart';
+import '../services/user_identity_service.dart';
 
 enum ChatRole {
   user,
   assistant,
+}
+
+enum ChatErrorType {
+  historyUnavailable,
+  authFailed,
+  rateLimited,
+  serviceUnavailable,
 }
 
 class ChatMessage {
@@ -70,13 +79,20 @@ abstract interface class ChatBackend {
 }
 
 class ApiChatBackend implements ChatBackend {
-  ApiChatBackend({ApiService? api})
-      : _api = api ?? ApiService(baseUrl: ApiConfig.baseUrl);
+  ApiChatBackend({
+    ApiService? api,
+    UserIdentityService? identityService,
+  })  : _api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
+        _identityService = identityService ?? UserIdentityService();
 
   final ApiService _api;
+  final UserIdentityService _identityService;
 
   @override
-  Future<RagResponse> query(String message) => _api.query(message);
+  Future<RagResponse> query(String message) async {
+    final userId = await _identityService.getOrCreateUserId();
+    return _api.query(message, userId: userId);
+  }
 
   void close() => _api.close();
 }
@@ -92,20 +108,17 @@ abstract interface class ChatHistoryStore {
 class LocalDbChatHistoryStore implements ChatHistoryStore {
   LocalDbChatHistoryStore({
     local_db.LocalDBService? database,
-    this.password = _defaultDbPassword,
-  }) : _database = database ?? local_db.LocalDBService();
-
-  static const _defaultDbPassword = String.fromEnvironment(
-    'SAKINA_CHAT_DB_PASSWORD',
-    defaultValue: 'sakina-local-chat-v1',
-  );
+    SecureDatabaseKeyService? keyService,
+  })  : _database = database ?? local_db.LocalDBService(),
+        _keyService = keyService ?? SecureDatabaseKeyService();
 
   final local_db.LocalDBService _database;
-  final String password;
+  final SecureDatabaseKeyService _keyService;
   bool _initialized = false;
 
   Future<void> _ensureInitialized() async {
     if (_initialized) return;
+    final password = await _keyService.getOrCreateDatabaseKey();
     await _database.init(password);
     _initialized = true;
   }
@@ -147,11 +160,11 @@ class ChatController {
   final List<ChatMessage> _messages = [];
   bool _initialized = false;
   bool _isSending = false;
-  String? _errorMessage;
+  ChatErrorType? _errorType;
 
   List<ChatMessage> get messages => List.unmodifiable(_messages);
   bool get isSending => _isSending;
-  String? get errorMessage => _errorMessage;
+  ChatErrorType? get errorType => _errorType;
 
   Future<void> initialize() async {
     if (_initialized) return;
@@ -162,9 +175,9 @@ class ChatController {
       _messages
         ..clear()
         ..addAll(await historyStore.load());
-      _errorMessage = null;
+      _errorType = null;
     } catch (_) {
-      _errorMessage = 'Chat history is unavailable on this device.';
+      _errorType = ChatErrorType.historyUnavailable;
     }
   }
 
@@ -173,7 +186,7 @@ class ChatController {
     if (message.isEmpty || _isSending) return;
 
     await initialize();
-    _errorMessage = null;
+    _errorType = null;
     _isSending = true;
 
     final userMessage = _newMessage(ChatRole.user, message);
@@ -189,9 +202,10 @@ class ChatController {
       );
       _messages.add(assistantMessage);
       await _saveBestEffort(assistantMessage);
+    } on ApiException catch (error) {
+      _errorType = _friendlyErrorType(error.message);
     } catch (_) {
-      _errorMessage =
-          'Sakina could not reach the guidance service. Please try again.';
+      _errorType = ChatErrorType.serviceUnavailable;
     } finally {
       _isSending = false;
     }
@@ -223,7 +237,17 @@ class ChatController {
     try {
       await _historyStore?.save(message);
     } catch (_) {
-      _errorMessage = 'Chat history is unavailable on this device.';
+      _errorType = ChatErrorType.historyUnavailable;
     }
+  }
+
+  ChatErrorType _friendlyErrorType(String? detail) {
+    if (detail != null && detail.contains('401')) {
+      return ChatErrorType.authFailed;
+    }
+    if (detail != null && detail.contains('429')) {
+      return ChatErrorType.rateLimited;
+    }
+    return ChatErrorType.serviceUnavailable;
   }
 }

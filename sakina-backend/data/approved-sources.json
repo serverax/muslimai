@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Quran text corpus",
+    "language": "ar",
+    "license_review": "required before ingestion",
+    "status": "pending_text_file",
+    "notes": "Use a verified Uthmani/plain-text source with explicit redistribution permission."
+  },
+  {
+    "title": "Reviewed hadith and fiqh excerpts",
+    "language": "ar,en",
+    "license_review": "required before ingestion",
+    "status": "pending_text_file",
+    "notes": "Only ingest excerpts approved by qualified reviewers and compatible with the project license."
+  }
+]

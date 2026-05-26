@@ -1,8 +1,9 @@
 //! Semantic router: classifies an incoming query's intent so the RAG pipeline
 //! can route FiqhQuery / TafsirQuery / CompanionChat / OutOfScope appropriately.
 //!
-//! Step 1 (Phase 1): stub classifier that returns FiqhQuery. The real path will
-//! call vLLM's completion endpoint and parse intent + confidence.
+//! Uses deterministic routing rules first so obviously out-of-scope traffic is
+//! rejected without spending LLM or vector-search capacity. A later version can
+//! replace the keyword rules with a local classifier while preserving this API.
 
 use serde::{Deserialize, Serialize};
 
@@ -22,31 +23,77 @@ pub struct ClassifyResult {
 }
 
 #[derive(Default)]
-pub struct SemanticRouter {
-    // Will use vLLM or a local classifier.
-}
+pub struct SemanticRouter;
 
 impl SemanticRouter {
     pub fn new() -> Self {
-        SemanticRouter {}
+        SemanticRouter
     }
 
     /// Classify an incoming query to determine intent + confidence.
     ///
-    /// TODO: call vLLM `/v1/completions` with a classification prompt and parse
-    /// the intent + confidence from the response. For now this returns a stub
-    /// that matches the test expectations.
     pub async fn classify(
         &self,
         query: &str,
     ) -> Result<ClassifyResult, Box<dyn std::error::Error>> {
-        let _ = query; // unused until vLLM wiring lands
+        let normalized = query.to_lowercase();
+        let (intent, confidence, routing_decision) = if contains_any(
+            &normalized,
+            &[
+                "tafsir",
+                "quran",
+                "surah",
+                "ayah",
+                "verse",
+                "تفسير",
+                "قرآن",
+                "سورة",
+                "آية",
+            ],
+        ) {
+            (QueryIntent::TafsirQuery, 0.88, "RAG")
+        } else if contains_any(
+            &normalized,
+            &[
+                "fiqh",
+                "halal",
+                "haram",
+                "permissible",
+                "madhhab",
+                "wudu",
+                "salah",
+                "zakat",
+                "fasting",
+                "حلال",
+                "حرام",
+                "فقه",
+                "وضوء",
+                "صلاة",
+            ],
+        ) {
+            (QueryIntent::FiqhQuery, 0.90, "RAG")
+        } else if contains_any(
+            &normalized,
+            &[
+                "islam", "muslim", "dua", "hadith", "sunnah", "prophet", "الله", "حديث", "دعاء",
+                "سنة",
+            ],
+        ) {
+            (QueryIntent::CompanionChat, 0.80, "RAG")
+        } else {
+            (QueryIntent::OutOfScope, 0.75, "DECLINE")
+        };
+
         Ok(ClassifyResult {
-            intent: QueryIntent::FiqhQuery,
-            confidence: 0.95,
-            routing_decision: "RAG".to_string(),
+            intent,
+            confidence,
+            routing_decision: routing_decision.to_string(),
         })
     }
+}
+
+fn contains_any(text: &str, needles: &[&str]) -> bool {
+    needles.iter().any(|needle| text.contains(needle))
 }
 
 #[cfg(test)]
@@ -54,14 +101,25 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn classify_returns_fiqh_stub() {
+    async fn classifies_fiqh_query() {
         let router = SemanticRouter::new();
         let result = router
             .classify("Is music permissible in Islam?")
             .await
             .unwrap();
         assert!(matches!(result.intent, QueryIntent::FiqhQuery));
-        assert_eq!(result.confidence, 0.95);
+        assert_eq!(result.confidence, 0.90);
         assert_eq!(result.routing_decision, "RAG");
+    }
+
+    #[tokio::test]
+    async fn classifies_out_of_scope_query() {
+        let router = SemanticRouter::new();
+        let result = router
+            .classify("How do I tune a database index?")
+            .await
+            .unwrap();
+        assert!(matches!(result.intent, QueryIntent::OutOfScope));
+        assert_eq!(result.routing_decision, "DECLINE");
     }
 }

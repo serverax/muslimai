@@ -1,0 +1,34 @@
+# Public HTTPS entry point for the Sakina API.
+#
+# This is intentionally standard networking.k8s.io/v1 Ingress so it validates
+# without requiring Traefik CRDs. A Traefik controller can still serve it via
+# ingressClassName: traefik, and cert-manager can provision the referenced TLS
+# secret when a matching ClusterIssuer exists in the target cluster.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sakina-api
+  namespace: sakina-api
+  labels:
+    app: sakina-api
+  annotations:
+    cert-manager.io/cluster-issuer: sakina-letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - api.sakinaapp.com
+      secretName: sakina-api-tls
+  rules:
+    - host: api.sakinaapp.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sakina-api
+                port:
+                  name: http

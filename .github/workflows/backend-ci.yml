@@ -4,10 +4,14 @@ on:
   push:
     paths:
       - 'sakina-backend/**'
+      - 'sakina-infra/manifests/**'
       - '.github/workflows/backend-ci.yml'
   pull_request:
     paths:
       - 'sakina-backend/**'
+      - 'sakina-infra/manifests/**'
+      - '.github/workflows/backend-ci.yml'
+  workflow_dispatch:
 
 jobs:
   test:
@@ -51,4 +55,9 @@ jobs:
       - name: Build Docker image
         run: |
           cd sakina-backend
-          docker build -f Dockerfile.api -t sakina-backend-api:latest .
+          docker build -f Dockerfile.api -t ghcr.io/serverax/sakinaai-api:ci .
+
+      - uses: azure/setup-kubectl@v4
+
+      - name: Validate Kubernetes manifests
+        run: kubectl apply --dry-run=client -R -f sakina-infra/manifests

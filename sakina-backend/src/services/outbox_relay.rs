@@ -12,6 +12,8 @@ use uuid::Uuid;
 struct OutboxEvent {
     id: Uuid,
     event_type: String,
+    retry_count: i32,
+    max_retries: i32,
 }
 
 pub struct OutboxRelay {
@@ -27,25 +29,84 @@ impl OutboxRelay {
     /// a database error (the caller logs it and the task ends).
     pub async fn relay_events(&self) -> Result<(), Box<dyn std::error::Error>> {
         loop {
-            let events: Vec<OutboxEvent> = sqlx::query_as(
-                "SELECT id, event_type FROM outbox.events \
-                 WHERE status = 'Pending' \
-                 FOR UPDATE SKIP LOCKED LIMIT 10",
-            )
-            .fetch_all(&self.pool)
-            .await?;
-
-            for event in events {
-                if event.event_type == "chunk_indexed" {
-                    // Chunks are upserted to Qdrant during ingestion; ack here.
-                    sqlx::query("UPDATE outbox.events SET status = 'Sent' WHERE id = $1")
-                        .bind(event.id)
-                        .execute(&self.pool)
-                        .await?;
-                }
-            }
-
+            self.relay_once().await?;
             sleep(Duration::from_secs(5)).await;
         }
+    }
+
+    /// Drain one batch. Kept public so CI can exercise relay behavior without
+    /// spawning a forever task.
+    pub async fn relay_once(&self) -> Result<usize, Box<dyn std::error::Error>> {
+        let mut tx = self.pool.begin().await?;
+        let events: Vec<OutboxEvent> = sqlx::query_as(
+            "SELECT id, event_type, retry_count, max_retries \
+             FROM outbox.events \
+             WHERE status = 'Pending' \
+             ORDER BY created_at ASC \
+             FOR UPDATE SKIP LOCKED LIMIT 10",
+        )
+        .fetch_all(&mut *tx)
+        .await?;
+
+        let count = events.len();
+        for event in events {
+            let result = handle_event(&event).await;
+            match result {
+                Ok(()) => {
+                    sqlx::query(
+                        "UPDATE outbox.events \
+                         SET status = 'Sent', updated_at = NOW() \
+                         WHERE id = $1",
+                    )
+                    .bind(event.id)
+                    .execute(&mut *tx)
+                    .await?;
+                }
+                Err(message) => {
+                    let next_retry = event.retry_count + 1;
+                    if next_retry >= event.max_retries {
+                        sqlx::query(
+                            "UPDATE outbox.events \
+                             SET status = 'DeadLetter', retry_count = $2, updated_at = NOW() \
+                             WHERE id = $1",
+                        )
+                        .bind(event.id)
+                        .bind(next_retry)
+                        .execute(&mut *tx)
+                        .await?;
+                        sqlx::query(
+                            "INSERT INTO outbox.dead_letters (event_id, error_message) \
+                             VALUES ($1, $2)",
+                        )
+                        .bind(event.id)
+                        .bind(message)
+                        .execute(&mut *tx)
+                        .await?;
+                    } else {
+                        sqlx::query(
+                            "UPDATE outbox.events \
+                             SET retry_count = $2, updated_at = NOW() \
+                             WHERE id = $1",
+                        )
+                        .bind(event.id)
+                        .bind(next_retry)
+                        .execute(&mut *tx)
+                        .await?;
+                    }
+                }
+            }
+        }
+
+        tx.commit().await?;
+        Ok(count)
+    }
+}
+
+async fn handle_event(event: &OutboxEvent) -> Result<(), String> {
+    match event.event_type.as_str() {
+        // Ingestion indexes vectors synchronously. The outbox remains as an
+        // auditable handoff point for future asynchronous indexers.
+        "chunk_ingested" | "chunk_indexed" => Ok(()),
+        other => Err(format!("unsupported outbox event type: {other}")),
     }
 }

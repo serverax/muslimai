@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sakina-ingest
+  namespace: sakina-api
+  labels:
+    app: sakina-ingest
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: sakina-ingest
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ingest
+          image: sakina-backend-api:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - sakina-ingest
+            - --path
+            - /data/verified-texts
+            - --madhhab
+            - hanafi
+            - --scholar
+            - Approved Sakina Source Review
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: connection-string
+            - name: QDRANT_URL
+              value: "http://qdrant.sakina-data.svc.cluster.local:6333"
+            - name: QDRANT_COLLECTION
+              value: "verified_knowledge"
+            - name: QDRANT_VECTOR_SIZE
+              value: "1536"
+            - name: VLLM_URL
+              value: "http://vllm.sakina-core.svc.cluster.local:8000"
+            - name: VLLM_CHAT_MODEL
+              value: "sakina-local"
+            - name: VLLM_EMBEDDING_MODEL
+              value: "sakina-local-embedding"
+          volumeMounts:
+            - name: verified-texts
+              mountPath: /data/verified-texts
+              readOnly: true
+      volumes:
+        - name: verified-texts
+          configMap:
+            name: verified-texts

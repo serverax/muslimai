@@ -1,4 +1,6 @@
 -- Create schemas
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 CREATE SCHEMA IF NOT EXISTS verified_knowledge;
 CREATE SCHEMA IF NOT EXISTS audit;
 CREATE SCHEMA IF NOT EXISTS outbox;
@@ -73,7 +75,15 @@ CREATE TABLE public.user_backups (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- Create user and grant permissions
-CREATE USER sakina_user WITH PASSWORD 'sakina_password';
+-- Create role and grant permissions.
+-- Password/secret material must be provisioned outside source control.
+DO
+$$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_catalog.pg_roles WHERE rolname = 'sakina_user') THEN
+        CREATE ROLE sakina_user LOGIN;
+    END IF;
+END
+$$;
 GRANT ALL PRIVILEGES ON SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;

@@ -6,7 +6,6 @@ metadata:
 data:
   POSTGRES_DB: sakina
   POSTGRES_USER: sakina_user
-  POSTGRES_PASSWORD: sakina_password
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -32,6 +31,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: postgres-config
+            - secretRef:
+                name: postgres-auth
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
@@ -55,7 +59,9 @@ spec:
         name: postgres-storage
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: local-storage
+        # Use cloud-managed CSI storage in production clusters.
+        # For kind/local dev, override this with local-storage if needed.
+        storageClassName: managed-csi
         resources:
           requests:
             storage: 10Gi
@@ -72,3 +78,6 @@ spec:
       targetPort: 5432
   selector:
     app: postgres
+
+# Required pre-created secret in namespace `sakina-data`:
+# - postgres-auth (keys: POSTGRES_PASSWORD)

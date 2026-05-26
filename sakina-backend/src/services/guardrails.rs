@@ -1,10 +1,7 @@
 //! Guardrails: enforce the similarity-confidence threshold before answering.
 //!
-//! Step 2 (Phase 1): threshold logic + a stubbed `check()`. The real path will
-//! embed the query and search Qdrant for the top similarity score, then apply
-//! `evaluate_score`. The Qdrant client is deliberately NOT wired yet (it pulls
-//! ~400 transitive crates that exhaust this machine's RAM during compilation);
-//! it lands with the real retrieval step, mirroring how the router defers vLLM.
+//! The RAG handler embeds the query, searches Qdrant, and passes the real top
+//! similarity score to `evaluate_score`.
 
 use serde::Serialize;
 
@@ -43,18 +40,6 @@ impl Guardrails {
                 confidence: top_score,
             }
         }
-    }
-
-    /// Check a query embedding against the verified-knowledge index.
-    ///
-    /// TODO: search Qdrant over `query_embedding`, take the top score, then call
-    /// `evaluate_score`. Stubbed (passes at 0.92) until qdrant-client is wired.
-    pub async fn check(
-        &self,
-        query_embedding: &[f32],
-    ) -> Result<GuardrailResult, Box<dyn std::error::Error>> {
-        let _ = query_embedding;
-        Ok(self.evaluate_score(0.92))
     }
 }
 

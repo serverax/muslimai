@@ -22,9 +22,7 @@ spec:
       nodeSelectorTerms:
         - matchExpressions:
             - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - docker-desktop
+              operator: Exists
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -43,6 +41,4 @@ spec:
       nodeSelectorTerms:
         - matchExpressions:
             - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - docker-desktop
+              operator: Exists

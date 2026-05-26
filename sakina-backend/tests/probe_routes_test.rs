@@ -8,7 +8,9 @@ fn api_exposes_kubernetes_probe_routes() {
 
     assert!(main_rs.contains(".route(\"/health\""));
     assert!(main_rs.contains(".route(\"/ready\""));
+    assert!(main_rs.contains(".route(\"/metrics\""));
     assert!(main_rs.contains("web::scope(\"/v1\")"));
     assert!(health_rs.contains("readiness_check"));
     assert!(health_rs.contains("HttpResponse::ServiceUnavailable()"));
+    assert!(main_rs.contains("AuthMiddleware::new"));
 }

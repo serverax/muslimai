@@ -27,7 +27,7 @@ void main() {
 
     await controller.send(' Assalamu alaikum ');
 
-    expect(controller.errorMessage, isNull);
+    expect(controller.errorType, isNull);
     expect(controller.messages, hasLength(2));
     expect(controller.messages.first.role, ChatRole.user);
     expect(controller.messages.first.content, 'Assalamu alaikum');
@@ -67,7 +67,7 @@ void main() {
     await controller.send('Help me');
 
     expect(controller.messages.single.content, 'Help me');
-    expect(controller.errorMessage, contains('could not reach'));
+    expect(controller.errorType, ChatErrorType.serviceUnavailable);
     expect(controller.isSending, isFalse);
   });
 }

@@ -37,6 +37,13 @@ services:
       - "8080:8080"
     environment:
       DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_API_TOKEN: local-dev-token
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_COLLECTION: verified_knowledge
+      VLLM_URL: http://vllm:8000
+      VLLM_CHAT_MODEL: sakina-local
+      VLLM_EMBEDDING_MODEL: sakina-local-embedding
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
       LOG_LEVEL: info
       BRAND_NAME: SAKINA
       BRAND_TAGLINE: "Trustworthy. Private. Islamic."
