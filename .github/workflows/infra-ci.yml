@@ -1,0 +1,44 @@
+name: Infrastructure CI
+
+on:
+  push:
+    paths:
+      - 'sakina-infra/**'
+      - 'sakina-tests/**'
+      - '.github/workflows/infra-ci.yml'
+  pull_request:
+    paths:
+      - 'sakina-infra/**'
+      - 'sakina-tests/**'
+      - '.github/workflows/infra-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/setup-kubectl@v4
+
+      - name: Validate Kubernetes manifests
+        run: kubectl apply --dry-run=client -R -f sakina-infra/manifests
+
+      - name: Verify deployment readiness contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          api_manifest = Path("sakina-infra/manifests/sakina-api-deployment.yaml").read_text()
+          assert "path: /v1/ready" in api_manifest, "readiness probe must target /v1/ready"
+          assert "ghcr.io/serverax/sakinaai-api:0.1.0" in api_manifest, "API image must use GHCR"
+          assert "sakina-api-auth" in api_manifest, "API auth secret reference is missing"
+          PY
+
+      - name: Validate Docker Compose config
+        run: docker compose -f sakina-infra/docker-compose.yml config
+
+      - name: Validate integration test collection
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest requests
+          pytest --collect-only -q sakina-tests/integration/test_rag_query.py

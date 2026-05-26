@@ -1,0 +1,97 @@
+name: SakinaAI Images
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'sakina-backend/**'
+      - 'sakina-dashboard/**'
+      - 'sakina-worker/**'
+      - 'sakina-infra/**'
+      - '.github/workflows/sakinaai-images.yml'
+  pull_request:
+    paths:
+      - 'sakina-backend/**'
+      - 'sakina-dashboard/**'
+      - 'sakina-worker/**'
+      - 'sakina-infra/**'
+      - '.github/workflows/sakinaai-images.yml'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  validate-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/setup-kubectl@v4
+
+      - name: Validate Kubernetes manifests
+        run: kubectl apply --dry-run=client -R -f sakina-infra/manifests
+
+      - name: Validate Docker Compose config
+        run: docker compose -f sakina-infra/docker-compose.yml config
+
+  build-images:
+    runs-on: ubuntu-latest
+    needs: validate-infra
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: sakinaai-api
+            context: sakina-backend
+            dockerfile: sakina-backend/Dockerfile.api
+          - name: sakinaai-vllm
+            context: sakina-backend
+            dockerfile: sakina-backend/Dockerfile.vllm
+          - name: sakinaai-admin-web
+            context: sakina-dashboard
+            dockerfile: sakina-dashboard/Dockerfile
+          - name: sakinaai-worker
+            context: sakina-worker
+            dockerfile: sakina-worker/Dockerfile
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set image repository
+        id: image
+        run: echo "repo=${REGISTRY}/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.name }}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ${{ steps.image.outputs.repo }}
+          tags: |
+            type=raw,value=0.1.0,enable=${{ github.ref == 'refs/heads/main' }}
+            type=sha,prefix=
+            type=ref,event=tag
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

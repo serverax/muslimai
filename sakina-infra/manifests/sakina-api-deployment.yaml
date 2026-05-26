@@ -51,7 +51,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: api
-        image: sakina-backend-api:latest
+        image: ghcr.io/serverax/sakinaai-api:0.1.0
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -65,8 +65,23 @@ spec:
             secretKeyRef:
               name: db-credentials
               key: connection-string
+        - name: SAKINA_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: sakina-api-auth
+              key: api-token
         - name: QDRANT_URL
           value: "http://qdrant.sakina-data.svc.cluster.local:6333"
+        - name: QDRANT_COLLECTION
+          value: "verified_knowledge"
+        - name: VLLM_URL
+          value: "http://vllm.sakina-core.svc.cluster.local:8000"
+        - name: VLLM_CHAT_MODEL
+          value: "sakina-local"
+        - name: VLLM_EMBEDDING_MODEL
+          value: "sakina-local-embedding"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://jaeger.sakina-monitoring.svc.cluster.local:4317"
         - name: BRAND_NAME
           valueFrom:
             configMapKeyRef:
@@ -87,7 +102,7 @@ spec:
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /v1/health
+            path: /v1/ready
             port: http
           initialDelaySeconds: 5
           periodSeconds: 5
@@ -134,13 +149,7 @@ metadata:
   name: sakina-api
   namespace: sakina-api
 ---
-# Secret for database credentials
-# In actual deployment, use sealed-secrets or external-secrets
-apiVersion: v1
-kind: Secret
-metadata:
-  name: db-credentials
-  namespace: sakina-api
-type: Opaque
-stringData:
-  connection-string: "postgres://sakina_user:sakina_password@postgres.sakina-data.svc.cluster.local:5432/sakina"
+# Secrets are intentionally not committed in this manifest.
+# Required pre-created secrets in namespace `sakina-api`:
+# - db-credentials (key: connection-string)
+# - sakina-api-auth (key: api-token)
