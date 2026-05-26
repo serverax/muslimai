@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../design/patterns/girih_pattern.dart';
 import '../design/sakina_luxury.dart';
 import '../design/tokens.dart';
+import '../l10n/app_localizations.dart';
 import 'chat_screen.dart';
 
 class SakinaShell extends StatefulWidget {
@@ -15,69 +16,68 @@ class SakinaShell extends StatefulWidget {
 class _SakinaShellState extends State<SakinaShell> {
   int _selectedIndex = 0;
 
-  static const _destinations = <NavigationDestination>[
-    NavigationDestination(
-      icon: Icon(Icons.home_outlined),
-      selectedIcon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.school_outlined),
-      selectedIcon: Icon(Icons.school),
-      label: 'Tutoring',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.menu_book_outlined),
-      selectedIcon: Icon(Icons.menu_book),
-      label: 'Quran',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.mosque_outlined),
-      selectedIcon: Icon(Icons.mosque),
-      label: 'Prayer',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.family_restroom_outlined),
-      selectedIcon: Icon(Icons.family_restroom),
-      label: 'Parent',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Project Sakina'),
+        title: Text(l10n.appTitle),
       ),
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [
-          HomeDashboard(),
+        children: [
+          const HomeDashboard(),
           PlaceholderTab(
-            title: 'Tutoring',
+            title: l10n.tutoring,
             icon: Icons.school_outlined,
-            summary: 'Personalized lessons and study support.',
+            summary: l10n.tutoringSummary,
           ),
           PlaceholderTab(
-            title: 'Quran',
+            title: l10n.quran,
             icon: Icons.menu_book_outlined,
-            summary: 'Reading, memorization, and reflection tools.',
+            summary: l10n.quranSummary,
           ),
           PlaceholderTab(
-            title: 'Prayer',
+            title: l10n.prayer,
             icon: Icons.mosque_outlined,
-            summary: 'Prayer times, qibla, and worship routines.',
+            summary: l10n.prayerSummary,
           ),
           PlaceholderTab(
-            title: 'Parent',
+            title: l10n.parent,
             icon: Icons.family_restroom_outlined,
-            summary: 'Guardian view for progress and settings.',
+            summary: l10n.parentSummary,
           ),
         ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
-        destinations: _destinations,
+        destinations: [
+          NavigationDestination(
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: l10n.home,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.school_outlined),
+            selectedIcon: const Icon(Icons.school),
+            label: l10n.tutoring,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.menu_book_outlined),
+            selectedIcon: const Icon(Icons.menu_book),
+            label: l10n.quran,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.mosque_outlined),
+            selectedIcon: const Icon(Icons.mosque),
+            label: l10n.prayer,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.family_restroom_outlined),
+            selectedIcon: const Icon(Icons.family_restroom),
+            label: l10n.parent,
+          ),
+        ],
         onDestinationSelected: (index) {
           setState(() {
             _selectedIndex = index;
@@ -94,6 +94,7 @@ class HomeDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final luxury = theme.extension<SakinaLuxury>()!;
     return IslamicPatternBackground(
       child: SafeArea(
@@ -101,7 +102,7 @@ class HomeDashboard extends StatelessWidget {
           padding: const EdgeInsets.all(SakinaSpacing.lg),
           children: [
             Text(
-              'Home',
+              l10n.home,
               style: theme.textTheme.headlineMedium?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
@@ -109,7 +110,7 @@ class HomeDashboard extends StatelessWidget {
             ),
             const SizedBox(height: SakinaSpacing.sm),
             Text(
-              'A calm starting point for guidance, learning, Quran, prayer, and family care.',
+              l10n.homeSummary,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -126,8 +127,8 @@ class HomeDashboard extends StatelessWidget {
                   foregroundColor: theme.colorScheme.onPrimaryContainer,
                   child: const Icon(Icons.chat_bubble_outline),
                 ),
-                title: const Text('Ask Sakina'),
-                subtitle: const Text('Open the companion chat'),
+                title: Text(l10n.askSakina),
+                subtitle: Text(l10n.openCompanionChat),
                 trailing: Icon(
                   Icons.arrow_forward,
                   color: luxury.gold,
@@ -142,20 +143,20 @@ class HomeDashboard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: SakinaSpacing.md),
-            const _DashboardTile(
+            _DashboardTile(
               icon: Icons.school_outlined,
-              title: 'Continue Learning',
-              subtitle: 'Resume tutoring sessions from the Tutoring tab.',
+              title: l10n.continueLearning,
+              subtitle: l10n.continueLearningSummary,
             ),
-            const _DashboardTile(
+            _DashboardTile(
               icon: Icons.menu_book_outlined,
-              title: 'Quran Focus',
-              subtitle: 'Jump into recitation, memorization, and tafsir work.',
+              title: l10n.quranFocus,
+              subtitle: l10n.quranFocusSummary,
             ),
-            const _DashboardTile(
+            _DashboardTile(
               icon: Icons.mosque_outlined,
-              title: 'Prayer Rhythm',
-              subtitle: 'Keep daily worship visible from the Prayer tab.',
+              title: l10n.prayerRhythm,
+              subtitle: l10n.prayerRhythmSummary,
             ),
           ],
         ),

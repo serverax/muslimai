@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:sakina_frontend/l10n/app_localizations.dart';
 import 'package:sakina_frontend/main.dart';
+import 'package:sakina_frontend/providers/preferences.dart';
+
+class _ArabicPreferencesNotifier extends PreferencesNotifier {
+  @override
+  AppPreferences build() => const AppPreferences(locale: Locale('ar'));
+}
 
 void main() {
   testWidgets('App shell renders the five primary tabs',
@@ -45,5 +52,33 @@ void main() {
     await tester.pump();
 
     expect(find.text('Assalamu alaikum'), findsOneWidget);
+  });
+
+  testWidgets('App supports Arabic localization and RTL direction',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          preferencesProvider.overrideWith(_ArabicPreferencesNotifier.new),
+        ],
+        child: const SakinaApp(),
+      ),
+    );
+
+    expect(find.text('مشروع سكينة'), findsOneWidget);
+    expect(find.text('الرئيسية'), findsWidgets);
+    expect(find.text('اسأل سكينة'), findsOneWidget);
+    expect(
+      Directionality.of(tester.element(find.text('الرئيسية').first)),
+      TextDirection.rtl,
+    );
+  });
+
+  test('five app locales are supported', () {
+    expect(
+      AppLocalizations.supportedLocales.map((locale) => locale.languageCode),
+      ['en', 'ar', 'ur', 'tr', 'id'],
+    );
+    expect(AppLocalizations.rtlLanguages, containsAll(['ar', 'ur']));
   });
 }

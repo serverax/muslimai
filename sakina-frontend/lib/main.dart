@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'design/app_theme.dart';
+import 'l10n/app_localizations.dart';
 import 'providers/preferences.dart';
 import 'screens/app_shell.dart';
 
@@ -29,6 +30,11 @@ class SakinaApp extends ConsumerWidget {
       ),
       themeMode: prefs.themeMode,
       locale: prefs.locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localeResolutionCallback: (locale, supportedLocales) {
+        return AppLocalizations.resolve(locale, supportedLocales);
+      },
       // Apply the user's text-scale preference globally.
       builder: (context, child) {
         final mq = MediaQuery.of(context);
