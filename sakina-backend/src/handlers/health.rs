@@ -1,7 +1,7 @@
-use actix_web::{HttpResponse, web};
-use sqlx::PgPool;
-use serde_json::json;
 use crate::brand::SAKINA;
+use actix_web::{web, HttpResponse};
+use serde_json::json;
+use sqlx::PgPool;
 
 pub async fn health_check(pool: web::Data<PgPool>) -> HttpResponse {
     let db_status = pool.acquire().await.is_ok();

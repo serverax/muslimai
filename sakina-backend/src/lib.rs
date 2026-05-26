@@ -1,9 +1,9 @@
 pub mod brand;
+pub mod error;
 pub mod handlers;
+pub mod middleware;
 pub mod models;
 pub mod services;
-pub mod middleware;
-pub mod error;
 pub mod telemetry;
 
 #[cfg(test)]
