@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:sakina_frontend/chat/chat_controller.dart';
 import 'package:sakina_frontend/l10n/app_localizations.dart';
 import 'package:sakina_frontend/main.dart';
 import 'package:sakina_frontend/providers/preferences.dart';
+import 'package:sakina_frontend/screens/chat_screen.dart';
+import 'package:sakina_frontend/services/api_service.dart';
 
 class _ArabicPreferencesNotifier extends PreferencesNotifier {
   @override
@@ -42,16 +45,23 @@ void main() {
 
   testWidgets('Typing and sending appends a message',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const ProviderScope(child: SakinaApp()));
-
-    await tester.tap(find.text('Ask Sakina'));
-    await tester.pumpAndSettle();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ChatScreen(
+          controller: ChatController(
+            backend: _WidgetTestBackend(),
+            historyStore: _WidgetTestHistoryStore(),
+          ),
+        ),
+      ),
+    );
 
     await tester.enterText(find.byType(TextField), 'Assalamu alaikum');
     await tester.tap(find.byIcon(Icons.send));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Assalamu alaikum'), findsOneWidget);
+    expect(find.text('Wa alaikum assalam'), findsOneWidget);
   });
 
   testWidgets('App supports Arabic localization and RTL direction',
@@ -81,4 +91,28 @@ void main() {
     );
     expect(AppLocalizations.rtlLanguages, containsAll(['ar', 'ur']));
   });
+}
+
+class _WidgetTestBackend implements ChatBackend {
+  @override
+  Future<RagResponse> query(String message) async {
+    return RagResponse(
+      answer: 'Wa alaikum assalam',
+      sources: const [],
+      confidence: 0.9,
+      guardrailTriggered: false,
+      processingTimeMs: 10,
+    );
+  }
+}
+
+class _WidgetTestHistoryStore implements ChatHistoryStore {
+  @override
+  Future<List<ChatMessage>> load() async => const [];
+
+  @override
+  Future<void> save(ChatMessage message) async {}
+
+  @override
+  Future<void> close() async {}
 }

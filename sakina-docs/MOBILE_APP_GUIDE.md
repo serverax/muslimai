@@ -1,7 +1,7 @@
 # Mobile App Guide — Project Sakina (Flutter)
 
 > **Status (honest):** the Flutter app compiles (`flutter analyze` clean) and its
-> unit/widget tests pass (10 tests) on Flutter 3.44 / Dart 3.12. It has **not**
+> unit/widget tests pass on Flutter 3.44 / Dart 3.12. It has **not**
 > been built into an APK/IPA or run on a device/simulator in this environment
 > (no Android SDK, no device, and iOS builds require macOS). The steps below are
 > the build/publish *procedure*.
@@ -47,8 +47,14 @@ reachable.
 - `SyncService` — X25519 ECDH + ChaCha20-Poly1305 (verified by round-trip tests).
 - `ApiService` — typed client for `/rag/query`, `/classify`, sync endpoints.
 - `CitationBadge` — tappable source citations.
-- Chat screen (basic). **Note:** the chat screen is not yet wired to `ApiService`/
-  `LocalDBService` end-to-end — that integration + a real device run is the next step.
+- Chat screen wired to `ApiService` for `/v1/rag/query`, with local message
+  persistence through `LocalDBService` and citation display for assistant
+  answers.
+- Five-tab app shell (Home, Tutoring, Quran, Prayer, Parent).
+- Five-language localization foundation (`en`, `ar`, `ur`, `tr`, `id`) with RTL
+  support for Arabic and Urdu.
+- Typed asset-slot registry for brand, tab hero, onboarding, and store-listing
+  assets.
 
 ## Publishing (procedure, not yet done)
 - **Google Play:** create a signed release (`key.properties` + keystore), `flutter build appbundle --release`, upload the `.aab` to the Play Console internal track.

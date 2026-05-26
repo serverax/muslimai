@@ -7,25 +7,28 @@ import 'package:sakina_frontend/services/api_service.dart';
 
 void main() {
   test('query() parses RagResponse (answer + sources + confidence)', () async {
-    final mock = MockClient((req) async => http.Response(
-          jsonEncode({
-            'answer': 'Response to: x',
-            'sources': [
-              {
-                'id': 'chunk-1',
-                'title': 'Sahih al-Bukhari',
-                'author': 'al-Bukhari',
-                'chapter': 'Faith',
-                'authenticity_grade': 'Sahih',
-              }
-            ],
-            'confidence': 0.92,
-            'guardrail_triggered': false,
-            'processing_time_ms': 450,
-          }),
-          200,
-          headers: {'content-type': 'application/json'},
-        ));
+    final mock = MockClient((req) async {
+      expect(req.url.toString(), 'http://test/v1/rag/query');
+      return http.Response(
+        jsonEncode({
+          'answer': 'Response to: x',
+          'sources': [
+            {
+              'id': 'chunk-1',
+              'title': 'Sahih al-Bukhari',
+              'author': 'al-Bukhari',
+              'chapter': 'Faith',
+              'authenticity_grade': 'Sahih',
+            }
+          ],
+          'confidence': 0.92,
+          'guardrail_triggered': false,
+          'processing_time_ms': 450,
+        }),
+        200,
+        headers: {'content-type': 'application/json'},
+      );
+    });
     final api = ApiService(baseUrl: 'http://test', client: mock);
 
     final r = await api.query('q');
