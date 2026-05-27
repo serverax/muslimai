@@ -36,8 +36,11 @@ spec:
   - Ingress
   ingress:
   - from:
-    # Traefik (when deployed)
-    - podSelector:
+    # Traefik or another ingress controller in sakina-core.
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: sakina-core
+      podSelector:
         matchLabels:
           app: traefik
     # Prometheus scraping /metrics from the monitoring namespace
@@ -89,6 +92,28 @@ spec:
     ports:
     - protocol: TCP
       port: 6333
+  # Allow to vLLM in sakina-core namespace
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: sakina-core
+      podSelector:
+        matchLabels:
+          app: vllm
+    ports:
+    - protocol: TCP
+      port: 8000
+  # Allow OTLP export to Jaeger in monitoring namespace
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: sakina-monitoring
+      podSelector:
+        matchLabels:
+          app: jaeger
+    ports:
+    - protocol: TCP
+      port: 4317
 ---
 # sakina-data namespace: default-deny all
 apiVersion: networking.k8s.io/v1
@@ -196,6 +221,30 @@ spec:
   podSelector: {}
   policyTypes:
   - Egress
+---
+# Allow vLLM to receive API requests from sakina-api.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-vllm-ingress
+  namespace: sakina-core
+spec:
+  podSelector:
+    matchLabels:
+      app: vllm
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: sakina-api
+      podSelector:
+        matchLabels:
+          app: sakina-api
+    ports:
+    - protocol: TCP
+      port: 8000
 ---
 # sakina-audit namespace: default-deny all
 apiVersion: networking.k8s.io/v1

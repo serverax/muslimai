@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: '3.32.0'
 
       - name: Get dependencies
         run: |
@@ -34,6 +34,7 @@ jobs:
           flutter test
 
       - name: Build APK
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           cd sakina-frontend
           flutter build apk --release
