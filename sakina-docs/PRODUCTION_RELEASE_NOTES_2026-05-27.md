@@ -77,13 +77,13 @@ kubectl -n sakina-prod set image deployment/sakina-frontend frontend=ghcr.io/ser
 - `7jzi.com`, `www.7jzi.com`, `api.7jzi.com`
 - `sakina_ai.waitlist`
 
-### Legacy stack currently unhealthy / outside confirmed scope
+### Legacy stack status (post-cleanup review)
 
-- `sakinaai-api`
-- `sakinaai-admin-web`
-- `sakinaai-worker`
-- `sakinaai-redis`
-- `sakinaai-ingress` (`api.sakinaapp.com`, `admin.sakinaapp.com`)
+- No `sakinaai-*` deployments/services/ingress/configmaps/secrets remain in `sakina-prod`.
+- Active ingress now only targets:
+  - `7jzi.com`
+  - `www.7jzi.com`
+  - `api.7jzi.com`
 
 ### Dependency check summary
 
@@ -124,6 +124,21 @@ kubectl -n sakina-prod delete secret sakinaai-secrets
 
 Important: do **not** delete PVCs unless explicitly approved.
 
+### Cleanup result snapshot
+
+- Verified absent:
+  - `sakinaai-api`
+  - `sakinaai-admin-web`
+  - `sakinaai-worker`
+  - `sakinaai-redis` service
+  - `sakinaai-ingress`
+- PVC check for legacy Redis was requested but not executable with the `sakina-developer` account due namespace PVC list RBAC restrictions.  
+  Admin check command:
+
+```bash
+kubectl -n sakina-prod get pvc | grep -Ei 'sakinaai|redis'
+```
+
 ## 7) Final Verification Evidence
 
 - `GET /health` returned healthy JSON.
@@ -137,6 +152,8 @@ Important: do **not** delete PVCs unless explicitly approved.
   - `sakina_build_info{service="sakina-backend"} 1`
 - `POST /waitlist` returned:
   - `{"status":"ok","message":"waitlist entry saved"}`
+- Post-cleanup waitlist verification email:
+  - `post-cleanup-20260527100142@example.com`
 - Frontend:
   - `http://7jzi.com/` and `http://7jzi.com/lander` served expected landing page content.
 
