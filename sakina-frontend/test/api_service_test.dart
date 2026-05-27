@@ -58,4 +58,28 @@ void main() {
     final api = ApiService(baseUrl: 'http://test', client: mock);
     expect(() => api.classify('q'), throwsA(isA<ApiException>()));
   });
+
+  test('joinWaitlist() posts the expected payload', () async {
+    late http.Request captured;
+    final mock = MockClient((req) async {
+      captured = req;
+      return http.Response(jsonEncode({'status': 'ok'}), 200);
+    });
+    final api = ApiService(baseUrl: 'http://test', client: mock);
+
+    await api.joinWaitlist(
+      name: 'Sakina User',
+      email: 'waitlist@example.com',
+      preferredLanguage: 'en',
+      platform: 'web',
+      message: 'Please notify me.',
+    );
+
+    expect(captured.url.toString(), 'http://test/v1/waitlist');
+    final body = jsonDecode(captured.body) as Map<String, dynamic>;
+    expect(body['name'], 'Sakina User');
+    expect(body['email'], 'waitlist@example.com');
+    expect(body['preferred_language'], 'en');
+    expect(body['platform'], 'web');
+  });
 }

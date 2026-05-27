@@ -22,4 +22,23 @@ void main() {
 
     expect(find.text('Assalamu alaikum'), findsOneWidget);
   });
+
+  testWidgets('Arabic text entry is rendered correctly', (WidgetTester tester) async {
+    await tester.pumpWidget(const ProviderScope(child: SakinaApp()));
+    const arabicText = 'السلام عليكم';
+
+    await tester.enterText(find.byType(TextField), arabicText);
+    await tester.tap(find.byIcon(Icons.send));
+    await tester.pump();
+
+    expect(find.text(arabicText), findsOneWidget);
+  });
+
+  testWidgets('Input and send controls expose semantics labels',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const ProviderScope(child: SakinaApp()));
+
+    expect(find.bySemanticsLabel('chat-message-input'), findsOneWidget);
+    expect(find.bySemanticsLabel('send-message-button'), findsOneWidget);
+  });
 }

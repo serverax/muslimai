@@ -44,3 +44,12 @@ yarn.lock
 *.apk
 *.ipa
 *.so
+
+# Security-sensitive local handoff/cluster files
+sakina-secure-handoff/
+sakina-secure-handoff.zip
+sakina-developer-kubeconfig.yaml
+*kubeconfig*.yaml
+*.kubeconfig
+*.env
+*.env.*

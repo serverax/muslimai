@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-backend
+  namespace: sakina-prod
+  labels:
+    app: sakina-backend
+spec:
+  type: ClusterIP
+  selector:
+    app: sakina-backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-backend
+  namespace: sakina-prod
+  labels:
+    app: sakina-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-backend
+  template:
+    metadata:
+      labels:
+        app: sakina-backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      imagePullSecrets:
+        - name: ghcr-creds
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: backend
+          image: ghcr.io/serverax/sakina-backend:2eb50fe
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-secrets
+                  key: DATABASE_URL
+            - name: SUPABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-secrets
+                  key: SUPABASE_URL
+            - name: SUPABASE_SERVICE_ROLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-secrets
+                  key: SUPABASE_SERVICE_ROLE_KEY
+            - name: SAKINA_SERVER_PUBKEY
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-secrets
+                  key: SAKINA_SERVER_PUBKEY
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 768Mi
+          livenessProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /v1/ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

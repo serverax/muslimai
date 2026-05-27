@@ -8,7 +8,7 @@ void main() {
 }
 
 class SakinaApp extends StatelessWidget {
-  const SakinaApp({Key? key}) : super(key: key);
+  const SakinaApp({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -54,6 +54,19 @@ jobs:
       - name: Validate Docker Compose config
         run: docker compose -f sakina-infra/docker-compose.yml config
 
+      - name: Verify active prod manifests
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          backend = Path("sakina-infra/manifests/sakina-prod/sakina-backend.yaml").read_text()
+          frontend = Path("sakina-infra/manifests/sakina-prod/sakina-frontend.yaml").read_text()
+          assert "ghcr.io/serverax/sakina-backend:" in backend
+          assert "ghcr.io/serverax/sakina-frontend:" in frontend
+          assert ":latest" not in backend
+          assert ":latest" not in frontend
+          print("Active manifests validated.")
+          PY
+
   build-images:
     runs-on: ubuntu-latest
     needs: validate-infra

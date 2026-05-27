@@ -33,6 +33,13 @@ jobs:
           cd sakina-frontend
           flutter test
 
+      - name: Verify backend secrets are not referenced in frontend
+        run: |
+          if rg -n "SUPABASE_SERVICE_ROLE_KEY" sakina-frontend/lib sakina-frontend/test; then
+            echo "SUPABASE_SERVICE_ROLE_KEY must never be referenced in frontend code"
+            exit 1
+          fi
+
       - name: Build APK
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |

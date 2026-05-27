@@ -12,14 +12,14 @@ services:
       - ../sakina-backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   qdrant:
-    image: qdrant/qdrant:latest
+    image: qdrant/qdrant:v1.10.1
     ports:
       - "6333:6333"
     volumes:
       - qdrant-data:/qdrant/storage
 
   vllm:
-    image: sakina-backend-vllm:latest
+    image: sakina-backend-vllm:dev-local
     build:
       context: ../sakina-backend
       dockerfile: Dockerfile.vllm
@@ -29,7 +29,7 @@ services:
       - CUDA_VISIBLE_DEVICES=0
 
   api:
-    image: sakina-backend-api:latest
+    image: sakina-backend-api:dev-local
     build:
       context: ../sakina-backend
       dockerfile: Dockerfile.api

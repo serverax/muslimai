@@ -1,0 +1,7 @@
+[allowlist]
+description = "Allow known non-secret placeholders in docs"
+regexes = [
+  '''replace-with-real-[a-zA-Z0-9-]+''',
+  '''your-super-secret-and-long-postgres-password''',
+  '''example\.com'''
+]

@@ -42,10 +42,12 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          api_manifest = Path("sakina-infra/manifests/sakina-api-deployment.yaml").read_text()
-          assert "path: /v1/ready" in api_manifest, "readiness probe must target /v1/ready"
-          assert "ghcr.io/serverax/sakinaai-api:0.1.0" in api_manifest, "API image must use GHCR"
-          assert "sakina-api-auth" in api_manifest, "API auth secret reference is missing"
+          backend_manifest = Path("sakina-infra/manifests/sakina-prod/sakina-backend.yaml").read_text()
+          frontend_manifest = Path("sakina-infra/manifests/sakina-prod/sakina-frontend.yaml").read_text()
+          assert "path: /v1/ready" in backend_manifest, "readiness probe must target /v1/ready"
+          assert "ghcr.io/serverax/sakina-backend:" in backend_manifest, "backend image must use pinned GHCR tag"
+          assert "SUPABASE_SERVICE_ROLE_KEY" in backend_manifest, "backend secret contract missing"
+          assert "ghcr.io/serverax/sakina-frontend:" in frontend_manifest, "frontend image must use pinned GHCR tag"
           PY
 
       - name: Validate Docker Compose config

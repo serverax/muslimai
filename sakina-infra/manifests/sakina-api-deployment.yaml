@@ -1,5 +1,6 @@
-# Project Sakina API Deployment & Service
-# CPU-only, 3 replicas, liveness probe on /v1/health
+# LEGACY MANIFEST (sakina-api namespace)
+# Do not use for active 7jzi.com production deploys.
+# Active deployment manifests live under sakina-infra/manifests/sakina-prod/.
 
 apiVersion: v1
 kind: Service

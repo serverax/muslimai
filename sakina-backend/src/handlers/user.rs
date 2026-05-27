@@ -1,4 +1,3 @@
-use crate::models::User;
 use actix_web::{web, HttpResponse};
 use serde_json::json;
 use sqlx::PgPool;
@@ -6,34 +5,47 @@ use uuid::Uuid;
 
 pub async fn create_user(
     _pool: web::Data<PgPool>,
-    body: web::Json<serde_json::Value>,
+    _body: web::Json<serde_json::Value>,
 ) -> HttpResponse {
-    let user_id = Uuid::new_v4();
-    let pub_key = body.get("pub_key").and_then(|v| v.as_str()).unwrap_or("");
-    let madhhab = body
-        .get("madhhab_preference")
-        .and_then(|v| v.as_str())
-        .unwrap_or("hanafi");
-
-    // TODO: Insert into database
-    let _ = User {
-        id: user_id,
-        pub_key: pub_key.to_string(),
-        madhhab_preference: madhhab.to_string(),
-        created_at: chrono::Utc::now().to_rfc3339(),
-    };
-
-    HttpResponse::Created().json(json!({
-        "id": user_id,
-        "pub_key": pub_key,
-        "madhhab_preference": madhhab,
-        "created_at": chrono::Utc::now().to_rfc3339()
+    HttpResponse::NotImplemented().json(json!({
+        "error": "user account creation is disabled until auth/profile phase is implemented"
     }))
 }
 
 pub async fn get_user(_pool: web::Data<PgPool>, user_id: web::Path<Uuid>) -> HttpResponse {
-    HttpResponse::Ok().json(json!({
+    HttpResponse::NotImplemented().json(json!({
         "id": user_id.into_inner(),
-        "message": "User handler stub"
+        "error": "user profile retrieval is disabled until auth/profile phase is implemented"
     }))
+}
+
+pub async fn get_server_pubkey() -> HttpResponse {
+    match std::env::var("SAKINA_SERVER_PUBKEY") {
+        Ok(pub_key) if !pub_key.trim().is_empty() => HttpResponse::Ok().json(json!({
+            "pub_key": pub_key
+        })),
+        _ => HttpResponse::ServiceUnavailable().json(json!({
+            "error": "server public key is not configured"
+        })),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use actix_web::http::StatusCode;
+
+    #[actix_rt::test]
+    async fn pubkey_endpoint_returns_service_unavailable_when_unset() {
+        std::env::remove_var("SAKINA_SERVER_PUBKEY");
+        let response = get_server_pubkey().await;
+        assert_eq!(response.status(), StatusCode::SERVICE_UNAVAILABLE);
+    }
+
+    #[actix_rt::test]
+    async fn pubkey_endpoint_returns_value_when_set() {
+        std::env::set_var("SAKINA_SERVER_PUBKEY", "test-pub-key");
+        let response = get_server_pubkey().await;
+        assert_eq!(response.status(), StatusCode::OK);
+    }
 }

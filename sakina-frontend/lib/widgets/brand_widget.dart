@@ -4,7 +4,7 @@ import '../config/brand_config.dart';
 class BrandHeader extends StatelessWidget {
   final bool isArabic;
 
-  const BrandHeader({Key? key, this.isArabic = false}) : super(key: key);
+  const BrandHeader({super.key, this.isArabic = false});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class BrandHeader extends StatelessWidget {
 class BrandValuesList extends StatelessWidget {
   final bool isArabic;
 
-  const BrandValuesList({Key? key, this.isArabic = false}) : super(key: key);
+  const BrandValuesList({super.key, this.isArabic = false});
 
   @override
   Widget build(BuildContext context) {

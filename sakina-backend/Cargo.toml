@@ -20,10 +20,10 @@ opentelemetry_sdk = "0.32.0"
 opentelemetry-stdout = "0.32.0"
 tracing-opentelemetry = "0.33.0"
 reqwest = { version = "0.12", default-features = false, features = ["json"] }
+sha2 = "0.10"
 # NOTE: Qdrant is accessed via its REST API (reqwest, http) instead of the
 # qdrant-client gRPC crate, to avoid the tonic dependency tree / OOM. vLLM
-# embeddings also use reqwest. sha2 stays omitted (std-hasher placeholder); see
-# git history for the trimmed deps.
+# embeddings also use reqwest.
 
 [[bin]]
 name = "sakina-api"

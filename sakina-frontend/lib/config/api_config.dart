@@ -1,5 +1,8 @@
 class ApiConfig {
-  static const String baseUrl = 'http://localhost:8080/v1';
+  static const String baseUrl = String.fromEnvironment(
+    'SAKINA_API_BASE_URL',
+    defaultValue: 'http://api.7jzi.com/v1',
+  );
 
   static const String healthEndpoint = '/health';
   static const String ragQueryEndpoint = '/rag/query';

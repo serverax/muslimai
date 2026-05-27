@@ -6,7 +6,6 @@ metadata:
 data:
   POSTGRES_DB: sakina
   POSTGRES_USER: sakina_user
-  POSTGRES_PASSWORD: sakina_password
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -24,6 +23,9 @@ spec:
       labels:
         app: postgres
     spec:
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 999
       containers:
         - name: postgres
           image: postgres:15-alpine
@@ -32,11 +34,31 @@ spec:
           envFrom:
             - configMapRef:
                 name: postgres-config
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
             - name: init-script
               mountPath: /docker-entrypoint-initdb.d
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           livenessProbe:
             exec:
               command:

@@ -1,5 +1,8 @@
-use actix_web::{web, HttpResponse};
+use actix_web::{web, HttpRequest, HttpResponse};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::sync::Mutex;
+use std::time::{Duration, Instant};
 
 #[derive(Debug, Deserialize)]
 pub struct WaitlistRequest {
@@ -17,6 +20,48 @@ pub struct WaitlistResponse {
     pub message: &'static str,
 }
 
+pub struct WaitlistRateLimiter {
+    window: Duration,
+    max_requests: usize,
+    requests_by_key: Mutex<HashMap<String, Vec<Instant>>>,
+}
+
+impl WaitlistRateLimiter {
+    pub fn new(max_requests: usize, window: Duration) -> Self {
+        Self {
+            window,
+            max_requests,
+            requests_by_key: Mutex::new(HashMap::new()),
+        }
+    }
+
+    pub fn is_allowed(&self, key: &str) -> bool {
+        let now = Instant::now();
+        let mut map = self
+            .requests_by_key
+            .lock()
+            .expect("waitlist rate limiter lock poisoned");
+        let entries = map.entry(key.to_string()).or_default();
+        entries.retain(|t| now.duration_since(*t) <= self.window);
+        if entries.len() >= self.max_requests {
+            return false;
+        }
+        entries.push(now);
+        true
+    }
+}
+
+fn requester_key(req: &HttpRequest) -> String {
+    req.headers()
+        .get("x-forwarded-for")
+        .and_then(|v| v.to_str().ok())
+        .and_then(|v| v.split(',').next())
+        .map(|v| v.trim().to_string())
+        .filter(|v| !v.is_empty())
+        .or_else(|| req.peer_addr().map(|a| a.ip().to_string()))
+        .unwrap_or_else(|| "unknown".to_string())
+}
+
 fn is_valid_email(email: &str) -> bool {
     let email = email.trim();
     if email.is_empty() || email.contains(' ') {
@@ -29,10 +74,25 @@ fn is_valid_email(email: &str) -> bool {
 }
 
 pub async fn create_waitlist_entry(
+    req: HttpRequest,
     pool: web::Data<sqlx::PgPool>,
+    limiter: web::Data<WaitlistRateLimiter>,
     payload: web::Json<WaitlistRequest>,
 ) -> HttpResponse {
+    let key = requester_key(&req);
+    if !limiter.is_allowed(&key) {
+        return HttpResponse::TooManyRequests().json(serde_json::json!({
+            "error": "too many requests, please try again later"
+        }));
+    }
+
     let req = payload.into_inner();
+    const MAX_NAME_LEN: usize = 120;
+    const MAX_EMAIL_LEN: usize = 320;
+    const MAX_LANGUAGE_LEN: usize = 16;
+    const MAX_PLATFORM_LEN: usize = 32;
+    const MAX_MESSAGE_LEN: usize = 2000;
+    const MAX_SOURCE_LEN: usize = 120;
 
     if req.name.trim().is_empty() || req.email.trim().is_empty() {
         return HttpResponse::BadRequest().json(serde_json::json!({
@@ -42,6 +102,33 @@ pub async fn create_waitlist_entry(
     if !is_valid_email(&req.email) {
         return HttpResponse::BadRequest().json(serde_json::json!({
             "error": "email is invalid"
+        }));
+    }
+    if req.name.trim().len() > MAX_NAME_LEN
+        || req.email.trim().len() > MAX_EMAIL_LEN
+        || req
+            .preferred_language
+            .as_deref()
+            .map(|v| v.trim().len() > MAX_LANGUAGE_LEN)
+            .unwrap_or(false)
+        || req
+            .platform
+            .as_deref()
+            .map(|v| v.trim().len() > MAX_PLATFORM_LEN)
+            .unwrap_or(false)
+        || req
+            .message
+            .as_deref()
+            .map(|v| v.trim().len() > MAX_MESSAGE_LEN)
+            .unwrap_or(false)
+        || req
+            .source
+            .as_deref()
+            .map(|v| v.trim().len() > MAX_SOURCE_LEN)
+            .unwrap_or(false)
+    {
+        return HttpResponse::BadRequest().json(serde_json::json!({
+            "error": "one or more fields exceeded maximum allowed length"
         }));
     }
 
@@ -86,9 +173,13 @@ pub async fn create_waitlist_entry(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use actix_web::body::to_bytes;
+    use actix_web::{body::to_bytes, test::TestRequest};
     use sqlx::{PgPool, Row};
     use uuid::Uuid;
+
+    fn test_limiter() -> web::Data<WaitlistRateLimiter> {
+        web::Data::new(WaitlistRateLimiter::new(50, Duration::from_secs(60)))
+    }
 
     async fn ensure_waitlist_schema(pool: &PgPool) {
         sqlx::query("CREATE SCHEMA IF NOT EXISTS sakina_ai")
@@ -127,7 +218,9 @@ mod tests {
         let pool = PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
             .expect("lazy pool");
         let response = create_waitlist_entry(
+            TestRequest::default().to_http_request(),
             web::Data::new(pool),
+            test_limiter(),
             web::Json(WaitlistRequest {
                 name: "A".to_string(),
                 email: "not-an-email".to_string(),
@@ -159,12 +252,19 @@ mod tests {
             source: None,
         };
 
-        let first =
-            create_waitlist_entry(web::Data::new(pool.clone()), web::Json(base_request)).await;
+        let first = create_waitlist_entry(
+            TestRequest::default().to_http_request(),
+            web::Data::new(pool.clone()),
+            test_limiter(),
+            web::Json(base_request),
+        )
+        .await;
         assert_eq!(first.status(), actix_web::http::StatusCode::OK);
 
         let second = create_waitlist_entry(
+            TestRequest::default().to_http_request(),
             web::Data::new(pool.clone()),
+            test_limiter(),
             web::Json(WaitlistRequest {
                 name: "Sakina User Updated".to_string(),
                 email: email.clone(),
@@ -195,7 +295,9 @@ mod tests {
         let pool = PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
             .expect("lazy pool");
         let response = create_waitlist_entry(
+            TestRequest::default().to_http_request(),
             web::Data::new(pool),
+            test_limiter(),
             web::Json(WaitlistRequest {
                 name: "   ".to_string(),
                 email: "user@example.com".to_string(),
@@ -210,5 +312,12 @@ mod tests {
         let body = to_bytes(response.into_body()).await.expect("body bytes");
         let text = String::from_utf8(body.to_vec()).expect("utf8");
         assert!(text.contains("name and email are required"));
+    }
+
+    #[test]
+    fn limiter_blocks_after_threshold() {
+        let limiter = WaitlistRateLimiter::new(1, Duration::from_secs(60));
+        assert!(limiter.is_allowed("127.0.0.1"));
+        assert!(!limiter.is_allowed("127.0.0.1"));
     }
 }

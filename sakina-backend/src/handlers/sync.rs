@@ -98,12 +98,9 @@ pub async fn download_backup(
 }
 
 fn checksum_hex(bytes: &[u8]) -> String {
-    use std::collections::hash_map::DefaultHasher;
-    use std::hash::{Hash, Hasher};
-
-    let mut hasher = DefaultHasher::new();
-    bytes.hash(&mut hasher);
-    format!("{:016x}", hasher.finish())
+    use sha2::{Digest, Sha256};
+    let digest = Sha256::digest(bytes);
+    format!("{:x}", digest)
 }
 
 fn authorize_user_access(req: &HttpRequest, requested_user_id: Uuid) -> bool {
@@ -113,4 +110,18 @@ fn authorize_user_access(req: &HttpRequest, requested_user_id: Uuid) -> bool {
         .and_then(|s| Uuid::parse_str(s).ok())
         .map(|header_user_id| header_user_id == requested_user_id)
         .unwrap_or(false)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::checksum_hex;
+
+    #[test]
+    fn checksum_is_deterministic_sha256() {
+        let input = b"abc";
+        let expected =
+            "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad".to_string();
+        assert_eq!(checksum_hex(input), expected);
+        assert_eq!(checksum_hex(input), expected);
+    }
 }

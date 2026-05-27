@@ -137,6 +137,10 @@ async fn main() -> std::io::Result<()> {
         &qdrant_collection,
     ));
     let embeddings = web::Data::new(services::EmbeddingsService::new(&vllm_url));
+    let waitlist_limiter = web::Data::new(handlers::waitlist::WaitlistRateLimiter::new(
+        5,
+        std::time::Duration::from_secs(60),
+    ));
     // Start HTTP server
     info!("Starting HTTP server on 0.0.0.0:8080");
 
@@ -148,6 +152,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(citations_data.clone())
             .app_data(qdrant.clone())
             .app_data(embeddings.clone())
+            .app_data(waitlist_limiter.clone())
             .app_data(
                 web::JsonConfig::default()
                     .limit(256 * 1024)
@@ -182,6 +187,7 @@ async fn main() -> std::io::Result<()> {
                     .service(
                         web::scope("/users")
                             .route("", web::post().to(handlers::user::create_user))
+                            .route("/pubkey", web::get().to(handlers::user::get_server_pubkey))
                             .route("/{user_id}", web::get().to(handlers::user::get_user)),
                     )
                     .service(
@@ -229,6 +235,12 @@ mod tests {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(pool))
+                .app_data(web::Data::new(
+                    handlers::waitlist::WaitlistRateLimiter::new(
+                        50,
+                        std::time::Duration::from_secs(60),
+                    ),
+                ))
                 .route("/health", web::get().to(handlers::health::health_check))
                 .route("/ready", web::get().to(readiness_check))
                 .route("/metrics", web::get().to(handlers::ops::metrics))

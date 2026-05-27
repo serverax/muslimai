@@ -77,6 +77,34 @@ class ApiService {
     throw ApiException('getPublicKey failed: HTTP ${res.statusCode}');
   }
 
+  Future<void> joinWaitlist({
+    required String name,
+    required String email,
+    String? preferredLanguage,
+    String? platform,
+    String? message,
+  }) async {
+    final res = await _withRetry(
+      () => _client
+          .post(
+            Uri.parse(_endpoint('/waitlist')),
+            headers: _headers(),
+            body: jsonEncode({
+              'name': name,
+              'email': email,
+              if (preferredLanguage != null)
+                'preferred_language': preferredLanguage,
+              if (platform != null) 'platform': platform,
+              if (message != null) 'message': message,
+            }),
+          )
+          .timeout(const Duration(seconds: 10)),
+    );
+    if (res.statusCode != 200) {
+      throw ApiException('waitlist failed: HTTP ${res.statusCode}');
+    }
+  }
+
   Future<void> uploadBackup(
     String encrypted, {
     required String userId,
