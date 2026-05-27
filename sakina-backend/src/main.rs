@@ -131,10 +131,20 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::AuditMiddleware)
             .route("/health", web::get().to(handlers::health::health_check))
             .route("/ready", web::get().to(readiness_check))
+            .route("/metrics", web::get().to(handlers::ops::metrics))
+            .route(
+                "/waitlist",
+                web::post().to(handlers::waitlist::create_waitlist_entry),
+            )
             .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
                     .route("/ready", web::get().to(readiness_check))
+                    .route("/metrics", web::get().to(handlers::ops::metrics))
+                    .route(
+                        "/waitlist",
+                        web::post().to(handlers::waitlist::create_waitlist_entry),
+                    )
                     .service(
                         web::scope("/users")
                             .route("", web::post().to(handlers::user::create_user))
