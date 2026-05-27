@@ -132,7 +132,15 @@ Important: do **not** delete PVCs unless explicitly approved.
   - `sakinaai-worker`
   - `sakinaai-redis` service
   - `sakinaai-ingress`
-- PVC check for legacy Redis was requested but not executable with the `sakina-developer` account due namespace PVC list RBAC restrictions.  
+- Legacy Redis PVC retained (admin-verified):
+  - `redis-data-sakinaai-redis-0`
+  - Size: `5Gi`
+  - Status: `Bound`
+  - StorageClass: `local-path`
+- Data-retention decision:
+  - PVC/data deletion is **not approved** in this release stage.
+  - Keep PVC intact pending separate explicit data-retention approval.
+- Initial PVC check from `sakina-developer` account was RBAC-restricted.  
   Admin check command:
 
 ```bash
