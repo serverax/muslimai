@@ -8,15 +8,17 @@ on:
       - 'v*'
     paths:
       - 'sakina-backend/**'
-      - 'sakina-dashboard/**'
-      - 'sakina-worker/**'
+      - 'Dockerfile.frontend'
+      - 'index.html'
+      - 'sakina-frontend-default.conf'
       - 'sakina-infra/**'
       - '.github/workflows/sakinaai-images.yml'
   pull_request:
     paths:
       - 'sakina-backend/**'
-      - 'sakina-dashboard/**'
-      - 'sakina-worker/**'
+      - 'Dockerfile.frontend'
+      - 'index.html'
+      - 'sakina-frontend-default.conf'
       - 'sakina-infra/**'
       - '.github/workflows/sakinaai-images.yml'
   workflow_dispatch:
@@ -62,21 +64,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: sakinaai-api
+          - name: sakina-backend
             context: sakina-backend
             dockerfile: sakina-backend/Dockerfile.api
             build_on_pr: true
-          - name: sakinaai-vllm
-            context: sakina-backend
-            dockerfile: sakina-backend/Dockerfile.vllm
-            build_on_pr: false
-          - name: sakinaai-admin-web
-            context: sakina-dashboard
-            dockerfile: sakina-dashboard/Dockerfile
-            build_on_pr: false
-          - name: sakinaai-worker
-            context: sakina-worker
-            dockerfile: sakina-worker/Dockerfile
+          - name: sakina-frontend
+            context: .
+            dockerfile: Dockerfile.frontend
             build_on_pr: false
 
     steps:
