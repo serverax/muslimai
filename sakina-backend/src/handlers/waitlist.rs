@@ -4,6 +4,8 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
+use crate::error::error_response;
+
 #[derive(Debug, Deserialize)]
 pub struct WaitlistRequest {
     pub name: String,
@@ -81,9 +83,11 @@ pub async fn create_waitlist_entry(
 ) -> HttpResponse {
     let key = requester_key(&req);
     if !limiter.is_allowed(&key) {
-        return HttpResponse::TooManyRequests().json(serde_json::json!({
-            "error": "too many requests, please try again later"
-        }));
+        return error_response(
+            actix_web::http::StatusCode::TOO_MANY_REQUESTS,
+            "rate_limited",
+            "too many requests, please try again later",
+        );
     }
 
     let req = payload.into_inner();
@@ -95,14 +99,18 @@ pub async fn create_waitlist_entry(
     const MAX_SOURCE_LEN: usize = 120;
 
     if req.name.trim().is_empty() || req.email.trim().is_empty() {
-        return HttpResponse::BadRequest().json(serde_json::json!({
-            "error": "name and email are required"
-        }));
+        return error_response(
+            actix_web::http::StatusCode::BAD_REQUEST,
+            "bad_request",
+            "name and email are required",
+        );
     }
     if !is_valid_email(&req.email) {
-        return HttpResponse::BadRequest().json(serde_json::json!({
-            "error": "email is invalid"
-        }));
+        return error_response(
+            actix_web::http::StatusCode::BAD_REQUEST,
+            "bad_request",
+            "email is invalid",
+        );
     }
     if req.name.trim().len() > MAX_NAME_LEN
         || req.email.trim().len() > MAX_EMAIL_LEN
@@ -127,9 +135,11 @@ pub async fn create_waitlist_entry(
             .map(|v| v.trim().len() > MAX_SOURCE_LEN)
             .unwrap_or(false)
     {
-        return HttpResponse::BadRequest().json(serde_json::json!({
-            "error": "one or more fields exceeded maximum allowed length"
-        }));
+        return error_response(
+            actix_web::http::StatusCode::BAD_REQUEST,
+            "bad_request",
+            "one or more fields exceeded maximum allowed length",
+        );
     }
 
     let query = r#"
@@ -163,9 +173,11 @@ pub async fn create_waitlist_entry(
         }),
         Err(err) => {
             tracing::error!("waitlist insert failed: {}", err);
-            HttpResponse::InternalServerError().json(serde_json::json!({
-                "error": "failed to save waitlist entry"
-            }))
+            error_response(
+                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+                "internal_error",
+                "failed to save waitlist entry",
+            )
         }
     }
 }
@@ -232,6 +244,11 @@ mod tests {
         )
         .await;
         assert_eq!(response.status(), actix_web::http::StatusCode::BAD_REQUEST);
+        let body = to_bytes(response.into_body()).await.expect("body bytes");
+        let text = String::from_utf8(body.to_vec()).expect("utf8");
+        assert!(text.contains("\"error\""));
+        assert!(text.contains("\"code\":\"bad_request\""));
+        assert!(text.contains("email is invalid"));
     }
 
     #[actix_rt::test]

@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
 use serde_json::json;
 use sqlx::postgres::PgPoolOptions;
@@ -51,6 +52,33 @@ async fn readiness_check(pool: web::Data<sqlx::PgPool>) -> HttpResponse {
     } else {
         HttpResponse::ServiceUnavailable().json(response)
     }
+}
+
+fn build_cors() -> Cors {
+    let allowed_origins = std::env::var("CORS_ALLOWED_ORIGINS")
+        .unwrap_or_else(|_| {
+            "https://7jzi.com,https://www.7jzi.com,http://7jzi.com,http://www.7jzi.com".to_string()
+        })
+        .split(',')
+        .map(str::trim)
+        .filter(|origin| !origin.is_empty())
+        .map(ToOwned::to_owned)
+        .collect::<Vec<String>>();
+
+    let mut cors = Cors::default()
+        .allowed_methods(vec!["GET", "POST", "OPTIONS"])
+        .allowed_headers(vec![
+            actix_web::http::header::AUTHORIZATION,
+            actix_web::http::header::CONTENT_TYPE,
+            actix_web::http::header::ACCEPT,
+            actix_web::http::header::HeaderName::from_static("x-sakina-user-id"),
+        ])
+        .max_age(3600);
+
+    for origin in allowed_origins {
+        cors = cors.allowed_origin(&origin);
+    }
+    cors
 }
 
 #[actix_web::main]
@@ -159,13 +187,16 @@ async fn main() -> std::io::Result<()> {
                     .error_handler(|err, _| {
                         actix_web::error::InternalError::from_response(
                             err,
-                            actix_web::HttpResponse::BadRequest().json(serde_json::json!({
-                                "error": "invalid or oversized request payload"
-                            })),
+                            sakina_backend::error::error_response(
+                                actix_web::http::StatusCode::BAD_REQUEST,
+                                "bad_request",
+                                "invalid or oversized request payload",
+                            ),
                         )
                         .into()
                     }),
             )
+            .wrap(build_cors())
             .wrap(Logger::default())
             .wrap(middleware::AuditMiddleware)
             .route("/health", web::get().to(handlers::health::health_check))
@@ -191,7 +222,30 @@ async fn main() -> std::io::Result<()> {
                             .route("/{user_id}", web::get().to(handlers::user::get_user)),
                     )
                     .service(
+                        web::scope("/modules")
+                            .route(
+                                "/quran/overview",
+                                web::get().to(handlers::modules::quran_overview),
+                            )
+                            .route(
+                                "/prayer/overview",
+                                web::get().to(handlers::modules::prayer_overview),
+                            )
+                            .route(
+                                "/knowledge/overview",
+                                web::get().to(handlers::modules::knowledge_overview),
+                            )
+                            .route(
+                                "/community/overview",
+                                web::get().to(handlers::modules::community_overview),
+                            ),
+                    )
+                    .service(
                         web::scope("/rag")
+                            .route("/status", web::get().to(handlers::rag::rag_status))
+                            .route("/sources", web::get().to(handlers::rag::rag_sources))
+                            .route("/search", web::get().to(handlers::rag::rag_search))
+                            .route("/decide", web::post().to(handlers::rag::rag_decide))
                             .route("/query", web::post().to(handlers::rag::query_rag)),
                     )
                     .route(
@@ -232,34 +286,48 @@ mod tests {
         let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
             .expect("lazy pool");
 
-        let app = test::init_service(
-            App::new()
-                .app_data(web::Data::new(pool))
-                .app_data(web::Data::new(
-                    handlers::waitlist::WaitlistRateLimiter::new(
-                        50,
-                        std::time::Duration::from_secs(60),
-                    ),
-                ))
-                .route("/health", web::get().to(handlers::health::health_check))
-                .route("/ready", web::get().to(readiness_check))
-                .route("/metrics", web::get().to(handlers::ops::metrics))
-                .route(
-                    "/waitlist",
-                    web::post().to(handlers::waitlist::create_waitlist_entry),
-                )
-                .service(
-                    web::scope("/v1")
-                        .route("/health", web::get().to(handlers::health::health_check))
-                        .route("/ready", web::get().to(readiness_check))
-                        .route("/metrics", web::get().to(handlers::ops::metrics))
-                        .route(
-                            "/waitlist",
-                            web::post().to(handlers::waitlist::create_waitlist_entry),
+        let app =
+            test::init_service(
+                App::new()
+                    .app_data(web::Data::new(pool))
+                    .app_data(web::Data::new(
+                        handlers::waitlist::WaitlistRateLimiter::new(
+                            50,
+                            std::time::Duration::from_secs(60),
                         ),
-                ),
-        )
-        .await;
+                    ))
+                    .app_data(web::JsonConfig::default().limit(256 * 1024).error_handler(
+                        |err, _| {
+                            actix_web::error::InternalError::from_response(
+                                err,
+                                sakina_backend::error::error_response(
+                                    actix_web::http::StatusCode::BAD_REQUEST,
+                                    "bad_request",
+                                    "invalid or oversized request payload",
+                                ),
+                            )
+                            .into()
+                        },
+                    ))
+                    .route("/health", web::get().to(handlers::health::health_check))
+                    .route("/ready", web::get().to(readiness_check))
+                    .route("/metrics", web::get().to(handlers::ops::metrics))
+                    .route(
+                        "/waitlist",
+                        web::post().to(handlers::waitlist::create_waitlist_entry),
+                    )
+                    .service(
+                        web::scope("/v1")
+                            .route("/health", web::get().to(handlers::health::health_check))
+                            .route("/ready", web::get().to(readiness_check))
+                            .route("/metrics", web::get().to(handlers::ops::metrics))
+                            .route(
+                                "/waitlist",
+                                web::post().to(handlers::waitlist::create_waitlist_entry),
+                            ),
+                    ),
+            )
+            .await;
 
         let health_root =
             test::call_service(&app, test::TestRequest::get().uri("/health").to_request()).await;
@@ -311,5 +379,31 @@ mod tests {
         .await;
         assert_eq!(waitlist_bad_root.status(), StatusCode::BAD_REQUEST);
         assert_eq!(waitlist_bad_v1.status(), StatusCode::BAD_REQUEST);
+
+        let waitlist_bad_body = to_bytes(waitlist_bad_root.into_body())
+            .await
+            .expect("waitlist bad request body");
+        let waitlist_bad_text = String::from_utf8(waitlist_bad_body.to_vec()).expect("utf8");
+        assert!(waitlist_bad_text.contains("\"error\""));
+        assert!(waitlist_bad_text.contains("\"code\":\"bad_request\""));
+
+        let malformed_payload = "{\"name\":\"x\",";
+        let parse_error = test::call_service(
+            &app,
+            test::TestRequest::post()
+                .uri("/v1/waitlist")
+                .insert_header(("content-type", "application/json"))
+                .set_payload(malformed_payload)
+                .to_request(),
+        )
+        .await;
+        assert_eq!(parse_error.status(), StatusCode::BAD_REQUEST);
+        let parse_body = to_bytes(parse_error.into_body())
+            .await
+            .expect("json parse error body");
+        let parse_text = String::from_utf8(parse_body.to_vec()).expect("utf8");
+        assert!(parse_text.contains("\"error\""));
+        assert!(parse_text.contains("\"code\":\"bad_request\""));
+        assert!(parse_text.contains("invalid or oversized request payload"));
     }
 }

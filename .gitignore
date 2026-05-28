@@ -53,3 +53,5 @@ sakina-developer-kubeconfig.yaml
 *.kubeconfig
 *.env
 *.env.*
+sakina-frontend/android/key.properties
+sakina-frontend/android/keystore/

@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 use uuid::Uuid;
 
-use crate::error::ApiError;
+use crate::error::{error_response, ApiError};
 
 #[derive(Debug, Deserialize)]
 pub struct BackupUploadRequest {
@@ -19,14 +19,18 @@ pub async fn upload_backup(
 ) -> Result<HttpResponse, ApiError> {
     let requested_user_id = user_id.into_inner();
     if !authorize_user_access(&req, requested_user_id) {
-        return Ok(HttpResponse::Unauthorized().json(json!({
-            "error": "requested user_id does not match x-sakina-user-id header"
-        })));
+        return Ok(error_response(
+            actix_web::http::StatusCode::UNAUTHORIZED,
+            "unauthorized",
+            "requested user_id does not match x-sakina-user-id header",
+        ));
     }
     if body.data.len() > 256 * 1024 {
-        return Ok(HttpResponse::BadRequest().json(json!({
-            "error": "backup payload exceeds 256KB limit"
-        })));
+        return Ok(error_response(
+            actix_web::http::StatusCode::BAD_REQUEST,
+            "bad_request",
+            "backup payload exceeds 256KB limit",
+        ));
     }
 
     let encrypted = body.data.as_bytes();
@@ -43,7 +47,7 @@ pub async fn upload_backup(
     .await
     .map_err(|e| {
         tracing::error!("upload backup db error: {}", e);
-        ApiError("failed to store backup".to_string())
+        ApiError::internal("failed to store backup")
     })?;
 
     Ok(HttpResponse::Ok().json(json!({
@@ -60,9 +64,11 @@ pub async fn download_backup(
 ) -> Result<HttpResponse, ApiError> {
     let requested_user_id = user_id.into_inner();
     if !authorize_user_access(&req, requested_user_id) {
-        return Ok(HttpResponse::Unauthorized().json(json!({
-            "error": "requested user_id does not match x-sakina-user-id header"
-        })));
+        return Ok(error_response(
+            actix_web::http::StatusCode::UNAUTHORIZED,
+            "unauthorized",
+            "requested user_id does not match x-sakina-user-id header",
+        ));
     }
     let row: Option<(Vec<u8>, String, chrono::NaiveDateTime)> = sqlx::query_as(
         "SELECT encrypted_blob, backup_hash, created_at \
@@ -76,14 +82,14 @@ pub async fn download_backup(
     .await
     .map_err(|e| {
         tracing::error!("download backup db error: {}", e);
-        ApiError("failed to load backup".to_string())
+        ApiError::internal("failed to load backup")
     })?;
 
     match row {
         Some((blob, backup_hash, created_at)) => {
             let data = String::from_utf8(blob).map_err(|e| {
                 tracing::error!("backup blob decode error: {}", e);
-                ApiError("stored backup is unreadable".to_string())
+                ApiError::internal("stored backup is unreadable")
             })?;
             Ok(HttpResponse::Ok().json(json!({
                 "data": data,
@@ -91,9 +97,11 @@ pub async fn download_backup(
                 "sync_timestamp": created_at.and_utc().to_rfc3339()
             })))
         }
-        None => Ok(HttpResponse::NotFound().json(json!({
-            "error": "backup not found"
-        }))),
+        None => Ok(error_response(
+            actix_web::http::StatusCode::NOT_FOUND,
+            "not_found",
+            "backup not found",
+        )),
     }
 }
 

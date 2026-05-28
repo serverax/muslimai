@@ -27,6 +27,7 @@ dependencies:
 
   # Networking
   http: ^1.1.0
+  shared_preferences: ^2.5.3
 
   # Internationalization
   intl: ^0.20.2

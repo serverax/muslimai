@@ -1,4 +1,5 @@
 pub mod citation;
+pub mod decision_algorithm;
 pub mod embeddings;
 pub mod guardrails;
 pub mod ingestion_producer;
@@ -7,6 +8,11 @@ pub mod qdrant_client;
 pub mod semantic_router;
 
 pub use citation::CitationEngine;
+pub use decision_algorithm::decide as decide_request;
+pub use decision_algorithm::DefaultModuleClassifier;
+pub use decision_algorithm::DefaultSafetyClassifier;
+pub use decision_algorithm::EmptyRetriever;
+pub use decision_algorithm::StrictFormatter;
 pub use embeddings::EmbeddingsService;
 pub use guardrails::Guardrails;
 pub use ingestion_producer::IngestionProducer;

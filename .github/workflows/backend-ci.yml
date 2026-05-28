@@ -36,6 +36,17 @@ jobs:
           cd sakina-backend
           cargo test --verbose
 
+      - name: Assert module contract schema surface
+        run: |
+          rg -n "struct (QuranOverview|PrayerOverview|KnowledgeOverview|CommunityOverview)" sakina-backend/src/models/mod.rs
+          rg -n "struct (RagStatusResponse|RagSourcesResponse|RagSearchResponse|DecisionResponse)" sakina-backend/src/models/mod.rs
+          rg -n "source_type: String|source_name: String|source_reference: String|review_status: String" sakina-backend/src/models/mod.rs
+          rg -n "ModuleSafetyStatus|ReviewStatus" sakina-backend/src/models/mod.rs
+          rg -n "/quran/overview|/prayer/overview|/knowledge/overview|/community/overview" sakina-backend/src/main.rs
+          rg -n "/status|/sources|/search|/decide" sakina-backend/src/main.rs
+          rg -n "invalid_provenance|feature_disabled|subscription_required" sakina-backend/src/handlers/modules.rs sakina-backend/src/handlers/rag.rs
+          rg -n "openapi: 3.0.3" sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml
+
       - name: Check formatting
         run: |
           cd sakina-backend

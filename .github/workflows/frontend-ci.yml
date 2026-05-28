@@ -41,7 +41,6 @@ jobs:
           fi
 
       - name: Build APK
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           cd sakina-frontend
           flutter build apk --release

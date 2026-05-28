@@ -1,44 +1,38 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sakina_frontend/main.dart';
 
 void main() {
-  testWidgets('Chat screen renders title and input', (WidgetTester tester) async {
-    await tester.pumpWidget(const ProviderScope(child: SakinaApp()));
-
-    expect(find.text('Project Sakina'), findsOneWidget);
-    expect(find.byType(TextField), findsOneWidget);
-    expect(find.byIcon(Icons.send), findsOneWidget);
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
   });
 
-  testWidgets('Typing and sending appends a message', (WidgetTester tester) async {
+  testWidgets('Welcome screen renders key CTAs', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: SakinaApp()));
+    await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(TextField), 'Assalamu alaikum');
-    await tester.tap(find.byIcon(Icons.send));
-    await tester.pump();
-
-    expect(find.text('Assalamu alaikum'), findsOneWidget);
+    expect(find.textContaining('Sakina AI'), findsWidgets);
+    expect(find.text('Get Started'), findsOneWidget);
+    expect(find.text('Learn More'), findsOneWidget);
   });
 
-  testWidgets('Arabic text entry is rendered correctly', (WidgetTester tester) async {
-    await tester.pumpWidget(const ProviderScope(child: SakinaApp()));
-    const arabicText = 'السلام عليكم';
-
-    await tester.enterText(find.byType(TextField), arabicText);
-    await tester.tap(find.byIcon(Icons.send));
-    await tester.pump();
-
-    expect(find.text(arabicText), findsOneWidget);
-  });
-
-  testWidgets('Input and send controls expose semantics labels',
+  testWidgets('Onboarding flow reaches account intro',
       (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: SakinaApp()));
+    await tester.pumpAndSettle();
 
-    expect(find.bySemanticsLabel('chat-message-input'), findsOneWidget);
-    expect(find.bySemanticsLabel('send-message-button'), findsOneWidget);
+    await tester.tap(find.text('Get Started'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Join Waitlist'), findsOneWidget);
+    expect(find.text('Submit'), findsOneWidget);
   });
 }

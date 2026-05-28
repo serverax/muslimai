@@ -49,6 +49,22 @@ spec:
             - containerPort: 8080
               name: http
           env:
+            - name: SAKINA_FEATURE_QURAN
+              value: "false"
+            - name: SAKINA_FEATURE_PRAYER
+              value: "false"
+            - name: SAKINA_FEATURE_COMMUNITY
+              value: "false"
+            - name: SAKINA_FEATURE_KNOWLEDGE
+              value: "false"
+            - name: SAKINA_RAG_QURAN_ENABLED
+              value: "false"
+            - name: SAKINA_RAG_PRAYER_ENABLED
+              value: "false"
+            - name: SAKINA_RAG_COMMUNITY_ENABLED
+              value: "false"
+            - name: SAKINA_RAG_KNOWLEDGE_ENABLED
+              value: "false"
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:

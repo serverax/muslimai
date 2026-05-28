@@ -43,7 +43,7 @@ class ApiService {
     if (res.statusCode == 200) {
       return RagResponse.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
     }
-    throw ApiException('rag/query failed: HTTP ${res.statusCode}');
+    throw ApiException(_errorMessage('rag/query failed', res));
   }
 
   Future<ClassifyResponse> classify(String text, {String? userId}) async {
@@ -60,7 +60,7 @@ class ApiService {
       return ClassifyResponse.fromJson(
           jsonDecode(res.body) as Map<String, dynamic>);
     }
-    throw ApiException('classify failed: HTTP ${res.statusCode}');
+    throw ApiException(_errorMessage('classify failed', res));
   }
 
   /// Server's public key (base64/string) for encrypted backup.
@@ -74,7 +74,7 @@ class ApiService {
       final decoded = jsonDecode(res.body) as Map<String, dynamic>;
       return decoded['pub_key'] as String? ?? '';
     }
-    throw ApiException('getPublicKey failed: HTTP ${res.statusCode}');
+    throw ApiException(_errorMessage('getPublicKey failed', res));
   }
 
   Future<void> joinWaitlist({
@@ -101,7 +101,7 @@ class ApiService {
           .timeout(const Duration(seconds: 10)),
     );
     if (res.statusCode != 200) {
-      throw ApiException('waitlist failed: HTTP ${res.statusCode}');
+      throw ApiException(_errorMessage('waitlist failed', res));
     }
   }
 
@@ -119,7 +119,7 @@ class ApiService {
           .timeout(const Duration(seconds: 60)),
     );
     if (res.statusCode != 200) {
-      throw ApiException('uploadBackup failed: HTTP ${res.statusCode}');
+      throw ApiException(_errorMessage('uploadBackup failed', res));
     }
   }
 
@@ -135,7 +135,7 @@ class ApiService {
     if (res.statusCode == 200) {
       return (jsonDecode(res.body) as Map<String, dynamic>)['data'] as String;
     }
-    throw ApiException('downloadBackup failed: HTTP ${res.statusCode}');
+    throw ApiException(_errorMessage('downloadBackup failed', res));
   }
 
   void close() => _client.close();
@@ -164,7 +164,8 @@ class ApiService {
     for (var attempt = 0; attempt < ApiConfig.retryAttempts; attempt++) {
       try {
         final response = await run();
-        if (response.statusCode >= 500 && attempt < ApiConfig.retryAttempts - 1) {
+        if (response.statusCode >= 500 &&
+            attempt < ApiConfig.retryAttempts - 1) {
           await Future<void>.delayed(
             ApiConfig.retryDelay * (attempt + 1),
           );
@@ -182,6 +183,27 @@ class ApiService {
       }
     }
     throw ApiException('request failed after retries: $lastError');
+  }
+
+  String _errorMessage(String fallback, http.Response response) {
+    try {
+      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+      final error = decoded['error'];
+      if (error is Map<String, dynamic>) {
+        final code = error['code']?.toString();
+        final message = error['message']?.toString();
+        if (code != null && message != null) {
+          return '$fallback [$code]: $message (HTTP ${response.statusCode})';
+        }
+        if (message != null) {
+          return '$fallback: $message (HTTP ${response.statusCode})';
+        }
+      }
+      if (error is String) {
+        return '$fallback: $error (HTTP ${response.statusCode})';
+      }
+    } catch (_) {}
+    return '$fallback: HTTP ${response.statusCode}';
   }
 }
 

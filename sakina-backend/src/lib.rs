@@ -7,6 +7,9 @@ pub mod services;
 pub mod telemetry;
 
 #[cfg(test)]
+pub static TEST_ENV_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+#[cfg(test)]
 mod tests {
     #[test]
     fn it_works() {

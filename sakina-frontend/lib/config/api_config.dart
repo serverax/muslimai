@@ -1,7 +1,7 @@
 class ApiConfig {
   static const String baseUrl = String.fromEnvironment(
     'SAKINA_API_BASE_URL',
-    defaultValue: 'http://api.7jzi.com/v1',
+    defaultValue: 'https://api.7jzi.com/v1',
   );
 
   static const String healthEndpoint = '/health';
