@@ -234,7 +234,7 @@ pub struct DecisionRequest {
     pub selected_module: String,
     pub language: String,
     pub user_subscription_tier: String,
-    pub safety_context: Option<String>,
+    pub safety_context: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

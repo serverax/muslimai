@@ -13,7 +13,7 @@ pub trait ModuleClassifier {
 }
 
 pub trait SafetyClassifier {
-    fn classify(&self, question: &str, safety_context: Option<&str>) -> SafetyRisk;
+    fn classify(&self, question: &str, safety_context: Option<&serde_json::Value>) -> SafetyRisk;
 }
 
 pub trait RagRetriever {
@@ -72,11 +72,14 @@ impl ModuleClassifier for DefaultModuleClassifier {
 pub struct DefaultSafetyClassifier;
 
 impl SafetyClassifier for DefaultSafetyClassifier {
-    fn classify(&self, question: &str, safety_context: Option<&str>) -> SafetyRisk {
+    fn classify(&self, question: &str, safety_context: Option<&serde_json::Value>) -> SafetyRisk {
         let mut text = question.to_ascii_lowercase();
         if let Some(extra) = safety_context {
             text.push(' ');
-            text.push_str(&extra.to_ascii_lowercase());
+            match extra {
+                serde_json::Value::String(s) => text.push_str(&s.to_ascii_lowercase()),
+                _ => text.push_str(&extra.to_string().to_ascii_lowercase()),
+            }
         }
         if text.contains("suicide") || text.contains("self harm") {
             return SafetyRisk::CrisisSensitive;
@@ -192,7 +195,7 @@ pub fn decide(
     llm_formatter: &dyn LlmFormatter,
 ) -> DecisionResponse {
     let classification = module_classifier.classify(&req.question, &req.selected_module);
-    let safety = safety_classifier.classify(&req.question, req.safety_context.as_deref());
+    let safety = safety_classifier.classify(&req.question, req.safety_context.as_ref());
     let module = classification.module.clone();
     let language = req.language.clone();
 
@@ -310,7 +313,7 @@ mod tests {
 
     struct FixedSafety(SafetyRisk);
     impl SafetyClassifier for FixedSafety {
-        fn classify(&self, _q: &str, _s: Option<&str>) -> SafetyRisk {
+        fn classify(&self, _q: &str, _s: Option<&serde_json::Value>) -> SafetyRisk {
             self.0.clone()
         }
     }

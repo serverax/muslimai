@@ -283,7 +283,7 @@ pub async fn rag_search(req: HttpRequest, query: web::Query<RagSearchQuery>) -> 
 mod contract_tests {
     use super::*;
     use actix_web::body::to_bytes;
-    use actix_web::{http::StatusCode, test::TestRequest, web};
+    use actix_web::{http::StatusCode, test::TestRequest, web, App};
 
     #[actix_rt::test]
     async fn rag_status_works() {
@@ -398,5 +398,84 @@ mod contract_tests {
         let text = String::from_utf8(body.to_vec()).expect("utf8");
         assert!(text.contains("\"error\""));
         assert!(text.contains("\"code\":\"bad_request\""));
+    }
+
+    #[actix_rt::test]
+    async fn rag_decide_accepts_object_safety_context() {
+        let app = actix_web::test::init_service(
+            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+        )
+        .await;
+        let req = TestRequest::post()
+            .uri("/v1/rag/decide")
+            .set_json(serde_json::json!({
+                "question": "What does Islam say about prayer?",
+                "selected_module": "quran",
+                "language": "en",
+                "user_subscription_tier": "free",
+                "safety_context": {}
+            }))
+            .to_request();
+        let response = actix_web::test::call_service(&app, req).await;
+        assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    #[actix_rt::test]
+    async fn rag_decide_accepts_string_safety_context() {
+        let app = actix_web::test::init_service(
+            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+        )
+        .await;
+        let req = TestRequest::post()
+            .uri("/v1/rag/decide")
+            .set_json(serde_json::json!({
+                "question": "What does Islam say about prayer?",
+                "selected_module": "quran",
+                "language": "en",
+                "user_subscription_tier": "free",
+                "safety_context": ""
+            }))
+            .to_request();
+        let response = actix_web::test::call_service(&app, req).await;
+        assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    #[actix_rt::test]
+    async fn rag_decide_accepts_null_safety_context() {
+        let app = actix_web::test::init_service(
+            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+        )
+        .await;
+        let req = TestRequest::post()
+            .uri("/v1/rag/decide")
+            .set_json(serde_json::json!({
+                "question": "What does Islam say about prayer?",
+                "selected_module": "quran",
+                "language": "en",
+                "user_subscription_tier": "free",
+                "safety_context": null
+            }))
+            .to_request();
+        let response = actix_web::test::call_service(&app, req).await;
+        assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    #[actix_rt::test]
+    async fn rag_decide_accepts_omitted_safety_context() {
+        let app = actix_web::test::init_service(
+            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+        )
+        .await;
+        let req = TestRequest::post()
+            .uri("/v1/rag/decide")
+            .set_json(serde_json::json!({
+                "question": "What does Islam say about prayer?",
+                "selected_module": "quran",
+                "language": "en",
+                "user_subscription_tier": "free"
+            }))
+            .to_request();
+        let response = actix_web::test::call_service(&app, req).await;
+        assert_eq!(response.status(), StatusCode::OK);
     }
 }

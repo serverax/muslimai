@@ -348,7 +348,10 @@ components:
         user_subscription_tier:
           type: string
         safety_context:
-          type: string
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
           nullable: true
     DecisionSource:
       allOf:
