@@ -43,7 +43,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: backend
-          image: ghcr.io/serverax/sakina-backend:2eb50fe
+          image: ghcr.io/serverax/sakina-backend:cd02005
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
