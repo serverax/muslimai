@@ -1,4 +1,5 @@
 use actix_web::{web, HttpRequest, HttpResponse};
+use sqlx::Row;
 use std::sync::Arc;
 use std::time::Instant;
 
@@ -144,16 +145,53 @@ fn has_entitlement(req: &HttpRequest) -> bool {
         .unwrap_or(false)
 }
 
-fn sample_sources(module: &str) -> Vec<RagSourceItem> {
-    let _ = module;
-    Vec::new()
-}
+async fn approved_sources_from_db(
+    pool: &sqlx::PgPool,
+    module: &str,
+) -> Result<Vec<RagSourceItem>, ApiError> {
+    let rows = sqlx::query(
+        r#"
+        SELECT
+            s.source_type,
+            s.title AS source_name,
+            COALESCE(c.chunk_key, d.document_key, s.source_key) AS source_reference,
+            c.citation_text AS citation,
+            COALESCE(c.language, d.language, s.language) AS language,
+            d.approved_at::text AS effective_date,
+            md5(c.chunk_text) AS content_hash
+        FROM sakina_ai.islamic_sources s
+        JOIN sakina_ai.islamic_documents d ON d.source_id = s.id
+        JOIN sakina_ai.islamic_chunks c ON c.document_id = d.id
+        WHERE s.source_status = 'approved'
+          AND s.review_status IN ('verified', 'approved')
+          AND d.source_status = 'approved'
+          AND d.review_status IN ('verified', 'approved')
+          AND c.source_status = 'approved'
+          AND c.review_status IN ('verified', 'approved')
+          AND s.source_type = $1
+        ORDER BY s.created_at DESC, d.created_at DESC, c.chunk_index ASC
+        LIMIT 50
+        "#,
+    )
+    .bind(module)
+    .fetch_all(pool)
+    .await
+    .map_err(|_| ApiError::internal("failed to load approved rag sources"))?;
 
-fn verified_only(items: Vec<RagSourceItem>) -> Vec<RagSourceItem> {
-    items
+    Ok(rows
         .into_iter()
-        .filter(|item| item.review_status == ReviewStatus::Verified)
-        .collect()
+        .map(|row| RagSourceItem {
+            module: module.to_string(),
+            source_type: row.get("source_type"),
+            source_name: row.get("source_name"),
+            source_reference: row.get("source_reference"),
+            citation: row.get("citation"),
+            language: row.get("language"),
+            review_status: ReviewStatus::Verified,
+            effective_date: row.get("effective_date"),
+            content_hash: row.get("content_hash"),
+        })
+        .collect())
 }
 
 pub async fn rag_status() -> HttpResponse {
@@ -178,7 +216,7 @@ pub async fn rag_decide(payload: web::Json<DecisionRequest>) -> HttpResponse {
     HttpResponse::Ok().json(response)
 }
 
-pub async fn rag_sources(req: HttpRequest) -> HttpResponse {
+pub async fn rag_sources(pool: web::Data<sqlx::PgPool>, req: HttpRequest) -> HttpResponse {
     let module = req
         .headers()
         .get("x-sakina-module")
@@ -217,12 +255,17 @@ pub async fn rag_sources(req: HttpRequest) -> HttpResponse {
         );
     }
 
-    HttpResponse::Ok().json(RagSourcesResponse {
-        sources: verified_only(sample_sources(&module)),
-    })
+    match approved_sources_from_db(pool.get_ref(), &module).await {
+        Ok(sources) => HttpResponse::Ok().json(RagSourcesResponse { sources }),
+        Err(err) => crate::error::error_response(err.status, err.code, err.message),
+    }
 }
 
-pub async fn rag_search(req: HttpRequest, query: web::Query<RagSearchQuery>) -> HttpResponse {
+pub async fn rag_search(
+    pool: web::Data<sqlx::PgPool>,
+    req: HttpRequest,
+    query: web::Query<RagSearchQuery>,
+) -> HttpResponse {
     let module = query.module.trim().to_ascii_lowercase();
     if module_feature_flag(&module).is_none() {
         return crate::error::error_response(
@@ -258,25 +301,29 @@ pub async fn rag_search(req: HttpRequest, query: web::Query<RagSearchQuery>) -> 
     }
 
     let now = chrono::Utc::now().to_rfc3339();
-    let verified_items = verified_only(sample_sources(&module))
-        .into_iter()
-        .map(|item| RagSearchItem {
-            module: item.module,
-            source_type: item.source_type,
-            source_name: item.source_name,
-            source_reference: item.source_reference,
-            citation: item.citation,
-            language: item.language,
-            review_status: item.review_status,
-            effective_date: item.effective_date,
-            content_hash: item.content_hash,
-            retrieved_at: now.clone(),
-        })
-        .collect();
-
-    HttpResponse::Ok().json(RagSearchResponse {
-        items: verified_items,
-    })
+    match approved_sources_from_db(pool.get_ref(), &module).await {
+        Ok(items) => {
+            let verified_items = items
+                .into_iter()
+                .map(|item| RagSearchItem {
+                    module: item.module,
+                    source_type: item.source_type,
+                    source_name: item.source_name,
+                    source_reference: item.source_reference,
+                    citation: item.citation,
+                    language: item.language,
+                    review_status: item.review_status,
+                    effective_date: item.effective_date,
+                    content_hash: item.content_hash,
+                    retrieved_at: now.clone(),
+                })
+                .collect();
+            HttpResponse::Ok().json(RagSearchResponse {
+                items: verified_items,
+            })
+        }
+        Err(err) => crate::error::error_response(err.status, err.code, err.message),
+    }
 }
 
 #[cfg(test)]
@@ -296,10 +343,13 @@ mod contract_tests {
         let _guard = crate::TEST_ENV_LOCK.lock().expect("env lock");
         std::env::set_var("SAKINA_FEATURE_QURAN", "false");
         std::env::set_var("SAKINA_RAG_QURAN_ENABLED", "true");
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy pool");
         let req = TestRequest::default()
             .insert_header(("x-sakina-subscription-tier", "premium"))
             .to_http_request();
         let response = rag_search(
+            web::Data::new(pool),
             req,
             web::Query(RagSearchQuery {
                 module: "quran".to_string(),
@@ -317,8 +367,11 @@ mod contract_tests {
         let _guard = crate::TEST_ENV_LOCK.lock().expect("env lock");
         std::env::set_var("SAKINA_FEATURE_QURAN", "true");
         std::env::set_var("SAKINA_RAG_QURAN_ENABLED", "true");
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy pool");
         let req = TestRequest::default().to_http_request();
         let response = rag_search(
+            web::Data::new(pool),
             req,
             web::Query(RagSearchQuery {
                 module: "quran".to_string(),
@@ -329,37 +382,6 @@ mod contract_tests {
         assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
         std::env::remove_var("SAKINA_FEATURE_QURAN");
         std::env::remove_var("SAKINA_RAG_QURAN_ENABLED");
-    }
-
-    #[test]
-    fn unverified_content_is_filtered_out() {
-        let items = vec![
-            RagSourceItem {
-                module: "quran".to_string(),
-                source_type: "tafsir".to_string(),
-                source_name: "Pending Source".to_string(),
-                source_reference: "1:1".to_string(),
-                citation: "citation-1".to_string(),
-                language: "ar".to_string(),
-                review_status: ReviewStatus::Unverified,
-                effective_date: None,
-                content_hash: "abc".to_string(),
-            },
-            RagSourceItem {
-                module: "quran".to_string(),
-                source_type: "tafsir".to_string(),
-                source_name: "Verified Source".to_string(),
-                source_reference: "1:2".to_string(),
-                citation: "citation-2".to_string(),
-                language: "ar".to_string(),
-                review_status: ReviewStatus::Verified,
-                effective_date: None,
-                content_hash: "def".to_string(),
-            },
-        ];
-        let verified = verified_only(items);
-        assert_eq!(verified.len(), 1);
-        assert_eq!(verified[0].source_name, "Verified Source");
     }
 
     #[test]
@@ -384,8 +406,11 @@ mod contract_tests {
 
     #[actix_rt::test]
     async fn rag_search_invalid_query_uses_standard_error_format() {
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy pool");
         let req = TestRequest::default().to_http_request();
         let response = rag_search(
+            web::Data::new(pool),
             req,
             web::Query(RagSearchQuery {
                 module: "bad-module".to_string(),

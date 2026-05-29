@@ -1,8 +1,10 @@
+pub mod chat;
 pub mod classify;
 pub mod dashboard;
 pub mod health;
 pub mod modules;
 pub mod ops;
+pub mod phase2;
 pub mod rag;
 pub mod sync;
 pub mod user;

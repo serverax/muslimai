@@ -160,6 +160,74 @@ pub struct CommunityOverviewChannel {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum ModuleLifecycleStatus {
+    Active,
+    Disabled,
+    ComingSoon,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ModuleStatusResponse {
+    pub module: String,
+    pub enabled: bool,
+    pub status: ModuleLifecycleStatus,
+    pub reason: String,
+    pub requires_subscription: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ModulesStatusCollectionResponse {
+    pub modules: Vec<ModuleStatusResponse>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateConversationRequest {
+    pub user_id: Option<Uuid>,
+    pub title: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateConversationResponse {
+    pub id: Uuid,
+    pub user_id: Option<Uuid>,
+    pub title: String,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ConversationMessageResponse {
+    pub id: Uuid,
+    pub role: String,
+    pub content: String,
+    pub created_at: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetConversationResponse {
+    pub id: Uuid,
+    pub user_id: Option<Uuid>,
+    pub title: String,
+    pub created_at: String,
+    pub updated_at: String,
+    pub messages: Vec<ConversationMessageResponse>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AddMessageRequest {
+    pub content: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AddMessageResponse {
+    pub conversation_id: Uuid,
+    pub user_message_id: Uuid,
+    pub assistant_message_id: Option<Uuid>,
+    pub response: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct RagStatusResponse {
     pub status: String,
     pub rag_enabled: bool,

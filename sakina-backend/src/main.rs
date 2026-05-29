@@ -140,9 +140,11 @@ async fn main() -> std::io::Result<()> {
     let router = std::sync::Arc::new(services::SemanticRouter::new());
     let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
     let citations = std::sync::Arc::new(services::CitationEngine::new(pool.clone()));
+    let phase2_repo = services::Phase2Repository::new(pool.clone());
     let router_data = web::Data::new(router.clone());
     let guardrails_data = web::Data::new(guardrails.clone());
     let citations_data = web::Data::new(citations.clone());
+    let phase2_repo_data = web::Data::new(phase2_repo.clone());
 
     // Background worker: drain the outbox (marks chunk_indexed events Sent).
     let relay = services::OutboxRelay::new(pool.clone());
@@ -178,6 +180,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(router_data.clone())
             .app_data(guardrails_data.clone())
             .app_data(citations_data.clone())
+            .app_data(phase2_repo_data.clone())
             .app_data(qdrant.clone())
             .app_data(embeddings.clone())
             .app_data(waitlist_limiter.clone())
@@ -207,6 +210,45 @@ async fn main() -> std::io::Result<()> {
                 web::post().to(handlers::waitlist::create_waitlist_entry),
             )
             .service(
+                web::scope("/modules")
+                    .route("", web::get().to(handlers::modules::modules_status))
+                    .route(
+                        "/chat/status",
+                        web::get().to(handlers::modules::chat_status),
+                    )
+                    .route(
+                        "/quran/status",
+                        web::get().to(handlers::modules::quran_status),
+                    )
+                    .route(
+                        "/prayer/status",
+                        web::get().to(handlers::modules::prayer_status),
+                    )
+                    .route(
+                        "/community/status",
+                        web::get().to(handlers::modules::community_status),
+                    )
+                    .route(
+                        "/knowledge/status",
+                        web::get().to(handlers::modules::knowledge_status),
+                    ),
+            )
+            .service(
+                web::scope("/chat")
+                    .route(
+                        "/conversations",
+                        web::post().to(handlers::chat::create_conversation),
+                    )
+                    .route(
+                        "/conversations/{id}",
+                        web::get().to(handlers::chat::get_conversation),
+                    )
+                    .route(
+                        "/conversations/{id}/messages",
+                        web::post().to(handlers::chat::add_message),
+                    ),
+            )
+            .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
                     .route("/ready", web::get().to(readiness_check))
@@ -215,14 +257,60 @@ async fn main() -> std::io::Result<()> {
                         "/waitlist",
                         web::post().to(handlers::waitlist::create_waitlist_entry),
                     )
+                    .route("/users/pubkey", web::get().to(handlers::user::get_server_pubkey))
                     .service(
-                        web::scope("/users")
-                            .route("", web::post().to(handlers::user::create_user))
-                            .route("/pubkey", web::get().to(handlers::user::get_server_pubkey))
-                            .route("/{user_id}", web::get().to(handlers::user::get_user)),
+                        web::scope("/auth")
+                            .route("/register", web::post().to(handlers::phase2::register_user))
+                            .route(
+                                "/sessions",
+                                web::post().to(handlers::phase2::create_session),
+                            ),
+                    )
+                    .service(
+                        web::scope("/profiles")
+                            .route(
+                                "/{user_id}",
+                                web::put().to(handlers::phase2::upsert_profile),
+                            )
+                            .route(
+                                "/{user_id}/family",
+                                web::post().to(handlers::phase2::create_family_profile),
+                            ),
+                    )
+                    .service(
+                        web::scope("/subscriptions")
+                            .route(
+                                "/{user_id}/activate",
+                                web::post().to(handlers::phase2::activate_subscription),
+                            )
+                            .route(
+                                "/{user_id}/entitlements",
+                                web::get().to(handlers::phase2::list_entitlements),
+                            ),
                     )
                     .service(
                         web::scope("/modules")
+                            .route("", web::get().to(handlers::modules::modules_status))
+                            .route(
+                                "/chat/status",
+                                web::get().to(handlers::modules::chat_status),
+                            )
+                            .route(
+                                "/quran/status",
+                                web::get().to(handlers::modules::quran_status),
+                            )
+                            .route(
+                                "/prayer/status",
+                                web::get().to(handlers::modules::prayer_status),
+                            )
+                            .route(
+                                "/community/status",
+                                web::get().to(handlers::modules::community_status),
+                            )
+                            .route(
+                                "/knowledge/status",
+                                web::get().to(handlers::modules::knowledge_status),
+                            )
                             .route(
                                 "/quran/overview",
                                 web::get().to(handlers::modules::quran_overview),
@@ -241,12 +329,141 @@ async fn main() -> std::io::Result<()> {
                             ),
                     )
                     .service(
+                        web::scope("/chat")
+                            .route(
+                                "/conversations",
+                                web::post().to(handlers::chat::create_conversation),
+                            )
+                            .route(
+                                "/conversations/{id}",
+                                web::get().to(handlers::chat::get_conversation),
+                            )
+                            .route(
+                                "/conversations/{id}/messages",
+                                web::post().to(handlers::chat::add_message),
+                            )
+                            .route(
+                                "/messages/{id}/feedback",
+                                web::post().to(handlers::phase2::create_chat_feedback),
+                            )
+                            .route(
+                                "/messages/{id}/report",
+                                web::post().to(handlers::phase2::report_answer),
+                            ),
+                    )
+                    .service(
                         web::scope("/rag")
                             .route("/status", web::get().to(handlers::rag::rag_status))
                             .route("/sources", web::get().to(handlers::rag::rag_sources))
+                            .route(
+                                "/sources/approved",
+                                web::get().to(handlers::phase2::approved_rag_sources),
+                            )
                             .route("/search", web::get().to(handlers::rag::rag_search))
                             .route("/decide", web::post().to(handlers::rag::rag_decide))
+                            .route(
+                                "/audit/retrieval",
+                                web::post().to(handlers::phase2::log_rag_retrieval),
+                            )
+                            .route(
+                                "/audit/citation",
+                                web::post().to(handlers::phase2::log_citation_event),
+                            )
                             .route("/query", web::post().to(handlers::rag::query_rag)),
+                    )
+                    .service(
+                        web::scope("/safety")
+                            .route(
+                                "/classifications",
+                                web::post().to(handlers::phase2::log_safety_classification),
+                            )
+                            .route(
+                                "/mastermind-decisions",
+                                web::post().to(handlers::phase2::log_mastermind_decision),
+                            )
+                            .route(
+                                "/scholar-review-queue",
+                                web::post().to(handlers::phase2::enqueue_scholar_review),
+                            )
+                            .route(
+                                "/wasm-events",
+                                web::post().to(handlers::phase2::log_wasm_event),
+                            ),
+                    )
+                    .service(
+                        web::scope("/admin")
+                            .route(
+                                "/roles",
+                                web::post().to(handlers::phase2::upsert_admin_role),
+                            )
+                            .route(
+                                "/audit-actions",
+                                web::post().to(handlers::phase2::log_admin_action),
+                            )
+                            .route(
+                                "/source-approval-queue",
+                                web::get().to(handlers::phase2::source_approval_queue),
+                            )
+                            .route(
+                                "/source-approval-queue",
+                                web::post().to(handlers::phase2::create_source_approval_item),
+                            )
+                            .route(
+                                "/scholars",
+                                web::post().to(handlers::phase2::create_scholar_account),
+                            )
+                            .route(
+                                "/scholar-assignments",
+                                web::post().to(handlers::phase2::assign_scholar_review),
+                            ),
+                    )
+                    .service(
+                        web::scope("/notifications")
+                            .route(
+                                "/templates",
+                                web::post().to(handlers::phase2::create_notification_template),
+                            )
+                            .route(
+                                "/send",
+                                web::post().to(handlers::phase2::enqueue_notification),
+                            )
+                            .route(
+                                "/device-tokens",
+                                web::post().to(handlers::phase2::upsert_device_token),
+                            ),
+                    )
+                    .service(web::scope("/support").route(
+                        "/tickets",
+                        web::post().to(handlers::phase2::create_support_ticket),
+                    ))
+                    .service(
+                        web::scope("/support")
+                            .route(
+                                "/tickets/{ticket_id}",
+                                web::get().to(handlers::phase2::get_support_ticket),
+                            )
+                            .route(
+                                "/tickets/{ticket_id}/messages",
+                                web::post().to(handlers::phase2::append_support_ticket_message),
+                            ),
+                    )
+                    .service(
+                        web::scope("/audit")
+                            .route("/logs", web::post().to(handlers::phase2::create_audit_log)),
+                    )
+                    .service(web::scope("/security").route(
+                        "/logs",
+                        web::post().to(handlers::phase2::create_security_log),
+                    ))
+                    .service(
+                        web::scope("/events")
+                            .route("/app", web::post().to(handlers::phase2::create_app_event))
+                            .route("/chat", web::post().to(handlers::phase2::create_chat_event))
+                            .route("/rag", web::post().to(handlers::phase2::create_rag_event))
+                            .route(
+                                "/admin",
+                                web::post().to(handlers::phase2::create_admin_event),
+                            ),
                     )
                     .route(
                         "/classify",
@@ -317,6 +534,45 @@ mod tests {
                         web::post().to(handlers::waitlist::create_waitlist_entry),
                     )
                     .service(
+                        web::scope("/modules")
+                            .route("", web::get().to(handlers::modules::modules_status))
+                            .route(
+                                "/chat/status",
+                                web::get().to(handlers::modules::chat_status),
+                            )
+                            .route(
+                                "/quran/status",
+                                web::get().to(handlers::modules::quran_status),
+                            )
+                            .route(
+                                "/prayer/status",
+                                web::get().to(handlers::modules::prayer_status),
+                            )
+                            .route(
+                                "/community/status",
+                                web::get().to(handlers::modules::community_status),
+                            )
+                            .route(
+                                "/knowledge/status",
+                                web::get().to(handlers::modules::knowledge_status),
+                            ),
+                    )
+                    .service(
+                        web::scope("/chat")
+                            .route(
+                                "/conversations",
+                                web::post().to(handlers::chat::create_conversation),
+                            )
+                            .route(
+                                "/conversations/{id}",
+                                web::get().to(handlers::chat::get_conversation),
+                            )
+                            .route(
+                                "/conversations/{id}/messages",
+                                web::post().to(handlers::chat::add_message),
+                            ),
+                    )
+                    .service(
                         web::scope("/v1")
                             .route("/health", web::get().to(handlers::health::health_check))
                             .route("/ready", web::get().to(readiness_check))
@@ -324,6 +580,45 @@ mod tests {
                             .route(
                                 "/waitlist",
                                 web::post().to(handlers::waitlist::create_waitlist_entry),
+                            )
+                            .service(
+                                web::scope("/modules")
+                                    .route("", web::get().to(handlers::modules::modules_status))
+                                    .route(
+                                        "/chat/status",
+                                        web::get().to(handlers::modules::chat_status),
+                                    )
+                                    .route(
+                                        "/quran/status",
+                                        web::get().to(handlers::modules::quran_status),
+                                    )
+                                    .route(
+                                        "/prayer/status",
+                                        web::get().to(handlers::modules::prayer_status),
+                                    )
+                                    .route(
+                                        "/community/status",
+                                        web::get().to(handlers::modules::community_status),
+                                    )
+                                    .route(
+                                        "/knowledge/status",
+                                        web::get().to(handlers::modules::knowledge_status),
+                                    ),
+                            )
+                            .service(
+                                web::scope("/chat")
+                                    .route(
+                                        "/conversations",
+                                        web::post().to(handlers::chat::create_conversation),
+                                    )
+                                    .route(
+                                        "/conversations/{id}",
+                                        web::get().to(handlers::chat::get_conversation),
+                                    )
+                                    .route(
+                                        "/conversations/{id}/messages",
+                                        web::post().to(handlers::chat::add_message),
+                                    ),
                             ),
                     ),
             )
@@ -405,5 +700,32 @@ mod tests {
         assert!(parse_text.contains("\"error\""));
         assert!(parse_text.contains("\"code\":\"bad_request\""));
         assert!(parse_text.contains("invalid or oversized request payload"));
+
+        let modules_root =
+            test::call_service(&app, test::TestRequest::get().uri("/modules").to_request()).await;
+        let modules_v1 = test::call_service(
+            &app,
+            test::TestRequest::get().uri("/v1/modules").to_request(),
+        )
+        .await;
+        assert_eq!(modules_root.status(), StatusCode::OK);
+        assert_eq!(modules_v1.status(), StatusCode::OK);
+
+        let chat_status_root = test::call_service(
+            &app,
+            test::TestRequest::get()
+                .uri("/modules/chat/status")
+                .to_request(),
+        )
+        .await;
+        let chat_status_v1 = test::call_service(
+            &app,
+            test::TestRequest::get()
+                .uri("/v1/modules/chat/status")
+                .to_request(),
+        )
+        .await;
+        assert_eq!(chat_status_root.status(), StatusCode::OK);
+        assert_eq!(chat_status_v1.status(), StatusCode::OK);
     }
 }

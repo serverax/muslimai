@@ -3,8 +3,9 @@ use actix_web::{HttpRequest, HttpResponse};
 use crate::error::error_response;
 use crate::models::{
     CommunityOverview, CommunityOverviewChannel, KnowledgeOverview, KnowledgeOverviewTopic,
-    ModuleSafetyStatus, PrayerOverview, PrayerOverviewWindow, QuranOverview, QuranOverviewEntry,
-    RagReadiness, ReviewStatus,
+    ModuleLifecycleStatus, ModuleSafetyStatus, ModuleStatusResponse,
+    ModulesStatusCollectionResponse, PrayerOverview, PrayerOverviewWindow, QuranOverview,
+    QuranOverviewEntry, RagReadiness, ReviewStatus,
 };
 
 fn env_flag_enabled(key: &str) -> bool {
@@ -25,6 +26,146 @@ fn has_entitlement(req: &HttpRequest) -> bool {
             )
         })
         .unwrap_or(false)
+}
+
+fn module_status(module: &str) -> ModuleStatusResponse {
+    let (enabled, status, reason, requires_subscription) = match module {
+        "chat" => {
+            let enabled = std::env::var("SAKINA_FEATURE_CHAT")
+                .ok()
+                .map(|v| !matches!(v.trim().to_ascii_lowercase().as_str(), "0" | "false" | "no"))
+                .unwrap_or(true);
+            (
+                enabled,
+                if enabled {
+                    ModuleLifecycleStatus::Active
+                } else {
+                    ModuleLifecycleStatus::Disabled
+                },
+                if enabled {
+                    "chat module is active".to_string()
+                } else {
+                    "chat module disabled by feature flag".to_string()
+                },
+                false,
+            )
+        }
+        "quran" => {
+            let enabled = env_flag_enabled("SAKINA_FEATURE_QURAN");
+            (
+                enabled,
+                if enabled {
+                    ModuleLifecycleStatus::Active
+                } else {
+                    ModuleLifecycleStatus::ComingSoon
+                },
+                if enabled {
+                    "quran module flag enabled; restricted content policy still applies".to_string()
+                } else {
+                    "quran module disabled by default until feature flag is enabled".to_string()
+                },
+                true,
+            )
+        }
+        "prayer" => {
+            let enabled = env_flag_enabled("SAKINA_FEATURE_PRAYER");
+            (
+                enabled,
+                if enabled {
+                    ModuleLifecycleStatus::Active
+                } else {
+                    ModuleLifecycleStatus::ComingSoon
+                },
+                if enabled {
+                    "prayer module flag enabled; restricted content policy still applies"
+                        .to_string()
+                } else {
+                    "prayer module disabled by default until feature flag is enabled".to_string()
+                },
+                true,
+            )
+        }
+        "community" => {
+            let enabled = env_flag_enabled("SAKINA_FEATURE_COMMUNITY");
+            (
+                enabled,
+                if enabled {
+                    ModuleLifecycleStatus::Active
+                } else {
+                    ModuleLifecycleStatus::ComingSoon
+                },
+                if enabled {
+                    "community module flag enabled; moderation controls still apply".to_string()
+                } else {
+                    "community module disabled by default until feature flag is enabled".to_string()
+                },
+                true,
+            )
+        }
+        "knowledge" => {
+            let enabled = env_flag_enabled("SAKINA_FEATURE_KNOWLEDGE");
+            (
+                enabled,
+                if enabled {
+                    ModuleLifecycleStatus::Active
+                } else {
+                    ModuleLifecycleStatus::ComingSoon
+                },
+                if enabled {
+                    "knowledge module flag enabled; verification controls still apply".to_string()
+                } else {
+                    "knowledge module disabled by default until feature flag is enabled".to_string()
+                },
+                true,
+            )
+        }
+        _ => (
+            false,
+            ModuleLifecycleStatus::Disabled,
+            "unknown module".to_string(),
+            false,
+        ),
+    };
+
+    ModuleStatusResponse {
+        module: module.to_string(),
+        enabled,
+        status,
+        reason,
+        requires_subscription,
+    }
+}
+
+pub async fn modules_status() -> HttpResponse {
+    HttpResponse::Ok().json(ModulesStatusCollectionResponse {
+        modules: vec![
+            module_status("chat"),
+            module_status("quran"),
+            module_status("prayer"),
+            module_status("community"),
+            module_status("knowledge"),
+        ],
+    })
+}
+
+pub async fn chat_status() -> HttpResponse {
+    HttpResponse::Ok().json(module_status("chat"))
+}
+
+pub async fn quran_status() -> HttpResponse {
+    HttpResponse::Ok().json(module_status("quran"))
+}
+
+pub async fn prayer_status() -> HttpResponse {
+    HttpResponse::Ok().json(module_status("prayer"))
+}
+
+pub async fn community_status() -> HttpResponse {
+    HttpResponse::Ok().json(module_status("community"))
+}
+
+pub async fn knowledge_status() -> HttpResponse {
+    HttpResponse::Ok().json(module_status("knowledge"))
 }
 
 fn enforce_module_gate(req: &HttpRequest, feature_flag_env: &str) -> Option<HttpResponse> {
@@ -199,7 +340,8 @@ pub async fn community_overview(req: HttpRequest) -> HttpResponse {
 mod tests {
     use super::*;
     use actix_web::body::to_bytes;
-    use actix_web::{http::StatusCode, test::TestRequest};
+    use actix_web::test as awtest;
+    use actix_web::{http::StatusCode, test::TestRequest, web, App};
 
     #[actix_rt::test]
     async fn disabled_flag_blocks_module_access_with_standard_error_shape() {
@@ -321,5 +463,81 @@ mod tests {
             vec![("article", "Fiqh Book", "", "editor_review_pending")],
         );
         assert!(result.is_some());
+    }
+
+    #[actix_rt::test]
+    async fn module_status_defaults_to_chat_active_and_others_coming_soon() {
+        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+        std::env::remove_var("SAKINA_FEATURE_CHAT");
+        std::env::remove_var("SAKINA_FEATURE_QURAN");
+        std::env::remove_var("SAKINA_FEATURE_PRAYER");
+        std::env::remove_var("SAKINA_FEATURE_COMMUNITY");
+        std::env::remove_var("SAKINA_FEATURE_KNOWLEDGE");
+
+        let chat = module_status("chat");
+        let quran = module_status("quran");
+
+        assert!(chat.enabled);
+        assert_eq!(chat.status, ModuleLifecycleStatus::Active);
+        assert!(!quran.enabled);
+        assert_eq!(quran.status, ModuleLifecycleStatus::ComingSoon);
+    }
+
+    #[actix_rt::test]
+    async fn modules_endpoints_exist_for_root_and_v1_paths() {
+        let app = awtest::init_service(
+            App::new()
+                .service(
+                    web::scope("/modules")
+                        .route("", web::get().to(modules_status))
+                        .route("/chat/status", web::get().to(chat_status))
+                        .route("/quran/status", web::get().to(quran_status))
+                        .route("/prayer/status", web::get().to(prayer_status))
+                        .route("/community/status", web::get().to(community_status))
+                        .route("/knowledge/status", web::get().to(knowledge_status)),
+                )
+                .service(
+                    web::scope("/v1").service(
+                        web::scope("/modules")
+                            .route("", web::get().to(modules_status))
+                            .route("/chat/status", web::get().to(chat_status))
+                            .route("/quran/status", web::get().to(quran_status))
+                            .route("/prayer/status", web::get().to(prayer_status))
+                            .route("/community/status", web::get().to(community_status))
+                            .route("/knowledge/status", web::get().to(knowledge_status)),
+                    ),
+                ),
+        )
+        .await;
+
+        let root_modules =
+            awtest::call_service(&app, TestRequest::get().uri("/modules").to_request()).await;
+        let v1_modules =
+            awtest::call_service(&app, TestRequest::get().uri("/v1/modules").to_request()).await;
+        let v1_quran = awtest::call_service(
+            &app,
+            TestRequest::get()
+                .uri("/v1/modules/quran/status")
+                .to_request(),
+        )
+        .await;
+
+        assert_eq!(root_modules.status(), StatusCode::OK);
+        assert_eq!(v1_modules.status(), StatusCode::OK);
+        assert_eq!(v1_quran.status(), StatusCode::OK);
+
+        let modules_body = to_bytes(v1_modules.into_body())
+            .await
+            .expect("modules body");
+        let modules_text = String::from_utf8(modules_body.to_vec()).expect("utf8");
+        assert!(modules_text.contains("\"module\":\"chat\""));
+        assert!(modules_text.contains("\"module\":\"quran\""));
+        assert!(modules_text.contains("\"status\":\"coming_soon\""));
+
+        let quran_body = to_bytes(v1_quran.into_body()).await.expect("quran body");
+        let quran_text = String::from_utf8(quran_body.to_vec()).expect("utf8");
+        assert!(quran_text.contains("\"module\":\"quran\""));
+        assert!(quran_text.contains("\"enabled\":false"));
+        assert!(quran_text.contains("\"requires_subscription\":true"));
     }
 }
