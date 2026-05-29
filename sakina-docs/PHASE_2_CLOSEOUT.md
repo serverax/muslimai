@@ -37,19 +37,22 @@ Build log evidence includes:
 
 - Fresh manually triggered `Frontend CI` run:
   - Dispatch command: `gh workflow run frontend-ci.yml --ref qa-security-hardening`
-  - Run URL: <https://github.com/serverax/muslimai/actions/runs/26594172525>
+  - Run URL: <https://github.com/serverax/muslimai/actions/runs/26618236175>
   - Conclusion: **PASS** (`success`)
-  - Step-level evidence from run metadata (`gh run view 26594172525 --json jobs`):
+  - Step-level evidence from run metadata (`gh run view 26618236175 --json jobs`):
     - `Get dependencies` -> `success`
     - `Analyze` -> `success`
     - `Run tests` -> `success`
+    - `Verify backend secrets are not referenced in frontend` -> `success`
     - `Build APK` -> `success`
-  - Log proof (`gh run view 26594172525 --log`):
+  - Log proof (`gh run view 26618236175 --log`):
     - `Run tests` shows `25 tests passed.`
+    - `Verify backend secrets are not referenced in frontend` shows `if grep -R -n "SUPABASE_SERVICE_ROLE_KEY" ...`
     - `Build APK` shows `Built build/app/outputs/flutter-apk/app-release.apk`
 
 - Secret scan step verification status:
-  - Result: **PARTIAL**
-  - Exact log error:
-    `/home/runner/work/_temp/d8b45dd4-8575-489c-bd62-b1e39a68a65e.sh: line 1: rg: command not found`
-  - Impact: step is marked successful by workflow control flow, but `rg` did not execute on runner, so this specific scan is not fully verified yet.
+  - Result: **PASS**
+  - Evidence:
+    - Workflow now uses runner-available `grep` in `.github/workflows/frontend-ci.yml`.
+    - Latest run log includes `if grep -R -n "SUPABASE_SERVICE_ROLE_KEY" sakina-frontend/lib sakina-frontend/test; then`.
+    - No `rg: command not found` error appears in this run.

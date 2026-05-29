@@ -94,15 +94,17 @@ Frontend behavior:
 
 - Latest manual Frontend CI dispatch from `qa-security-hardening`:
   - Dispatch command: `gh workflow run frontend-ci.yml --ref qa-security-hardening`
-  - Run URL: <https://github.com/serverax/muslimai/actions/runs/26594172525>
+  - Run URL: <https://github.com/serverax/muslimai/actions/runs/26618236175>
   - Conclusion: `success`
-  - Step status (`gh run view 26594172525 --json jobs`):
+  - Step status (`gh run view 26618236175 --json jobs`):
     - `Get dependencies` -> `success`
     - `Analyze` -> `success`
     - `Run tests` -> `success`
+    - `Verify backend secrets are not referenced in frontend` -> `success`
     - `Build APK` -> `success`
-  - Log evidence (`gh run view 26594172525 --log`):
+  - Log evidence (`gh run view 26618236175 --log`):
     - `Run tests`: `25 tests passed.`
+    - `Verify backend secrets are not referenced in frontend`: `if grep -R -n "SUPABASE_SERVICE_ROLE_KEY" ...`
     - `Build APK`: `Built build/app/outputs/flutter-apk/app-release.apk`
 
 - Workflow dispatch trigger verification on branch:
@@ -121,8 +123,7 @@ Frontend behavior:
 - Chat foundation persists conversations/messages only; no LLM/provider invocation is connected.
 - Non-chat modules remain intentionally disabled/coming-soon unless explicitly enabled by release flags.
 - Frontend release APK is currently built with debug signing fallback when `android/key.properties` is absent.
-- Frontend secret scan workflow step is **PARTIAL** on GitHub runner because `rg` is not installed:
-  - exact error: `/home/runner/work/_temp/d8b45dd4-8575-489c-bd62-b1e39a68a65e.sh: line 1: rg: command not found`
+- Frontend secret scan workflow step status is now **PASS** on GitHub runner after replacing `rg` with `grep` in `.github/workflows/frontend-ci.yml`.
 
 ## Rollback commands
 
