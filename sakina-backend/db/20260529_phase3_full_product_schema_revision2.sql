@@ -240,24 +240,6 @@ CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_providers (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_licences (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
-    provider_id UUID REFERENCES sakina_ai.islamic_source_providers(id) ON DELETE SET NULL,
-    licence_name TEXT NOT NULL,
-    licence_version TEXT,
-    licence_url TEXT,
-    attribution_required BOOLEAN NOT NULL DEFAULT true,
-    commercial_use_allowed BOOLEAN NOT NULL DEFAULT false,
-    derivative_use_allowed BOOLEAN NOT NULL DEFAULT false,
-    review_status TEXT NOT NULL DEFAULT 'pending',
-    approved_by TEXT,
-    approved_at TIMESTAMPTZ,
-    rejected_reason TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
 CREATE TABLE IF NOT EXISTS sakina_ai.islamic_sources (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     source_key TEXT NOT NULL UNIQUE,
@@ -272,6 +254,24 @@ CREATE TABLE IF NOT EXISTS sakina_ai.islamic_sources (
     disabled_at TIMESTAMPTZ,
     rejected_reason TEXT,
     metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_licences (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+    provider_id UUID REFERENCES sakina_ai.islamic_source_providers(id) ON DELETE SET NULL,
+    licence_name TEXT NOT NULL,
+    licence_version TEXT,
+    licence_url TEXT,
+    attribution_required BOOLEAN NOT NULL DEFAULT true,
+    commercial_use_allowed BOOLEAN NOT NULL DEFAULT false,
+    derivative_use_allowed BOOLEAN NOT NULL DEFAULT false,
+    review_status TEXT NOT NULL DEFAULT 'pending',
+    approved_by TEXT,
+    approved_at TIMESTAMPTZ,
+    rejected_reason TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

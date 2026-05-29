@@ -7,7 +7,7 @@ Branch: `qa-security-hardening`
 
 - Revision 2 is prepared as a **schema-only package for review**.
 - No deployment commands were executed.
-- No SQL apply operation was executed against any database runtime.
+- SQL apply was executed only on an isolated local verification database instance (no live/staging/prod target).
 
 ## Migration files in package
 
@@ -46,3 +46,26 @@ This package is marked **ready for approval review** at schema level and intenti
   `sakina-backend/db/20260529_phase3_full_product_schema_revision2_rollback_procedure.md`
 - A destructive down-SQL file is intentionally not provided for this broad idempotent package because safe rollback depends on pre-apply state capture.
 - Approved rollback method: restore the pre-Revision-2 DB snapshot/backup and verify post-restore schema consistency.
+
+## Phase 1 local/dev verification evidence
+
+- Defect fixed: creation order corrected so `sakina_ai.islamic_sources` is defined before `sakina_ai.islamic_source_licences` FK references it.
+- Local-only verification method:
+  - initialized isolated PostgreSQL instance on `localhost:55435`;
+  - created DB `sakina_verify`;
+  - applied `20260529_phase3_full_product_schema_revision2.sql` twice with `ON_ERROR_STOP=1`.
+- Apply result: first run **success**, second run **success** (idempotency verified).
+- Post-verify checks:
+  - `tables_count = 89`
+  - `indexes_count = 187`
+  - `constraints_count = 880`
+  - `foreign_keys_count = 117`
+  - confirmed presence of key tables:
+    `sakina_ai.islamic_sources`, `sakina_ai.islamic_source_licences`, `sakina_ai.islamic_documents`, `public.users`, `public.user_subscriptions`
+  - confirmed sample indexes:
+    `idx_islamic_sources_status_type_lang`, `idx_islamic_documents_source_language`, `idx_rag_retrieval_audit_request`
+  - confirmed sample constraints:
+    `chk_islamic_sources_source_status`, `chk_islamic_sources_source_type`, `chk_islamic_sources_language`
+  - confirmed expected FKs on `sakina_ai.islamic_source_licences`:
+    `islamic_source_licences_source_id_fkey`, `islamic_source_licences_provider_id_fkey`
+- Rollback applicability check: doc-based rollback procedure exists and remains applicable for environments with pre-apply snapshots.
