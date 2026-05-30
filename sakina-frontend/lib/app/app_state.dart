@@ -7,7 +7,6 @@ class AppState extends ChangeNotifier {
   AppState({
     required AppLanguage language,
     required bool onboardingComplete,
-    required this.mockMode,
   })  : _language = language,
         _onboardingComplete = onboardingComplete;
 
@@ -16,7 +15,6 @@ class AppState extends ChangeNotifier {
 
   AppLanguage _language;
   bool _onboardingComplete;
-  final bool mockMode;
 
   AppLanguage get language => _language;
   bool get isArabic => _language == AppLanguage.arabic;
@@ -28,12 +26,9 @@ class AppState extends ChangeNotifier {
     final onboarding = prefs.getBool(_onboardingKey) ?? false;
     final language =
         languageCode == 'ar' ? AppLanguage.arabic : AppLanguage.english;
-    const mockMode =
-        bool.fromEnvironment('SAKINA_MOCK_MODE', defaultValue: false);
     return AppState(
       language: language,
       onboardingComplete: onboarding,
-      mockMode: mockMode,
     );
   }
 

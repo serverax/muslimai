@@ -150,11 +150,6 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
               },
               child: Text(app.t('openPreviewShell')),
             ),
-            const SizedBox(height: 8),
-            OutlinedButton(
-              onPressed: null,
-              child: Text('${app.t('comingSoon')}: Dashboard'),
-            ),
           ],
         ),
       ),

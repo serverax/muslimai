@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../config/api_config.dart';
+import '../services/api_service.dart';
+
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  ChatScreen({
+    super.key,
+    ApiService? api,
+    String? userId,
+  })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
+        userId = userId ??
+            const String.fromEnvironment(
+              'SAKINA_USER_ID',
+              defaultValue: '00000000-0000-0000-0000-000000000000',
+            );
+
+  final ApiService api;
+  final String userId;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -9,21 +24,276 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final List<Map<String, String>> _messages = [];
+  final TextEditingController _supportController = TextEditingController();
+  final List<ChatItem> _messages = [];
+  bool _sending = false;
+  bool _initializing = false;
+  bool _notificationBusy = false;
+  bool _supportBusy = false;
+  String? _conversationId;
+  String? _lastMessageId;
+  String _status = '';
+  List<String> _entitlements = const [];
+  bool _contractWarning = false;
 
-  void _sendMessage() {
-    if (_controller.text.isEmpty) return;
+  Future<void> _initializeUserFlows() async {
+    if (_initializing) return;
+    setState(() {
+      _initializing = true;
+      _status = 'Initializing auth/profile/subscription flow...';
+    });
+    final now = DateTime.now().millisecondsSinceEpoch;
+    try {
+      final register = await widget.api.registerUser(
+        RegisterUserRequest(
+          email: 'mobile-$now@sakina.local',
+          provider: 'mobile',
+          providerUserId: 'mobile-$now',
+        ),
+      );
+      final userId = register.userId;
+      await widget.api.createSession(
+        CreateSessionRequest(
+          userId: userId,
+          sessionTokenHash: 'session-$now',
+          refreshTokenHash: 'refresh-$now',
+          expiresAt: DateTime.now()
+              .toUtc()
+              .add(const Duration(hours: 1))
+              .toIso8601String(),
+          refreshExpiresAt: DateTime.now()
+              .toUtc()
+              .add(const Duration(days: 30))
+              .toIso8601String(),
+          ipAddress: '127.0.0.1',
+          userAgent: 'sakina-mobile',
+        ),
+      );
+      await widget.api.upsertProfile(
+        userId,
+        UpsertProfileRequest(displayName: 'Sakina Mobile'),
+      );
+      await widget.api.createFamilyProfile(
+        userId,
+        CreateFamilyProfileRequest(familyName: 'Sakina Household'),
+      );
+      await widget.api.activateSubscription(
+        userId,
+        ActivateSubscriptionRequest(
+          providerKey: 'stripe',
+          planKey: 'premium-monthly',
+        ),
+      );
+      final entitlements = await widget.api.listEntitlements(userId);
+      await widget.api.upsertDeviceToken(
+        userId: userId,
+        platform: 'android',
+        tokenHash: 'device-$now',
+      );
+      if (!mounted) return;
+      setState(() {
+        _status = 'User flows initialized: ${entitlements.length} entitlements';
+        _entitlements = entitlements;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _status = _humanizeError(error);
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _initializing = false);
+      }
+    }
+  }
+
+  Future<void> _sendNotificationFlow() async {
+    if (_notificationBusy) return;
+    setState(() => _notificationBusy = true);
+    try {
+      final id = await widget.api.createNotificationTemplate(
+        templateKey: 'mobile-chat-update-${DateTime.now().millisecondsSinceEpoch}',
+        subjectTemplate: 'Sakina update',
+        bodyTemplate: 'A chat update is available.',
+      );
+      await widget.api.sendNotification(
+        userId: widget.userId,
+        templateId: id,
+        title: 'Sakina Notification',
+        body: 'Evidence-only answer ready.',
+      );
+      if (!mounted) return;
+      setState(() {
+        _status = 'Notifications endpoint wired successfully.';
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _status = _humanizeError(error));
+    } finally {
+      if (mounted) {
+        setState(() => _notificationBusy = false);
+      }
+    }
+  }
+
+  Future<void> _submitSupportTicket() async {
+    final body = _supportController.text.trim();
+    if (body.isEmpty || _supportBusy) return;
+    setState(() => _supportBusy = true);
+    try {
+      final ticket = await widget.api.createSupportTicket(
+        userId: widget.userId,
+        subject: 'Mobile support request',
+        messageBody: body,
+      );
+      await widget.api.appendSupportMessage(
+        ticketId: ticket.ticketId,
+        messageBody: 'Follow-up from mobile client.',
+      );
+      final snapshot = await widget.api.getSupportTicket(ticket.ticketId);
+      if (!mounted) return;
+      setState(() {
+        _status =
+            'Support ticket ${snapshot.ticketId} synced (${snapshot.messages.length} messages).';
+        _supportController.clear();
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _status = _humanizeError(error));
+    } finally {
+      if (mounted) {
+        setState(() => _supportBusy = false);
+      }
+    }
+  }
+
+  Future<String> _ensureConversation() async {
+    if (_conversationId != null) {
+      return _conversationId!;
+    }
+    final response = await widget.api.createConversation(
+      userId: widget.userId,
+      title: 'Mobile conversation',
+    );
+    _conversationId = response.id;
+    return response.id;
+  }
+
+  Future<void> _sendMessage() async {
+    final text = _controller.text.trim();
+    if (text.isEmpty || _sending) return;
 
     setState(() {
-      _messages.add({
-        'role': 'user',
-        'content': _controller.text,
-      });
+      _messages.add(ChatItem.user(text));
       _controller.clear();
+      _sending = true;
+      _status = '';
+      _contractWarning = false;
     });
 
-    // TODO: Call API
-    // Future API call here
+    try {
+      final conversationId = await _ensureConversation();
+      final stored = await widget.api.addConversationMessage(
+        userId: widget.userId,
+        conversationId: conversationId,
+        content: text,
+      );
+      _lastMessageId = stored.userMessageId;
+      final rag = await widget.api.query(text, userId: widget.userId);
+      final verifiedSources =
+          rag.sources.where((source) => source.isVerifiedShape).toList();
+      final malformedDetected =
+          rag.sources.isNotEmpty && verifiedSources.length != rag.sources.length;
+      if (!mounted) return;
+      setState(() {
+        _contractWarning = malformedDetected;
+        if (verifiedSources.isEmpty) {
+          _messages.add(
+            ChatItem.system(
+              'No verified evidence is available yet. I cannot provide a religious answer without verified sources.',
+            ),
+          );
+          return;
+        }
+        _messages.add(
+          ChatItem.evidence(
+            'Verified evidence retrieved.',
+            verifiedSources,
+          ),
+        );
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _messages.add(ChatItem.system(_humanizeError(error)));
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _sending = false);
+      }
+    }
+  }
+
+  Future<void> _sendFeedback(String type) async {
+    final messageId = _lastMessageId;
+    if (messageId == null) {
+      setState(() {
+        _status = 'No message available for feedback yet.';
+      });
+      return;
+    }
+    try {
+      await widget.api.sendChatFeedback(
+        messageId: messageId,
+        feedbackType: type,
+        feedbackScore: type == 'thumbs_up' ? 5 : 1,
+      );
+      if (!mounted) return;
+      setState(() => _status = 'Feedback submitted.');
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _status = _humanizeError(error));
+    }
+  }
+
+  Future<void> _reportMessage() async {
+    final messageId = _lastMessageId;
+    if (messageId == null) {
+      setState(() => _status = 'No message available to report.');
+      return;
+    }
+    try {
+      await widget.api.reportMessage(
+        messageId: messageId,
+        reason: 'citation_missing',
+        details: 'Verified evidence could not be validated in UI.',
+      );
+      if (!mounted) return;
+      setState(() => _status = 'Report submitted.');
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _status = _humanizeError(error));
+    }
+  }
+
+  String _humanizeError(Object error) {
+    if (error is FormatException) {
+      return 'Malformed backend response. Please retry later.';
+    }
+    if (error is ApiException) {
+      final code = error.errorCode ?? '';
+      if (error.statusCode == 401 || error.statusCode == 403) {
+        return 'Unauthorized request. Please sign in again.';
+      }
+      if (error.statusCode == 402 || code == 'subscription_required') {
+        return 'Premium entitlement required for this action.';
+      }
+      if (code == 'feature_disabled') {
+        return 'This feature is currently disabled by backend policy.';
+      }
+      return error.backendMessage ?? error.message;
+    }
+    return 'Unexpected error occurred. Please try again.';
   }
 
   @override
@@ -34,25 +304,104 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
+          if (_status.isNotEmpty)
+            Container(
+              width: double.infinity,
+              color: Colors.blueGrey.shade50,
+              padding: const EdgeInsets.all(8),
+              child: Text(_status),
+            ),
+          if (_entitlements.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Text('Entitlements: ${_entitlements.join(', ')}'),
+            ),
+          if (_contractWarning)
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                'Some backend evidence items were malformed and were safely discarded.',
+                style: TextStyle(color: Colors.deepOrange),
+              ),
+            ),
+          Wrap(
+            spacing: 8,
+            children: [
+              OutlinedButton(
+                onPressed: _initializing ? null : _initializeUserFlows,
+                child: Text(_initializing ? 'Initializing...' : 'Init User Flows'),
+              ),
+              OutlinedButton(
+                onPressed: _notificationBusy ? null : _sendNotificationFlow,
+                child: Text(_notificationBusy ? 'Sending...' : 'Notify'),
+              ),
+              OutlinedButton(
+                onPressed: _sendFeedbackUpDownDisabled() ? null : () => _sendFeedback('thumbs_up'),
+                child: const Text('Feedback +'),
+              ),
+              OutlinedButton(
+                onPressed: _sendFeedbackUpDownDisabled() ? null : () => _sendFeedback('thumbs_down'),
+                child: const Text('Feedback -'),
+              ),
+              OutlinedButton(
+                onPressed: _sendFeedbackUpDownDisabled() ? null : _reportMessage,
+                child: const Text('Report'),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _supportController,
+                    decoration: const InputDecoration(
+                      hintText: 'Create support ticket...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: _supportBusy ? null : _submitSupportTicket,
+                  child: Text(_supportBusy ? '...' : 'Support'),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 final message = _messages[index];
                 return Align(
-                  alignment: message['role'] == 'user'
+                  alignment: message.role == ChatRole.user
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: message['role'] == 'user'
+                      color: message.role == ChatRole.user
                           ? Colors.blue
                           : Colors.grey[300],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(message['content'] ?? ''),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(message.text),
+                        if (message.evidence.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          for (final source in message.evidence)
+                            Text(
+                              '- ${source.title} | ${source.chapter} | ${source.authenticityGrade}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                        ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -83,7 +432,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   label: 'send-message-button',
                   child: FloatingActionButton(
                     tooltip: 'Send message',
-                    onPressed: _sendMessage,
+                    onPressed: _sending ? null : _sendMessage,
                     child: const Icon(Icons.send),
                   ),
                 ),
@@ -98,6 +447,33 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _controller.dispose();
+    _supportController.dispose();
+    widget.api.close();
     super.dispose();
   }
+
+  bool _sendFeedbackUpDownDisabled() => _lastMessageId == null;
+}
+
+enum ChatRole { user, system, evidence }
+
+class ChatItem {
+  final ChatRole role;
+  final String text;
+  final List<Citation> evidence;
+
+  const ChatItem._({
+    required this.role,
+    required this.text,
+    required this.evidence,
+  });
+
+  factory ChatItem.user(String text) =>
+      ChatItem._(role: ChatRole.user, text: text, evidence: const []);
+
+  factory ChatItem.system(String text) =>
+      ChatItem._(role: ChatRole.system, text: text, evidence: const []);
+
+  factory ChatItem.evidence(String text, List<Citation> evidence) =>
+      ChatItem._(role: ChatRole.evidence, text: text, evidence: evidence);
 }

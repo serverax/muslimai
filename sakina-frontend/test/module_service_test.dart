@@ -9,6 +9,7 @@ class FakeModuleApiClient extends ModuleApiClient {
   FakeModuleApiClient() : super(baseUrl: 'http://test');
 
   int calls = 0;
+  int statusCalls = 0;
 
   @override
   Future<QuranOverviewDto> fetchQuranOverview({required String tier}) async {
@@ -85,6 +86,19 @@ class FakeModuleApiClient extends ModuleApiClient {
         reviewStatus: ReviewStatus.scholarReviewRequired,
       ),
       provenance: [],
+    );
+  }
+
+  @override
+  Future<ModuleStatusDto> fetchModuleStatus(ModuleStatusKey module,
+      {required String tier}) async {
+    statusCalls += 1;
+    return ModuleStatusDto(
+      module: module,
+      enabled: true,
+      status: ModuleLifecycleStatus.active,
+      reason: 'module active in preview',
+      requiresSubscription: module != ModuleStatusKey.chat,
     );
   }
 }
@@ -356,5 +370,58 @@ void main() {
     final dto = await client.fetchQuranOverview(tier: 'premium');
     expect(dto.provenance, isEmpty);
     expect(dto.message, contains('under review'));
+  });
+
+  test('status parser handles coming_soon contract', () {
+    final status = ModuleStatusDto.fromJson({
+      'module': 'quran',
+      'enabled': false,
+      'status': 'coming_soon',
+      'reason': 'quran module disabled by default until feature flag is enabled',
+      'requires_subscription': true,
+    });
+    expect(status.module, ModuleStatusKey.quran);
+    expect(status.enabled, isFalse);
+    expect(status.status, ModuleLifecycleStatus.comingSoon);
+  });
+
+  test('moduleStatus short-circuits backend when local flag disabled', () async {
+    final fakeClient = FakeModuleApiClient();
+    final service = ModuleService(
+      apiClient: fakeClient,
+      entitlementGate: EntitlementGate(tier: 'premium'),
+      featureGate: const ModuleFeatureGate(
+        quran: false,
+        prayer: false,
+        knowledge: false,
+        community: false,
+      ),
+    );
+
+    final status = await service.moduleStatus(ModuleStatusKey.quran);
+    expect(status.enabled, isFalse);
+    expect(status.status, ModuleLifecycleStatus.comingSoon);
+    expect(status.usedBackendStatus, isFalse);
+    expect(fakeClient.statusCalls, 0);
+  });
+
+  test('moduleStatus combines local flag and backend status', () async {
+    final fakeClient = FakeModuleApiClient();
+    final service = ModuleService(
+      apiClient: fakeClient,
+      entitlementGate: EntitlementGate(tier: 'premium'),
+      featureGate: const ModuleFeatureGate(
+        quran: true,
+        prayer: false,
+        knowledge: false,
+        community: false,
+      ),
+    );
+
+    final status = await service.moduleStatus(ModuleStatusKey.quran);
+    expect(status.enabled, isTrue);
+    expect(status.status, ModuleLifecycleStatus.active);
+    expect(status.usedBackendStatus, isTrue);
+    expect(fakeClient.statusCalls, 1);
   });
 }

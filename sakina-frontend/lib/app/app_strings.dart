@@ -94,17 +94,17 @@ class AppStrings {
     },
     'phase2Notice': {
       AppLanguage.english:
-          'Login and full dashboard are in Phase 2. This screen is intentionally limited.',
+          'Create your account profile and continue into the live mobile flows.',
       AppLanguage.arabic:
-          'تسجيل الدخول ولوحة التحكم الكاملة في المرحلة الثانية. هذه الشاشة محدودة عمدا.',
+          'أنشئ ملفك الشخصي ثم تابع إلى مسارات الجوال المتصلة بالخدمات الحية.',
     },
     'comingSoon': {
       AppLanguage.english: 'Coming soon',
       AppLanguage.arabic: 'قريبا',
     },
     'openPreviewShell': {
-      AppLanguage.english: 'Open Preview Shell',
-      AppLanguage.arabic: 'افتح واجهة المعاينة',
+      AppLanguage.english: 'Open Mobile Workspace',
+      AppLanguage.arabic: 'افتح مساحة العمل على الجوال',
     },
     'chat': {
       AppLanguage.english: 'Chat',
@@ -140,12 +140,6 @@ class AppStrings {
     'language': {
       AppLanguage.english: 'Language',
       AppLanguage.arabic: 'اللغة',
-    },
-    'mockMode': {
-      AppLanguage.english:
-          'Mock mode enabled (for testing only). Do not use this mode in production.',
-      AppLanguage.arabic:
-          'وضع المحاكاة مفعّل (للاختبار فقط). لا تستخدم هذا الوضع في الإنتاج.',
     },
   };
 

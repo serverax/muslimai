@@ -7,6 +7,7 @@ void main() {
   testWidgets('CitationBadge renders title/author and opens a detail dialog',
       (tester) async {
     final c = Citation(
+      id: 'citation-1',
       title: 'Sahih al-Bukhari',
       author: 'al-Bukhari',
       chapter: 'Book of Faith',

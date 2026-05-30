@@ -7,6 +7,7 @@ import '../config/api_config.dart';
 import 'api_service.dart';
 
 enum ModuleKey { quran, prayer, knowledge, community }
+enum ModuleStatusKey { chat, quran, prayer, knowledge, community }
 
 enum ModuleSafetyStatus {
   disabled,
@@ -28,6 +29,34 @@ enum ModuleAccessState {
   subscriptionRequired,
   enabledReadOnly,
   requiresReview,
+}
+
+enum ModuleLifecycleStatus { active, disabled, comingSoon }
+
+class ModuleStatusDto {
+  const ModuleStatusDto({
+    required this.module,
+    required this.enabled,
+    required this.status,
+    required this.reason,
+    required this.requiresSubscription,
+  });
+
+  final ModuleStatusKey module;
+  final bool enabled;
+  final ModuleLifecycleStatus status;
+  final String reason;
+  final bool requiresSubscription;
+
+  factory ModuleStatusDto.fromJson(Map<String, dynamic> json) {
+    return ModuleStatusDto(
+      module: _moduleStatusKeyFromJson(json['module']),
+      enabled: json['enabled'] as bool? ?? false,
+      status: _moduleLifecycleStatusFromJson(json['status']),
+      reason: json['reason'] as String? ?? '',
+      requiresSubscription: json['requires_subscription'] as bool? ?? false,
+    );
+  }
 }
 
 class SourceProvenanceDto {
@@ -297,6 +326,23 @@ class ModuleApiClient {
     return CommunityOverviewDto.fromJson(response);
   }
 
+  Future<List<ModuleStatusDto>> fetchModulesStatus({required String tier}) async {
+    final response = await _get('/modules', tier: tier);
+    final raw = response['modules'] as List<dynamic>? ?? const [];
+    return raw
+        .map((e) => ModuleStatusDto.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<ModuleStatusDto> fetchModuleStatus(
+    ModuleStatusKey module, {
+    required String tier,
+  }) async {
+    final moduleName = _moduleStatusKeyToPath(module);
+    final response = await _get('/modules/$moduleName/status', tier: tier);
+    return ModuleStatusDto.fromJson(response);
+  }
+
   Future<Map<String, dynamic>> _get(String path, {required String tier}) async {
     final uri = Uri.parse('${_endpointBase()}$path');
     final res = await _client.get(uri, headers: {
@@ -331,6 +377,24 @@ class ModuleApiClient {
   void close() => _client.close();
 }
 
+class ModuleResolvedStatus {
+  const ModuleResolvedStatus({
+    required this.module,
+    required this.enabled,
+    required this.status,
+    required this.reason,
+    required this.requiresSubscription,
+    required this.usedBackendStatus,
+  });
+
+  final ModuleStatusKey module;
+  final bool enabled;
+  final ModuleLifecycleStatus status;
+  final String reason;
+  final bool requiresSubscription;
+  final bool usedBackendStatus;
+}
+
 class ModuleService {
   ModuleService({
     required ModuleApiClient apiClient,
@@ -343,6 +407,40 @@ class ModuleService {
   final ModuleApiClient _apiClient;
   final EntitlementGate _entitlementGate;
   final ModuleFeatureGate _featureGate;
+
+  Future<ModuleResolvedStatus> moduleStatus(ModuleStatusKey key) async {
+    final localEnabled = switch (key) {
+      ModuleStatusKey.chat => true,
+      ModuleStatusKey.quran => _featureGate.isEnabled(ModuleKey.quran),
+      ModuleStatusKey.prayer => _featureGate.isEnabled(ModuleKey.prayer),
+      ModuleStatusKey.knowledge => _featureGate.isEnabled(ModuleKey.knowledge),
+      ModuleStatusKey.community => _featureGate.isEnabled(ModuleKey.community),
+    };
+
+    if (!localEnabled && key != ModuleStatusKey.chat) {
+      return ModuleResolvedStatus(
+        module: key,
+        enabled: false,
+        status: ModuleLifecycleStatus.comingSoon,
+        reason: 'Module disabled by local release flag.',
+        requiresSubscription: true,
+        usedBackendStatus: false,
+      );
+    }
+
+    final backend = await _apiClient.fetchModuleStatus(
+      key,
+      tier: _entitlementGate.tierHeaderValue,
+    );
+    return ModuleResolvedStatus(
+      module: key,
+      enabled: localEnabled && backend.enabled,
+      status: backend.status,
+      reason: backend.reason,
+      requiresSubscription: backend.requiresSubscription,
+      usedBackendStatus: true,
+    );
+  }
 
   Future<ModuleResult<QuranOverviewDto>> quran() async {
     if (!_featureGate.isEnabled(ModuleKey.quran)) {
@@ -486,5 +584,35 @@ ReviewStatus _reviewStatusFromJson(Object? value) {
     'rejected' => ReviewStatus.rejected,
     'disabled' => ReviewStatus.disabled,
     _ => ReviewStatus.scholarReviewRequired,
+  };
+}
+
+ModuleStatusKey _moduleStatusKeyFromJson(Object? value) {
+  return switch ((value?.toString() ?? '').toLowerCase()) {
+    'chat' => ModuleStatusKey.chat,
+    'quran' => ModuleStatusKey.quran,
+    'prayer' => ModuleStatusKey.prayer,
+    'knowledge' => ModuleStatusKey.knowledge,
+    'community' => ModuleStatusKey.community,
+    _ => ModuleStatusKey.chat,
+  };
+}
+
+ModuleLifecycleStatus _moduleLifecycleStatusFromJson(Object? value) {
+  return switch ((value?.toString() ?? '').toLowerCase()) {
+    'active' => ModuleLifecycleStatus.active,
+    'disabled' => ModuleLifecycleStatus.disabled,
+    'coming_soon' => ModuleLifecycleStatus.comingSoon,
+    _ => ModuleLifecycleStatus.disabled,
+  };
+}
+
+String _moduleStatusKeyToPath(ModuleStatusKey key) {
+  return switch (key) {
+    ModuleStatusKey.chat => 'chat',
+    ModuleStatusKey.quran => 'quran',
+    ModuleStatusKey.prayer => 'prayer',
+    ModuleStatusKey.knowledge => 'knowledge',
+    ModuleStatusKey.community => 'community',
   };
 }

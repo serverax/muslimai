@@ -139,11 +139,9 @@ async fn main() -> std::io::Result<()> {
     // Phase 1 services — wired into handlers via app_data.
     let router = std::sync::Arc::new(services::SemanticRouter::new());
     let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
-    let citations = std::sync::Arc::new(services::CitationEngine::new(pool.clone()));
     let phase2_repo = services::Phase2Repository::new(pool.clone());
     let router_data = web::Data::new(router.clone());
     let guardrails_data = web::Data::new(guardrails.clone());
-    let citations_data = web::Data::new(citations.clone());
     let phase2_repo_data = web::Data::new(phase2_repo.clone());
 
     // Background worker: drain the outbox (marks chunk_indexed events Sent).
@@ -179,7 +177,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(pool.clone()))
             .app_data(router_data.clone())
             .app_data(guardrails_data.clone())
-            .app_data(citations_data.clone())
             .app_data(phase2_repo_data.clone())
             .app_data(qdrant.clone())
             .app_data(embeddings.clone())

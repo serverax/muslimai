@@ -1,4 +1,3 @@
-pub mod citation;
 pub mod decision_algorithm;
 pub mod embeddings;
 pub mod guardrails;
@@ -8,7 +7,6 @@ pub mod phase2;
 pub mod qdrant_client;
 pub mod semantic_router;
 
-pub use citation::CitationEngine;
 pub use decision_algorithm::decide as decide_request;
 pub use decision_algorithm::DefaultModuleClassifier;
 pub use decision_algorithm::DefaultSafetyClassifier;

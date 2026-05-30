@@ -9,9 +9,7 @@ use crate::models::{
     RagSourcesResponse, RagStatusResponse, ReviewStatus,
 };
 use crate::models::{RagQuery, RagResponse, SourceReference};
-use crate::services::{
-    CitationEngine, EmbeddingsService, Guardrails, QdrantVectorDB, SemanticRouter,
-};
+use crate::services::{EmbeddingsService, Guardrails, QdrantVectorDB, SemanticRouter};
 
 fn payload_text(payload: Option<&serde_json::Value>, key: &str) -> Option<String> {
     payload
@@ -53,7 +51,6 @@ fn source_from_payload(hit: &crate::services::qdrant_client::ScoredPoint) -> Opt
 pub async fn query_rag(
     router: web::Data<Arc<SemanticRouter>>,
     guardrails: web::Data<Arc<Guardrails>>,
-    _citations: web::Data<Arc<CitationEngine>>,
     qdrant: web::Data<QdrantVectorDB>,
     embeddings: web::Data<EmbeddingsService>,
     query: web::Json<RagQuery>,

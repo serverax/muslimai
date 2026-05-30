@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../app/app_state.dart';
-import '../app/feature_flags.dart';
 import '../services/module_service.dart';
 import 'chat_screen.dart';
-import 'community_module_screen.dart';
-import 'knowledge_module_screen.dart';
-import 'phase2_placeholder_screen.dart';
-import 'prayer_module_screen.dart';
-import 'quran_module_screen.dart';
+import 'module_read_only_state_screen.dart';
 
 class HomeShellScreen extends StatefulWidget {
   const HomeShellScreen({super.key, required this.appState});
@@ -36,29 +31,23 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
   Widget build(BuildContext context) {
     final app = widget.appState;
     final screens = [
-      const ChatScreen(),
-      FeatureFlags.quran
-          ? QuranModuleScreen(
-              moduleService: _moduleService, title: app.t('quran'))
-          : Phase2PlaceholderScreen(title: app.t('quran'), appState: app),
-      FeatureFlags.prayer
-          ? PrayerModuleScreen(
-              moduleService: _moduleService,
-              title: app.t('prayer'),
-            )
-          : Phase2PlaceholderScreen(title: app.t('prayer'), appState: app),
-      FeatureFlags.community
-          ? CommunityModuleScreen(
-              moduleService: _moduleService,
-              title: app.t('community'),
-            )
-          : Phase2PlaceholderScreen(title: app.t('community'), appState: app),
-      FeatureFlags.knowledge
-          ? KnowledgeModuleScreen(
-              moduleService: _moduleService,
-              title: app.t('knowledge'),
-            )
-          : Phase2PlaceholderScreen(title: app.t('knowledge'), appState: app),
+      ChatScreen(),
+      ModuleReadOnlyStateScreen(
+        title: app.t('quran'),
+        load: _moduleService.quran,
+      ),
+      ModuleReadOnlyStateScreen(
+        title: app.t('prayer'),
+        load: _moduleService.prayer,
+      ),
+      ModuleReadOnlyStateScreen(
+        title: app.t('community'),
+        load: _moduleService.community,
+      ),
+      ModuleReadOnlyStateScreen(
+        title: app.t('knowledge'),
+        load: _moduleService.knowledge,
+      ),
     ];
 
     return Scaffold(

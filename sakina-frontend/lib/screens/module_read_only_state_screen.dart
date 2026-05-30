@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/api_service.dart';
 import '../services/module_service.dart';
 
 class ModuleReadOnlyStateScreen<T extends ModuleOverviewDto>
@@ -22,11 +23,28 @@ class ModuleReadOnlyStateScreen<T extends ModuleOverviewDto>
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
+          final error = snapshot.error;
+          if (error is FormatException) {
+            return _stateText(
+                '$title is temporarily unavailable due to malformed backend data.');
+          }
+          if (error is ApiException) {
+            if (error.statusCode == 401 || error.statusCode == 403) {
+              return _stateText('Unauthorized. Please sign in again.');
+            }
+            if (error.statusCode == 402 ||
+                error.errorCode == 'subscription_required') {
+              return _stateText('$title requires premium subscription.');
+            }
+            if (error.errorCode == 'feature_disabled') {
+              return _stateText('$title is disabled by backend policy.');
+            }
+          }
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Text(
-                '$title coming soon / under review.',
+                '$title is unavailable right now.',
                 textAlign: TextAlign.center,
               ),
             ),

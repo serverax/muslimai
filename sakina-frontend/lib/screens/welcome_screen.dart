@@ -23,19 +23,6 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (appState.mockMode)
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.amber.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      appState.t('mockMode'),
-                      style: const TextStyle(color: Colors.black87),
-                    ),
-                  ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: DropdownButton<AppLanguage>(
