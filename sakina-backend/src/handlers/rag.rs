@@ -13,17 +13,47 @@ use crate::services::{
     CitationEngine, EmbeddingsService, Guardrails, QdrantVectorDB, SemanticRouter,
 };
 
-/// Real RAG pipeline (Step 18): classify -> embed -> guardrail -> Qdrant search
-/// -> cite -> answer.
+fn payload_text(payload: Option<&serde_json::Value>, key: &str) -> Option<String> {
+    payload
+        .and_then(|value| value.get(key))
+        .and_then(|value| value.as_str())
+        .map(|value| value.trim().to_string())
+        .filter(|value| !value.is_empty())
+}
+
+fn source_from_payload(hit: &crate::services::qdrant_client::ScoredPoint) -> Option<SourceReference> {
+    let payload = hit.payload.as_ref();
+    let source_id = payload_text(payload, "source_id")
+        .or_else(|| payload_text(payload, "chunk_id"))
+        .or_else(|| hit.id.as_i64().map(|id| id.to_string()))
+        .or_else(|| hit.id.as_str().map(|id| id.to_string()))?;
+    Some(SourceReference {
+        id: source_id,
+        title: payload_text(payload, "title")
+            .or_else(|| payload_text(payload, "source_name"))
+            .unwrap_or_default(),
+        author: payload_text(payload, "author")
+            .or_else(|| payload_text(payload, "source_author"))
+            .unwrap_or_default(),
+        chapter: payload_text(payload, "chapter")
+            .or_else(|| payload_text(payload, "source_reference"))
+            .unwrap_or_default(),
+        authenticity_grade: payload_text(payload, "authenticity_grade")
+            .or_else(|| payload_text(payload, "review_status"))
+            .unwrap_or_default(),
+    })
+}
+
+/// Real RAG pipeline (Step 18): classify -> embed -> guardrail -> Qdrant search.
 ///
 /// Structured for production but NOT runtime-tested here: it needs a live vLLM
 /// (embeddings), a live Qdrant with indexed chunks, and a populated Postgres.
-/// The final answer generation (vLLM completion) is still a placeholder.
+/// This endpoint is evidence-only: it does not generate answer text.
 #[tracing::instrument(skip_all)]
 pub async fn query_rag(
     router: web::Data<Arc<SemanticRouter>>,
     guardrails: web::Data<Arc<Guardrails>>,
-    citations: web::Data<Arc<CitationEngine>>,
+    _citations: web::Data<Arc<CitationEngine>>,
     qdrant: web::Data<QdrantVectorDB>,
     embeddings: web::Data<EmbeddingsService>,
     query: web::Json<RagQuery>,
@@ -41,9 +71,7 @@ pub async fn query_rag(
     let guard = guardrails.check(&embedding).await?;
     if !guard.passed {
         return Ok(HttpResponse::Ok().json(RagResponse {
-            answer: "To maintain accuracy, I cannot provide an answer below our \
-                     confidence threshold. Please consult a qualified Islamic scholar."
-                .to_string(),
+            answer: String::new(),
             sources: vec![],
             confidence: 0.0,
             guardrail_triggered: true,
@@ -55,9 +83,7 @@ pub async fn query_rag(
     let hits = qdrant.search(&embedding, THRESHOLD, 5).await?;
     if hits.is_empty() {
         return Ok(HttpResponse::Ok().json(RagResponse {
-            answer: "I don't have reliable verified sources on this topic. Please \
-                     consult a qualified Islamic scholar."
-                .to_string(),
+            answer: String::new(),
             sources: vec![],
             confidence: 0.0,
             guardrail_triggered: true,
@@ -65,35 +91,18 @@ pub async fn query_rag(
         }));
     }
 
-    // 5. Citations for the retrieved chunk IDs.
-    let chunk_ids: Vec<i64> = hits.iter().filter_map(|p| p.id.as_i64()).collect();
-    let sources: Vec<SourceReference> = citations
-        .cite(&chunk_ids)
-        .await?
-        .into_iter()
-        .enumerate()
-        .map(|(i, c)| SourceReference {
-            id: format!("chunk-{}", i + 1),
-            title: c.title,
-            author: c.author,
-            chapter: c.chapter.unwrap_or_default(),
-            authenticity_grade: c.authenticity_grade.unwrap_or_default(),
-        })
-        .collect();
-
-    // 6. Answer generation (vLLM completion) — placeholder until wired.
-    let answer = format!(
-        "Based on verified Islamic sources: {}",
-        sources
-            .first()
-            .map(|s| s.title.as_str())
-            .unwrap_or("(no source)")
-    );
+    // 5. Build evidence references only from returned retrieval metadata.
+    let sources: Vec<SourceReference> = hits.iter().filter_map(source_from_payload).collect();
+    let top_similarity = hits
+        .iter()
+        .map(|point| point.score)
+        .fold(0.0_f32, f32::max);
+    let confidence = guard.confidence.min(top_similarity);
 
     Ok(HttpResponse::Ok().json(RagResponse {
-        answer,
+        answer: String::new(),
         sources,
-        confidence: guard.confidence,
+        confidence,
         guardrail_triggered: false,
         processing_time_ms: start.elapsed().as_millis() as u64,
     }))

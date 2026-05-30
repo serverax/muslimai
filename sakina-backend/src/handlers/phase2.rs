@@ -659,6 +659,7 @@ mod tests {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(repo))
+                .app_data(web::Data::new(pool.clone()))
                 .route("/auth/register", web::post().to(register_user))
                 .route("/chat/conversations", web::post().to(crate::handlers::chat::create_conversation))
                 .route(
