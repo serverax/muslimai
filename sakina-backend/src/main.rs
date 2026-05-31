@@ -87,8 +87,16 @@ async fn main() -> std::io::Result<()> {
 
     // Project Sakina brand banner (single source of truth: src/brand.rs)
     let (motto_en, motto_ar) = brand::get_brand_motto();
-    info!("[{}] {}", brand::SAKINA.name, brand::SAKINA.tagline);
-    info!("[{}] Vision: {}", brand::SAKINA.name, brand::SAKINA.vision);
+    info!(
+        "[{name}] {tagline}",
+        name = brand::SAKINA.name,
+        tagline = brand::SAKINA.tagline
+    );
+    info!(
+        "[{name}] Vision: {vision}",
+        name = brand::SAKINA.name,
+        vision = brand::SAKINA.vision
+    );
     info!(
         "[{}] Mission: {}",
         brand::SAKINA.name,
@@ -106,7 +114,7 @@ async fn main() -> std::io::Result<()> {
         motto_ar
     );
     for value in brand::SAKINA.values {
-        info!("[{}] Value: {}", brand::SAKINA.name, value);
+        info!("[{name}] Value: {value}", name = brand::SAKINA.name);
     }
     info!(
         "[{}] Theme primary={} accent={} bg={} text={} error={}",
@@ -118,7 +126,10 @@ async fn main() -> std::io::Result<()> {
         brand::BRAND_COLORS.error
     );
 
-    info!("[{}] Starting Sakina API Server", brand::SAKINA.name);
+    info!(
+        "[{name}] Starting Sakina API Server",
+        name = brand::SAKINA.name
+    );
 
     // Database connection
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
@@ -148,7 +159,7 @@ async fn main() -> std::io::Result<()> {
     let relay = services::OutboxRelay::new(pool.clone());
     tokio::spawn(async move {
         if let Err(e) = relay.relay_events().await {
-            tracing::error!("outbox relay stopped: {}", e);
+            tracing::error!("outbox relay stopped: {e}");
         }
     });
 
@@ -201,6 +212,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::AuditMiddleware)
             .route("/health", web::get().to(handlers::health::health_check))
             .route("/ready", web::get().to(readiness_check))
+            .route("/readiness", web::get().to(readiness_check))
             .route("/metrics", web::get().to(handlers::ops::metrics))
             .route(
                 "/waitlist",
@@ -249,12 +261,16 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
                     .route("/ready", web::get().to(readiness_check))
+                    .route("/readiness", web::get().to(readiness_check))
                     .route("/metrics", web::get().to(handlers::ops::metrics))
                     .route(
                         "/waitlist",
                         web::post().to(handlers::waitlist::create_waitlist_entry),
                     )
-                    .route("/users/pubkey", web::get().to(handlers::user::get_server_pubkey))
+                    .route(
+                        "/users/pubkey",
+                        web::get().to(handlers::user::get_server_pubkey),
+                    )
                     .service(
                         web::scope("/auth")
                             .route("/register", web::post().to(handlers::phase2::register_user))
@@ -525,6 +541,7 @@ mod tests {
                     ))
                     .route("/health", web::get().to(handlers::health::health_check))
                     .route("/ready", web::get().to(readiness_check))
+                    .route("/readiness", web::get().to(readiness_check))
                     .route("/metrics", web::get().to(handlers::ops::metrics))
                     .route(
                         "/waitlist",
@@ -573,6 +590,7 @@ mod tests {
                         web::scope("/v1")
                             .route("/health", web::get().to(handlers::health::health_check))
                             .route("/ready", web::get().to(readiness_check))
+                            .route("/readiness", web::get().to(readiness_check))
                             .route("/metrics", web::get().to(handlers::ops::metrics))
                             .route(
                                 "/waitlist",
@@ -648,10 +666,22 @@ mod tests {
 
         let ready_root =
             test::call_service(&app, test::TestRequest::get().uri("/ready").to_request()).await;
+        let readiness_root = test::call_service(
+            &app,
+            test::TestRequest::get().uri("/readiness").to_request(),
+        )
+        .await;
         let ready_v1 =
             test::call_service(&app, test::TestRequest::get().uri("/v1/ready").to_request()).await;
+        let readiness_v1 = test::call_service(
+            &app,
+            test::TestRequest::get().uri("/v1/readiness").to_request(),
+        )
+        .await;
         assert_eq!(ready_root.status(), StatusCode::SERVICE_UNAVAILABLE);
+        assert_eq!(readiness_root.status(), StatusCode::SERVICE_UNAVAILABLE);
         assert_eq!(ready_v1.status(), StatusCode::SERVICE_UNAVAILABLE);
+        assert_eq!(readiness_v1.status(), StatusCode::SERVICE_UNAVAILABLE);
 
         let waitlist_bad_root = test::call_service(
             &app,
