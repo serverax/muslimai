@@ -332,3 +332,92 @@ pub struct DecisionResponse {
     pub generated_from_verified_sources: bool,
     pub requires_scholar_review: bool,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ImanJourneyProgress {
+    pub prayer: i32,
+    pub quran: i32,
+    pub dhikr: i32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ImanJourneyFamilyReminder {
+    pub consent_granted: bool,
+    pub reminder_text: Option<String>,
+    pub notify_family: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ImanJourneyEvidenceItem {
+    pub source_type: String,
+    pub source_reference: String,
+    pub citation: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ImanJourneySafeFallback {
+    pub reason: String,
+    pub message: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ImanJourneyReligiousReminder {
+    pub text: Option<String>,
+    pub confidence_score: f64,
+    pub evidence_bundle: Vec<ImanJourneyEvidenceItem>,
+    pub safe_fallback: Option<ImanJourneySafeFallback>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ImanJourneyPrivacySettings {
+    pub personalization_enabled: bool,
+    pub reminders_enabled: bool,
+    pub store_journey_enabled: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct UpsertImanJourneyRequest {
+    pub journey_date: Option<String>,
+    pub today_focus: String,
+    pub continue_yesterday_topic: Option<String>,
+    pub progress: ImanJourneyProgress,
+    pub ask_sakina_today_context: Option<String>,
+    pub tomorrow_follow_up: Option<String>,
+    pub family_reminder: Option<ImanJourneyFamilyReminder>,
+    pub religious_reminder_text: Option<String>,
+    pub religious_confidence_score: Option<f64>,
+    pub evidence_bundle: Option<Vec<ImanJourneyEvidenceItem>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ImanJourneyResponse {
+    pub journey_date: String,
+    pub today_focus: String,
+    pub continue_yesterday_topic: Option<String>,
+    pub progress: ImanJourneyProgress,
+    pub personal_dua_list: Vec<ImanDuaItem>,
+    pub family_reminder: ImanJourneyFamilyReminder,
+    pub ask_sakina_today_context: Option<String>,
+    pub tomorrow_follow_up: Option<String>,
+    pub privacy_settings: ImanJourneyPrivacySettings,
+    pub religious_reminder: ImanJourneyReligiousReminder,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct UpsertImanJourneyPrivacyRequest {
+    pub personalization_enabled: bool,
+    pub reminders_enabled: bool,
+    pub store_journey_enabled: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ImanDuaItem {
+    pub id: String,
+    pub dua_text: String,
+    pub is_answered: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct AddDuaItemRequest {
+    pub dua_text: String,
+}

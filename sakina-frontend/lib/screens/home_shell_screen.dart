@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../app/app_state.dart';
 import '../services/module_service.dart';
 import 'chat_screen.dart';
+import 'iman_journey_screen.dart';
+import 'islamic_library_screen.dart';
 import 'module_read_only_state_screen.dart';
 
 class HomeShellScreen extends StatefulWidget {
@@ -44,10 +46,8 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
         title: app.t('community'),
         load: _moduleService.community,
       ),
-      ModuleReadOnlyStateScreen(
-        title: app.t('knowledge'),
-        load: _moduleService.knowledge,
-      ),
+      const IslamicLibraryScreen(),
+      ImanJourneyScreen(),
     ];
 
     return Scaffold(
@@ -83,6 +83,11 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
             icon: const Icon(Icons.school_outlined),
             selectedIcon: const Icon(Icons.school),
             label: app.t('knowledge'),
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.auto_graph_outlined),
+            selectedIcon: Icon(Icons.auto_graph),
+            label: 'Iman Journey',
           ),
         ],
       ),

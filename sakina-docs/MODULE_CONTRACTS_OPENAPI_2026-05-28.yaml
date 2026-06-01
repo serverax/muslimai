@@ -138,7 +138,137 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DecisionResponse"
+  /iman-journey/{user_id}:
+    get:
+      summary: Read daily iman journey
+      parameters:
+        - $ref: "#/components/parameters/UserIdPath"
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+            format: date
+        - $ref: "#/components/parameters/UserScopeHeader"
+      responses:
+        "200":
+          description: Daily iman journey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImanJourneyResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    put:
+      summary: Upsert daily iman journey
+      parameters:
+        - $ref: "#/components/parameters/UserIdPath"
+        - $ref: "#/components/parameters/UserScopeHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertImanJourneyRequest"
+      responses:
+        "200":
+          description: Upserted daily iman journey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImanJourneyResponse"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /iman-journey/{user_id}/privacy:
+    get:
+      summary: Read iman journey privacy settings
+      parameters:
+        - $ref: "#/components/parameters/UserIdPath"
+        - $ref: "#/components/parameters/UserScopeHeader"
+      responses:
+        "200":
+          description: Privacy settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImanJourneyPrivacySettings"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    put:
+      summary: Update iman journey privacy settings
+      parameters:
+        - $ref: "#/components/parameters/UserIdPath"
+        - $ref: "#/components/parameters/UserScopeHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImanJourneyPrivacySettings"
+      responses:
+        "200":
+          description: Updated privacy settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImanJourneyPrivacySettings"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /dua-list/{user_id}:
+    get:
+      summary: List personal dua items
+      parameters:
+        - $ref: "#/components/parameters/UserIdPath"
+        - $ref: "#/components/parameters/UserScopeHeader"
+      responses:
+        "200":
+          description: Dua list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DuaListResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      summary: Add personal dua item
+      parameters:
+        - $ref: "#/components/parameters/UserIdPath"
+        - $ref: "#/components/parameters/UserScopeHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddDuaItemRequest"
+      responses:
+        "201":
+          description: Created dua item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DuaItem"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
 components:
+  parameters:
+    UserIdPath:
+      in: path
+      name: user_id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    UserScopeHeader:
+      in: header
+      name: x-sakina-user-id
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
     ModuleSafetyStatus:
       type: string
@@ -411,6 +541,168 @@ components:
           type: boolean
         requires_scholar_review:
           type: boolean
+    ImanJourneyProgress:
+      type: object
+      required: [prayer, quran, dhikr]
+      properties:
+        prayer:
+          type: integer
+        quran:
+          type: integer
+        dhikr:
+          type: integer
+    ImanJourneyFamilyReminder:
+      type: object
+      required: [consent_granted, notify_family]
+      properties:
+        consent_granted:
+          type: boolean
+        reminder_text:
+          type: string
+          nullable: true
+        notify_family:
+          type: boolean
+    ImanJourneyEvidenceItem:
+      type: object
+      required: [source_type, source_reference, citation]
+      properties:
+        source_type:
+          type: string
+        source_reference:
+          type: string
+        citation:
+          type: string
+    ImanJourneySafeFallback:
+      type: object
+      required: [reason, message]
+      properties:
+        reason:
+          type: string
+        message:
+          type: string
+    ImanJourneyReligiousReminder:
+      type: object
+      required: [confidence_score, evidence_bundle]
+      properties:
+        text:
+          type: string
+          nullable: true
+        confidence_score:
+          type: number
+          format: double
+        evidence_bundle:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImanJourneyEvidenceItem"
+        safe_fallback:
+          allOf:
+            - $ref: "#/components/schemas/ImanJourneySafeFallback"
+          nullable: true
+    ImanJourneyPrivacySettings:
+      type: object
+      required: [personalization_enabled, reminders_enabled, store_journey_enabled]
+      properties:
+        personalization_enabled:
+          type: boolean
+        reminders_enabled:
+          type: boolean
+        store_journey_enabled:
+          type: boolean
+    DuaItem:
+      type: object
+      required: [id, dua_text, is_answered]
+      properties:
+        id:
+          type: string
+        dua_text:
+          type: string
+        is_answered:
+          type: boolean
+    DuaListResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/DuaItem"
+    UpsertImanJourneyRequest:
+      type: object
+      required: [today_focus, progress]
+      properties:
+        journey_date:
+          type: string
+          format: date
+          nullable: true
+        today_focus:
+          type: string
+        continue_yesterday_topic:
+          type: string
+          nullable: true
+        progress:
+          $ref: "#/components/schemas/ImanJourneyProgress"
+        ask_sakina_today_context:
+          type: string
+          nullable: true
+        tomorrow_follow_up:
+          type: string
+          nullable: true
+        family_reminder:
+          $ref: "#/components/schemas/ImanJourneyFamilyReminder"
+        religious_reminder_text:
+          type: string
+          nullable: true
+        religious_confidence_score:
+          type: number
+          format: double
+          nullable: true
+        evidence_bundle:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImanJourneyEvidenceItem"
+    ImanJourneyResponse:
+      type: object
+      required:
+        - journey_date
+        - today_focus
+        - progress
+        - personal_dua_list
+        - family_reminder
+        - privacy_settings
+        - religious_reminder
+      properties:
+        journey_date:
+          type: string
+          format: date
+        today_focus:
+          type: string
+        continue_yesterday_topic:
+          type: string
+          nullable: true
+        progress:
+          $ref: "#/components/schemas/ImanJourneyProgress"
+        personal_dua_list:
+          type: array
+          items:
+            $ref: "#/components/schemas/DuaItem"
+        family_reminder:
+          $ref: "#/components/schemas/ImanJourneyFamilyReminder"
+        ask_sakina_today_context:
+          type: string
+          nullable: true
+        tomorrow_follow_up:
+          type: string
+          nullable: true
+        privacy_settings:
+          $ref: "#/components/schemas/ImanJourneyPrivacySettings"
+        religious_reminder:
+          $ref: "#/components/schemas/ImanJourneyReligiousReminder"
+    AddDuaItemRequest:
+      type: object
+      required: [dua_text]
+      properties:
+        dua_text:
+          type: string
     ErrorResponse:
       type: object
       required: [error]
@@ -438,6 +730,12 @@ components:
             $ref: "#/components/schemas/ErrorResponse"
     BadRequestError:
       description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    UnauthorizedError:
+      description: User scope mismatch or missing scope header
       content:
         application/json:
           schema:

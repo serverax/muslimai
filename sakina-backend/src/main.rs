@@ -151,9 +151,13 @@ async fn main() -> std::io::Result<()> {
     let router = std::sync::Arc::new(services::SemanticRouter::new());
     let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
     let phase2_repo = services::Phase2Repository::new(pool.clone());
+    let iman_journey_service = services::ImanJourneyService::new(pool.clone());
+    let islamic_repo = services::IslamicKnowledgeRepository::new(pool.clone());
     let router_data = web::Data::new(router.clone());
     let guardrails_data = web::Data::new(guardrails.clone());
     let phase2_repo_data = web::Data::new(phase2_repo.clone());
+    let iman_journey_service_data = web::Data::new(iman_journey_service.clone());
+    let islamic_repo_data = web::Data::new(islamic_repo.clone());
 
     // Background worker: drain the outbox (marks chunk_indexed events Sent).
     let relay = services::OutboxRelay::new(pool.clone());
@@ -176,6 +180,13 @@ async fn main() -> std::io::Result<()> {
         &qdrant_collection,
     ));
     let embeddings = web::Data::new(services::EmbeddingsService::new(&vllm_url));
+    let islamic_qdrant_collection = std::env::var("ISLAMIC_QDRANT_COLLECTION")
+        .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());
+    let islamic_answer_service = web::Data::new(services::IslamicAnswerService::new(
+        islamic_repo.clone(),
+        services::QdrantVectorDB::new(&qdrant_url, &islamic_qdrant_collection),
+        services::EmbeddingsService::new(&vllm_url),
+    ));
     let waitlist_limiter = web::Data::new(handlers::waitlist::WaitlistRateLimiter::new(
         5,
         std::time::Duration::from_secs(60),
@@ -189,8 +200,11 @@ async fn main() -> std::io::Result<()> {
             .app_data(router_data.clone())
             .app_data(guardrails_data.clone())
             .app_data(phase2_repo_data.clone())
+            .app_data(iman_journey_service_data.clone())
+            .app_data(islamic_repo_data.clone())
             .app_data(qdrant.clone())
             .app_data(embeddings.clone())
+            .app_data(islamic_answer_service.clone())
             .app_data(waitlist_limiter.clone())
             .app_data(
                 web::JsonConfig::default()
@@ -301,6 +315,7 @@ async fn main() -> std::io::Result<()> {
                                 web::get().to(handlers::phase2::list_entitlements),
                             ),
                     )
+                    .configure(handlers::iman_journey::configure)
                     .service(
                         web::scope("/modules")
                             .route("", web::get().to(handlers::modules::modules_status))
@@ -383,6 +398,32 @@ async fn main() -> std::io::Result<()> {
                                 web::post().to(handlers::phase2::log_citation_event),
                             )
                             .route("/query", web::post().to(handlers::rag::query_rag)),
+                    )
+                    .service(
+                        web::scope("/islamic")
+                            .route("/sources", web::get().to(handlers::islamic::list_sources))
+                            .route(
+                                "/documents",
+                                web::get().to(handlers::islamic::list_documents),
+                            )
+                            .route(
+                                "/documents/{id}/chunks",
+                                web::get().to(handlers::islamic::list_document_chunks),
+                            )
+                            .route("/search", web::get().to(handlers::islamic::search_local))
+                            .route(
+                                "/citations/{id}",
+                                web::get().to(handlers::islamic::get_citation),
+                            )
+                            .route("/ask", web::post().to(handlers::islamic::ask))
+                            .route(
+                                "/qdrant/plan",
+                                web::post().to(handlers::islamic::qdrant_plan),
+                            )
+                            .route(
+                                "/ingestion/scaffolds",
+                                web::get().to(handlers::islamic::ingestion_scaffolds),
+                            ),
                     )
                     .service(
                         web::scope("/safety")

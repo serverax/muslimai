@@ -209,6 +209,101 @@ class ApiService {
     throw _apiException('list entitlements failed', res);
   }
 
+  Future<List<IslamicSourceDto>> getIslamicSources({
+    String? language,
+    String? source,
+  }) async {
+    final query = <String, String>{};
+    if (language != null && language.isNotEmpty) query['language'] = language;
+    if (source != null && source.isNotEmpty) query['source'] = source;
+    final uri = Uri.parse(_endpoint('/islamic/sources')).replace(queryParameters: query);
+    final res = await _withRetry(
+      () => _client.get(uri, headers: _headers()).timeout(const Duration(seconds: 30)),
+    );
+    if (res.statusCode == 200) {
+      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+      return (decoded['sources'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(IslamicSourceDto.fromJson)
+          .toList();
+    }
+    throw _apiException('list islamic sources failed', res);
+  }
+
+  Future<List<IslamicDocumentDto>> getIslamicDocuments({
+    String? language,
+    String? source,
+  }) async {
+    final query = <String, String>{};
+    if (language != null && language.isNotEmpty) query['language'] = language;
+    if (source != null && source.isNotEmpty) query['source'] = source;
+    final uri = Uri.parse(_endpoint('/islamic/documents')).replace(queryParameters: query);
+    final res = await _withRetry(
+      () => _client.get(uri, headers: _headers()).timeout(const Duration(seconds: 30)),
+    );
+    if (res.statusCode == 200) {
+      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+      return (decoded['documents'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(IslamicDocumentDto.fromJson)
+          .toList();
+    }
+    throw _apiException('list islamic documents failed', res);
+  }
+
+  Future<List<IslamicChunkDto>> getIslamicChunks(String documentId) async {
+    final res = await _get('/islamic/documents/$documentId/chunks');
+    if (res.statusCode == 200) {
+      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+      return (decoded['chunks'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(IslamicChunkDto.fromJson)
+          .toList();
+    }
+    throw _apiException('list islamic chunks failed', res);
+  }
+
+  Future<List<IslamicSearchResultDto>> searchIslamic({
+    required String query,
+    required String language,
+    String? source,
+  }) async {
+    final params = <String, String>{'q': query, 'language': language};
+    if (source != null && source.isNotEmpty) {
+      params['source'] = source;
+    }
+    final uri =
+        Uri.parse(_endpoint('/islamic/search')).replace(queryParameters: params);
+    final res = await _withRetry(
+      () => _client.get(uri, headers: _headers()).timeout(const Duration(seconds: 30)),
+    );
+    if (res.statusCode == 200) {
+      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+      return (decoded['results'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(IslamicSearchResultDto.fromJson)
+          .toList();
+    }
+    throw _apiException('islamic search failed', res);
+  }
+
+  Future<IslamicAskResponseDto> askIslamic({
+    required String question,
+    required String language,
+    String? source,
+  }) async {
+    final body = <String, dynamic>{
+      'question': question,
+      'language': language,
+      if (source != null && source.isNotEmpty) 'source': source,
+    };
+    final res = await _post('/islamic/ask', body);
+    if (res.statusCode == 200) {
+      return IslamicAskResponseDto.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    }
+    throw _apiException('islamic ask failed', res);
+  }
+
   Future<CreateConversationResponse> createConversation({
     required String userId,
     required String title,
@@ -399,6 +494,99 @@ class ApiService {
       );
     }
     throw _apiException('get support ticket failed', res);
+  }
+
+  Future<ImanJourneyResponseDto> getImanJourney(
+    String userId, {
+    DateTime? date,
+  }) async {
+    final query = <String, String>{};
+    if (date != null) {
+      query['date'] = date.toIso8601String().split('T').first;
+    }
+    final uri = Uri.parse(_endpoint('/iman-journey/$userId'))
+        .replace(queryParameters: query.isEmpty ? null : query);
+    final res = await _withRetry(
+      () => _client
+          .get(uri, headers: _headers(userId: userId))
+          .timeout(const Duration(seconds: 30)),
+    );
+    if (res.statusCode == 200) {
+      return ImanJourneyResponseDto.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('get iman journey failed', res);
+  }
+
+  Future<ImanJourneyResponseDto> upsertImanJourney(
+    String userId,
+    UpsertImanJourneyRequestDto request,
+  ) async {
+    final res = await _put(
+      '/iman-journey/$userId',
+      request.toJson(),
+      userId: userId,
+    );
+    if (res.statusCode == 200) {
+      return ImanJourneyResponseDto.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('upsert iman journey failed', res);
+  }
+
+  Future<ImanJourneyPrivacySettingsDto> getImanJourneyPrivacy(
+    String userId,
+  ) async {
+    final res = await _get('/iman-journey/$userId/privacy', userId: userId);
+    if (res.statusCode == 200) {
+      return ImanJourneyPrivacySettingsDto.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('get iman journey privacy failed', res);
+  }
+
+  Future<ImanJourneyPrivacySettingsDto> updateImanJourneyPrivacy(
+    String userId,
+    ImanJourneyPrivacySettingsDto request,
+  ) async {
+    final res = await _put(
+      '/iman-journey/$userId/privacy',
+      request.toJson(),
+      userId: userId,
+    );
+    if (res.statusCode == 200) {
+      return ImanJourneyPrivacySettingsDto.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('update iman journey privacy failed', res);
+  }
+
+  Future<List<ImanDuaItemDto>> getDuaList(String userId) async {
+    final res = await _get('/dua-list/$userId', userId: userId);
+    if (res.statusCode == 200) {
+      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+      return (decoded['items'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(ImanDuaItemDto.fromJson)
+          .toList();
+    }
+    throw _apiException('get dua list failed', res);
+  }
+
+  Future<ImanDuaItemDto> addDuaItem(String userId, String duaText) async {
+    final res = await _post(
+      '/dua-list/$userId',
+      {'dua_text': duaText},
+      userId: userId,
+    );
+    if (res.statusCode == 201) {
+      return ImanDuaItemDto.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    }
+    throw _apiException('add dua item failed', res);
   }
 
   void close() => _client.close();
@@ -621,6 +809,141 @@ class ApiException implements Exception {
 
   @override
   String toString() => 'ApiException: $message';
+}
+
+class IslamicSourceDto {
+  final String id;
+  final String sourceKey;
+  final String sourceName;
+  final String sourceType;
+  final String language;
+  final String? licenseName;
+
+  IslamicSourceDto({
+    required this.id,
+    required this.sourceKey,
+    required this.sourceName,
+    required this.sourceType,
+    required this.language,
+    this.licenseName,
+  });
+
+  factory IslamicSourceDto.fromJson(Map<String, dynamic> json) => IslamicSourceDto(
+        id: json['id']?.toString() ?? '',
+        sourceKey: json['source_key']?.toString() ?? '',
+        sourceName: json['source_name']?.toString() ?? '',
+        sourceType: json['source_type']?.toString() ?? '',
+        language: json['language']?.toString() ?? '',
+        licenseName: json['license_name']?.toString(),
+      );
+}
+
+class IslamicDocumentDto {
+  final String id;
+  final String sourceId;
+  final String documentKey;
+  final String title;
+  final String language;
+  final String sourceType;
+
+  IslamicDocumentDto({
+    required this.id,
+    required this.sourceId,
+    required this.documentKey,
+    required this.title,
+    required this.language,
+    required this.sourceType,
+  });
+
+  factory IslamicDocumentDto.fromJson(Map<String, dynamic> json) =>
+      IslamicDocumentDto(
+        id: json['id']?.toString() ?? '',
+        sourceId: json['source_id']?.toString() ?? '',
+        documentKey: json['document_key']?.toString() ?? '',
+        title: json['title']?.toString() ?? '',
+        language: json['language']?.toString() ?? '',
+        sourceType: json['source_type']?.toString() ?? '',
+      );
+}
+
+class IslamicChunkDto {
+  final String id;
+  final String documentId;
+  final int chunkIndex;
+  final String chunkText;
+  final String citationLabel;
+
+  IslamicChunkDto({
+    required this.id,
+    required this.documentId,
+    required this.chunkIndex,
+    required this.chunkText,
+    required this.citationLabel,
+  });
+
+  factory IslamicChunkDto.fromJson(Map<String, dynamic> json) => IslamicChunkDto(
+        id: json['id']?.toString() ?? '',
+        documentId: json['document_id']?.toString() ?? '',
+        chunkIndex: (json['chunk_index'] as num?)?.toInt() ?? 0,
+        chunkText: json['chunk_text']?.toString() ?? '',
+        citationLabel: json['citation_label']?.toString() ?? '',
+      );
+}
+
+class IslamicSearchResultDto {
+  final String chunkId;
+  final String sourceName;
+  final String documentTitle;
+  final String chunkText;
+  final String citationLabel;
+  final String language;
+
+  IslamicSearchResultDto({
+    required this.chunkId,
+    required this.sourceName,
+    required this.documentTitle,
+    required this.chunkText,
+    required this.citationLabel,
+    required this.language,
+  });
+
+  factory IslamicSearchResultDto.fromJson(Map<String, dynamic> json) =>
+      IslamicSearchResultDto(
+        chunkId: json['chunk_id']?.toString() ?? '',
+        sourceName: json['source_name']?.toString() ?? '',
+        documentTitle: json['document_title']?.toString() ?? '',
+        chunkText: json['chunk_text']?.toString() ?? '',
+        citationLabel: json['citation_label']?.toString() ?? '',
+        language: json['language']?.toString() ?? '',
+      );
+}
+
+class IslamicAskResponseDto {
+  final String language;
+  final String answer;
+  final bool fallbackUsed;
+  final bool fatwaSensitive;
+  final List<Citation> citations;
+
+  IslamicAskResponseDto({
+    required this.language,
+    required this.answer,
+    required this.fallbackUsed,
+    required this.fatwaSensitive,
+    required this.citations,
+  });
+
+  factory IslamicAskResponseDto.fromJson(Map<String, dynamic> json) =>
+      IslamicAskResponseDto(
+        language: json['language']?.toString() ?? 'en',
+        answer: json['answer']?.toString() ?? '',
+        fallbackUsed: json['fallback_used'] as bool? ?? false,
+        fatwaSensitive: json['fatwa_sensitive'] as bool? ?? false,
+        citations: (json['citations'] as List<dynamic>? ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .map(Citation.fromJson)
+            .toList(),
+      );
 }
 
 class RegisterUserRequest {
@@ -885,4 +1208,260 @@ class SupportTicketResponse {
             .map(SupportTicketMessage.fromJson)
             .toList(),
       );
+}
+
+class ImanJourneyProgressDto {
+  final int prayer;
+  final int quran;
+  final int dhikr;
+
+  const ImanJourneyProgressDto({
+    required this.prayer,
+    required this.quran,
+    required this.dhikr,
+  });
+
+  factory ImanJourneyProgressDto.fromJson(Map<String, dynamic> json) =>
+      ImanJourneyProgressDto(
+        prayer: (json['prayer'] as num?)?.toInt() ?? 0,
+        quran: (json['quran'] as num?)?.toInt() ?? 0,
+        dhikr: (json['dhikr'] as num?)?.toInt() ?? 0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'prayer': prayer,
+        'quran': quran,
+        'dhikr': dhikr,
+      };
+}
+
+class ImanJourneyFamilyReminderDto {
+  final bool consentGranted;
+  final String? reminderText;
+  final bool notifyFamily;
+
+  const ImanJourneyFamilyReminderDto({
+    required this.consentGranted,
+    required this.reminderText,
+    required this.notifyFamily,
+  });
+
+  factory ImanJourneyFamilyReminderDto.fromJson(Map<String, dynamic> json) =>
+      ImanJourneyFamilyReminderDto(
+        consentGranted: json['consent_granted'] as bool? ?? false,
+        reminderText: json['reminder_text'] as String?,
+        notifyFamily: json['notify_family'] as bool? ?? false,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'consent_granted': consentGranted,
+        'reminder_text': reminderText,
+        'notify_family': notifyFamily,
+      };
+}
+
+class ImanJourneyEvidenceItemDto {
+  final String sourceType;
+  final String sourceReference;
+  final String citation;
+
+  const ImanJourneyEvidenceItemDto({
+    required this.sourceType,
+    required this.sourceReference,
+    required this.citation,
+  });
+
+  factory ImanJourneyEvidenceItemDto.fromJson(Map<String, dynamic> json) =>
+      ImanJourneyEvidenceItemDto(
+        sourceType: json['source_type']?.toString() ?? '',
+        sourceReference: json['source_reference']?.toString() ?? '',
+        citation: json['citation']?.toString() ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        'source_type': sourceType,
+        'source_reference': sourceReference,
+        'citation': citation,
+      };
+}
+
+class ImanJourneySafeFallbackDto {
+  final String reason;
+  final String message;
+
+  const ImanJourneySafeFallbackDto({
+    required this.reason,
+    required this.message,
+  });
+
+  factory ImanJourneySafeFallbackDto.fromJson(Map<String, dynamic> json) =>
+      ImanJourneySafeFallbackDto(
+        reason: json['reason']?.toString() ?? '',
+        message: json['message']?.toString() ?? '',
+      );
+}
+
+class ImanJourneyReligiousReminderDto {
+  final String? text;
+  final double confidenceScore;
+  final List<ImanJourneyEvidenceItemDto> evidenceBundle;
+  final ImanJourneySafeFallbackDto? safeFallback;
+
+  const ImanJourneyReligiousReminderDto({
+    required this.text,
+    required this.confidenceScore,
+    required this.evidenceBundle,
+    required this.safeFallback,
+  });
+
+  factory ImanJourneyReligiousReminderDto.fromJson(Map<String, dynamic> json) =>
+      ImanJourneyReligiousReminderDto(
+        text: json['text'] as String?,
+        confidenceScore: (json['confidence_score'] as num?)?.toDouble() ?? 0.0,
+        evidenceBundle: (json['evidence_bundle'] as List<dynamic>? ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .map(ImanJourneyEvidenceItemDto.fromJson)
+            .toList(),
+        safeFallback: json['safe_fallback'] is Map<String, dynamic>
+            ? ImanJourneySafeFallbackDto.fromJson(
+                json['safe_fallback'] as Map<String, dynamic>,
+              )
+            : null,
+      );
+}
+
+class ImanJourneyPrivacySettingsDto {
+  final bool personalizationEnabled;
+  final bool remindersEnabled;
+  final bool storeJourneyEnabled;
+
+  const ImanJourneyPrivacySettingsDto({
+    required this.personalizationEnabled,
+    required this.remindersEnabled,
+    required this.storeJourneyEnabled,
+  });
+
+  factory ImanJourneyPrivacySettingsDto.fromJson(Map<String, dynamic> json) =>
+      ImanJourneyPrivacySettingsDto(
+        personalizationEnabled:
+            json['personalization_enabled'] as bool? ?? false,
+        remindersEnabled: json['reminders_enabled'] as bool? ?? false,
+        storeJourneyEnabled: json['store_journey_enabled'] as bool? ?? true,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'personalization_enabled': personalizationEnabled,
+        'reminders_enabled': remindersEnabled,
+        'store_journey_enabled': storeJourneyEnabled,
+      };
+}
+
+class ImanDuaItemDto {
+  final String id;
+  final String duaText;
+  final bool isAnswered;
+
+  const ImanDuaItemDto({
+    required this.id,
+    required this.duaText,
+    required this.isAnswered,
+  });
+
+  factory ImanDuaItemDto.fromJson(Map<String, dynamic> json) => ImanDuaItemDto(
+        id: json['id']?.toString() ?? '',
+        duaText: json['dua_text']?.toString() ?? '',
+        isAnswered: json['is_answered'] as bool? ?? false,
+      );
+}
+
+class ImanJourneyResponseDto {
+  final String journeyDate;
+  final String todayFocus;
+  final String? continueYesterdayTopic;
+  final ImanJourneyProgressDto progress;
+  final List<ImanDuaItemDto> personalDuaList;
+  final ImanJourneyFamilyReminderDto familyReminder;
+  final String? askSakinaTodayContext;
+  final String? tomorrowFollowUp;
+  final ImanJourneyPrivacySettingsDto privacySettings;
+  final ImanJourneyReligiousReminderDto religiousReminder;
+
+  const ImanJourneyResponseDto({
+    required this.journeyDate,
+    required this.todayFocus,
+    required this.continueYesterdayTopic,
+    required this.progress,
+    required this.personalDuaList,
+    required this.familyReminder,
+    required this.askSakinaTodayContext,
+    required this.tomorrowFollowUp,
+    required this.privacySettings,
+    required this.religiousReminder,
+  });
+
+  factory ImanJourneyResponseDto.fromJson(Map<String, dynamic> json) =>
+      ImanJourneyResponseDto(
+        journeyDate: json['journey_date']?.toString() ?? '',
+        todayFocus: json['today_focus']?.toString() ?? '',
+        continueYesterdayTopic: json['continue_yesterday_topic'] as String?,
+        progress: ImanJourneyProgressDto.fromJson(
+          json['progress'] as Map<String, dynamic>? ?? const {},
+        ),
+        personalDuaList:
+            (json['personal_dua_list'] as List<dynamic>? ?? const [])
+                .whereType<Map<String, dynamic>>()
+                .map(ImanDuaItemDto.fromJson)
+                .toList(),
+        familyReminder: ImanJourneyFamilyReminderDto.fromJson(
+          json['family_reminder'] as Map<String, dynamic>? ?? const {},
+        ),
+        askSakinaTodayContext: json['ask_sakina_today_context'] as String?,
+        tomorrowFollowUp: json['tomorrow_follow_up'] as String?,
+        privacySettings: ImanJourneyPrivacySettingsDto.fromJson(
+          json['privacy_settings'] as Map<String, dynamic>? ?? const {},
+        ),
+        religiousReminder: ImanJourneyReligiousReminderDto.fromJson(
+          json['religious_reminder'] as Map<String, dynamic>? ?? const {},
+        ),
+      );
+}
+
+class UpsertImanJourneyRequestDto {
+  final DateTime? journeyDate;
+  final String todayFocus;
+  final String? continueYesterdayTopic;
+  final ImanJourneyProgressDto progress;
+  final String? askSakinaTodayContext;
+  final String? tomorrowFollowUp;
+  final ImanJourneyFamilyReminderDto? familyReminder;
+  final String? religiousReminderText;
+  final double? religiousConfidenceScore;
+  final List<ImanJourneyEvidenceItemDto>? evidenceBundle;
+
+  const UpsertImanJourneyRequestDto({
+    required this.todayFocus,
+    required this.progress,
+    this.journeyDate,
+    this.continueYesterdayTopic,
+    this.askSakinaTodayContext,
+    this.tomorrowFollowUp,
+    this.familyReminder,
+    this.religiousReminderText,
+    this.religiousConfidenceScore,
+    this.evidenceBundle,
+  });
+
+  Map<String, dynamic> toJson() => {
+        if (journeyDate != null) 'journey_date': journeyDate!.toIso8601String().split('T').first,
+        'today_focus': todayFocus,
+        'continue_yesterday_topic': continueYesterdayTopic,
+        'progress': progress.toJson(),
+        'ask_sakina_today_context': askSakinaTodayContext,
+        'tomorrow_follow_up': tomorrowFollowUp,
+        if (familyReminder != null) 'family_reminder': familyReminder!.toJson(),
+        'religious_reminder_text': religiousReminderText,
+        'religious_confidence_score': religiousConfidenceScore,
+        if (evidenceBundle != null)
+          'evidence_bundle': evidenceBundle!.map((item) => item.toJson()).toList(),
+      };
 }

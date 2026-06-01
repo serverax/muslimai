@@ -2,6 +2,8 @@ pub mod chat;
 pub mod classify;
 pub mod dashboard;
 pub mod health;
+pub mod iman_journey;
+pub mod islamic;
 pub mod modules;
 pub mod ops;
 pub mod phase2;
