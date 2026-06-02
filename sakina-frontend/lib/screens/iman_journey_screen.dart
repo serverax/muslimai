@@ -114,141 +114,158 @@ class _ImanJourneyScreenState extends State<ImanJourneyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final noSplashTheme = Theme.of(context).copyWith(
+      splashFactory: NoSplash.splashFactory,
+    );
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return Theme(
+        data: noSplashTheme,
+        child: const Center(child: CircularProgressIndicator()),
+      );
     }
     if (_error != null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(_error!),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: _load,
-              child: const Text('Retry'),
-            ),
-          ],
+      return Theme(
+        data: noSplashTheme,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(_error!),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: _load,
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
       );
     }
     final journey = _journey;
     if (journey == null) {
-      return const Center(child: Text('No journey data available.'));
+      return Theme(
+        data: noSplashTheme,
+        child: const Center(child: Text('No journey data available.')),
+      );
     }
     final fallback = journey.religiousReminder.safeFallback;
-    return RefreshIndicator(
-      onRefresh: _load,
-      child: ListView(
-        padding: const EdgeInsets.all(12),
-        children: [
-          if (_status != null) ...[
-            Text(_status!),
-            const SizedBox(height: 8),
+    return Theme(
+      data: noSplashTheme,
+      child: RefreshIndicator(
+        onRefresh: _load,
+        child: ListView(
+          padding: const EdgeInsets.all(12),
+          children: [
+            if (_status != null) ...[
+              Text(_status!),
+              const SizedBox(height: 8),
+            ],
+            _section(
+              'Today\'s Iman Focus',
+              Text(journey.todayFocus),
+            ),
+            _section(
+              'Continue Yesterday\'s Topic',
+              Text(journey.continueYesterdayTopic ?? 'Not set yet'),
+            ),
+            _section(
+              'Prayer / Qur\'an / Dhikr Progress',
+              Text(
+                'Prayer: ${journey.progress.prayer} | Qur\'an: ${journey.progress.quran} | Dhikr: ${journey.progress.dhikr}',
+              ),
+            ),
+            _section(
+              'Personal Dua List',
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...journey.personalDuaList.map(
+                    (item) => Text('- ${item.duaText}'),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _duaController,
+                    decoration: const InputDecoration(
+                      labelText: 'Add dua',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: _addDua,
+                    child: const Text('Add Dua'),
+                  ),
+                ],
+              ),
+            ),
+            _section(
+              'Family Reminder',
+              Text(
+                journey.familyReminder.consentGranted
+                    ? (journey.familyReminder.reminderText ?? 'Reminder not set')
+                    : 'Consent not granted',
+              ),
+            ),
+            _section(
+              'Ask Sakina with today context',
+              Text(journey.askSakinaTodayContext ?? 'Not set yet'),
+            ),
+            _section(
+              'Tomorrow Follow-up',
+              Text(journey.tomorrowFollowUp ?? 'Not set yet'),
+            ),
+            _section(
+              'Notification/privacy settings',
+              Column(
+                children: [
+                  SwitchListTile(
+                    title: const Text('Personalization'),
+                    value: _personalizationEnabled,
+                    onChanged: (value) =>
+                        setState(() => _personalizationEnabled = value),
+                  ),
+                  SwitchListTile(
+                    title: const Text('Reminders'),
+                    value: _remindersEnabled,
+                    onChanged: (value) =>
+                        setState(() => _remindersEnabled = value),
+                  ),
+                  SwitchListTile(
+                    title: const Text('Store journey data'),
+                    value: _storeJourneyEnabled,
+                    onChanged: (value) =>
+                        setState(() => _storeJourneyEnabled = value),
+                  ),
+                  ElevatedButton(
+                    onPressed: _savingPrivacy ? null : _savePrivacy,
+                    child: Text(_savingPrivacy ? 'Saving...' : 'Save Privacy'),
+                  ),
+                ],
+              ),
+            ),
+            _section(
+              'Evidence bundle enforcement',
+              journey.religiousReminder.evidenceBundle.isEmpty
+                  ? const Text('No verified evidence bundle found.')
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: journey.religiousReminder.evidenceBundle
+                          .map(
+                            (item) => Text(
+                              '- ${item.sourceReference}: ${item.citation}',
+                            ),
+                          )
+                          .toList(),
+                    ),
+            ),
+            _section(
+              'Safe fallback if evidence is missing',
+              fallback == null
+                  ? Text(journey.religiousReminder.text ?? 'Reminder ready')
+                  : Text(fallback.message),
+            ),
           ],
-          _section(
-            'Today\'s Iman Focus',
-            Text(journey.todayFocus),
-          ),
-          _section(
-            'Continue Yesterday\'s Topic',
-            Text(journey.continueYesterdayTopic ?? 'Not set yet'),
-          ),
-          _section(
-            'Prayer / Qur\'an / Dhikr Progress',
-            Text(
-              'Prayer: ${journey.progress.prayer} | Qur\'an: ${journey.progress.quran} | Dhikr: ${journey.progress.dhikr}',
-            ),
-          ),
-          _section(
-            'Personal Dua List',
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...journey.personalDuaList.map(
-                  (item) => Text('- ${item.duaText}'),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _duaController,
-                  decoration: const InputDecoration(
-                    labelText: 'Add dua',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: _addDua,
-                  child: const Text('Add Dua'),
-                ),
-              ],
-            ),
-          ),
-          _section(
-            'Family Reminder',
-            Text(
-              journey.familyReminder.consentGranted
-                  ? (journey.familyReminder.reminderText ?? 'Reminder not set')
-                  : 'Consent not granted',
-            ),
-          ),
-          _section(
-            'Ask Sakina with today context',
-            Text(journey.askSakinaTodayContext ?? 'Not set yet'),
-          ),
-          _section(
-            'Tomorrow Follow-up',
-            Text(journey.tomorrowFollowUp ?? 'Not set yet'),
-          ),
-          _section(
-            'Notification/privacy settings',
-            Column(
-              children: [
-                SwitchListTile(
-                  title: const Text('Personalization'),
-                  value: _personalizationEnabled,
-                  onChanged: (value) =>
-                      setState(() => _personalizationEnabled = value),
-                ),
-                SwitchListTile(
-                  title: const Text('Reminders'),
-                  value: _remindersEnabled,
-                  onChanged: (value) => setState(() => _remindersEnabled = value),
-                ),
-                SwitchListTile(
-                  title: const Text('Store journey data'),
-                  value: _storeJourneyEnabled,
-                  onChanged: (value) => setState(() => _storeJourneyEnabled = value),
-                ),
-                ElevatedButton(
-                  onPressed: _savingPrivacy ? null : _savePrivacy,
-                  child: Text(_savingPrivacy ? 'Saving...' : 'Save Privacy'),
-                ),
-              ],
-            ),
-          ),
-          _section(
-            'Evidence bundle enforcement',
-            journey.religiousReminder.evidenceBundle.isEmpty
-                ? const Text('No verified evidence bundle found.')
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: journey.religiousReminder.evidenceBundle
-                        .map(
-                          (item) => Text(
-                            '- ${item.sourceReference}: ${item.citation}',
-                          ),
-                        )
-                        .toList(),
-                  ),
-          ),
-          _section(
-            'Safe fallback if evidence is missing',
-            fallback == null
-                ? Text(journey.religiousReminder.text ?? 'Reminder ready')
-                : Text(fallback.message),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -1,0 +1,369 @@
+SAKINA LIVE HANDOFF AND DEPLOYMENT GATE
+
+1. Local readiness summary
+   - backend compile: PASS
+   - backend tests: PASS
+   - Flutter analyze: PASS
+   - Flutter tests: PASS
+   - gitleaks: PASS
+   - semgrep: PARTIAL
+   - trivy: PARTIAL
+   - local demo script: PASS
+   - local demo readiness: YES
+
+2. Git state
+   - current branch: `qa-security-hardening`
+   - current commit: `e7eb3105ea564a574a380a4552c8cdf0eb78f1bd`
+   - git status --short:
+     - M .github/workflows/backend-ci.yml
+     - M .github/workflows/frontend-ci.yml
+     - M .github/workflows/infra-ci.yml
+     - M .github/workflows/sakinaai-images.yml
+     - M .gitignore
+     - M sakina-backend/.dockerignore
+     - M sakina-backend/Cargo.toml
+     - M sakina-backend/Dockerfile.api
+     - M sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql
+     - M sakina-backend/db/init.sql
+     - M sakina-backend/src/handlers/chat.rs
+     - M sakina-backend/src/handlers/classify.rs
+     - M sakina-backend/src/handlers/health.rs
+     - M sakina-backend/src/handlers/iman_journey.rs
+     - M sakina-backend/src/handlers/phase2.rs
+     - M sakina-backend/src/handlers/rag.rs
+     - M sakina-backend/src/handlers/sync.rs
+     - M sakina-backend/src/main.rs
+     - M sakina-backend/src/middleware/mod.rs
+     - M sakina-backend/src/services/embeddings.rs
+     - M sakina-backend/src/services/guardrails.rs
+     - M sakina-backend/src/services/iman_journey.rs
+     - M sakina-backend/src/services/ingestion_producer.rs
+     - M sakina-backend/src/services/mod.rs
+     - M sakina-backend/src/services/outbox_relay.rs
+     - M sakina-backend/src/services/qdrant_client.rs
+     - M sakina-backend/src/telemetry.rs
+     - M sakina-backend/tests/phase21_iman_journey_contract.rs
+     - M sakina-docs/MOBILE_APP_GUIDE.md
+     - M sakina-docs/PHASE_2_CLOSEOUT.md
+     - M sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md
+     - M sakina-docs/PRODUCTION_DEPLOYMENT.md
+     - M sakina-frontend/.flutter-plugins-dependencies
+     - M sakina-frontend/.gitignore
+     - M sakina-frontend/README.md
+     - M sakina-frontend/analysis_options.yaml
+     - M sakina-frontend/android/.gitignore
+     - M sakina-frontend/android/app/build.gradle.kts
+     - M sakina-frontend/android/app/src/debug/AndroidManifest.xml
+     - M sakina-frontend/android/app/src/main/AndroidManifest.xml
+     - M sakina-frontend/android/app/src/main/kotlin/com/example/sakina_frontend/MainActivity.kt
+     - M sakina-frontend/android/app/src/main/res/drawable-v21/launch_background.xml
+     - M sakina-frontend/android/app/src/main/res/drawable/launch_background.xml
+     - M sakina-frontend/android/app/src/main/res/values-night/styles.xml
+     - M sakina-frontend/android/app/src/main/res/values/styles.xml
+     - M sakina-frontend/android/app/src/profile/AndroidManifest.xml
+     - M sakina-frontend/android/build.gradle.kts
+     - M sakina-frontend/android/gradle.properties
+     - M sakina-frontend/android/gradle/wrapper/gradle-wrapper.properties
+     - M sakina-frontend/android/settings.gradle.kts
+     - M sakina-frontend/lib/chat/chat_controller.dart
+     - M sakina-frontend/lib/config/api_config.dart
+     - M sakina-frontend/lib/main.dart
+     - M sakina-frontend/lib/screens/chat_screen.dart
+     - M sakina-frontend/lib/widgets/brand_widget.dart
+     - M sakina-frontend/pubspec.lock
+     - M sakina-frontend/pubspec.yaml
+     - M sakina-frontend/test/api_service_test.dart
+     - M sakina-frontend/test/widget_test.dart
+     - M sakina-infra/Makefile
+     - M sakina-infra/docker-compose.yml
+     - M sakina-infra/manifests/postgres-deployment.yaml
+     - M sakina-infra/manifests/qdrant-deployment.yaml
+     - M sakina-infra/manifests/sakina-api-deployment.yaml
+     - M sakina-infra/manifests/sakina-prod/sakina-backend.yaml
+     - M sakina-infra/manifests/storage-class.yaml
+   - files changed:
+     - all tracked files listed above
+     - newly added reports, scripts, and quarantine artifacts under `reports/`, `scripts/`, and `.quarantine/`
+   - untracked files:
+     - .github/workflows/sakina-mobile-db-verify.yml
+     - .github/workflows/sakina-mobile-infra-plan.yml
+     - .github/workflows/sakina-mobile-rag-ci.yml
+     - .github/workflows/sakina-mobile-smoke.yml
+     - .github/workflows/sakina-mobile-staging-deploy.yml
+     - .local-bin/
+     - .local-quarantine/
+     - .quarantine/
+     - .tools/
+     - docs/sakina-mobile-aks-hld.md
+     - docs/sakina-mobile-aks-lld.md
+     - docs/sakina-mobile-db-schema-plan.md
+     - docs/sakina-mobile-deployment-runbook.md
+     - docs/sakina-mobile-infra-runbook.md
+     - docs/sakina-mobile-live-demo-plan.md
+     - docs/sakina-mobile-openapi.yaml
+     - docs/sakina-mobile-rag-plan.md
+     - docs/sakina-mobile-ui-ux-spec.md
+     - docs/sakina-mobile-wireframe-plan.md
+     - docs/sakina-phase25-ui-implementation-backlog.md
+     - docs/sakina-ui-api-traceability-matrix.md
+     - docs/sakina-ui-ux-user-stories.md
+     - infra/sakina-mobile/
+     - reports/
+     - sakina-backend/db/migrations/
+     - sakina-backend/src/handlers/islamic.rs
+     - sakina-backend/src/routes/
+     - sakina-backend/src/services/islamic_knowledge.rs
+     - sakina-dashboard/admin/
+     - sakina-frontend/lib/config/staging_client_config.dart
+     - sakina-frontend/lib/screens/islamic_library_screen.dart
+     - sakina-local-qa-check.sh
+     - sakina-rag/README.md
+     - sakina-rag/config/
+     - sakina-rag/src/
+     - sakina-rag/tests/
+     - scripts/env.sh
+     - scripts/phase183d-repo-hygiene-secret-scan.sh
+     - scripts/sakina/demo-verify.sh
+     - scripts/sakina/smoke-backend.sh
+     - scripts/sakina/smoke-mobile-config.sh
+     - scripts/sakina/verify-db-schema.sh
+   - files that must be committed:
+     - `scripts/env.sh`
+     - `scripts/sakina/demo-verify.sh`
+     - `scripts/sakina/smoke-mobile-config.sh`
+     - `sakina-infra/docker-compose.yml`
+     - `.github/workflows/backend-ci.yml`
+     - `reports/qa/SAKINA_LIVE_HANDOFF_AND_DEPLOYMENT_GATE.md`
+     - the existing intended Sakina source edits already under tracked modification
+   - files that must not be committed:
+     - `.local-bin/`
+     - `.tools/`
+     - `sakina-backend/target/`
+     - `sakina-frontend/.dart_tool/`
+     - `.local-quarantine/`
+     - build outputs and scanner caches
+
+3. Live target confirmation needed
+   - confirmed values:
+     - Kubernetes cluster: `ordinox-talos`
+     - kubeconfig/current-context: `admin@ordinox-talos`
+     - production namespace: `sakina-prod`
+     - staging/intelligence namespace: `sakina-mobile-staging`
+     - backend deployment: `sakina-backend`
+     - frontend deployment: `sakina-frontend`
+     - landing deployment: `sakina-landing`
+     - backend image currently live: `ghcr.io/serverax/sakina-backend:4cc124d`
+     - ingress hosts: `sakina.ai`, `www.sakina.ai`
+     - TLS configured: no
+     - staging RAG services: `sakina-rag-ingestion`, `sakina-rag-retrieval`
+     - production DB path: `supabase/supabase-supabase-db:5432`
+     - staging DB path: `sakina-mobile-staging/sakina-postgres`
+   - still needed values:
+     - kubeconfig file path on disk
+     - GHCR/image registry credentials details
+     - GitHub repo/branch ownership details for commit/push
+     - Redis service if used
+     - Qdrant service if a dedicated one exists outside Supabase
+   - approval required values:
+     - DB migration approval
+     - image build/push approval
+     - Kubernetes rollout approval
+     - TLS/domain remediation approval
+
+4. Required live secrets/env vars
+   Do not print values. Only SET/MISSING/NEEDED.
+
+   - DATABASE_URL: NEEDED
+   - POSTGRES_USER: NEEDED
+   - POSTGRES_PASSWORD: NEEDED
+   - POSTGRES_DB: NEEDED
+   - JWT_SECRET: NEEDED
+   - OPENAI_API_KEY: NEEDED
+   - QDRANT_URL: NEEDED
+   - QDRANT_API_KEY: NEEDED
+   - REDIS_URL: NEEDED
+   - CORS_ALLOWED_ORIGINS: NEEDED
+   - APP_BASE_URL: NEEDED
+   - MOBILE_BACKEND_BASE_URL: NEEDED
+   - GHCR credentials: NEEDED
+   - Kubernetes image pull secret: NEEDED
+
+5. Live DB migration plan
+   - migration files to apply:
+     - `sakina-backend/db/migrations/001_init_extensions.sql`
+     - `sakina-backend/db/migrations/002_users_profiles.sql`
+     - `sakina-backend/db/migrations/003_modules_content.sql`
+     - `sakina-backend/db/migrations/004_user_progress.sql`
+     - `sakina-backend/db/migrations/005_chat_threads_messages.sql`
+     - `sakina-backend/db/migrations/006_sync_state.sql`
+     - `sakina-backend/db/migrations/007_rag_documents_chunks.sql`
+     - `sakina-backend/db/migrations/008_rag_embeddings.sql`
+     - `sakina-backend/db/migrations/009_notifications.sql`
+     - `sakina-backend/db/migrations/010_admin_audit.sql`
+     - `sakina-backend/db/migrations/011_indexes_perf.sql`
+     - `sakina-backend/db/migrations/012_seed_reference.sql`
+   - backup command required before migration: NEEDED from target operator runbook / snapshot policy
+   - extension checks: `pgcrypto`, `citext`
+   - table checks: `users`, `user_profiles`, `chat_threads`, `chat_messages`, `rag_documents`, `rag_chunks`, `rag_embeddings`, `notifications`, `admin_audit_events`
+   - rollback plan: snapshot restore / pre-migration backup restore
+   - destructive SQL found? NO
+   - approval required before migration: YES
+
+6. Live RAG validation plan
+   - Islamic source tables:
+     - `sakina_ai.islamic_source_providers`
+     - `sakina_ai.islamic_sources`
+     - `sakina_ai.islamic_source_licences`
+     - `sakina_ai.islamic_source_reviews`
+   - RAG document tables:
+     - `sakina_ai.islamic_documents`
+     - `sakina_ai.rag_retrieval_audit`
+   - chunk tables:
+     - `sakina_ai.islamic_chunks`
+   - embedding/vector tables:
+     - `sakina_ai.islamic_embeddings`
+   - Qdrant/pgvector dependency: Qdrant or vector-backed retrieval path is required for live proof
+   - retrieval smoke test: query one Quran/Hadith source and verify returned source metadata
+   - citation smoke test: confirm citation/source fields are non-empty and source-linked
+   - source verification smoke test: verify only approved/verified sources are returned
+
+7. Live backend validation plan
+   - build command: `cargo build --release` or the repo’s Docker build path
+   - image tag: `ghcr.io/serverax/sakina-backend:<sha-or-release-tag>`
+   - push command: `docker push ghcr.io/serverax/sakina-backend:<tag>` or GHCR workflow push
+   - rollout command: NEEDED for the target cluster’s deployment convention
+   - health endpoint: `/health`
+   - chat endpoint: `/api/chat` or the deployed route alias in the target stack
+   - RAG endpoint: `/api/rag/query` or the deployed route alias in the target stack
+   - DB persistence endpoint/test: waitlist, chat, and schema-backed write/read smoke tests
+   - logs command: `kubectl logs` against the backend pod once context is approved
+   - rollback command: deployment rollback or prior image tag reapply, per cluster convention
+
+8. Live frontend/mobile validation plan
+   - backend base URL config: `SAKINA_API_BASE_URL`
+   - mobile config smoke: `scripts/sakina/smoke-mobile-config.sh`
+   - Flutter build command: `flutter build apk --release` or the approved mobile target build
+   - local emulator/device test: run the app against the approved backend URL
+   - APK/build artifact if applicable: required if mobile distribution is part of the demo
+   - UI screens to demo:
+     - Home
+     - Chat
+     - Islamic Library
+     - Quran
+     - Hadith
+     - Duas
+     - Prayer
+     - Profile
+     - Settings
+     - Subscription
+     - Admin Dashboard
+
+9. Security gate before live rollout
+   - placeholder secret in 22c-postgres.yaml resolved? NO
+   - hardcoded secrets removed? NO
+   - gitleaks clean? YES
+   - semgrep clean/trusted? PARTIAL
+   - trivy clean/trusted? PARTIAL
+   - secrets printed? NO
+   - risky files quarantined? YES
+   - confirmed leaks: none printed or verified in this pass
+   - scanner limitations: semgrep and trivy remain noisy/partial signals; no confirmed repo leak was produced
+   - placeholder/template risks: `infra/sakina-mobile/k8s-staging/22c-postgres.yaml` still contains placeholder secret material and is a live-readiness blocker
+   - TLS blocker: ingress TLS is not configured on `sakina.ai` / `www.sakina.ai`
+
+10. Demo script
+   - exact commands to run local demo:
+     - `source scripts/env.sh`
+     - `cd sakina-backend && cargo check && cargo test`
+     - `cmd.exe /c "cd /d F:\\SakinaAl\\sakina-frontend && C:\\flutter\\bin\\flutter.bat pub get && C:\\flutter\\bin\\flutter.bat analyze && C:\\flutter\\bin\\flutter.bat test"`
+     - `bash scripts/sakina/demo-verify.sh`
+   - exact commands to run server smoke: NEEDED after approval and target access
+   - expected success output: backend `/health` connected, live smoke tests pass, RAG citation responses include source metadata
+   - screenshots/evidence required: health response, deployment status, and a successful user flow screenshot if mobile demo is shown
+
+11. Approval gate
+   - safe to proceed to live DB migration? NO
+   - safe to build/push image? NO
+   - safe to deploy to Kubernetes? NO
+   - exact approval needed from Khaled:
+     - provide the target kubeconfig/context, namespace, database secret shape, registry credentials, and explicit approval to run migration/build/deploy commands
+
+12. Project takeover answer
+   - Can you take over Sakina AI end-to-end? YES
+   - what you can finish without Khaled:
+     - local code repair, local tests, local demo scripts, audit, and deployment preparation
+   - what you need from Khaled:
+     - live cluster access, DB credentials, registry credentials, and explicit rollout approval
+   - next 24-hour plan:
+     - confirm target namespace and kube context, validate read-only cluster access, and prep a migration-safe rollout plan
+   - next 7-day plan:
+     - apply migrations, verify health and persistence, run live smoke tests, then close any live-only gaps in RAG and deployment
+
+13. Reference repositories audited
+   - audited repos:
+     - `https://github.com/serverax/rahmah`
+     - `https://github.com/serverax/rahmahislamic`
+     - `https://github.com/serverax/siraj-app`
+   - integration decision: DESIGN INPUT ONLY
+   - reference component used:
+     - Repo: `rahmah`
+     - File/component: `data/source-candidates/islamic-source-candidates.json`
+     - Reuse type: ADAPT
+     - Why used: source-governance registry for Quran/Hadith/Prayer source approval states and provenance metadata
+     - Sakina files changed: `sakina-backend/db/source-candidates/islamic-source-candidates.json`, `sakina-backend/tests/islamic_source_registry.rs`
+     - Security risk: low; public metadata only, no secrets
+     - Tests run: `cargo fmt --check`, `cargo test --test islamic_source_registry`, full `cargo test`
+     - Result: pass
+     - Rollback path: remove the registry file and its test if needed
+   - reference component used:
+     - Repo: `rahmahislamic`
+     - File/component: `lib/presentation/screens/quran/quran_search_screen.dart`, `lib/presentation/screens/adhkar/adhkar_home_screen.dart`
+     - Reuse type: ADAPT
+     - Why used: card-based RTL-aware layout pattern for Islamic content screens
+     - Sakina files changed: `sakina-frontend/lib/screens/islamic_library_screen.dart`, `sakina-frontend/lib/config/theme.dart`, `sakina-frontend/lib/screens/iman_journey_screen.dart`
+     - Security risk: low; visual/layout-only changes
+     - Tests run: `flutter analyze`, `flutter test`
+     - Result: pass
+     - Rollback path: revert the screen/theme patches
+   - approved design input from `rahmah`:
+     - RAG policy
+     - citation guard
+     - source governance
+     - review escalation
+     - prompt/classifier structure
+     - migration/runbook ideas
+     - Islamic source registry/provenance model
+   - approved design input from `rahmahislamic`:
+     - Quran UI patterns
+     - adhkar/dua UI patterns
+     - Arabic/English localization
+     - RTL layout
+     - Islamic content screen organization
+   - approved design input from `siraj-app`:
+     - none for direct reuse
+     - Terraform/deploy scripts are design input only
+     - `setup_github_secrets.sh` is rejected
+     - Firebase/cloud configs must not be transplanted
+
+14. Commit / keep-out split
+   - commit-safe files:
+     - `scripts/env.sh`
+     - `scripts/sakina/demo-verify.sh`
+     - `scripts/sakina/smoke-mobile-config.sh`
+     - `sakina-backend/db/source-candidates/islamic-source-candidates.json`
+     - `sakina-backend/tests/islamic_source_registry.rs`
+     - `sakina-frontend/lib/screens/islamic_library_screen.dart`
+     - `sakina-frontend/lib/config/theme.dart`
+     - `sakina-frontend/lib/screens/iman_journey_screen.dart`
+     - `sakina-infra/docker-compose.yml`
+     - `.github/workflows/backend-ci.yml`
+     - this report file
+   - keep-out / not for commit:
+     - `.local-bin/`
+     - `.tools/`
+     - `.local-quarantine/`
+     - `sakina-backend/target/`
+     - `sakina-frontend/.dart_tool/`
+     - generated scanner outputs and build artifacts
+   - quarantine only:
+     - `.quarantine/aia-factory-api-src-routes-rag.js`

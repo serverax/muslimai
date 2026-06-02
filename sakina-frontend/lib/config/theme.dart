@@ -5,6 +5,7 @@ class SakinaTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
+      splashFactory: InkSplash.splashFactory,
       primaryColor: const Color(0xFF1B6B5E),
       scaffoldBackgroundColor: const Color(0xFFF5F5F5),
       fontFamily: isArabic ? 'Amiri' : 'Inter',
@@ -34,6 +35,7 @@ class SakinaTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      splashFactory: InkSplash.splashFactory,
       primaryColor: const Color(0xFF1B6B5E),
       fontFamily: isArabic ? 'Amiri' : 'Inter',
     );

@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: sakina
       POSTGRES_USER: sakina_user
-      POSTGRES_PASSWORD: sakina_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
     ports:
       - "5432:5432"
     volumes:
@@ -36,7 +36,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      DATABASE_URL: postgres://sakina_user:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/sakina
       LOG_LEVEL: info
       BRAND_NAME: SAKINA
       BRAND_TAGLINE: "Trustworthy. Private. Islamic."
