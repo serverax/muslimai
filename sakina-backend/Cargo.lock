@@ -1881,6 +1881,7 @@ dependencies = [
  "opentelemetry-stdout",
  "opentelemetry_sdk",
  "reqwest",
+ "sakina-fatwa-policy-gate",
  "serde",
  "serde_json",
  "sha2",
@@ -1890,6 +1891,15 @@ dependencies = [
  "tracing-opentelemetry",
  "tracing-subscriber",
  "uuid",
+]
+
+[[package]]
+name = "sakina-fatwa-policy-gate"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "wasm-bindgen",
 ]
 
 [[package]]
