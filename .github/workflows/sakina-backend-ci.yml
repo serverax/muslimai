@@ -1,0 +1,47 @@
+name: sakina-backend-ci
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "sakina-backend/**"
+      - ".github/workflows/sakina-backend-ci.yml"
+  pull_request:
+    paths:
+      - "sakina-backend/**"
+      - ".github/workflows/sakina-backend-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  backend-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check formatting
+        run: |
+          cd sakina-backend
+          cargo fmt -- --check
+
+      - name: Run clippy
+        run: |
+          cd sakina-backend
+          cargo clippy -- -D warnings
+
+      - name: Run backend tests
+        run: |
+          cd sakina-backend
+          cargo test --locked --all-targets --all-features
+
+      - name: Build backend image
+        run: |
+          docker build -f sakina-backend/Dockerfile -t sakina-backend-ci:${{ github.sha }} .

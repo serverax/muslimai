@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: sakina-mobile-staging
+
+commonLabels:
+  app.kubernetes.io/part-of: sakina-mobile
+  app.kubernetes.io/environment: staging
+
+resources:
+  - namespace.yaml
+  - postgres.yaml
+  - db-migrations.yaml
+  - rag.yaml
+  - backend.yaml
+  - admin.yaml
+  - smoke-tests.yaml

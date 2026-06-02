@@ -1,0 +1,63 @@
+name: sakina-build-images
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "sakina-backend/**"
+      - "sakina-rag/**"
+      - "sakina-dashboard/admin/**"
+      - "sakina-backend/Dockerfile"
+      - "sakina-rag/Dockerfile"
+      - "admin/Dockerfile"
+      - ".github/workflows/sakina-build-images.yml"
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAMESPACE: ${{ github.repository_owner }}/sakina-mobile
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - name: backend
+            dockerfile: sakina-backend/Dockerfile
+          - name: rag
+            dockerfile: sakina-rag/Dockerfile
+          - name: admin
+            dockerfile: admin/Dockerfile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.service.dockerfile }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}-${{ matrix.service.name }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}-${{ matrix.service.name }}:staging-latest
