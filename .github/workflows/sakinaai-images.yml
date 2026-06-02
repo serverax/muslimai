@@ -29,6 +29,11 @@ env:
 jobs:
   validate-infra:
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: sakina_ci
+      POSTGRES_PASSWORD: sakina_ci_password_for_compose_validation_only
+      POSTGRES_DB: sakina_ci
+      DATABASE_URL: postgres://sakina_ci:sakina_ci_password_for_compose_validation_only@postgres:5432/sakina_ci
     steps:
       - uses: actions/checkout@v4
 
