@@ -230,8 +230,10 @@ SAKINA LIVE HANDOFF AND DEPLOYMENT GATE
 7. Live backend validation plan
    - build command: `cargo build --release` or the repo’s Docker build path
    - image tag: `ghcr.io/serverax/sakina-backend:<sha-or-release-tag>`
+   - current live backend image: `ghcr.io/serverax/sakina-backend:4cc124d`
+   - repo manifest currently pins: `ghcr.io/serverax/sakina-backend:cd02005`
    - push command: `docker push ghcr.io/serverax/sakina-backend:<tag>` or GHCR workflow push
-   - rollout command: NEEDED for the target cluster’s deployment convention
+   - rollout command: `kubectl -n sakina-prod set image deployment/sakina-backend backend=ghcr.io/serverax/sakina-backend:<tag>` followed by `kubectl -n sakina-prod rollout status deployment/sakina-backend`
    - health endpoint: `/health`
    - chat endpoint: `/api/chat` or the deployed route alias in the target stack
    - RAG endpoint: `/api/rag/query` or the deployed route alias in the target stack
@@ -287,6 +289,13 @@ SAKINA LIVE HANDOFF AND DEPLOYMENT GATE
    - safe to deploy to Kubernetes? NO
    - exact approval needed from Khaled:
      - provide the target kubeconfig/context, namespace, database secret shape, registry credentials, and explicit approval to run migration/build/deploy commands
+   - exact command list awaiting approval:
+     - `docker build -t ghcr.io/serverax/sakina-backend:<new-tag> sakina-backend`
+     - `docker push ghcr.io/serverax/sakina-backend:<new-tag>`
+     - `kubectl -n sakina-prod set image deployment/sakina-backend backend=ghcr.io/serverax/sakina-backend:<new-tag>`
+     - `kubectl -n sakina-prod rollout status deployment/sakina-backend`
+     - `kubectl -n sakina-prod logs deploy/sakina-backend --tail=200`
+     - `kubectl -n sakina-prod get pods,svc,ingress`
 
 12. Project takeover answer
    - Can you take over Sakina AI end-to-end? YES
