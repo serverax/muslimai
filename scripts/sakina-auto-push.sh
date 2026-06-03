@@ -36,6 +36,12 @@ if command -v cargo >/dev/null 2>&1; then
   cargo test --manifest-path sakina-backend/Cargo.toml --locked --all-targets --all-features
 fi
 
+git_dir="$(git rev-parse --git-dir)"
+if [[ ! -w "${git_dir}" ]]; then
+  echo "Git metadata directory is not writable in this environment: ${git_dir}" >&2
+  exit 1
+fi
+
 git add -A
 
 message="${1:-}"
