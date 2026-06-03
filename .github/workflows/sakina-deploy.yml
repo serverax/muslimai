@@ -1,0 +1,62 @@
+name: Sakina Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      namespace:
+        description: "Kubernetes namespace"
+        required: true
+        default: "sakina-ai"
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    name: Deploy Sakina to Kubernetes
+    runs-on: ubuntu-latest
+
+    env:
+      NAMESPACE: ${{ github.event.inputs.namespace }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.SAKINA_KUBECONFIG_B64 }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Confirm cluster access
+        run: |
+          kubectl get nodes -o wide
+          kubectl get ns
+
+      - name: Create namespace
+        run: |
+          kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Apply Sakina manifests
+        run: |
+          if [ -d sakina-infra/manifests ]; then
+            kubectl -n "$NAMESPACE" apply -f sakina-infra/manifests/
+          else
+            echo "sakina-infra/manifests not found"
+            exit 1
+          fi
+
+      - name: Show deployment status
+        run: |
+          kubectl -n "$NAMESPACE" get deploy,pods,svc,ingress -o wide
+          kubectl -n "$NAMESPACE" get events --sort-by=.metadata.creationTimestamp | tail -80
+
+      - name: Smoke check pods
+        run: |
+          kubectl -n "$NAMESPACE" wait --for=condition=Ready pod --all --timeout=180s
+          kubectl -n "$NAMESPACE" get pods -o wide

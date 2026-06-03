@@ -1,0 +1,132 @@
+name: Sakina CI
+
+on:
+  push:
+    branches:
+      - qa-security-hardening
+      - main
+      - master
+  pull_request:
+    branches:
+      - qa-security-hardening
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
+jobs:
+  backend:
+    name: Backend Rust checks
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: sakina-backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Format check
+        run: cargo fmt --check
+
+      - name: Cargo check
+        run: cargo check --all-targets
+
+      - name: Cargo test
+        run: cargo test --all-targets --all-features
+
+  wasm:
+    name: WASM policy gate checks
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: sakina-wasm/fatwa-policy-gate
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: WASM crate test
+        run: cargo test
+
+  flutter:
+    name: Flutter Android checks
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: sakina-frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Flutter analyze
+        run: flutter analyze
+
+      - name: Flutter test
+        run: flutter test
+
+      - name: Android release APK build
+        run: flutter build apk --release --dart-define=SAKINA_API_BASE_URL=https://api.sakina.local
+
+      - name: Android release AAB build
+        run: flutter build appbundle --release --dart-define=SAKINA_API_BASE_URL=https://api.sakina.local
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sakina-android-release
+          path: |
+            sakina-frontend/build/app/outputs/flutter-apk/*.apk
+            sakina-frontend/build/app/outputs/bundle/release/*.aab
+
+  secrets-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for obvious committed secrets
+        run: |
+          set -e
+          ! grep -RInE "ghp_|github_pat_|sk_live|AKIA[0-9A-Z]{16}|BEGIN RSA PRIVATE KEY|BEGIN OPENSSH PRIVATE KEY" . \
+            --exclude-dir=.git \
+            --exclude-dir=build \
+            --exclude-dir=target \
+            --exclude-dir=.dart_tool
