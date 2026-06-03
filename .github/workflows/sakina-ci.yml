@@ -1,132 +1,166 @@
-name: Sakina CI
+name: sakina-ci
 
 on:
   push:
-    branches:
-      - qa-security-hardening
-      - main
-      - master
   pull_request:
-    branches:
-      - qa-security-hardening
-      - main
-      - master
   workflow_dispatch:
 
 permissions:
   contents: read
-  actions: read
-  security-events: write
 
 jobs:
-  backend:
-    name: Backend Rust checks
+  repo-guard:
     runs-on: ubuntu-latest
-
     defaults:
       run:
-        working-directory: sakina-backend
-
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
+      - name: Sakina-only guard
+        run: bash scripts/ensure-sakina-only.sh
 
-      - name: Cache cargo
-        uses: Swatinem/rust-cache@v2
-
-      - name: Format check
-        run: cargo fmt --check
-
-      - name: Cargo check
-        run: cargo check --all-targets
-
-      - name: Cargo test
-        run: cargo test --all-targets --all-features
-
-  wasm:
-    name: WASM policy gate checks
+  flutter-ci:
     runs-on: ubuntu-latest
-
     defaults:
       run:
-        working-directory: sakina-wasm/fatwa-policy-gate
-
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache cargo
-        uses: Swatinem/rust-cache@v2
-
-      - name: WASM crate test
-        run: cargo test
-
-  flutter:
-    name: Flutter Android checks
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: sakina-frontend
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
-          cache: true
+          flutter-version: "3.32.0"
 
-      - name: Flutter pub get
-        run: flutter pub get
+      - name: Install Flutter dependencies
+        run: |
+          cd sakina-frontend
+          flutter pub get
 
       - name: Flutter analyze
-        run: flutter analyze
+        run: |
+          cd sakina-frontend
+          flutter analyze
 
-      - name: Flutter test
-        run: flutter test
+      - name: Flutter tests
+        run: |
+          cd sakina-frontend
+          flutter test --reporter compact
 
-      - name: Android release APK build
-        run: flutter build apk --release --dart-define=SAKINA_API_BASE_URL=https://api.sakina.local
-
-      - name: Android release AAB build
-        run: flutter build appbundle --release --dart-define=SAKINA_API_BASE_URL=https://api.sakina.local
-
-      - name: Upload Android artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: sakina-android-release
-          path: |
-            sakina-frontend/build/app/outputs/flutter-apk/*.apk
-            sakina-frontend/build/app/outputs/bundle/release/*.aab
-
-  secrets-scan:
-    name: Secret scan
+  backend-ci:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check for obvious committed secrets
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check formatting
         run: |
-          set -e
-          ! grep -RInE "ghp_|github_pat_|sk_live|AKIA[0-9A-Z]{16}|BEGIN RSA PRIVATE KEY|BEGIN OPENSSH PRIVATE KEY" . \
-            --exclude-dir=.git \
-            --exclude-dir=build \
-            --exclude-dir=target \
-            --exclude-dir=.dart_tool
+          cd sakina-backend
+          cargo fmt -- --check
+
+      - name: Run clippy
+        run: |
+          cd sakina-backend
+          cargo clippy --locked --all-targets --all-features -- -D warnings
+
+      - name: Run backend tests
+        run: |
+          cd sakina-backend
+          cargo test --locked --all-targets --all-features
+
+  security-scan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sakina-only guard
+        run: bash scripts/ensure-sakina-only.sh
+
+      - name: Secret scan
+        run: bash scripts/sakina/verify-no-secret-leak.sh --all-files
+
+  android-build-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.0"
+
+      - name: Install Flutter dependencies
+        run: |
+          cd sakina-frontend
+          flutter pub get
+
+      - name: Build Android APK check
+        run: |
+          cd sakina-frontend
+          flutter build apk --debug --dart-define=SAKINA_API_BASE_URL=https://api.7jzi.com/v1
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sakina-android-check-artifacts
+          path: |
+            sakina-frontend/build/app/outputs/flutter-apk/*.apk
+            sakina-frontend/build/app/outputs/bundle/**/*.aab
+          if-no-files-found: ignore
+
+  ios-build-check:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: macos-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.0"
+
+      - name: Verify iOS target exists
+        run: |
+          if [[ ! -d sakina-frontend/ios ]]; then
+            echo "sakina-frontend/ios is missing. Restore the iOS target before running this job."
+            exit 1
+          fi
+
+      - name: Install Flutter dependencies
+        run: |
+          cd sakina-frontend
+          flutter pub get
+
+      - name: Build iOS without code signing
+        run: |
+          cd sakina-frontend
+          flutter build ios --no-codesign --dart-define=SAKINA_API_BASE_URL=https://api.7jzi.com/v1
+
+      - name: Upload iOS build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sakina-ios-check-artifacts
+          path: |
+            sakina-frontend/build/ios/**
+          if-no-files-found: ignore

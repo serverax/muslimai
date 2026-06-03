@@ -1,4 +1,5 @@
 import java.io.FileInputStream
+import org.gradle.api.GradleException
 import java.util.Properties
 
 plugins {
@@ -52,8 +53,9 @@ android {
             signingConfig = if (keystorePropertiesFile.exists()) {
                 signingConfigs.getByName("release")
             } else {
-                println("WARNING: android/key.properties not found, using debug signing for release build.")
-                signingConfigs.getByName("debug")
+                throw GradleException(
+                    "android/key.properties is required for release builds. Copy android/key.properties.example and provide a production keystore."
+                )
             }
         }
     }
