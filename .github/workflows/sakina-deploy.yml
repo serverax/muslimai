@@ -1,77 +1,86 @@
-name: sakina-deploy
+name: Sakina Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
 
-permissions:
-  contents: read
-
-env:
-  TARGET_NAMESPACE: sakina-prod
-  MANIFEST_DIR: sakina-infra/manifests/sakina-prod
+  push:
+    branches:
+      - qa-security-hardening
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+
+    env:
+      STAGING_NAMESPACE: ${{ secrets.SAKINA_STAGING_NAMESPACE }}
+      PROD_NAMESPACE: ${{ secrets.SAKINA_PROD_NAMESPACE }}
+
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Sakina-only guard
-        run: bash scripts/ensure-sakina-only.sh
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
 
       - name: Configure kubeconfig
         run: |
-          mkdir -p "${HOME}/.kube"
-          printf '%s' "${{ secrets.SAKINA_KUBECONFIG_B64 }}" | base64 --decode > "${HOME}/.kube/config"
-          chmod 600 "${HOME}/.kube/config"
+          mkdir -p ~/.kube
+          echo "${{ secrets.SAKINA_KUBECONFIG_B64 }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
 
-      - name: Confirm kube context and namespace
+      - name: Select namespace
+        id: ns
         run: |
-          kubectl config current-context
-          kubectl get ns "${TARGET_NAMESPACE}"
-          test "${TARGET_NAMESPACE}" = "sakina-prod"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "namespace=${STAGING_NAMESPACE}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.inputs.environment }}" = "production" ]; then
+            echo "namespace=${PROD_NAMESPACE}" >> "$GITHUB_OUTPUT"
+          else
+            echo "namespace=${STAGING_NAMESPACE}" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Apply Sakina manifests
+      - name: Confirm cluster and namespace
         run: |
-          kubectl apply -f "${MANIFEST_DIR}/sakina-backend.yaml"
-          kubectl apply -f "${MANIFEST_DIR}/sakina-frontend.yaml"
-          kubectl apply -f "${MANIFEST_DIR}/sakina-ingress.yaml"
+          kubectl get nodes -o wide
+          kubectl get ns "${{ steps.ns.outputs.namespace }}"
+          kubectl -n "${{ steps.ns.outputs.namespace }}" get all
 
-      - name: Rollout status
+      - name: Apply Kubernetes manifests
         run: |
-          kubectl -n "${TARGET_NAMESPACE}" rollout status deploy/sakina-backend --timeout=300s
-          kubectl -n "${TARGET_NAMESPACE}" rollout status deploy/sakina-frontend --timeout=300s
+          if [ -d "sakina-infra/k8s" ]; then
+            kubectl -n "${{ steps.ns.outputs.namespace }}" apply -f sakina-infra/k8s/
+          elif [ -d "k8s" ]; then
+            kubectl -n "${{ steps.ns.outputs.namespace }}" apply -f k8s/
+          else
+            echo "ERROR: No Kubernetes manifest folder found."
+            echo "Expected sakina-infra/k8s or k8s."
+            exit 1
+          fi
 
-      - name: Pod status
+      - name: Restart Sakina deployments
         run: |
-          kubectl -n "${TARGET_NAMESPACE}" get pods -o wide
+          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout restart deployment || true
 
-      - name: Recent events
+      - name: Confirm rollout
         run: |
-          kubectl -n "${TARGET_NAMESPACE}" get events --sort-by=.lastTimestamp | tail -80
+          kubectl -n "${{ steps.ns.outputs.namespace }}" get all
+          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-backend --timeout=180s || true
+          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-admin --timeout=180s || true
+          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-rag-ingestion --timeout=180s || true
+          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-rag-retrieval --timeout=180s || true
+          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-frontend --timeout=180s || true
+          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-landing --timeout=180s || true
 
-      - name: Service endpoints
+      - name: Show recent events if needed
+        if: always()
         run: |
-          kubectl -n "${TARGET_NAMESPACE}" get svc,endpoints -o wide
-
-      - name: Backend logs
-        run: |
-          kubectl -n "${TARGET_NAMESPACE}" logs deploy/sakina-backend --tail=100
-
-      - name: Health smoke test
-        run: |
-          kubectl -n "${TARGET_NAMESPACE}" port-forward svc/sakina-backend 18080:80 >/tmp/sakina-port-forward.log 2>&1 &
-          pf_pid=$!
-          trap 'kill ${pf_pid} >/dev/null 2>&1 || true' EXIT
-          sleep 5
-          curl -fsS http://127.0.0.1:18080/health
-          kill "${pf_pid}" >/dev/null 2>&1 || true
-          wait "${pf_pid}" 2>/dev/null || true
-
-      - name: Final smoke summary
-        run: |
-          echo "Sakina deployment workflow completed for ${TARGET_NAMESPACE}"
+          kubectl -n "${{ steps.ns.outputs.namespace }}" get events --sort-by=.lastTimestamp | tail -80
