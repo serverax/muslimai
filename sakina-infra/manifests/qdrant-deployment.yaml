@@ -23,6 +23,11 @@ spec:
           image: qdrant/qdrant:v1.10.1
           ports:
             - containerPort: 6333
+          env:
+            - name: QDRANT__STORAGE__STORAGE_PATH
+              value: /qdrant/storage
+            - name: QDRANT__STORAGE__SNAPSHOTS_PATH
+              value: /qdrant/storage/snapshots
           resources:
             requests:
               cpu: 100m
