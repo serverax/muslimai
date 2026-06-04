@@ -112,6 +112,7 @@ jobs:
 
           apply_manifest sakina-infra/manifests/postgres-deployment.yaml
           apply_manifest sakina-infra/manifests/qdrant-deployment.yaml
+          kubectl -n sakina-data delete pod qdrant-0 --wait=true
 
           kubectl -n sakina-data rollout status statefulset/postgres --timeout=180s
           kubectl -n sakina-data rollout status statefulset/qdrant --timeout=180s
