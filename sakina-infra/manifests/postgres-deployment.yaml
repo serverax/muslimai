@@ -24,8 +24,9 @@ spec:
         app: postgres
     spec:
       securityContext:
-        runAsNonRoot: true
         fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: postgres
           image: postgres:15-alpine
@@ -47,6 +48,11 @@ spec:
               mountPath: /var/lib/postgresql/data
             - name: init-script
               mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+            - name: postgres-run
+              mountPath: /var/run/postgresql
           resources:
             requests:
               cpu: 100m
@@ -56,7 +62,14 @@ spec:
               memory: 1Gi
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
             capabilities:
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - SETGID
+                - SETUID
               drop:
                 - ALL
           livenessProbe:
@@ -72,12 +85,16 @@ spec:
           configMap:
             name: postgres-init
             defaultMode: 0755
+        - name: tmp
+          emptyDir: {}
+        - name: postgres-run
+          emptyDir: {}
   volumeClaimTemplates:
     - metadata:
         name: postgres-storage
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: local-storage
+        storageClassName: local-path
         resources:
           requests:
             storage: 10Gi

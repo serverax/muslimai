@@ -56,50 +56,98 @@ jobs:
 
       - name: Apply Kubernetes manifests
         run: |
-          echo "Searching for Kubernetes manifest folders..."
+          set -euo pipefail
 
-          CANDIDATES="
-          sakina-infra/k8s
-          sakina-infra/kubernetes
-          sakina-infra/manifests
-          sakina-infra
-          k8s
-          kubernetes
-          manifests
-          deploy
-          deployment
-          "
-
-          FOUND="false"
-
-          for dir in $CANDIDATES; do
-            if [ -d "$dir" ] && find "$dir" -type f \( -name "*.yaml" -o -name "*.yml" \) | grep -q .; then
-              echo "Applying manifests from: $dir"
-              kubectl apply -f "$dir" --recursive
-              FOUND="true"
+          apply_manifest() {
+            manifest="$1"
+            if [ ! -f "$manifest" ]; then
+              echo "ERROR: required Kubernetes manifest is missing: $manifest"
+              exit 1
             fi
-          done
+            echo "Applying Kubernetes manifest: $manifest"
+            kubectl apply -f "$manifest"
+          }
 
-          if [ "$FOUND" != "true" ]; then
-            echo "ERROR: No Kubernetes manifest folder found."
-            echo "Available YAML files:"
-            find . -type f \( -name "*.yaml" -o -name "*.yml" \) | sort
-            exit 1
-          fi
+          echo "Applying Sakina Kubernetes manifests in strict order."
+          apply_manifest sakina-infra/manifests/00-namespaces.yaml
+          apply_manifest sakina-infra/manifests/brand-configmap.yaml
+          kubectl -n sakina-data create configmap postgres-init \
+            --from-file=init.sql=sakina-backend/db/init.sql \
+            --dry-run=client -o yaml | kubectl apply -f -
+          apply_manifest sakina-infra/manifests/storage-class.yaml
+
+          repair_pending_data_claim() {
+            statefulset="$1"
+            claim="$2"
+            if kubectl -n sakina-data get pvc "$claim" >/dev/null 2>&1; then
+              phase="$(kubectl -n sakina-data get pvc "$claim" -o jsonpath='{.status.phase}')"
+              storage_class="$(kubectl -n sakina-data get pvc "$claim" -o jsonpath='{.spec.storageClassName}')"
+              if [ "$phase" = "Pending" ] && [ "$storage_class" != "local-path" ]; then
+                echo "Recreating unbound Sakina data claim $claim for StatefulSet $statefulset."
+                if kubectl -n sakina-data get statefulset "$statefulset" >/dev/null 2>&1; then
+                  kubectl -n sakina-data delete statefulset "$statefulset" --wait=true
+                fi
+                kubectl -n sakina-data delete pvc "$claim" --wait=true
+              fi
+            fi
+          }
+
+          repair_pending_data_claim postgres postgres-storage-postgres-0
+          repair_pending_data_claim qdrant qdrant-storage-qdrant-0
+
+          apply_manifest sakina-infra/manifests/postgres-deployment.yaml
+          apply_manifest sakina-infra/manifests/qdrant-deployment.yaml
+
+          kubectl -n sakina-data rollout status statefulset/postgres --timeout=180s
+          kubectl -n sakina-data rollout status statefulset/qdrant --timeout=180s
+          kubectl -n sakina-data exec -i postgres-0 -- psql -U sakina_user -d sakina < sakina-backend/db/migrations/013_waitlist.sql
+          kubectl -n sakina-data exec postgres-0 -- psql -U sakina_user -d sakina \
+            -c "SELECT to_regclass('sakina_ai.waitlist') AS waitlist_table;"
+
+          apply_manifest sakina-infra/manifests/sakina-api-deployment.yaml
+          kubectl -n sakina-api rollout status deployment/sakina-api --timeout=180s
+
+          apply_manifest sakina-infra/manifests/sakina-prod/sakina-backend.yaml
+          apply_manifest sakina-infra/manifests/sakina-prod/sakina-frontend.yaml
+          kubectl -n sakina-prod rollout status deployment/sakina-backend --timeout=180s
+          kubectl -n sakina-prod rollout status deployment/sakina-frontend --timeout=180s
+
+          apply_manifest sakina-infra/manifests/monitoring/jaeger.yaml
+          apply_manifest sakina-infra/manifests/monitoring/prometheus.yaml
+          apply_manifest sakina-infra/manifests/monitoring/grafana.yaml
+          apply_manifest sakina-infra/manifests/sakina-prod/sakina-ingress.yaml
+          apply_manifest sakina-infra/manifests/network-policies.yaml
 
       - name: Restart Sakina deployments
         run: |
-          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout restart deployment || true
+          found="false"
+          for deployment in sakina-backend sakina-admin sakina-rag-ingestion sakina-rag-retrieval sakina-frontend sakina-landing; do
+            if kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment "$deployment" >/dev/null 2>&1; then
+              kubectl -n "${{ steps.ns.outputs.namespace }}" rollout restart "deployment/$deployment"
+              found="true"
+            fi
+          done
+          if [ "$found" != "true" ]; then
+            echo "ERROR: no Sakina deployments found for restart"
+            kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment
+            exit 1
+          fi
 
       - name: Confirm rollout
         run: |
+          set -euo pipefail
           kubectl -n "${{ steps.ns.outputs.namespace }}" get all
-          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-backend --timeout=180s || true
-          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-admin --timeout=180s || true
-          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-rag-ingestion --timeout=180s || true
-          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-rag-retrieval --timeout=180s || true
-          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-frontend --timeout=180s || true
-          kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status deployment/sakina-landing --timeout=180s || true
+          required="sakina-backend sakina-admin sakina-rag-ingestion sakina-rag-retrieval"
+          if kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment sakina-frontend >/dev/null 2>&1; then
+            required="$required sakina-frontend"
+          fi
+          if kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment sakina-landing >/dev/null 2>&1; then
+            required="$required sakina-landing"
+          fi
+          for deployment in $required; do
+            kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment "$deployment"
+            kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status "deployment/$deployment" --timeout=180s
+          done
 
       - name: Show recent events if needed
         if: always()

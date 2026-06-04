@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sakina-api
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sakina-audit
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sakina-core
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sakina-data
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sakina-monitoring
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sakina-prod

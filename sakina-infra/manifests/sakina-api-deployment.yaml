@@ -46,13 +46,17 @@ spec:
         prometheus.io/path: "/metrics"
     spec:
       serviceAccountName: sakina-api
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: api
-        image: ghcr.io/serverax/sakinaai-api:0.1.0
+        image: ghcr.io/serverax/sakina-backend:cd02005
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -66,15 +70,10 @@ spec:
             secretKeyRef:
               name: db-credentials
               key: connection-string
-        - name: SAKINA_API_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: sakina-api-auth
-              key: api-token
         - name: QDRANT_URL
           value: "http://qdrant.sakina-data.svc.cluster.local:6333"
         - name: QDRANT_COLLECTION
-          value: "verified_knowledge"
+          value: "sakina_islamic_chunks_en"
         - name: VLLM_URL
           value: "http://vllm.sakina-core.svc.cluster.local:8000"
         - name: VLLM_CHAT_MODEL
@@ -118,7 +117,7 @@ spec:
             memory: 512Mi
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
+          readOnlyRootFilesystem: true
           capabilities:
             drop:
             - ALL

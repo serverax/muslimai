@@ -15,8 +15,9 @@ spec:
         app: qdrant
     spec:
       securityContext:
-        runAsNonRoot: true
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: qdrant
           image: qdrant/qdrant:v1.10.1
@@ -31,24 +32,30 @@ spec:
               memory: 1Gi
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
             capabilities:
               drop:
                 - ALL
           volumeMounts:
             - name: qdrant-storage
               mountPath: /qdrant/storage
+            - name: tmp
+              mountPath: /tmp
           livenessProbe:
             httpGet:
               path: /health
               port: 6333
             initialDelaySeconds: 30
             periodSeconds: 10
+      volumes:
+        - name: tmp
+          emptyDir: {}
   volumeClaimTemplates:
     - metadata:
         name: qdrant-storage
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: local-storage
+        storageClassName: local-path
         resources:
           requests:
             storage: 5Gi

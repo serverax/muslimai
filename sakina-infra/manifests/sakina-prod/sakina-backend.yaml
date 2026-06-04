@@ -36,7 +36,7 @@ spec:
         prometheus.io/path: "/metrics"
     spec:
       imagePullSecrets:
-        - name: ghcr-creds
+        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -68,23 +68,18 @@ spec:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: sakina-secrets
+                  name: sakina-supabase-secret
                   key: DATABASE_URL
             - name: SUPABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: sakina-secrets
+                  name: sakina-supabase-secret
                   key: SUPABASE_URL
             - name: SUPABASE_SERVICE_ROLE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sakina-secrets
+                  name: sakina-supabase-secret
                   key: SUPABASE_SERVICE_ROLE_KEY
-            - name: SAKINA_SERVER_PUBKEY
-              valueFrom:
-                secretKeyRef:
-                  name: sakina-secrets
-                  key: SAKINA_SERVER_PUBKEY
           resources:
             requests:
               cpu: 100m
@@ -108,6 +103,13 @@ spec:
             timeoutSeconds: 3
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
