@@ -100,6 +100,9 @@ jobs:
 
           kubectl -n sakina-data rollout status statefulset/postgres --timeout=180s
           kubectl -n sakina-data rollout status statefulset/qdrant --timeout=180s
+          kubectl -n sakina-data run sakina-qdrant-health \
+            --rm -i --restart=Never --image=curlimages/curl \
+            -- curl -fsS http://qdrant.sakina-data.svc.cluster.local:6333/healthz
           kubectl -n sakina-data exec -i postgres-0 -- psql -U sakina_user -d sakina < sakina-backend/db/migrations/013_waitlist.sql
           kubectl -n sakina-data exec postgres-0 -- psql -U sakina_user -d sakina \
             -c "SELECT to_regclass('sakina_ai.waitlist') AS waitlist_table;"
