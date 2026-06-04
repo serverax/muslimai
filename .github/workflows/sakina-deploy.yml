@@ -58,6 +58,21 @@ jobs:
         run: |
           set -euo pipefail
 
+          dump_deploy_debug() {
+            status="$?"
+            set +e
+            echo "=== Sakina deploy debug: sakina-data resources ==="
+            kubectl -n sakina-data get statefulset,pods,pvc,svc -o wide
+            echo "=== Sakina deploy debug: qdrant pod description ==="
+            kubectl -n sakina-data describe pod qdrant-0
+            echo "=== Sakina deploy debug: qdrant logs ==="
+            kubectl -n sakina-data logs qdrant-0 --all-containers --tail=200
+            echo "=== Sakina deploy debug: sakina-data events ==="
+            kubectl -n sakina-data get events --sort-by=.lastTimestamp
+            exit "$status"
+          }
+          trap dump_deploy_debug ERR
+
           apply_manifest() {
             manifest="$1"
             if [ ! -f "$manifest" ]; then
