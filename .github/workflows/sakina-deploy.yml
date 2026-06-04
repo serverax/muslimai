@@ -56,13 +56,34 @@ jobs:
 
       - name: Apply Kubernetes manifests
         run: |
-          if [ -d "sakina-infra/k8s" ]; then
-            kubectl -n "${{ steps.ns.outputs.namespace }}" apply -f sakina-infra/k8s/
-          elif [ -d "k8s" ]; then
-            kubectl -n "${{ steps.ns.outputs.namespace }}" apply -f k8s/
-          else
+          echo "Searching for Kubernetes manifest folders..."
+
+          CANDIDATES="
+          sakina-infra/k8s
+          sakina-infra/kubernetes
+          sakina-infra/manifests
+          sakina-infra
+          k8s
+          kubernetes
+          manifests
+          deploy
+          deployment
+          "
+
+          FOUND="false"
+
+          for dir in $CANDIDATES; do
+            if [ -d "$dir" ] && find "$dir" -type f \( -name "*.yaml" -o -name "*.yml" \) | grep -q .; then
+              echo "Applying manifests from: $dir"
+              kubectl -n "${{ steps.ns.outputs.namespace }}" apply -f "$dir" --recursive
+              FOUND="true"
+            fi
+          done
+
+          if [ "$FOUND" != "true" ]; then
             echo "ERROR: No Kubernetes manifest folder found."
-            echo "Expected sakina-infra/k8s or k8s."
+            echo "Available YAML files:"
+            find . -type f \( -name "*.yaml" -o -name "*.yml" \) | sort
             exit 1
           fi
 
