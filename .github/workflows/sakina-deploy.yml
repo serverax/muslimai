@@ -75,7 +75,7 @@ jobs:
           for dir in $CANDIDATES; do
             if [ -d "$dir" ] && find "$dir" -type f \( -name "*.yaml" -o -name "*.yml" \) | grep -q .; then
               echo "Applying manifests from: $dir"
-              kubectl -n "${{ steps.ns.outputs.namespace }}" apply -f "$dir" --recursive
+              kubectl apply -f "$dir" --recursive
               FOUND="true"
             fi
           done
