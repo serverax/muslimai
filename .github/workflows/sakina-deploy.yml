@@ -204,6 +204,17 @@ jobs:
           apply_file "$manifest_root/rag.yaml"
           apply_file "$manifest_root/backend.yaml"
           apply_file "$manifest_root/admin.yaml"
+          echo "Pin runtime deployments to this commit's backend image so Kubernetes pulls the image built by this run"
+          backend_sha_image="ghcr.io/serverax/sakina-backend:${{ github.sha }}"
+          kubectl -n "$namespace" set image deployment/sakina-backend \
+            backend="$backend_sha_image" \
+            install-agent-validator-wasm="$backend_sha_image"
+          kubectl -n "$namespace" set image deployment/sakina-rag-ingestion \
+            ingestion="$backend_sha_image" \
+            install-agent-validator-wasm="$backend_sha_image"
+          kubectl -n "$namespace" set image deployment/sakina-rag-retrieval \
+            retrieval="$backend_sha_image" \
+            install-agent-validator-wasm="$backend_sha_image"
           kubectl -n "$namespace" rollout status deployment/sakina-backend --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
