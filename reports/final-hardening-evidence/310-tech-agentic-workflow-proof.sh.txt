@@ -176,7 +176,7 @@ sakina-backend/src/services/ai_router.rs:563:        assert_eq!(route.selected_a
 sakina-backend/src/services/ai_router.rs:579:        assert_eq!(route.selected_agent, "Safety/Escalation Agent");
 sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_agent, "Quran Agent");
 {
-  "request_id": "agentic-quran-1780648895-21929",
+  "request_id": "agentic-quran-1780674782-112",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -264,7 +264,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
     },
     {
       "step": "decision_logged",
-      "outcome": "b8813296-3e19-497d-b3cc-6c5632ab7dd2"
+      "outcome": "fca1ccb4-eca0-4327-8e6c-d72f78bde693"
     },
     {
       "step": "final_response_returned",
@@ -273,7 +273,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
   ]
 }
 {
-  "request_id": "agentic-hadith-1780648896-24806",
+  "request_id": "agentic-hadith-1780674782-10940",
   "selected_agent": "Hadith Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hadith_hybrid_rag>evaluation",
@@ -361,7 +361,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
     },
     {
       "step": "decision_logged",
-      "outcome": "ebff159f-8005-4493-8a31-fbe0d2a3a336"
+      "outcome": "4a3208f7-31ac-4676-84e2-6098bce62ad6"
     },
     {
       "step": "final_response_returned",
@@ -370,7 +370,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
   ]
 }
 {
-  "request_id": "agentic-dua-1780648896-26251",
+  "request_id": "agentic-dua-1780674782-28572",
   "selected_agent": "Dua/Azkar Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>verified_dua_rag>evaluation",
@@ -458,7 +458,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
     },
     {
       "step": "decision_logged",
-      "outcome": "5debf878-722f-4474-a266-b254daa82b6a"
+      "outcome": "e1e60acc-d674-4ae7-8726-15aefe19bd12"
     },
     {
       "step": "final_response_returned",
@@ -467,7 +467,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
   ]
 }
 {
-  "request_id": "agentic-fiqh-1780648896-8281",
+  "request_id": "agentic-fiqh-1780674782-25749",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -555,7 +555,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
     },
     {
       "step": "decision_logged",
-      "outcome": "413afa76-74fa-452d-937c-57aa4433583b"
+      "outcome": "f5b42486-beec-4dcd-8fdb-507d44e892bf"
     },
     {
       "step": "final_response_returned",
@@ -564,7 +564,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
   ]
 }
 {
-  "request_id": "agentic-safety-1780648896-17507",
+  "request_id": "agentic-safety-1780674783-3733",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -652,7 +652,7 @@ sakina-backend/src/services/ai_router.rs:597:        assert_eq!(route.selected_a
     },
     {
       "step": "decision_logged",
-      "outcome": "8fe5ad69-46dd-4c2b-bc37-3083e8e9b3c2"
+      "outcome": "701777d7-e70b-4d0e-926b-e2b10db90170"
     },
     {
       "step": "final_response_returned",

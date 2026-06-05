@@ -1,6 +1,6 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.44s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.64s
 {
-  "request_id": "a61dbb71-1cb5-4775-8e90-cb2a26f8c548",
+  "request_id": "a934fcf5-a7ee-478b-bab0-9a91b41efcae",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -88,7 +88,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "3d05224d-c602-4734-a3b0-b57acd9ebf51"
+      "outcome": "ea157b10-310c-489b-a69c-60908cb0b31f"
     },
     {
       "step": "final_response_returned",
@@ -97,7 +97,7 @@
   ]
 }
 {
-  "request_id": "7a3e2231-c00f-4fb4-8f68-678857c39fb3",
+  "request_id": "dd653606-389e-4743-9a89-792417fcf75c",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -185,7 +185,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "ab41d90d-00b8-4a53-8beb-08f063b078be"
+      "outcome": "3ecb2941-d4f9-4c1b-a082-e34894cdce8a"
     },
     {
       "step": "final_response_returned",
@@ -194,7 +194,7 @@
   ]
 }
 {
-  "request_id": "eff49489-fcb9-4bcf-acff-884bf26d75a0",
+  "request_id": "616943c5-5978-44d3-94aa-14f58b25aace",
   "selected_agent": "Family/Marriage Advice Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>hybrid_rag>evaluation",
@@ -282,7 +282,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "2db57a33-1f89-4845-aa47-79c7c934ec4e"
+      "outcome": "fdeca94e-e1f3-4fc1-8cab-76c1b9e5f2ac"
     },
     {
       "step": "final_response_returned",

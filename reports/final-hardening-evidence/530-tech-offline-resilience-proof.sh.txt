@@ -1,7 +1,7 @@
 00:00 +0: loading F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart
 00:00 +0: F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart: offline backend failure queues user message and does not fake answer
-00:00 +1: F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart: offline backend failure queues user message and does not fake answer
-00:00 +2: F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart: retryPending sends queued message to backend and marks it synced
+00:00 +1: F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart: retryPending sends queued message to backend and marks it synced
+00:00 +2: F:/SakinaAL/sakina-frontend/test/local_db_test.dart: Message round-trips through toMap/fromMap
 00:00 +3: All tests passed!
 sakina-frontend/test/offline_resilience_test.dart:52:      historyStore: store,
 sakina-frontend/test/offline_resilience_test.dart:58:    expect(controller.errorType, ChatErrorType.serviceUnavailable);
@@ -47,6 +47,9 @@ sakina-frontend/lib/services/local_db_service.dart:43:        "ALTER TABLE messa
 sakina-frontend/lib/services/local_db_service.dart:52:      conflictAlgorithm: ConflictAlgorithm.replace,
 sakina-frontend/lib/services/local_db_service.dart:95:        'sync_status': syncStatus,
 sakina-frontend/lib/services/local_db_service.dart:105:        syncStatus: map['sync_status'] as String? ?? 'synced',
+sakina-frontend/lib/app/app_strings.dart:91:          'Network unavailable. Please check your connection and try again.',
+sakina-frontend/lib/config/api_config.dart:14:  static const int retryAttempts = 3;
+sakina-frontend/lib/config/api_config.dart:15:  static const Duration retryDelay = Duration(seconds: 1);
 sakina-frontend/lib/chat/chat_controller.dart:21:  serviceUnavailable,
 sakina-frontend/lib/chat/chat_controller.dart:196:      case ChatErrorType.serviceUnavailable:
 sakina-frontend/lib/chat/chat_controller.dart:237:    } on ApiException catch (error) {
@@ -54,9 +57,6 @@ sakina-frontend/lib/chat/chat_controller.dart:241:      _errorType = ChatErrorTy
 sakina-frontend/lib/chat/chat_controller.dart:268:    } on ApiException catch (error) {
 sakina-frontend/lib/chat/chat_controller.dart:271:      _errorType = ChatErrorType.serviceUnavailable;
 sakina-frontend/lib/chat/chat_controller.dart:327:    return ChatErrorType.serviceUnavailable;
-sakina-frontend/lib/config/api_config.dart:14:  static const int retryAttempts = 3;
-sakina-frontend/lib/config/api_config.dart:15:  static const Duration retryDelay = Duration(seconds: 1);
-sakina-frontend/lib/app/app_strings.dart:91:          'Network unavailable. Please check your connection and try again.',
 sakina-frontend/lib/services/api_service.dart:107:    final res = await _withRetry(
 sakina-frontend/lib/services/api_service.dart:118:          .timeout(const Duration(seconds: 30)),
 sakina-frontend/lib/services/api_service.dart:127:    final res = await _withRetry(

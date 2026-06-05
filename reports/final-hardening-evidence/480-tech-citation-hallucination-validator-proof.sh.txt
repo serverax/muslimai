@@ -1,4 +1,4 @@
-{"indexed_chunks": 27, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+{"indexed_chunks": 34, "collection": "sakina_islamic_chunks_en", "dimension": 128}
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.44s
 {
   "citations": [

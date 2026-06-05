@@ -1,5 +1,5 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.54s
-Feature entitlement proof users: A=c02a8738-9f28-4d9c-b1b0-4b4c7a3313c5 B=75758b6a-bda8-4053-a356-9fe94220e5e3
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.58s
+Feature entitlement proof users: A=0f94d4cb-9580-4b78-9a04-2af4bf33e817 B=1f038daf-3ae4-4324-8907-7e1b9a8d89de
 {
   "module": "quran",
   "enabled": true,
@@ -12,25 +12,25 @@ Missing-auth quran overview status: 401
 {"error":{"code":"subscription_required","message":"module requires premium entitlement"}}
 Free-user quran overview status: 402
 {
-  "user_id": "c02a8738-9f28-4d9c-b1b0-4b4c7a3313c5",
-  "subscription_id": "2668bbb0-bc8f-4fcb-aaad-60f384575fd5",
-  "payment_customer_id": "7cdd8554-7dc3-4bd5-8aea-b66836337eee",
-  "plan_id": "bb690de4-8c51-44a8-8216-0f3cc2d0799b",
-  "invoice_id": "979f8aee-b814-4fc5-886f-de93a6b54506"
+  "user_id": "0f94d4cb-9580-4b78-9a04-2af4bf33e817",
+  "subscription_id": "ba7f486e-6486-4883-a94c-404e197826dc",
+  "payment_customer_id": "881ae86a-8c31-4741-8cfe-96fd46ecb206",
+  "plan_id": "130a9d6d-980e-4a48-a4af-7380b10ee148",
+  "invoice_id": "d24718ca-0457-47a2-9429-68beb0a25605"
 }
 {
   "entitlements": [
     {
       "entitlement_key": "quran_access",
       "expires_at": null,
-      "granted_at": "2026-06-05 08:48:55.705314+00",
-      "id": "8767d11c-43c2-4287-84de-12eb11816eb0"
+      "granted_at": "2026-06-05 15:54:49.41749+00",
+      "id": "37657b5c-1b7d-450a-95e5-a22f03973867"
     },
     {
       "entitlement_key": "rag_verified",
       "expires_at": null,
-      "granted_at": "2026-06-05 08:48:55.705314+00",
-      "id": "4e847340-6d92-4120-9e09-f9c0e3f5cd2c"
+      "granted_at": "2026-06-05 15:54:49.41749+00",
+      "id": "fb289ed6-6fbd-404f-9585-3214c7e9821c"
     }
   ]
 }
@@ -43,6 +43,8 @@ Cross-user forged-tier overview status: 402
 Disabled prayer overview status: 403
 {"error":{"code":"unauthorized","message":"requested user_id does not match authenticated user"}}
 Cross-user entitlement list status: 401
+sakina-frontend/lib/screens/home_shell_screen.dart:31:      apiClient: ModuleApiClient(authToken: widget.session?.accessToken),
+sakina-frontend/lib/screens/home_shell_screen.dart:32:      entitlementGate: EntitlementGate(),
 sakina-frontend/lib/services/module_service.dart:254:  })  : quran = quran ?? FeatureFlags.quran,
 sakina-frontend/lib/services/module_service.dart:255:        prayer = prayer ?? FeatureFlags.prayer,
 sakina-frontend/lib/services/module_service.dart:256:        knowledge = knowledge ?? FeatureFlags.knowledge,
@@ -53,8 +55,6 @@ sakina-frontend/lib/services/module_service.dart:299:  ModuleApiClient({
 sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/services/module_service.dart:411:    required EntitlementGate entitlementGate,
 sakina-frontend/lib/services/module_service.dart:418:  final EntitlementGate _entitlementGate;
-sakina-frontend/lib/screens/home_shell_screen.dart:31:      apiClient: ModuleApiClient(authToken: widget.session?.accessToken),
-sakina-frontend/lib/screens/home_shell_screen.dart:32:      entitlementGate: EntitlementGate(),
 sakina-frontend/lib/services/api_service.dart:264:  Future<SubscriptionResponse> activateSubscription(
 sakina-frontend/lib/services/api_service.dart:281:  Future<List<String>> listEntitlements(String userId) async {
 sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';

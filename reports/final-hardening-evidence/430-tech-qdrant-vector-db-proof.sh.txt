@@ -7,14 +7,14 @@
     ]
   },
   "status": "ok",
-  "time": 0.000005498
+  "time": 0.000004897
 }
 {
   "result": {
     "status": "green",
     "optimizer_status": "ok",
     "indexed_vectors_count": 0,
-    "points_count": 27,
+    "points_count": 34,
     "segments_count": 8,
     "config": {
       "params": {
@@ -53,12 +53,28 @@
     "payload_schema": {}
   },
   "status": "ok",
-  "time": 0.000059585
+  "time": 0.000039074
 }
-Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=27 status=green
+Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=34 status=green
 {
   "result": {
     "points": [
+      {
+        "id": "014312e5-3da1-4096-b9b4-0013223c793c",
+        "payload": {
+          "authenticity_grade": "verified",
+          "chunk_id": "014312e5-3da1-4096-b9b4-0013223c793c",
+          "citation": "verified citation",
+          "document_id": "3fa374c4-5a51-4ac4-b52c-22b99f1f67e6",
+          "language": "en",
+          "review_status": "verified",
+          "source_id": "446b6f45-7a65-4229-98d5-69d817e9a110",
+          "source_name": "Verified Source",
+          "source_reference": "verified citation",
+          "source_type": "quran",
+          "title": "Verified Source"
+        }
+      },
       {
         "id": "015995a1-5b41-4286-8468-593ee173f681",
         "payload": {
@@ -90,45 +106,29 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=27 statu
           "source_type": "quran",
           "title": "Verified Source"
         }
-      },
-      {
-        "id": "0ba71119-a9c1-4adc-a002-2e3372ae39be",
-        "payload": {
-          "authenticity_grade": "verified",
-          "chunk_id": "0ba71119-a9c1-4adc-a002-2e3372ae39be",
-          "citation": "Quran 94:5-6",
-          "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-          "language": "en",
-          "review_status": "verified",
-          "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
-          "source_name": "Quran Reference Guidance",
-          "source_reference": "Quran 94:5-6",
-          "source_type": "quran",
-          "title": "Quran Reference Guidance"
-        }
       }
     ],
-    "next_page_offset": "0f3f481e-8a3a-4967-ae87-db77d4f0ada6"
+    "next_page_offset": "0ba71119-a9c1-4adc-a002-2e3372ae39be"
   },
   "status": "ok",
-  "time": 0.00180016
+  "time": 0.00231654
 }
 {
   "result": {
-    "operation_id": 344,
+    "operation_id": 419,
     "status": "completed"
   },
   "status": "ok",
-  "time": 0.002217459
+  "time": 0.002713573
 }
 {
   "result": [
     {
-      "id": "11111111-1111-4111-8111-326324759278",
-      "version": 344,
+      "id": "11111111-1111-4111-8111-879578631956",
+      "version": 419,
       "score": 1.0000001,
       "payload": {
-        "chunk_id": "11111111-1111-4111-8111-326324759278",
+        "chunk_id": "11111111-1111-4111-8111-879578631956",
         "language": "en",
         "proof": true,
         "review_status": "verified",
@@ -138,7 +138,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=27 statu
     },
     {
       "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "version": 343,
+      "version": 418,
       "score": 0.45082265,
       "payload": {
         "authenticity_grade": "verified",
@@ -156,7 +156,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=27 statu
     },
     {
       "id": "67d60cf5-7d60-4b38-8462-254936094923",
-      "version": 343,
+      "version": 418,
       "score": 0.4437724,
       "payload": {
         "authenticity_grade": "approved",
@@ -174,7 +174,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=27 statu
     },
     {
       "id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
-      "version": 343,
+      "version": 418,
       "score": 0.43704957,
       "payload": {
         "authenticity_grade": "verified",
@@ -192,7 +192,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=27 statu
     },
     {
       "id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
-      "version": 343,
+      "version": 418,
       "score": 0.4197709,
       "payload": {
         "authenticity_grade": "verified",
@@ -210,23 +210,23 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=27 statu
     }
   ],
   "status": "ok",
-  "time": 0.001584513
+  "time": 0.001617111
 }
-{"status":{"error":"Wrong input: Vector dimension error: expected dim: 128, got 129"},"time":0.00135157}
+{"status":{"error":"Wrong input: Vector dimension error: expected dim: 128, got 129"},"time":0.002409777}
 Wrong-dimension upsert HTTP status: 400
 {
   "result": {
-    "operation_id": 346,
+    "operation_id": 421,
     "status": "completed"
   },
   "status": "ok",
-  "time": 0.001420453
+  "time": 0.002327933
 }
 {
   "result": [
     {
       "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "version": 343,
+      "version": 418,
       "score": 0.45082265,
       "payload": {
         "authenticity_grade": "verified",
@@ -244,7 +244,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "67d60cf5-7d60-4b38-8462-254936094923",
-      "version": 343,
+      "version": 418,
       "score": 0.4437724,
       "payload": {
         "authenticity_grade": "approved",
@@ -262,7 +262,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
-      "version": 343,
+      "version": 418,
       "score": 0.43704957,
       "payload": {
         "authenticity_grade": "verified",
@@ -280,7 +280,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
-      "version": 343,
+      "version": 418,
       "score": 0.4197709,
       "payload": {
         "authenticity_grade": "verified",
@@ -298,7 +298,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
-      "version": 343,
+      "version": 418,
       "score": 0.3682984,
       "payload": {
         "authenticity_grade": "verified",
@@ -316,7 +316,7 @@ Wrong-dimension upsert HTTP status: 400
     }
   ],
   "status": "ok",
-  "time": 0.001133323
+  "time": 0.001153723
 }
 scripts/sakina/index-approved-rag-corpus.py:16:QDRANT_URL = os.environ.get("QDRANT_URL", "http://localhost:6333").rstrip("/")
 scripts/sakina/index-approved-rag-corpus.py:76:            f"{QDRANT_URL}/collections/{QDRANT_COLLECTION}",

@@ -1,10 +1,3 @@
-sakina-frontend/lib/services/api_service.dart:25:  Future<PasswordAuthResponse> registerWithPassword({
-sakina-frontend/lib/services/api_service.dart:48:  Future<PasswordAuthResponse> loginWithPassword({
-sakina-frontend/lib/services/api_service.dart:66:  Future<PasswordAuthResponse> refreshWithToken({
-sakina-frontend/lib/services/api_service.dart:82:  Future<UserSummaryResponse> currentUser() async {
-sakina-frontend/lib/services/api_service.dart:92:  Future<void> logout() async {
-sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';
-sakina-frontend/lib/services/api_service.dart:814:      headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/services/auth_service.dart:1:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 sakina-frontend/lib/services/auth_service.dart:28:  static const _refreshTokenKey = 'sakina_refresh_token';
@@ -14,36 +7,43 @@ sakina-frontend/lib/services/auth_service.dart:73:    final response = await _ap
 sakina-frontend/lib/services/auth_service.dart:85:    final response = await _api.loginWithPassword(
 sakina-frontend/lib/services/auth_service.dart:100:  Future<void> logout() async {
 sakina-frontend/lib/services/auth_service.dart:104:      await _api.logout();
+sakina-frontend/lib/services/api_service.dart:25:  Future<PasswordAuthResponse> registerWithPassword({
+sakina-frontend/lib/services/api_service.dart:48:  Future<PasswordAuthResponse> loginWithPassword({
+sakina-frontend/lib/services/api_service.dart:66:  Future<PasswordAuthResponse> refreshWithToken({
+sakina-frontend/lib/services/api_service.dart:82:  Future<UserSummaryResponse> currentUser() async {
+sakina-frontend/lib/services/api_service.dart:92:  Future<void> logout() async {
+sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:814:      headers['Authorization'] = 'Bearer $token';
 {
-  "user_id": "9d711ee9-3291-4b36-abe1-d706cdabd016",
-  "identity_id": "d2182da8-8995-4a86-9e25-23cdf4e619c7",
-  "email": "frontend-contract-1780648868-26545@example.com",
+  "user_id": "39a02eac-18b4-4984-803e-858f068d5f2b",
+  "identity_id": "f1040bd0-dfea-4749-a983-4505640c5c11",
+  "email": "frontend-contract-1780674751-19917@example.com",
   "pub_key": null,
   "auth_provider": "password",
-  "created_at": "2026-06-05 08:41:09.845002+00",
-  "updated_at": "2026-06-05 08:41:09.845002+00",
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgwNjkyMDcwLCJpYXQiOjE3ODA2NDg4NzAsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiI1NmMzYTQ1MS01MzM4LTRkMmItOTk4Ni0yMzgzYzJjNWRkYmQiLCJzdWIiOiI5ZDcxMWVlOS0zMjkxLTRiMzYtYWJlMS1kNzA2Y2RhYmQwMTYifQ.3j2396xqT43xbEMkTrV22mG8t8xJZFsaYVincY2nM2o",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgzMjQwODcwLCJpYXQiOjE3ODA2NDg4NzAsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiI4ODliZDRmOC1lZTc3LTQ1NWMtYWMyYy01YzE2YWEzYmE5ZDciLCJzdWIiOiI5ZDcxMWVlOS0zMjkxLTRiMzYtYWJlMS1kNzA2Y2RhYmQwMTYifQ.IvRKvKy1PRtNtMmZGmIbfJlqVtcIQ3l8cD2oBMwqXgU"
+  "created_at": "2026-06-05 15:52:33.793952+00",
+  "updated_at": "2026-06-05 15:52:33.793952+00",
+  "access_token": "[masked]",
+  "refresh_token": "[masked]"
 }
 {
-  "user_id": "9d711ee9-3291-4b36-abe1-d706cdabd016",
-  "email": "frontend-contract-1780648868-26545@example.com",
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgwNjkyMDcxLCJpYXQiOjE3ODA2NDg4NzEsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiI1NzRmNTZjYS04MDBjLTQ0MWUtOGQxMi04YWJjNjc5YzAyOWIiLCJzdWIiOiI5ZDcxMWVlOS0zMjkxLTRiMzYtYWJlMS1kNzA2Y2RhYmQwMTYifQ.soyTYaWXMxbBdtLEjeDkEYSD10QbamM6lAoidC9mIlE",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgzMjQwODcxLCJpYXQiOjE3ODA2NDg4NzEsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiI5YTQ1YzAzNC1kODgzLTQwNWMtOTZkMi1mMjE4YzhhMWE5MjUiLCJzdWIiOiI5ZDcxMWVlOS0zMjkxLTRiMzYtYWJlMS1kNzA2Y2RhYmQwMTYifQ.g89EBcgHz5t3naiSysN__4Wu1X-hpwiuqL8hxY8F1Cc",
-  "expires_at": "2026-06-05T20:41:11.072674989Z"
+  "user_id": "39a02eac-18b4-4984-803e-858f068d5f2b",
+  "email": "frontend-contract-1780674751-19917@example.com",
+  "access_token": "[masked]",
+  "refresh_token": "[masked]",
+  "expires_at": "2026-06-06T03:52:35.115662587Z"
 }
 {
-  "user_id": "9d711ee9-3291-4b36-abe1-d706cdabd016",
-  "email": "frontend-contract-1780648868-26545@example.com",
+  "user_id": "39a02eac-18b4-4984-803e-858f068d5f2b",
+  "email": "frontend-contract-1780674751-19917@example.com",
   "auth_provider": "password",
-  "created_at": "2026-06-05 08:41:09.845002+00"
+  "created_at": "2026-06-05 15:52:33.793952+00"
 }
 {
-  "user_id": "9d711ee9-3291-4b36-abe1-d706cdabd016",
-  "email": "frontend-contract-1780648868-26545@example.com",
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgwNjkyMDcxLCJpYXQiOjE3ODA2NDg4NzEsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiI0YTMzMTFlNi03NzUyLTRiYTktODEwZi05OGQ5OTBlNzM1OTgiLCJzdWIiOiI5ZDcxMWVlOS0zMjkxLTRiMzYtYWJlMS1kNzA2Y2RhYmQwMTYifQ.0YBIStKugKG7JY4k5R627s7F7HSAcbEBVwJaBCAgGUM",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgzMjQwODcxLCJpYXQiOjE3ODA2NDg4NzEsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiIwZjYyMjI0ZS1jNmFjLTQzZjEtODBmMS1mZGMxZDk2MmRmMGQiLCJzdWIiOiI5ZDcxMWVlOS0zMjkxLTRiMzYtYWJlMS1kNzA2Y2RhYmQwMTYifQ.IH2tvEbw7GY1xhuh-RKtrwzAyRGjhS5qBsevKWjNxsE",
-  "expires_at": "2026-06-05T20:41:11.156209986Z"
+  "user_id": "39a02eac-18b4-4984-803e-858f068d5f2b",
+  "email": "frontend-contract-1780674751-19917@example.com",
+  "access_token": "[masked]",
+  "refresh_token": "[masked]",
+  "expires_at": "2026-06-06T03:52:35.202904836Z"
 }
 Refresh token reuse status=401
 Logout status=200

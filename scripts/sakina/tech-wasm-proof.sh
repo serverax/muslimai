@@ -50,6 +50,11 @@ cleanup() {
   set +e
   if [[ "${started_backend}" = "1" ]]; then
     kill "$backend_pid" 2>/dev/null
+    for _ in $(seq 1 20); do
+      kill -0 "$backend_pid" 2>/dev/null || break
+      sleep 0.2
+    done
+    kill -9 "$backend_pid" 2>/dev/null
     wait "$backend_pid" 2>/dev/null
   fi
 }

@@ -1,14 +1,14 @@
 === health ===
-{"brand":"SAKINA","database":"connected","db":"connected","service":"Project Sakina API","status":"healthy","tagline":"Trustworthy. Private. Islamic.","timestamp":"2026-06-05T08:41:06.709236397+00:00","values":["Integrity","Privacy","Excellence","Accessibility","Community"],"version":"1.0.0"}
+{"brand":"SAKINA","database":"connected","db":"connected","service":"Project Sakina API","status":"healthy","tagline":"Trustworthy. Private. Islamic.","timestamp":"2026-06-05T15:52:30.099748363+00:00","values":["Integrity","Privacy","Excellence","Accessibility","Community"],"version":"1.0.0"}
 === ready ===
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   306  100   306    0     0   4815      0 --:--:-- --:--:-- --:--:--  4781100   306  100   306    0     0   3726      0 --:--:-- --:--:-- --:--:--  3686
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   306  100   306    0     0   1527      0 --:--:-- --:--:-- --:--:--  1530
 HTTP/1.1 503 Service Unavailable
 content-length: 306
 content-type: application/json
 vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
-date: Fri, 05 Jun 2026 08:41:06 GMT
+date: Fri, 05 Jun 2026 15:52:30 GMT
 
 {"checks":{"auth":"ok","database":"ok","encryption":"ok","environment":"local","fake_mode":"disabled","llm_provider":"configured_or_disabled_closed","payments":"configured_or_disabled_closed","qdrant":"ok","redis_valkey":"missing","rls":"ok","storage":"configured_or_disabled_closed"},"status":"not_ready"}
 === ready json ===
@@ -30,43 +30,40 @@ date: Fri, 05 Jun 2026 08:41:06 GMT
 }
 === observability ===
 {
-  "audit_logs": 55,
-  "brain_traces": 2037,
-  "rag_traces": 28,
+  "audit_logs": 77,
+  "brain_traces": 2479,
+  "rag_traces": 35,
   "request_id": "enabled",
-  "safety_traces": 28,
+  "safety_traces": 35,
   "sensitive_log_policy": "do_not_log_secret_values",
   "status": "ok",
   "structured_logs": "enabled"
 }
 === api log tail ===
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.82s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.32s
      Running `sakina-backend/target/debug/sakina-api`
-[2m2026-06-05T08:41:04.622515Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Trustworthy. Private. Islamic.
-[2m2026-06-05T08:41:04.625293Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Vision: Empower Muslims with Sovereign, Intelligent, and Trustworthy Islamic Guidance
-[2m2026-06-05T08:41:04.625675Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Mission: Zero-hallucination Islamic guidance with complete privacy and sovereignty
-[2m2026-06-05T08:41:04.625781Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Promise: Authentic Islamic guidance, complete privacy, transparency in every interaction
-[2m2026-06-05T08:41:04.626131Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Motto: Authentic. Private. Trusted. / أصيل. خاص. موثوق
-[2m2026-06-05T08:41:04.627065Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Integrity - Never compromise on authenticity
-[2m2026-06-05T08:41:04.627120Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Privacy - User data is sacred
-[2m2026-06-05T08:41:04.627132Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Excellence - Zero tolerance for hallucinations
-[2m2026-06-05T08:41:04.627140Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Accessibility - Simple, works offline
-[2m2026-06-05T08:41:04.627148Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Community - Open source, collaborative
-[2m2026-06-05T08:41:04.627160Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Theme primary=#1B6B5E accent=#E8F5E9 bg=#F5F5F5 text=#212121 error=#D32F2F
-[2m2026-06-05T08:41:04.627171Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Starting Sakina API Server
-[2m2026-06-05T08:41:04.764096Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m Connected to PostgreSQL
-[2m2026-06-05T08:41:04.778448Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m Starting HTTP server on 0.0.0.0:8080
-[2m2026-06-05T08:41:04.785792Z[0m [32m INFO[0m [2mactix_server::builder[0m[2m:[0m starting 8 workers
-[2m2026-06-05T08:41:04.787908Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m Actix runtime found; starting in Actix runtime
-[2m2026-06-05T08:41:04.787981Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m starting service: "actix-web-service-0.0.0.0:8080", workers: 8, listening on: 0.0.0.0:8080
-[2m2026-06-05T08:41:05.188893Z[0m [33m WARN[0m [2msakina_backend::services::outbox_relay[0m[2m:[0m [3mevent[0m[2m=[0m"outbox_event_dead_lettered" [3mevent_id[0m[2m=[0me9d574b4-9115-42aa-95d4-4e2625e19112 [3mevent_type[0m[2m=[0maccount_deletion_requested
-[2m2026-06-05T08:41:05.192905Z[0m [33m WARN[0m [2msakina_backend::services::outbox_relay[0m[2m:[0m [3mevent[0m[2m=[0m"outbox_event_retry_scheduled" [3mevent_id[0m[2m=[0maf710eb0-2b75-443a-b411-9d63faf1b362 [3mevent_type[0m[2m=[0maccount_deletion_requested [3mretry_count[0m[2m=[0m4
-[2m2026-06-05T08:41:05.196634Z[0m [33m WARN[0m [2msakina_backend::services::outbox_relay[0m[2m:[0m [3mevent[0m[2m=[0m"outbox_event_retry_scheduled" [3mevent_id[0m[2m=[0m5e9a4a81-f8ce-43c8-919e-f99f3df20932 [3mevent_type[0m[2m=[0maccount_deletion_requested [3mretry_count[0m[2m=[0m3
-[2m2026-06-05T08:41:06.711357Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health [3mstatus[0m[2m=[0m200 [3mduration_ms[0m[2m=[0m4 [3muser_id[0m[2m=[0manonymous
-[2m2026-06-05T08:41:06.712215Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health HTTP/1.1" 200 293 "-" "curl/8.5.0" 0.005877
-[2m2026-06-05T08:41:06.788789Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health/ready [3mstatus[0m[2m=[0m503 [3mduration_ms[0m[2m=[0m17 [3muser_id[0m[2m=[0manonymous
-[2m2026-06-05T08:41:06.788956Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health/ready HTTP/1.1" 503 306 "-" "curl/8.5.0" 0.017835
-[2m2026-06-05T08:41:06.836328Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health/ready [3mstatus[0m[2m=[0m503 [3mduration_ms[0m[2m=[0m6 [3muser_id[0m[2m=[0manonymous
-[2m2026-06-05T08:41:06.836426Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health/ready HTTP/1.1" 503 306 "-" "curl/8.5.0" 0.006138
-[2m2026-06-05T08:41:06.866693Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health/observability [3mstatus[0m[2m=[0m200 [3mduration_ms[0m[2m=[0m17 [3muser_id[0m[2m=[0manonymous
-[2m2026-06-05T08:41:06.866857Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health/observability HTTP/1.1" 200 187 "-" "curl/8.5.0" 0.017891
+[2m2026-06-05T15:52:28.534570Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Trustworthy. Private. Islamic.
+[2m2026-06-05T15:52:28.538162Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Vision: Empower Muslims with Sovereign, Intelligent, and Trustworthy Islamic Guidance
+[2m2026-06-05T15:52:28.538889Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Mission: Zero-hallucination Islamic guidance with complete privacy and sovereignty
+[2m2026-06-05T15:52:28.538965Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Promise: Authentic Islamic guidance, complete privacy, transparency in every interaction
+[2m2026-06-05T15:52:28.539548Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Motto: Authentic. Private. Trusted. / أصيل. خاص. موثوق
+[2m2026-06-05T15:52:28.540810Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Integrity - Never compromise on authenticity
+[2m2026-06-05T15:52:28.540850Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Privacy - User data is sacred
+[2m2026-06-05T15:52:28.540859Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Excellence - Zero tolerance for hallucinations
+[2m2026-06-05T15:52:28.540868Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Accessibility - Simple, works offline
+[2m2026-06-05T15:52:28.540876Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Value: Community - Open source, collaborative
+[2m2026-06-05T15:52:28.540888Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Theme primary=#1B6B5E accent=#E8F5E9 bg=#F5F5F5 text=#212121 error=#D32F2F
+[2m2026-06-05T15:52:28.540899Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m [SAKINA] Starting Sakina API Server
+[2m2026-06-05T15:52:28.658313Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m Connected to PostgreSQL
+[2m2026-06-05T15:52:28.668494Z[0m [32m INFO[0m [2msakina_api[0m[2m:[0m Starting HTTP server on 0.0.0.0:8080
+[2m2026-06-05T15:52:28.676401Z[0m [32m INFO[0m [2mactix_server::builder[0m[2m:[0m starting 8 workers
+[2m2026-06-05T15:52:28.678911Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m Actix runtime found; starting in Actix runtime
+[2m2026-06-05T15:52:28.678979Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m starting service: "actix-web-service-0.0.0.0:8080", workers: 8, listening on: 0.0.0.0:8080
+[2m2026-06-05T15:52:30.101191Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health [3mstatus[0m[2m=[0m200 [3mduration_ms[0m[2m=[0m4 [3muser_id[0m[2m=[0manonymous
+[2m2026-06-05T15:52:30.101986Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health HTTP/1.1" 200 293 "-" "curl/8.5.0" 0.004973
+[2m2026-06-05T15:52:30.322484Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health/ready [3mstatus[0m[2m=[0m503 [3mduration_ms[0m[2m=[0m103 [3muser_id[0m[2m=[0manonymous
+[2m2026-06-05T15:52:30.322601Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health/ready HTTP/1.1" 503 306 "-" "curl/8.5.0" 0.103611
+[2m2026-06-05T15:52:30.351518Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health/ready [3mstatus[0m[2m=[0m503 [3mduration_ms[0m[2m=[0m4 [3muser_id[0m[2m=[0manonymous
+[2m2026-06-05T15:52:30.351624Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health/ready HTTP/1.1" 503 306 "-" "curl/8.5.0" 0.005033
+[2m2026-06-05T15:52:30.383173Z[0m [32m INFO[0m [2msakina_backend::middleware::audit[0m[2m:[0m HTTP request [3mevent[0m[2m=[0m"http_request" [3mmethod[0m[2m=[0mGET [3mpath[0m[2m=[0m/health/observability [3mstatus[0m[2m=[0m200 [3mduration_ms[0m[2m=[0m19 [3muser_id[0m[2m=[0manonymous
+[2m2026-06-05T15:52:30.383293Z[0m [32m INFO[0m [2mactix_web::middleware::logger[0m[2m:[0m 127.0.0.1 "GET /health/observability HTTP/1.1" 200 187 "-" "curl/8.5.0" 0.019578

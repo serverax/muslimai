@@ -1,4 +1,4 @@
-Inserted outbox event: 8e2aaf38-2e4c-4a0d-b6f9-c373e528ccc7
+Inserted outbox event: c726bb78-e38f-4bb0-856f-63844a98151a
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.56s
 Outbox event final status: Sent
 sakina-backend/db/init.sql:42:CREATE TABLE outbox.events (

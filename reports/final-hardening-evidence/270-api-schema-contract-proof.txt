@@ -72,8 +72,6 @@ sakina-backend/src/services/memory_engine.rs:178:    pub async fn write(&self, r
 sakina-backend/src/services/memory_engine.rs:228:        Ok(MemoryWriteOutcome {
 sakina-backend/src/services/memory_engine.rs:241:    ) -> Result<Option<MemoryEntry>, ApiError> {
 sakina-backend/src/services/memory_engine.rs:289:        Ok(Some(MemoryEntry {
-sakina-backend/src/handlers/phase2.rs:15:    UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
-sakina-backend/src/handlers/phase2.rs:142:    body: web::Json<UpsertProfileRequest>,
 sakina-backend/src/services/phase2.rs:28:    ) -> Result<RegisterUserResponse, ApiError> {
 sakina-backend/src/services/phase2.rs:140:        let mut response = RegisterUserResponse {
 sakina-backend/src/services/phase2.rs:230:    pub async fn login_password(&self, request: LoginRequest) -> Result<LoginResponse, ApiError> {
@@ -84,56 +82,58 @@ sakina-backend/src/services/phase2.rs:398:        request: UpsertProfileRequest,
 sakina-backend/src/services/phase2.rs:2116:pub struct RegisterUserResponse {
 sakina-backend/src/services/phase2.rs:2144:pub struct LoginResponse {
 sakina-backend/src/services/phase2.rs:2180:pub struct UpsertProfileRequest {
+sakina-backend/src/handlers/phase2.rs:15:    UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
+sakina-backend/src/handlers/phase2.rs:142:    body: web::Json<UpsertProfileRequest>,
 sakina-backend/src/handlers/chat.rs:7:    AddMessageRequest, AddMessageResponse, BrainRouteRequest, ConversationMessageResponse,
 sakina-backend/src/handlers/chat.rs:8:    CreateConversationRequest, CreateConversationResponse, GetConversationResponse,
 sakina-backend/src/handlers/chat.rs:75:        Ok(row) => HttpResponse::Ok().json(CreateConversationResponse {
 sakina-backend/src/handlers/chat.rs:328:    HttpResponse::Ok().json(AddMessageResponse {
 {
-  "user_id": "bc03521b-ed05-4d5e-a736-0068be23e55b",
-  "identity_id": "ffd1b389-bc78-4c33-b43f-38287589227b",
-  "email": "schema-contract-1780648886-14116@example.com",
+  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
+  "identity_id": "b03b94c6-e9ec-42a7-b19f-bcd7c5c4dcde",
+  "email": "schema-contract-1780674771-13240@example.com",
   "pub_key": null,
   "auth_provider": "password",
-  "created_at": "2026-06-05 08:41:28.0594+00",
-  "updated_at": "2026-06-05 08:41:28.0594+00",
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgwNjkyMDg4LCJpYXQiOjE3ODA2NDg4ODgsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiIxNWRmOTRiMy1hNWYwLTQ5NGEtYmM5Yi1lZjQ3ZDA3NWYzN2MiLCJzdWIiOiJiYzAzNTIxYi1lZDA1LTRkNWUtYTczNi0wMDY4YmUyM2U1NWIifQ.XE5adAsVXIRCd1GBVKbTPAwDbDxudX4QTq3KLEtdmjw",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzYWtpbmEtbW9iaWxlIiwiZXhwIjoxNzgzMjQwODg4LCJpYXQiOjE3ODA2NDg4ODgsImlzcyI6InNha2luYS1hcGkiLCJqdGkiOiI4ZmI4OTI5ZS05Y2E4LTQ5M2EtYjBlYi05YzcxMzQ4ZTZhMGUiLCJzdWIiOiJiYzAzNTIxYi1lZDA1LTRkNWUtYTczNi0wMDY4YmUyM2U1NWIifQ.Fwj6y1HgvpLA0LlScDHsbdeZjQtWzwb8cMWOse9SJsY"
+  "created_at": "2026-06-05 15:52:53.783576+00",
+  "updated_at": "2026-06-05 15:52:53.783576+00",
+  "access_token": "[masked]",
+  "refresh_token": "[masked]"
 }
 {
-  "user_id": "bc03521b-ed05-4d5e-a736-0068be23e55b",
-  "email": "schema-contract-1780648886-14116@example.com",
+  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
+  "email": "schema-contract-1780674771-13240@example.com",
   "auth_provider": "password",
-  "created_at": "2026-06-05 08:41:28.0594+00"
+  "created_at": "2026-06-05 15:52:53.783576+00"
 }
 {
-  "profile_id": "1235a5c8-faa3-4e57-9ce5-15aa61ca8d94",
-  "user_id": "bc03521b-ed05-4d5e-a736-0068be23e55b"
+  "profile_id": "cb064828-8fde-4649-9984-0782333eaedf",
+  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7"
 }
 {
-  "id": "2ae81aae-3a46-4d1f-92d8-4575a7efd68c",
-  "user_id": "bc03521b-ed05-4d5e-a736-0068be23e55b",
+  "id": "c646c7c5-e3e5-4b08-a615-13c21d6d220d",
+  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
   "title": "Schema contract chat",
-  "created_at": "2026-06-05 08:41:28.824714+00",
-  "updated_at": "2026-06-05 08:41:28.824714+00"
+  "created_at": "2026-06-05 15:52:54.645127+00",
+  "updated_at": "2026-06-05 15:52:54.645127+00"
 }
 {
-  "conversation_id": "2ae81aae-3a46-4d1f-92d8-4575a7efd68c",
-  "user_message_id": "6cb3d687-e65e-406f-92ae-b1b18de18428",
-  "assistant_message_id": "023a2994-b4de-4965-a44c-897aca216f77",
+  "conversation_id": "c646c7c5-e3e5-4b08-a615-13c21d6d220d",
+  "user_message_id": "2a2ee420-0311-45ea-a405-95b9c7985c94",
+  "assistant_message_id": "cc99d600-b67c-4761-abb2-289aa96ac9d5",
   "response": "I found verified sources related to Quran 2:153.",
-  "trace_id": "62eb82c6-1667-4681-8f61-2207d1c38e42"
+  "trace_id": "62f89b01-e034-4db4-8f73-18a1377caff7"
 }
 {
   "stored": true,
   "allowed": true,
   "sensitivity_level": "safe",
   "reason": "memory write allowed",
-  "memory_id": "751af9a4-57d4-41c0-a1d6-06c6d78a91f2"
+  "memory_id": "b23cbe3c-75c2-4a7a-a2d5-4d651acbbf09"
 }
 {
-  "id": "751af9a4-57d4-41c0-a1d6-06c6d78a91f2",
-  "user_id": "bc03521b-ed05-4d5e-a736-0068be23e55b",
-  "memory_key": "schema.contract.1780648886-14116",
+  "id": "b23cbe3c-75c2-4a7a-a2d5-4d651acbbf09",
+  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
+  "memory_key": "schema.contract.1780674771-13240",
   "memory_type": "preference",
   "sensitivity_level": "safe",
   "payload": {

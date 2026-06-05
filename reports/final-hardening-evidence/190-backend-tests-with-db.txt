@@ -1,15 +1,19 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.66s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.77s
      Running unittests src/lib.rs (sakina-backend/target/debug/deps/sakina_backend-5bd443900cff2969)
 
 running 94 tests
 test error::tests::error_response_uses_consistent_contract_shape ... ok
 test handlers::brain::tests::debug_agents_returns_registered_agent_list ... ok
+test handlers::brain::tests::test_route_returns_execution_trace ... ok
+test handlers::chat::tests::add_message_for_missing_conversation_uses_normalized_error ... ok
+test handlers::chat::tests::add_message_persists_user_and_assistant_messages_with_trace ... ok
+test handlers::chat::tests::create_conversation_returns_created_record ... ok
+test handlers::chat::tests::empty_message_is_rejected ... ok
+test handlers::chat::tests::get_conversation_returns_messages ... ok
+test handlers::chat::tests::unsafe_message_is_blocked_by_mother_brain ... ok
 test handlers::evaluation::tests::evaluation_check_fails_without_citations ... ok
 test handlers::evaluation::tests::evaluation_check_passes_for_grounded_answer ... ok
-test handlers::brain::tests::test_route_returns_execution_trace ... ok
 test handlers::modules::tests::disabled_flag_blocks_module_access_with_standard_error_shape ... ok
-test handlers::chat::tests::empty_message_is_rejected ... ok
-test handlers::chat::tests::add_message_for_missing_conversation_uses_normalized_error ... ok
 test handlers::modules::tests::enabled_community_returns_requires_review_without_fabricated_payload ... ok
 test handlers::modules::tests::enabled_flag_without_subscription_is_blocked ... ok
 test handlers::modules::tests::enabled_knowledge_returns_requires_review_without_fabricated_payload ... ok
@@ -17,13 +21,16 @@ test handlers::modules::tests::enabled_prayer_returns_requires_review_without_fa
 test handlers::modules::tests::enabled_quran_returns_requires_review_without_fabricated_payload ... ok
 test handlers::modules::tests::entitlement_bypass_with_free_tier_is_blocked ... ok
 test handlers::modules::tests::module_status_defaults_to_chat_active_and_others_coming_soon ... ok
+test handlers::modules::tests::modules_endpoints_exist_for_root_and_v1_paths ... ok
 test handlers::modules::tests::provenance_validation_rejects_missing_required_fields ... ok
 test handlers::modules::tests::provenance_validation_rejects_unsourced_religious_content ... ok
-test handlers::modules::tests::modules_endpoints_exist_for_root_and_v1_paths ... ok
 test handlers::ops::tests::metrics_exposes_required_prometheus_keys ... ok
 test handlers::phase2::tests::auth_domain_wires_user_and_session_tables ... ok
-test handlers::chat::tests::create_conversation_returns_created_record ... ok
-test handlers::chat::tests::unsafe_message_is_blocked_by_mother_brain ... ok
+test handlers::phase2::tests::chat_rag_safety_and_admin_domains_wire_tables ... ok
+test handlers::phase2::tests::notifications_support_and_audit_domains_wire_tables ... ok
+test handlers::phase2::tests::profile_domain_wires_profile_and_family_tables ... ok
+test handlers::phase2::tests::register_session_profile_chain_is_fully_wired ... ok
+test handlers::phase2::tests::subscription_domain_wires_plan_payment_and_entitlement_tables ... ok
 test handlers::rag::contract_tests::disabled_module_cannot_query_rag ... ok
 test handlers::rag::contract_tests::missing_entitlement_blocks_rag ... ok
 test handlers::rag::contract_tests::rag_decide_accepts_null_safety_context ... ok
@@ -89,15 +96,8 @@ test services::semantic_cache::tests::sensitive_payload_is_not_cacheable ... ok
 test services::semantic_router::tests::classify_detects_fiqh_query ... ok
 test services::semantic_router::tests::classify_detects_out_of_scope_query ... ok
 test tests::it_works ... ok
-test handlers::chat::tests::add_message_persists_user_and_assistant_messages_with_trace ... ok
-test handlers::phase2::tests::notifications_support_and_audit_domains_wire_tables ... ok
-test handlers::chat::tests::get_conversation_returns_messages ... ok
-test handlers::phase2::tests::profile_domain_wires_profile_and_family_tables ... ok
-test handlers::phase2::tests::register_session_profile_chain_is_fully_wired ... ok
-test handlers::phase2::tests::subscription_domain_wires_plan_payment_and_entitlement_tables ... ok
-test handlers::phase2::tests::chat_rag_safety_and_admin_domains_wire_tables ... ok
 
-test result: ok. 94 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.66s
+test result: ok. 94 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.85s
 
      Running unittests src/main.rs (sakina-backend/target/debug/deps/sakina_api-a27d8b49d58acb93)
 
@@ -112,7 +112,13 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running tests/islamic_source_registry.rs (sakina-backend/target/debug/deps/islamic_source_registry-c79a93b6bd523858)
+     Running unittests src/bin/migrate.rs (sakina-backend/target/debug/deps/sakina_migrate-746daa5894cd7913)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/islamic_source_registry.rs (sakina-backend/target/debug/deps/islamic_source_registry-b8975b8f710cfad8)
 
 running 2 tests
 test islamic_source_registry_contains_core_sources ... ok
@@ -120,22 +126,22 @@ test islamic_source_registry_is_present_and_well_formed ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running tests/offline_islamic_assets.rs (sakina-backend/target/debug/deps/offline_islamic_assets-465e769dfc1a50b0)
+     Running tests/offline_islamic_assets.rs (sakina-backend/target/debug/deps/offline_islamic_assets-8c60021b6ca51e2f)
 
 running 4 tests
-test starter_bundle_and_categories_exist_for_fallback_ui ... ok
-test source_registry_contains_approved_quran_source ... ok
 test dua_adhkar_and_names_assets_are_loaded ... ok
 test quran_asset_is_loaded_and_citable ... ok
+test source_registry_contains_approved_quran_source ... ok
+test starter_bundle_and_categories_exist_for_fallback_ui ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
 
-     Running tests/phase21_iman_journey_contract.rs (sakina-backend/target/debug/deps/phase21_iman_journey_contract-e240ee68cac4ccae)
+     Running tests/phase21_iman_journey_contract.rs (sakina-backend/target/debug/deps/phase21_iman_journey_contract-d21366dbd0816743)
 
 running 1 test
 test phase21_core_flow_enforces_fallback_privacy_and_scope ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
 
    Doc-tests sakina_backend
 

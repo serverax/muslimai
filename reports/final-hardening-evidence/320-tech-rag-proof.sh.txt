@@ -7,7 +7,7 @@
     ]
   },
   "status": "ok",
-  "time": 0.000004801
+  "time": 0.000005496
 }
 {
   "object": "list",
@@ -159,8 +159,8 @@
     }
   ]
 }
-{"indexed_chunks": 27, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-Approved Islamic chunks in DB: 27
+{"indexed_chunks": 34, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+Approved Islamic chunks in DB: 34
 {
   "answer": "",
   "sources": [
@@ -202,7 +202,7 @@ Approved Islamic chunks in DB: 27
   ],
   "confidence": 1.0,
   "guardrail_triggered": false,
-  "processing_time_ms": 9
+  "processing_time_ms": 8
 }
 sakina-backend/src/services/hybrid_rag.rs:10:    CompressedEvidenceChunk, ContextCompressionService, EmbeddingsService, KnowledgeGraphService,
 sakina-backend/src/services/hybrid_rag.rs:11:    QdrantVectorDB,

@@ -18,6 +18,14 @@ require_cmd jq
 require_cmd psql
 require_cmd rg
 
+mask_auth_json() {
+  jq 'if type == "object" then
+    (if has("access_token") then .access_token = "[masked]" else . end)
+    | (if has("refresh_token") then .refresh_token = "[masked]" else . end)
+    | (if has("token") then .token = "[masked]" else . end)
+  else . end'
+}
+
 cat tasks/AGENTS.md >/dev/null
 cat tasks/sakina-loop-control-rules.md >/dev/null
 cat tasks/sakina-ultimate-hard-execution-order.md >/dev/null
@@ -86,14 +94,14 @@ register_response="$(curl -fsS -X POST "$api_base/auth/register" \
     provider_user_id:$email,
     metadata:{display_name:"Frontend Contract User"}
   }')")"
-printf '%s\n' "$register_response" | jq .
+printf '%s\n' "$register_response" | mask_auth_json
 printf '%s\n' "$register_response" | jq -e '.user_id and .access_token and .refresh_token' >/dev/null \
   || fail "register response does not match frontend PasswordAuthResponse contract"
 
 login_response="$(curl -fsS -X POST "$api_base/auth/login" \
   -H "Content-Type: application/json" \
   -d "$(jq -n --arg email "$email" --arg password "$password" '{email:$email,password:$password}')")"
-printf '%s\n' "$login_response" | jq .
+printf '%s\n' "$login_response" | mask_auth_json
 access_token="$(printf '%s\n' "$login_response" | jq -r '.access_token')"
 refresh_token="$(printf '%s\n' "$login_response" | jq -r '.refresh_token')"
 [[ "$access_token" == *.*.* && "$refresh_token" == *.*.* ]] \
@@ -107,7 +115,7 @@ printf '%s\n' "$me_response" | jq -e --arg email "$email" '.user_id and .email =
 refresh_response="$(curl -fsS -X POST "$api_base/auth/refresh" \
   -H "Content-Type: application/json" \
   -d "$(jq -n --arg refresh_token "$refresh_token" '{refresh_token:$refresh_token}')")"
-printf '%s\n' "$refresh_response" | jq .
+printf '%s\n' "$refresh_response" | mask_auth_json
 new_access_token="$(printf '%s\n' "$refresh_response" | jq -r '.access_token')"
 new_refresh_token="$(printf '%s\n' "$refresh_response" | jq -r '.refresh_token')"
 [[ "$new_access_token" == *.*.* && "$new_refresh_token" == *.*.* ]] \

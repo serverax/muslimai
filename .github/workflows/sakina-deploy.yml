@@ -27,11 +27,6 @@ jobs:
     env:
       STAGING_NAMESPACE: ${{ secrets.SAKINA_STAGING_NAMESPACE }}
       PROD_NAMESPACE: ${{ secrets.SAKINA_PROD_NAMESPACE }}
-      GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
-      GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
-      SAKINA_STAGING_POSTGRES_DB: ${{ secrets.SAKINA_STAGING_POSTGRES_DB }}
-      SAKINA_STAGING_POSTGRES_USER: ${{ secrets.SAKINA_STAGING_POSTGRES_USER }}
-      SAKINA_STAGING_POSTGRES_PASSWORD: ${{ secrets.SAKINA_STAGING_POSTGRES_PASSWORD }}
       SAKINA_STAGING_JWT_SECRET: ${{ secrets.SAKINA_STAGING_JWT_SECRET }}
       SAKINA_STAGING_ENCRYPTION_KEY: ${{ secrets.SAKINA_STAGING_ENCRYPTION_KEY }}
       BACKEND_IMAGE: ghcr.io/serverax/sakina-backend:qa-security-hardening
@@ -105,12 +100,12 @@ jobs:
       - name: Confirm GHCR images and credentials
         run: |
           set -euo pipefail
-          ghcr_user="${GHCR_USERNAME:-${{ github.actor }}}"
-          ghcr_token="${GHCR_PULL_TOKEN:-${{ github.token }}}"
+          ghcr_user="${{ github.actor }}"
+          ghcr_token="${{ github.token }}"
           printf '%s' "$ghcr_token" | docker login ghcr.io -u "$ghcr_user" --password-stdin
           docker manifest inspect "$BACKEND_IMAGE" >/dev/null
           docker manifest inspect "$FRONTEND_IMAGE" >/dev/null
-          echo "GHCR images are reachable with package read credentials."
+          echo "GHCR public images are reachable with workflow package credentials."
 
       - name: Apply Kubernetes manifests in strict order
         run: |
@@ -152,11 +147,6 @@ jobs:
             kubectl -n "$namespace" logs "job/$job_name" --all-containers --tail=200
           }
 
-          ghcr_user="${GHCR_USERNAME:-${{ github.actor }}}"
-          ghcr_token="${GHCR_PULL_TOKEN:-${{ github.token }}}"
-          postgres_db="${SAKINA_STAGING_POSTGRES_DB:-sakina_mobile}"
-          postgres_user="${SAKINA_STAGING_POSTGRES_USER:-sakina}"
-          postgres_password="${SAKINA_STAGING_POSTGRES_PASSWORD:-}"
           jwt_secret="${SAKINA_STAGING_JWT_SECRET:-}"
           encryption_key="${SAKINA_STAGING_ENCRYPTION_KEY:-}"
 
@@ -165,25 +155,11 @@ jobs:
           kubectl get ns "$namespace"
 
           echo "2. secrets/configmaps"
-          kubectl -n "$namespace" create secret docker-registry ghcr-pull-secret \
-            --docker-server=ghcr.io \
-            --docker-username="$ghcr_user" \
-            --docker-password="$ghcr_token" \
-            --dry-run=client -o yaml | kubectl apply -f -
-          kubectl -n "$namespace" get secret ghcr-pull-secret
-
           if kubectl -n "$namespace" get secret sakina-postgres-secret >/dev/null 2>&1; then
             echo "Using existing sakina-postgres-secret in $namespace"
           else
-            if [ -z "$postgres_password" ]; then
-              echo "ERROR: SAKINA_STAGING_POSTGRES_PASSWORD GitHub secret is required when sakina-postgres-secret is absent"
-              exit 1
-            fi
-            kubectl -n "$namespace" create secret generic sakina-postgres-secret \
-              --from-literal=POSTGRES_DB="$postgres_db" \
-              --from-literal=POSTGRES_USER="$postgres_user" \
-              --from-literal=POSTGRES_PASSWORD="$postgres_password" \
-              --dry-run=client -o yaml | kubectl apply -f -
+            echo "ERROR: sakina-postgres-secret must exist before deployment; create it out of band without printing secret values"
+            exit 1
           fi
 
           if kubectl -n "$namespace" get secret sakina-staging-secrets >/dev/null 2>&1; then

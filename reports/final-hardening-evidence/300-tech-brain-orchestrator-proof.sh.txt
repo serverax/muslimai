@@ -16,7 +16,7 @@ sakina-backend/src/handlers/rag.rs:259:    aia: web::Data<AiaOrchestrator>,
 sakina-backend/src/handlers/rag.rs:384:    fn aia_data() -> web::Data<AiaOrchestrator> {
 sakina-backend/src/handlers/rag.rs:385:        web::Data::new(AiaOrchestrator::new(Arc::new(
 {
-  "request_id": "brain-proof-1780648892-17937",
+  "request_id": "brain-proof-1780674778-8026",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -104,7 +104,7 @@ sakina-backend/src/handlers/rag.rs:385:        web::Data::new(AiaOrchestrator::n
     },
     {
       "step": "decision_logged",
-      "outcome": "1a9e429b-39ce-4ee6-bcb6-9a28951bf7d3"
+      "outcome": "b66dfa96-6ccd-4447-91b7-59ad60c18ef6"
     },
     {
       "step": "final_response_returned",
@@ -112,9 +112,9 @@ sakina-backend/src/handlers/rag.rs:385:        web::Data::new(AiaOrchestrator::n
     }
   ]
 }
-Brain trace count before=2046 after=2047
+Brain trace count before=2488 after=2489
 {
-  "request_id": "c5214925-f317-44ea-a116-62377dfdbe9d",
+  "request_id": "664b7c4e-3f93-4259-85a5-02c8bf31ae61",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -202,7 +202,7 @@ Brain trace count before=2046 after=2047
     },
     {
       "step": "decision_logged",
-      "outcome": "2a2af839-e375-4c17-bb3d-355311db9dfa"
+      "outcome": "faa5a105-b627-47fe-ae32-f5f2c2381553"
     },
     {
       "step": "final_response_returned",

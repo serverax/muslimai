@@ -1,9 +1,9 @@
-Running Gradle task 'assembleRelease'...                            5.4s
+Running Gradle task 'assembleRelease'...                            6.5s
 ✓ Built build\app\outputs\flutter-apk\app-release.apk (62.8MB)
-Running Gradle task 'bundleRelease'...                              5.2s
+Running Gradle task 'bundleRelease'...                              5.6s
 ✓ Built build\app\outputs\bundle\release\app-release.aab (47.1MB)
--rwxrwxrwx 1 kalshafee kalshafee 48M Jun  5 09:48 sakina-frontend/build/app/outputs/bundle/release/app-release.aab
--rwxrwxrwx 1 kalshafee kalshafee 63M Jun  5 09:50 sakina-frontend/build/app/outputs/flutter-apk/app-release.apk
+-rwxrwxrwx 1 kalshafee kalshafee 48M Jun  5 16:54 sakina-frontend/build/app/outputs/bundle/release/app-release.aab
+-rwxrwxrwx 1 kalshafee kalshafee 63M Jun  5 16:56 sakina-frontend/build/app/outputs/flutter-apk/app-release.apk
 sakina-frontend/lib/screens/compliance_screen.dart:38:      final response = await api.requestAccountDeletion();
 sakina-frontend/lib/screens/compliance_screen.dart:59:        Text('Privacy Policy', style: Theme.of(context).textTheme.titleLarge),
 sakina-frontend/lib/screens/compliance_screen.dart:65:        Text('Terms', style: Theme.of(context).textTheme.titleLarge),
@@ -47,28 +47,28 @@ sakina-backend/src/handlers/phase2.rs:521:        VALUES ('account_deletion_requ
 {"error":{"code":"unauthorized","message":"authorization bearer token is required"}}
 Missing-auth delete request status: 401
 {
-  "audit_id": 58,
-  "outbox_event_id": "7c84deb8-e6bd-40fb-9845-567c2d39238b",
-  "request_id": "store-compliance-1780649411-24745-delete",
+  "audit_id": 80,
+  "outbox_event_id": "35ced19e-7071-4c75-885b-5ae1fa104bb4",
+  "request_id": "store-compliance-1780674970-23213-delete",
   "status": "queued"
 }
 Deletion audit rows=1 outbox rows=1
 STORE_COMPLIANCE_OK release APK/AAB builds exist, release config has no local/demo token blockers, mobile privacy/terms/disclaimer/account deletion UI is visible, Android/iOS permissions match enabled multimodal features, account deletion request requires JWT, and backend persists audit/outbox deletion request evidence.
   File: sakina-frontend/build/app/outputs/flutter-apk/app-release.apk
-  Size: 65867883  	Blocks: 78232      IO Block: 512    regular file
-Device: 0,252	Inode: 2814749767559787  Links: 1
+  Size: 65867883  	Blocks: 105760     IO Block: 512    regular file
+Device: 0,252	Inode: 844424930593635  Links: 1
 Access: (0777/-rwxrwxrwx)  Uid: ( 1000/kalshafee)   Gid: ( 1000/kalshafee)
-Access: 2026-06-05 09:50:18.940766400 +0100
-Modify: 2026-06-05 09:50:18.940766400 +0100
-Change: 2026-06-05 09:50:18.940766400 +0100
+Access: 2026-06-05 16:56:19.687883300 +0100
+Modify: 2026-06-05 16:56:19.687883300 +0100
+Change: 2026-06-05 16:56:19.687883300 +0100
  Birth: -
   File: sakina-frontend/build/app/outputs/bundle/release/app-release.aab
   Size: 49420841  	Blocks: 96368      IO Block: 512    regular file
-Device: 0,252	Inode: 10696049115455399  Links: 1
+Device: 0,252	Inode: 16607023626379400  Links: 1
 Access: (0777/-rwxrwxrwx)  Uid: ( 1000/kalshafee)   Gid: ( 1000/kalshafee)
-Access: 2026-06-05 09:48:41.261453800 +0100
-Modify: 2026-06-05 09:48:41.261453800 +0100
-Change: 2026-06-05 09:48:41.261453800 +0100
+Access: 2026-06-05 16:54:33.859287200 +0100
+Modify: 2026-06-05 16:54:33.859287200 +0100
+Change: 2026-06-05 16:54:33.859287200 +0100
  Birth: -
 59:        Text('Privacy Policy', style: Theme.of(context).textTheme.titleLarge),
 65:        Text('Terms', style: Theme.of(context).textTheme.titleLarge),
@@ -77,7 +77,7 @@ Change: 2026-06-05 09:48:41.261453800 +0100
 90:              : 'Request account deletion'),
 sakina-backend/src/handlers/phase2.rs:503:        VALUES ('account_deletion_requested', 'user', $1, $2, $3)
 sakina-backend/src/handlers/phase2.rs:521:        VALUES ('account_deletion_requested', $1, 'Pending')
+sakina-frontend/lib/screens/compliance_screen.dart:38:      final response = await api.requestAccountDeletion();
 sakina-frontend/lib/services/api_service.dart:293:  Future<AccountDeletionRequestResponse> requestAccountDeletion() async {
 sakina-frontend/lib/services/api_service.dart:294:    final res = await _post('/account/delete-request', const {});
-sakina-frontend/lib/screens/compliance_screen.dart:38:      final response = await api.requestAccountDeletion();
 STORE_READINESS_OK release artifacts, compliance UI, deletion flow, permissions, and production config checks are proven by runtime store compliance proof.

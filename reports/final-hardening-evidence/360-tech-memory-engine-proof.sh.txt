@@ -1,12 +1,12 @@
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.44s
 {
-  "user_id": "392fdfbf-556b-443b-82f1-75a8f0c29071",
-  "email": "sakina-memory-a-1780648918-18708@example.com",
+  "user_id": "ca5a6572-da4b-4c95-866b-170f0cac2148",
+  "email": "sakina-memory-a-1780674804-10110@example.com",
   "has_access_token": true
 }
 {
-  "user_id": "f5e6fcd0-66a1-4345-8fe2-ef8c698a86e3",
-  "email": "sakina-memory-b-1780648918-18708@example.com",
+  "user_id": "853c08d2-09ef-4811-9ad1-854f2f1da0f4",
+  "email": "sakina-memory-b-1780674804-10110@example.com",
   "has_access_token": true
 }
 Unauthenticated memory read status=401
@@ -28,12 +28,12 @@ Unauthenticated memory read status=401
   "allowed": true,
   "sensitivity_level": "sensitive",
   "reason": "memory write allowed",
-  "memory_id": "722c19df-ca0e-42a3-945b-e96e2ff2ad37"
+  "memory_id": "7a2c7182-ca80-4df0-8b20-cd81bf17fe85"
 }
 {
-  "id": "722c19df-ca0e-42a3-945b-e96e2ff2ad37",
-  "user_id": "392fdfbf-556b-443b-82f1-75a8f0c29071",
-  "memory_key": "quran-memory-1780648918-18708",
+  "id": "7a2c7182-ca80-4df0-8b20-cd81bf17fe85",
+  "user_id": "ca5a6572-da4b-4c95-866b-170f0cac2148",
+  "memory_key": "quran-memory-1780674804-10110",
   "memory_type": "quran_memorisation",
   "sensitivity_level": "sensitive",
   "payload": {

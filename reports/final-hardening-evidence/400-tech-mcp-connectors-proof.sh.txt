@@ -1,4 +1,4 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.55s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s
      Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_backend-5bd443900cff2969)
 
 running 1 test
@@ -18,19 +18,25 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running tests/islamic_source_registry.rs (/tmp/sakina-cargo-target/debug/deps/islamic_source_registry-c79a93b6bd523858)
+     Running unittests src/bin/migrate.rs (/tmp/sakina-cargo-target/debug/deps/sakina_migrate-746daa5894cd7913)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/islamic_source_registry.rs (/tmp/sakina-cargo-target/debug/deps/islamic_source_registry-b8975b8f710cfad8)
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
 
-     Running tests/offline_islamic_assets.rs (/tmp/sakina-cargo-target/debug/deps/offline_islamic_assets-465e769dfc1a50b0)
+     Running tests/offline_islamic_assets.rs (/tmp/sakina-cargo-target/debug/deps/offline_islamic_assets-8c60021b6ca51e2f)
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
 
-     Running tests/phase21_iman_journey_contract.rs (/tmp/sakina-cargo-target/debug/deps/phase21_iman_journey_contract-e240ee68cac4ccae)
+     Running tests/phase21_iman_journey_contract.rs (/tmp/sakina-cargo-target/debug/deps/phase21_iman_journey_contract-d21366dbd0816743)
 
 running 0 tests
 

@@ -1,5 +1,5 @@
-NOTICE:  database "sakina_empty_migration_1780648879_12930" does not exist, skipping
-Temporary migration database=sakina_empty_migration_1780648879_12930
+NOTICE:  database "sakina_empty_migration_1780674764_2483" does not exist, skipping
+Temporary migration database=sakina_empty_migration_1780674764_2483
 Applying sakina-backend/db/migrations/001_init_extensions.sql
 Applying sakina-backend/db/migrations/002_users_profiles.sql
 Applying sakina-backend/db/migrations/003_modules_content.sql

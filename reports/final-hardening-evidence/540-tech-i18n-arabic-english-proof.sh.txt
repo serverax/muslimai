@@ -1,10 +1,10 @@
 {
-  "profile_id": "6627ad43-c169-4f95-aa6f-d715eb2e9f4a",
-  "user_id": "0f52bcf9-6ba9-4de6-ac11-018db94bc571"
+  "profile_id": "40b63290-255a-4de6-9c7a-16354e68c9cd",
+  "user_id": "92448bdc-7c72-4e9b-acf9-c156bb42022d"
 }
 DB Arabic language preference rows: 1
 {
-  "request_id": "i18n-1780649371-17678-brain-ar",
+  "request_id": "i18n-1780674926-18798-brain-ar",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -92,7 +92,7 @@ DB Arabic language preference rows: 1
     },
     {
       "step": "decision_logged",
-      "outcome": "aac3e784-53a4-477b-abbf-baf4b196c2d6"
+      "outcome": "a0190b88-4f02-49cb-ba41-e849a15c547b"
     },
     {
       "step": "final_response_returned",
@@ -175,14 +175,9 @@ sakina-frontend/lib/app/app_state.dart:39:        _languageKey, language == AppL
 sakina-frontend/lib/services/api_service.dart:1441:        'ui_language': 'en',
 sakina-frontend/lib/services/api_service.dart:1442:        'content_language': 'ar',
 sakina-backend/src/services/semantic_cache.rs:137:                language: row.get("language"),
-sakina-backend/src/handlers/phase2.rs:754:                    "ui_language": "en",
-sakina-backend/src/handlers/phase2.rs:755:                    "content_language": "ar",
-sakina-backend/src/handlers/phase2.rs:815:                "ui_language": "en",
-sakina-backend/src/handlers/phase2.rs:816:                "content_language": "ar",
-sakina-backend/src/handlers/rag.rs:239:            language: row.get("language"),
 sakina-backend/src/services/hybrid_rag.rs:129:                language: row.get("language"),
 sakina-backend/src/services/hybrid_rag.rs:256:                language: row.get("language"),
-sakina-backend/src/services/memory_engine.rs:296:            source_language: row.get("source_language"),
+sakina-backend/src/handlers/rag.rs:239:            language: row.get("language"),
 sakina-backend/src/services/phase2.rs:436:                user_id, ui_language, content_language, transliteration_enabled
 sakina-backend/src/services/phase2.rs:441:                ui_language = EXCLUDED.ui_language,
 sakina-backend/src/services/phase2.rs:442:                content_language = EXCLUDED.content_language,
@@ -191,24 +186,29 @@ sakina-backend/src/services/phase2.rs:449:        .bind(&request.content_languag
 sakina-backend/src/services/phase2.rs:947:                language: row.get("language"),
 sakina-backend/src/services/phase2.rs:2187:    pub ui_language: String,
 sakina-backend/src/services/phase2.rs:2188:    pub content_language: String,
+sakina-backend/src/handlers/phase2.rs:754:                    "ui_language": "en",
+sakina-backend/src/handlers/phase2.rs:755:                    "content_language": "ar",
+sakina-backend/src/handlers/phase2.rs:815:                "ui_language": "en",
+sakina-backend/src/handlers/phase2.rs:816:                "content_language": "ar",
+sakina-backend/src/services/brain_controller.rs:153:                step: "language_detected".to_string(),
 sakina-backend/src/services/ai_router.rs:174:        let language = detect_language(message, request.language.as_deref());
 sakina-backend/src/services/ai_router.rs:260:        ) || is_arabic_text(message)
 sakina-backend/src/services/ai_router.rs:358:                    step: "language_detected".to_string(),
 sakina-backend/src/services/ai_router.rs:359:                    outcome: detect_language(message, request.language.as_deref()),
 sakina-backend/src/services/ai_router.rs:402:fn detect_language(message: &str, preferred: Option<&str>) -> String {
 sakina-backend/src/services/ai_router.rs:494:fn is_arabic_text(text: &str) -> bool {
-sakina-backend/src/services/brain_controller.rs:153:                step: "language_detected".to_string(),
-sakina-backend/src/services/islamic_knowledge.rs:331:        let mut answer_text = crate::services::offline_lookup(question, &language)
 sakina-backend/src/services/knowledge_graph_service.rs:82:            language: row.get("language"),
 sakina-backend/src/services/knowledge_graph_service.rs:130:                        language: row.get("language"),
 sakina-backend/src/services/knowledge_graph_service.rs:196:                    language: row.get("language"),
+sakina-backend/src/services/islamic_knowledge.rs:331:        let mut answer_text = crate::services::offline_lookup(question, &language)
+sakina-backend/src/services/memory_engine.rs:296:            source_language: row.get("source_language"),
 00:00 +0: loading F:/SakinaAL/sakina-frontend/test/widget_test.dart
 00:00 +0: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
 00:00 +1: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
 00:00 +2: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
 00:00 +3: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
 00:01 +4: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
-00:01 +5: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
+00:02 +5: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
 00:03 +6: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: contract errors expose status and code for gating
 00:03 +7: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: malformed add message payload throws FormatException
 00:03 +8: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: phase3 domain wiring calls required endpoints

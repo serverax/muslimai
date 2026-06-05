@@ -17,6 +17,14 @@ require_cmd curl
 require_cmd jq
 require_cmd rg
 
+mask_auth_json() {
+  jq 'if type == "object" then
+    (if has("access_token") then .access_token = "[masked]" else . end)
+    | (if has("refresh_token") then .refresh_token = "[masked]" else . end)
+    | (if has("token") then .token = "[masked]" else . end)
+  else . end'
+}
+
 cat tasks/AGENTS.md >/dev/null
 cat tasks/sakina-loop-control-rules.md >/dev/null
 cat tasks/sakina-ultimate-hard-execution-order.md >/dev/null
@@ -45,6 +53,11 @@ cleanup() {
   set +e
   if [[ "${started_backend}" = "1" ]]; then
     kill "$backend_pid" 2>/dev/null
+    for _ in $(seq 1 20); do
+      kill -0 "$backend_pid" 2>/dev/null || break
+      sleep 0.2
+    done
+    kill -9 "$backend_pid" 2>/dev/null
     wait "$backend_pid" 2>/dev/null
   fi
 }
@@ -83,7 +96,7 @@ password="StrongPassword123!"
 register_response="$(curl -fsS -X POST "$api_base/auth/register" \
   -H "Content-Type: application/json" \
   -d "$(jq -n --arg email "$email" --arg password "$password" '{email:$email,password:$password,display_name:"Schema Contract User"}')")"
-printf '%s\n' "$register_response" | jq .
+printf '%s\n' "$register_response" | mask_auth_json
 printf '%s\n' "$register_response" | jq -e '.user_id and .email and .access_token and .refresh_token' >/dev/null \
   || fail "register schema missing user_id/email/access_token/refresh_token"
 

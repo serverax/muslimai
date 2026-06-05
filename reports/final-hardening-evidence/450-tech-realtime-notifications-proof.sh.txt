@@ -1,24 +1,24 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.46s
-Notification proof users: A=a05781f5-79b7-4dd2-a89f-11a919085bb8 B=518a67bb-0aa3-45ed-a43f-f908610e9995
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.51s
+Notification proof users: A=5509ccaf-8b8a-445d-a8b5-1c29b7568ea8 B=a4157de7-2b3d-4b1f-bd73-a6c9bf2ac4eb
 {
-  "id": "fcae2be2-3796-4f11-b458-fb2704668cd1"
+  "id": "7fca1d7c-040c-4d79-a393-7ac4fc5e9362"
 }
 {"error":{"code":"unauthorized","message":"authorization bearer token is required"}}
 Missing-auth notifications status: 401
 {
-  "id": "f1de36b9-1a56-4f91-8d28-5e4c8815a180"
+  "id": "1cb94ae8-9fb4-4e4e-a3cb-95d2f8355e7d"
 }
-Notification owner in DB: a05781f5-79b7-4dd2-a89f-11a919085bb8
+Notification owner in DB: 5509ccaf-8b8a-445d-a8b5-1c29b7568ea8
 {
   "notifications": [
     {
       "body": "Notification proof body",
       "channel": "in_app",
-      "created_at": "2026-06-05T08:48:51.948300+00:00",
-      "id": "f1de36b9-1a56-4f91-8d28-5e4c8815a180",
+      "created_at": "2026-06-05T15:54:45.313792+00:00",
+      "id": "1cb94ae8-9fb4-4e4e-a3cb-95d2f8355e7d",
       "notification_status": "queued",
       "payload": {
-        "proof_id": "notif-1780649328-27157"
+        "proof_id": "notif-1780674882-26045"
       },
       "read_at": null,
       "scheduled_at": null,
@@ -33,18 +33,18 @@ Notification owner in DB: a05781f5-79b7-4dd2-a89f-11a919085bb8
 {"error":{"code":"not_found","message":"notification not found"}}
 Cross-user mark-read status: 404
 {
-  "id": "f1de36b9-1a56-4f91-8d28-5e4c8815a180",
+  "id": "1cb94ae8-9fb4-4e4e-a3cb-95d2f8355e7d",
   "channel": "in_app",
   "notification_status": "read",
   "title": "Runtime notification proof",
   "body": "Notification proof body",
   "payload": {
-    "proof_id": "notif-1780649328-27157"
+    "proof_id": "notif-1780674882-26045"
   },
   "scheduled_at": null,
   "sent_at": null,
-  "read_at": "2026-06-05T08:48:52.129885+00:00",
-  "created_at": "2026-06-05T08:48:51.948300+00:00"
+  "read_at": "2026-06-05T15:54:45.514538+00:00",
+  "created_at": "2026-06-05T15:54:45.313792+00:00"
 }
 DB notification read probe: read|t|1
 sakina-backend/src/main.rs:973:                        web::scope("/notifications")

@@ -40,17 +40,17 @@ Bad type status=400
 Oversize status=400
 Own asset status=200 Cross-user status=404
 MULTIMODAL_SECURITY_OK auth, type/size validation, private metadata, and owner isolation proved.
-{"indexed_chunks": 27, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-sakina-backend/src/services/brain_audit.rs:57:                        INSERT INTO sakina_ai.brain_decision_traces (
+{"indexed_chunks": 34, "collection": "sakina_islamic_chunks_en", "dimension": 128}
 sakina-backend/src/services/multimodal.rs:15:use crate::services::{AiaOrchestrator, AskIslamicRequest, IslamicAnswerService};
 sakina-backend/src/services/multimodal.rs:325:            .answer_islamic(
 sakina-backend/src/services/multimodal.rs:327:                AskIslamicRequest {
 sakina-backend/src/services/multimodal.rs:363:            "citations_count": islamic_answer.get("citations").and_then(|v| v.as_array()).map(|v| v.len()).unwrap_or(0),
 sakina-backend/src/services/multimodal.rs:365:            "retrieval_strategy": islamic_answer.get("retrieval_strategy").cloned().unwrap_or(json!(null))
 sakina-backend/src/handlers/multimodal.rs:114:    let route = aia.route(&BrainRouteRequest {
+sakina-backend/src/services/brain_audit.rs:57:                        INSERT INTO sakina_ai.brain_decision_traces (
 {
-  "asset_id": "922e49fb-bcd3-4f27-8464-c16401d358ac",
-  "trace_id": "mm-brain-rag-1780648950-12301",
+  "asset_id": "1790297f-e083-4eb2-b608-82ac3a570328",
+  "trace_id": "mm-brain-rag-1780674826-4475",
   "status": "analyzed",
   "extracted_text": "Can I shorten prayers while travelling? Please answer with verified citations.",
   "redacted_text": "Can I shorten prayers while travelling? Please answer with verified citations.",
@@ -133,7 +133,7 @@ sakina-backend/src/handlers/multimodal.rs:114:    let route = aia.route(&BrainRo
         "step": "memory_action"
       },
       {
-        "outcome": "7f3b7b72-5b34-4cce-a6eb-5b20dca0f4eb",
+        "outcome": "ed482af9-1b9e-47f3-be23-823a0f8460f0",
         "step": "decision_logged"
       },
       {
@@ -280,21 +280,21 @@ sakina-backend/src/handlers/multimodal.rs:114:    let route = aia.route(&BrainRo
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30",
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30"
     ],
-    "source_version": "hybrid-v1:27:fed0a6b5da8b6464149ac0f1d9f1df06",
-    "trace_id": "ffb28bf9-6da6-480e-8510-a2b9e693d137",
+    "source_version": "hybrid-v1:34:49993c5fb83b5963793dc5d8109bedeb",
+    "trace_id": "45a26e95-1076-4381-bdfe-c9bf30a5348b",
     "weak_evidence_blocked": false
   }
 }
 MULTIMODAL_BRAIN_RAG_OK multimodal document upload entered Brain, RAG/Graph fields, citations, DB metadata, and trace.
-{"indexed_chunks": 27, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+{"indexed_chunks": 34, "collection": "sakina_islamic_chunks_en", "dimension": 128}
 {
-  "user_id": "3fee865d-9729-4b37-bec1-179ac81e5785",
-  "email": "sakina-mm-live-1780649290-4629@example.com",
+  "user_id": "4a71371c-fe71-4a3a-be7c-b28c95c97e91",
+  "email": "sakina-mm-live-1780674845-9735@example.com",
   "has_access_token": true
 }
 {
-  "asset_id": "ae45f278-0c30-47d8-8938-5c7f963bbb95",
-  "trace_id": "mm-doc-1780649290-4629",
+  "asset_id": "f34db3e6-5c8c-44c1-9068-3f732547128a",
+  "trace_id": "mm-doc-1780674845-9735",
   "status": "analyzed",
   "extracted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
   "redacted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
@@ -377,7 +377,7 @@ MULTIMODAL_BRAIN_RAG_OK multimodal document upload entered Brain, RAG/Graph fiel
         "step": "memory_action"
       },
       {
-        "outcome": "3297cac1-298e-4ca4-91cc-e3f63d04247c",
+        "outcome": "76caaa00-aaa4-4870-96c0-a4c69c54d2c4",
         "step": "decision_logged"
       },
       {
@@ -524,15 +524,15 @@ MULTIMODAL_BRAIN_RAG_OK multimodal document upload entered Brain, RAG/Graph fiel
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30"
     ],
-    "source_version": "hybrid-v1:27:fed0a6b5da8b6464149ac0f1d9f1df06",
-    "trace_id": "462a7cbb-4ec2-43d5-84ee-3eebf68738fd",
+    "source_version": "hybrid-v1:34:49993c5fb83b5963793dc5d8109bedeb",
+    "trace_id": "f0a5b83a-8bb2-4e1e-801c-511feeb560bc",
     "weak_evidence_blocked": false
   }
 }
 Brain trace rows related to multimodal: 1
 {
-  "asset_id": "2c36657c-c27e-4367-949a-7ae5c86181f5",
-  "trace_id": "mm-image-1780649290-4629",
+  "asset_id": "f5d4699a-6d15-410e-8bf7-d1c5f9357a0a",
+  "trace_id": "mm-image-1780674845-9735",
   "status": "analyzed",
   "extracted_text": "TRAWEL PRAYER",
   "redacted_text": "TRAWEL PRAYER",
@@ -615,7 +615,7 @@ Brain trace rows related to multimodal: 1
         "step": "memory_action"
       },
       {
-        "outcome": "3b91ab0f-c5e3-4cd3-8450-162a2e4aece7",
+        "outcome": "54466432-c07c-4c28-8c7d-69056ed1375a",
         "step": "decision_logged"
       },
       {
@@ -762,23 +762,23 @@ Brain trace rows related to multimodal: 1
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31"
     ],
-    "source_version": "hybrid-v1:27:fed0a6b5da8b6464149ac0f1d9f1df06",
-    "trace_id": "a98cae2d-72c3-4b8c-a330-e460369913cf",
+    "source_version": "hybrid-v1:34:49993c5fb83b5963793dc5d8109bedeb",
+    "trace_id": "cf174bc8-5515-40db-b97a-137d01197c27",
     "weak_evidence_blocked": false
   }
 }
 MULTIMODAL_LIVE_E2E_OK document and image multimodal workflow proved with real backend, DB, Brain/RAG, and provider.
 2:    <uses-permission android:name="android.permission.CAMERA" />
 sakina-frontend/ios/Runner/Info.plist:29:	<key>NSCameraUsageDescription</key>
-Running Gradle task 'assembleRelease'...                            6.2s
+Running Gradle task 'assembleRelease'...                            6.9s
 ✓ Built build\app\outputs\flutter-apk\app-release.apk (62.8MB)
-Running Gradle task 'bundleRelease'...                             12.6s
+Running Gradle task 'bundleRelease'...                             10.5s
 ✓ Built build\app\outputs\bundle\release\app-release.aab (47.1MB)
 
 [32;1mFullName                                                                    [0m[32;1m   Length[0m[32;1m LastWriteTime[0m
 [32;1m--------                                                                    [0m [32;1m  ------[0m [32;1m-------------[0m
-F:\SakinaAL\sakina-frontend\build\app\outputs\flutter-apk\app-release.apk    65867883 6/5/2026 9:48:24 AM
-F:\SakinaAL\sakina-frontend\build\app\outputs\bundle\release\app-release.aab 49420841 6/5/2026 9:48:41 AM
+F:\SakinaAL\sakina-frontend\build\app\outputs\flutter-apk\app-release.apk    65867883 6/5/2026 4:54:19 PM
+F:\SakinaAL\sakina-frontend\build\app\outputs\bundle\release\app-release.aab 49420841 6/5/2026 4:54:33 PM
 
 MULTIMODAL_RELEASE_PERMISSIONS_OK release permissions and Android/iOS release artifacts proved.
 MULTIMODAL_AI_OK LIVE AND END-TO-END PROVEN.

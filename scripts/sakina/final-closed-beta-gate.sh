@@ -12,7 +12,7 @@ run_step() {
   "$@" > "$evidence" 2>&1
 }
 
-run_step 190-backend-tests-with-db env DATABASE_URL=postgres://sakina_user:sakina_password@localhost:5434/sakina cargo test --manifest-path sakina-backend/Cargo.toml --all --all-features -- --nocapture
+run_step 190-backend-tests-with-db env DATABASE_URL=postgres://sakina_user:sakina_password@localhost:5434/sakina cargo test --manifest-path sakina-backend/Cargo.toml --all --all-features -- --nocapture --test-threads=1
 run_step 190-auth-live-proof bash scripts/sakina/auth-live-proof.sh
 
 if [[ ! -f scripts/sakina/auth-refresh-proof.sh ]]; then
@@ -35,4 +35,3 @@ fi
 run_step 190-store-readiness bash scripts/sakina/store-readiness-proof.sh
 
 printf 'CLOSED_BETA_GATE_OK all closed-beta subchecks exited successfully.\n'
-
