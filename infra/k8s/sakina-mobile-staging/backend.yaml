@@ -44,6 +44,25 @@ spec:
         fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        - name: install-agent-validator-wasm
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+            - cp /usr/local/share/sakina/wasm/sakina_validator.wasm /agent-wasm/sakina_validator.wasm && test -s /agent-wasm/sakina_validator.wasm
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: agent-validator-wasm
+              mountPath: /agent-wasm
       containers:
         - name: backend
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
@@ -93,6 +112,10 @@ spec:
               value: sakina_islamic_chunks_en
             - name: SAKINA_REDIS_URL
               value: redis://sakina-redis:6379
+            - name: SAKINA_AGENT_ROLLOUT_PROBE_ENABLED
+              value: "true"
+            - name: SAKINA_VALIDATOR_WASM_PATH
+              value: /opt/sakina/wasm/sakina_validator.wasm
           readinessProbe:
             httpGet:
               path: /health/ready
@@ -123,6 +146,11 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            - name: agent-validator-wasm
+              mountPath: /opt/sakina/wasm
+              readOnly: true
       volumes:
         - name: tmp
+          emptyDir: {}
+        - name: agent-validator-wasm
           emptyDir: {}

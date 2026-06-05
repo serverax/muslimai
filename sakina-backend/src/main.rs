@@ -666,6 +666,18 @@ async fn main() -> std::io::Result<()> {
                 web::get().to(handlers::brain::audit_recent),
             )
             .route(
+                "/api/agent/feedback",
+                web::post().to(handlers::agent_feedback::submit_feedback),
+            )
+            .route(
+                "/api/agent/rollout/route",
+                web::post().to(handlers::agent::rollout_route_probe),
+            )
+            .route(
+                "/api/agent/rollout/validate",
+                web::post().to(handlers::agent::rollout_validate_probe),
+            )
+            .route(
                 "/api/test/route",
                 web::post().to(handlers::brain::test_route),
             )
@@ -752,10 +764,17 @@ async fn main() -> std::io::Result<()> {
                                 web::get().to(handlers::phase2::list_entitlements),
                             ),
                     )
-                    .service(web::scope("/account").route(
-                        "/delete-request",
-                        web::post().to(handlers::phase2::request_account_deletion),
-                    ))
+                    .service(
+                        web::scope("/account")
+                            .route(
+                                "/delete-request",
+                                web::post().to(handlers::phase2::request_account_deletion),
+                            )
+                            .route(
+                                "/export-request",
+                                web::post().to(handlers::phase2::request_data_export),
+                            ),
+                    )
                     .configure(handlers::iman_journey::configure)
                     .service(
                         web::scope("/modules")

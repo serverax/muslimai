@@ -1,3 +1,4 @@
+pub mod agent;
 pub mod brand;
 pub mod error;
 pub mod handlers;

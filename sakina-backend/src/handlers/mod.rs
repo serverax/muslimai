@@ -1,3 +1,5 @@
+pub mod agent;
+pub mod agent_feedback;
 pub mod brain;
 pub mod cache;
 pub mod chat;

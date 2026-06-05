@@ -300,6 +300,16 @@ class ApiService {
     throw _apiException('request account deletion failed', res);
   }
 
+  Future<AccountDeletionRequestResponse> requestDataExport() async {
+    final res = await _post('/account/export-request', const {});
+    if (res.statusCode == 202) {
+      return AccountDeletionRequestResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('request data export failed', res);
+  }
+
   Future<List<IslamicSourceDto>> getIslamicSources({
     String? language,
     String? source,

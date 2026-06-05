@@ -69,6 +69,12 @@ jobs:
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
 
+      - name: Install staging proof tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
       - name: Configure kubeconfig
         run: |
           set -euo pipefail
@@ -239,6 +245,12 @@ jobs:
             echo "$bad_pods"
             exit 1
           fi
+
+      - name: Run staging agent rollout gate
+        run: |
+          set -euo pipefail
+          chmod +x scripts/sakina/final-staging-agent-rollout-gate.sh
+          SAKINA_NS="${{ steps.ns.outputs.namespace }}" bash scripts/sakina/final-staging-agent-rollout-gate.sh
 
       - name: Show recent events
         if: always()

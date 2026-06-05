@@ -539,6 +539,71 @@ pub async fn request_account_deletion(
     })))
 }
 
+pub async fn request_data_export(
+    req: HttpRequest,
+    repo: web::Data<Phase2Repository>,
+) -> Result<HttpResponse, ApiError> {
+    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let request_id = req
+        .headers()
+        .get("x-request-id")
+        .and_then(|value| value.to_str().ok())
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .map(ToOwned::to_owned)
+        .unwrap_or_else(|| Uuid::new_v4().to_string());
+
+    let audit_id: i64 = sqlx::query_scalar(
+        r#"
+        INSERT INTO public.audit_logs (event_type, actor_type, actor_id, request_id, payload)
+        VALUES ('data_export_requested', 'user', $1, $2, $3)
+        RETURNING id
+        "#,
+    )
+    .bind(user_id.to_string())
+    .bind(&request_id)
+    .bind(serde_json::json!({
+        "source": "mobile_app",
+        "status": "queued",
+        "pii_minimized": true,
+        "scope": [
+            "profile",
+            "chat",
+            "memory",
+            "uploads",
+            "consent",
+            "audit_summary"
+        ]
+    }))
+    .fetch_one(repo.pool())
+    .await
+    .map_err(|_| ApiError::internal("failed to create data export audit event"))?;
+
+    let outbox_id: Uuid = sqlx::query_scalar(
+        r#"
+        INSERT INTO outbox.events (event_type, payload, status)
+        VALUES ('data_export_requested', $1, 'Pending')
+        RETURNING id
+        "#,
+    )
+    .bind(serde_json::json!({
+        "user_id": user_id,
+        "audit_id": audit_id,
+        "request_id": request_id,
+        "format": "json"
+    }))
+    .fetch_one(repo.pool())
+    .await
+    .map_err(|_| ApiError::internal("failed to enqueue data export event"))?;
+
+    Ok(HttpResponse::Accepted().json(serde_json::json!({
+        "status": "queued",
+        "request_id": request_id,
+        "audit_id": audit_id,
+        "outbox_event_id": outbox_id
+    })))
+}
+
 pub async fn create_app_event(
     repo: web::Data<Phase2Repository>,
     body: web::Json<CreateEventRequest>,

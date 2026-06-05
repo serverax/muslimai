@@ -10,6 +10,11 @@ WORKDIR /app/sakina-backend
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/usr/local/cargo/git \
     cargo build --release --bin sakina-api --bin sakina-migrate
+WORKDIR /app/wasm
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    rustup target add wasm32-unknown-unknown && \
+    cargo build --release --target wasm32-unknown-unknown
 
 FROM debian:bookworm-slim
 
@@ -17,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libpq5 ca-certi
 RUN groupadd --system sakina && useradd --system --gid sakina --home-dir /nonexistent --shell /usr/sbin/nologin sakina
 COPY --from=builder /app/sakina-backend/target/release/sakina-api /usr/local/bin/
 COPY --from=builder /app/sakina-backend/target/release/sakina-migrate /usr/local/bin/
+COPY --from=builder /app/wasm/target/wasm32-unknown-unknown/release/sakina_validator.wasm /usr/local/share/sakina/wasm/sakina_validator.wasm
 
 EXPOSE 8080
 USER sakina

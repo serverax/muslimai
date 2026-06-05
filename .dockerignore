@@ -3,6 +3,8 @@
 !sakina-backend/**
 !sakina-wasm/
 !sakina-wasm/**
+!wasm/
+!wasm/**
 !Dockerfile.frontend
 !index.html
 !sakina-frontend-default.conf
