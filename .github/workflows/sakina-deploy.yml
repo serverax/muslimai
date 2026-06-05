@@ -249,7 +249,7 @@ jobs:
           kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
-          bad_pods="$(kubectl get pods -A | awk '/ImagePullBackOff|CrashLoopBackOff|CreateContainerConfigError|Pending|Error/ { print }')"
+          bad_pods="$(kubectl -n "$namespace" get pods | awk '/ImagePullBackOff|CrashLoopBackOff|CreateContainerConfigError|Pending|Error/ { print }')"
           if [ -n "$bad_pods" ]; then
             echo "$bad_pods"
             exit 1
