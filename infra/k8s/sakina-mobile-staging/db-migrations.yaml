@@ -18,13 +18,13 @@ spec:
         app.kubernetes.io/environment: staging
     spec:
       restartPolicy: Never
-      imagePullSecrets:
-        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: db-migrations
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
@@ -61,6 +61,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL

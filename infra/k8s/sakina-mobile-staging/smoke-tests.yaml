@@ -23,6 +23,8 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: smoke
           image: curlimages/curl:8.8.0
@@ -31,9 +33,12 @@ spec:
             - /bin/sh
             - -ec
             - |
-              curl -fsS http://sakina-backend:8080/health/ready >/dev/null
-              curl -fsS http://sakina-rag-retrieval:8080/health/ready >/dev/null
-              curl -fsS http://sakina-admin:80/ >/dev/null
+              echo "Checking sakina-backend readiness"
+              curl -fsS http://sakina-backend:8080/health/ready
+              echo "Checking sakina-rag-retrieval readiness"
+              curl -fsS http://sakina-rag-retrieval:8080/health/ready
+              echo "Checking sakina-admin root"
+              curl -fsS http://sakina-admin:80/
           resources:
             requests:
               cpu: "25m"
@@ -44,6 +49,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL

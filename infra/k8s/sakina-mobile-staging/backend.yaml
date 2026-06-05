@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/environment: staging
 spec:
   selector:
-    app.kubernetes.io/name: backend
+    app: sakina-backend
   ports:
     - name: http
       port: 8080
@@ -28,21 +28,22 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app.kubernetes.io/name: backend
+      app: sakina-backend
   template:
     metadata:
       labels:
+        app: sakina-backend
         app.kubernetes.io/name: backend
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
-      imagePullSecrets:
-        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: backend
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
@@ -114,6 +115,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL

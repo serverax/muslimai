@@ -207,6 +207,8 @@ jobs:
 
           echo "3. storage/PVC/PV and statefulsets"
           ensure_statefulset sakina-postgres "$manifest_root/postgres.yaml"
+          kubectl -n "$namespace" patch service sakina-postgres --type=json -p='[{"op":"replace","path":"/spec/selector","value":{"app":"sakina-postgres"}}]'
+          kubectl -n "$namespace" get endpoints sakina-postgres -o wide
           ensure_statefulset sakina-qdrant "$manifest_root/qdrant.yaml"
           apply_file "$manifest_root/redis.yaml"
           kubectl -n "$namespace" rollout status deployment/sakina-redis --timeout=180s

@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/environment: staging
 spec:
   selector:
-    app.kubernetes.io/name: rag-retrieval
+    app: sakina-rag-retrieval
   ports:
     - name: http
       port: 8080
@@ -26,7 +26,7 @@ metadata:
     app.kubernetes.io/environment: staging
 spec:
   selector:
-    app.kubernetes.io/name: rag-ingestion
+    app: sakina-rag-ingestion
   ports:
     - name: http
       port: 8080
@@ -43,7 +43,7 @@ metadata:
     app.kubernetes.io/environment: staging
 spec:
   selector:
-    app.kubernetes.io/name: rag-retrieval
+    app: sakina-rag-retrieval
   ports:
     - name: http
       port: 8080
@@ -62,21 +62,22 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: rag-retrieval
+      app: sakina-rag-retrieval
   template:
     metadata:
       labels:
+        app: sakina-rag-retrieval
         app.kubernetes.io/name: rag-retrieval
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
-      imagePullSecrets:
-        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: retrieval
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
@@ -148,6 +149,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL
@@ -171,21 +174,22 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: rag-ingestion
+      app: sakina-rag-ingestion
   template:
     metadata:
       labels:
+        app: sakina-rag-ingestion
         app.kubernetes.io/name: rag-ingestion
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
-      imagePullSecrets:
-        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: ingestion
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
@@ -257,6 +261,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL

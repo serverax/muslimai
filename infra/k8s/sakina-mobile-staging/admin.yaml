@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/environment: staging
 spec:
   selector:
-    app.kubernetes.io/name: admin
+    app: sakina-admin
   ports:
     - name: http
       port: 80
@@ -28,21 +28,22 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: admin
+      app: sakina-admin
   template:
     metadata:
       labels:
+        app: sakina-admin
         app.kubernetes.io/name: admin
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
-      imagePullSecrets:
-        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 101
         runAsGroup: 101
         fsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: admin
           image: ghcr.io/serverax/sakina-frontend:qa-security-hardening
@@ -72,6 +73,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL

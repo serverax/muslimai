@@ -13,7 +13,7 @@ spec:
       port: 5432
       targetPort: 5432
   selector:
-    app.kubernetes.io/name: postgres
+    app: sakina-postgres
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -29,10 +29,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: postgres
+      app: sakina-postgres
   template:
     metadata:
       labels:
+        app: sakina-postgres
         app.kubernetes.io/name: postgres
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
@@ -42,6 +43,8 @@ spec:
         runAsUser: 999
         runAsGroup: 999
         fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: postgres
           image: postgres:16-alpine
@@ -87,6 +90,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL
