@@ -10,4 +10,4 @@ API_CONFIG_FILE="sakina-frontend/lib/config/api_config.dart"
 grep -q "SAKINA_API_BASE_URL" "$CONFIG_FILE"
 grep -q "SAKINA_API_BASE_URL" "$API_CONFIG_FILE"
 
-echo "mobile config smoke passed"
+echo "mobile config smoke completed with file assertions."

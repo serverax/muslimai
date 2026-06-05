@@ -1,15 +1,13 @@
-use actix_web::{web, HttpResponse};
-use std::sync::Arc;
-
 use crate::error::ApiError;
 use crate::models::{ClassifyRequest, ClassifyResponse};
-use crate::services::SemanticRouter;
+use crate::services::AiaOrchestrator;
+use actix_web::{web, HttpResponse};
 
 pub async fn classify_intent(
     req: web::Json<ClassifyRequest>,
-    router: web::Data<Arc<SemanticRouter>>,
+    aia: web::Data<AiaOrchestrator>,
 ) -> Result<HttpResponse, ApiError> {
-    let result = router.classify(&req.text).await?;
+    let result = aia.classify(&req.text).await?;
     Ok(HttpResponse::Ok().json(ClassifyResponse {
         intent: format!("{:?}", result.intent),
         confidence: result.confidence,

@@ -21,6 +21,10 @@ impl ImanJourneyService {
         Self { pool }
     }
 
+    pub fn pool(&self) -> &PgPool {
+        &self.pool
+    }
+
     pub async fn upsert_journey(
         &self,
         user_id: Uuid,
@@ -151,9 +155,9 @@ impl ImanJourneyService {
                 journey_date::text AS journey_date,
                 today_focus,
                 continue_yesterday_topic,
-                prayer_progress,
-                quran_progress,
-                dhikr_progress,
+                prayer_progress::int4 AS prayer_progress,
+                quran_progress::int4 AS quran_progress,
+                dhikr_progress::int4 AS dhikr_progress,
                 ask_sakina_today_context,
                 tomorrow_follow_up
             FROM public.iman_journey_daily
@@ -166,7 +170,9 @@ impl ImanJourneyService {
         .await
         .map_err(|_| ApiError::internal("failed to load iman journey"))?;
 
-        let evidence = self.get_reminder_with_evidence(user_id, date, &privacy).await?;
+        let evidence = self
+            .get_reminder_with_evidence(user_id, date, &privacy)
+            .await?;
         if let Some(row) = row {
             Ok(ImanJourneyResponse {
                 journey_date: row.get("journey_date"),
@@ -308,7 +314,10 @@ impl ImanJourneyService {
             .collect())
     }
 
-    async fn get_family_settings(&self, user_id: Uuid) -> Result<ImanJourneyFamilyReminder, ApiError> {
+    async fn get_family_settings(
+        &self,
+        user_id: Uuid,
+    ) -> Result<ImanJourneyFamilyReminder, ApiError> {
         let row = sqlx::query(
             r#"
             SELECT consent_granted, reminder_text, notify_family
@@ -375,14 +384,13 @@ impl ImanJourneyService {
         };
         let confidence_score: f64 = row.get("confidence_score");
         let evidence_json: Value = row.get("evidence_bundle");
-        let evidence_bundle: Vec<ImanJourneyEvidenceItem> =
-            serde_json::from_value::<Vec<ImanJourneyEvidenceItem>>(evidence_json)
-            .unwrap_or_default()
-            .into_iter()
-            .filter(|item| {
-                !item.source_reference.trim().is_empty() && !item.citation.trim().is_empty()
-            })
-            .collect();
+        let evidence_bundle: Vec<ImanJourneyEvidenceItem> = serde_json::from_value::<
+            Vec<ImanJourneyEvidenceItem>,
+        >(evidence_json)
+        .unwrap_or_default()
+        .into_iter()
+        .filter(|item| !item.source_reference.trim().is_empty() && !item.citation.trim().is_empty())
+        .collect();
         let reminder_text: Option<String> = row.get("reminder_text");
         if confidence_score >= 0.7
             && !evidence_bundle.is_empty()

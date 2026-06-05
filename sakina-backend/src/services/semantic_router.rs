@@ -1,8 +1,8 @@
 //! Semantic router: classifies an incoming query's intent so the RAG pipeline
 //! can route FiqhQuery / TafsirQuery / CompanionChat / OutOfScope appropriately.
 //!
-//! Step 1 (Phase 1): stub classifier that returns FiqhQuery. The real path will
-//! call vLLM's completion endpoint and parse intent + confidence.
+//! The production fallback is deterministic and conservative. Provider-backed
+//! routing can override it, but this path never fabricates a universal intent.
 
 use serde::{Deserialize, Serialize};
 
@@ -22,9 +22,7 @@ pub struct ClassifyResult {
 }
 
 #[derive(Default)]
-pub struct SemanticRouter {
-    // Will use vLLM or a local classifier.
-}
+pub struct SemanticRouter {}
 
 impl SemanticRouter {
     pub fn new() -> Self {
@@ -32,21 +30,71 @@ impl SemanticRouter {
     }
 
     /// Classify an incoming query to determine intent + confidence.
-    ///
-    /// TODO: call vLLM `/v1/completions` with a classification prompt and parse
-    /// the intent + confidence from the response. For now this returns a stub
-    /// that matches the test expectations.
     pub async fn classify(
         &self,
         query: &str,
     ) -> Result<ClassifyResult, Box<dyn std::error::Error>> {
-        let _ = query; // unused until vLLM wiring lands
+        let q = query.to_lowercase();
+        let (intent, confidence) = if contains_any(
+            &q,
+            &[
+                "tafsir",
+                "ayah",
+                "surah",
+                "quran",
+                "verse",
+                "تفسير",
+                "آية",
+                "سورة",
+                "قرآن",
+            ],
+        ) {
+            (QueryIntent::TafsirQuery, 0.88)
+        } else if contains_any(
+            &q,
+            &[
+                "permissible",
+                "halal",
+                "haram",
+                "ruling",
+                "fatwa",
+                "zakat",
+                "fasting",
+                "حلال",
+                "حرام",
+                "حكم",
+                "فتوى",
+                "زكاة",
+                "صيام",
+            ],
+        ) {
+            (QueryIntent::FiqhQuery, 0.87)
+        } else if contains_any(
+            &q,
+            &[
+                "salam", "dua", "dhikr", "prayer", "anxiety", "remember", "دعاء", "ذكر", "صلاة",
+                "قلق",
+            ],
+        ) {
+            (QueryIntent::CompanionChat, 0.82)
+        } else {
+            (QueryIntent::OutOfScope, 0.70)
+        };
+        let routing_decision = match intent {
+            QueryIntent::FiqhQuery | QueryIntent::TafsirQuery => "RAG",
+            QueryIntent::CompanionChat => "BRAIN_COMPANION",
+            QueryIntent::OutOfScope => "SAFETY_CLARIFY",
+        };
         Ok(ClassifyResult {
-            intent: QueryIntent::FiqhQuery,
-            confidence: 0.95,
-            routing_decision: "RAG".to_string(),
+            intent,
+            confidence,
+            routing_decision: routing_decision.to_string(),
         })
     }
+}
+
+fn contains_any(text: &str, terms: &[&str]) -> bool {
+    terms.iter().any(|term| text.contains(term))
 }
 
 #[cfg(test)]
@@ -54,14 +102,25 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn classify_returns_fiqh_stub() {
+    async fn classify_detects_fiqh_query() {
         let router = SemanticRouter::new();
         let result = router
             .classify("Is music permissible in Islam?")
             .await
-            .unwrap();
+            .expect("classify fiqh query");
         assert!(matches!(result.intent, QueryIntent::FiqhQuery));
-        assert_eq!(result.confidence, 0.95);
+        assert!(result.confidence >= 0.85);
         assert_eq!(result.routing_decision, "RAG");
+    }
+
+    #[tokio::test]
+    async fn classify_detects_out_of_scope_query() {
+        let router = SemanticRouter::new();
+        let result = router
+            .classify("How do I tune a guitar?")
+            .await
+            .expect("classify out of scope query");
+        assert!(matches!(result.intent, QueryIntent::OutOfScope));
+        assert_eq!(result.routing_decision, "SAFETY_CLARIFY");
     }
 }

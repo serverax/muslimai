@@ -32,7 +32,7 @@ void main() {
     await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Join Waitlist'), findsOneWidget);
-    expect(find.text('Submit'), findsOneWidget);
+    expect(find.text('Create account'), findsWidgets);
+    expect(find.text('I already have an account'), findsOneWidget);
   });
 }

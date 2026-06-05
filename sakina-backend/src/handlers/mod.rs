@@ -1,10 +1,16 @@
+pub mod brain;
+pub mod cache;
 pub mod chat;
 pub mod classify;
 pub mod dashboard;
+pub mod evaluation;
 pub mod health;
 pub mod iman_journey;
 pub mod islamic;
+pub mod knowledge_graph;
+pub mod memory;
 pub mod modules;
+pub mod multimodal;
 pub mod ops;
 pub mod phase2;
 pub mod rag;

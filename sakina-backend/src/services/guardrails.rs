@@ -1,10 +1,7 @@
 //! Guardrails: enforce the similarity-confidence threshold before answering.
 //!
-//! Step 2 (Phase 1): threshold logic + a stubbed `check()`. The real path will
-//! embed the query and search Qdrant for the top similarity score, then apply
-//! `evaluate_score`. The Qdrant client is deliberately NOT wired yet (it pulls
-//! ~400 transitive crates that exhaust this machine's RAM during compilation);
-//! it lands with the real retrieval step, mirroring how the router defers vLLM.
+//! The live RAG path supplies the best retrieval score from the verified
+//! knowledge index. This service only makes the final threshold decision.
 
 use serde::Serialize;
 
@@ -45,16 +42,17 @@ impl Guardrails {
         }
     }
 
-    /// Check a query embedding against the verified-knowledge index.
-    ///
-    /// TODO: search Qdrant over `query_embedding`, take the top score, then call
-    /// `evaluate_score`. Stubbed (passes at 0.92) until qdrant-client is wired.
+    /// Check the strongest retrieval score from the verified-knowledge index.
     pub async fn check(
         &self,
-        query_embedding: &[f32],
+        retrieval_scores: &[f32],
     ) -> Result<GuardrailResult, Box<dyn std::error::Error>> {
-        let _ = query_embedding;
-        Ok(self.evaluate_score(0.92))
+        let top_score = retrieval_scores
+            .iter()
+            .copied()
+            .filter(|score| score.is_finite())
+            .fold(0.0_f32, f32::max);
+        Ok(self.evaluate_score(top_score))
     }
 }
 
@@ -77,5 +75,13 @@ mod tests {
         assert!(g.evaluate_score(0.85).passed);
         assert!(g.evaluate_score(0.99).passed);
         assert!(g.evaluate_score(0.99).reason.is_none());
+    }
+
+    #[tokio::test]
+    async fn check_uses_top_retrieval_score() {
+        let g = Guardrails::new(0.85);
+        let r = g.check(&[0.61, 0.91, 0.72]).await.expect("guardrail check");
+        assert!(r.passed);
+        assert_eq!(r.confidence, 0.91);
     }
 }

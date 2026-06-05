@@ -25,7 +25,7 @@ pub struct RagResponse {
     pub processing_time_ms: u64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SourceReference {
     pub id: String,
     pub title: String,
@@ -44,6 +44,122 @@ pub struct ClassifyResponse {
     pub intent: String,
     pub confidence: f32,
     pub routing_decision: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct BrainAgentSpec {
+    pub name: String,
+    pub domain: String,
+    pub model: String,
+    pub pipeline: String,
+    pub requires_rag: bool,
+    pub requires_wasm: bool,
+    pub requires_evaluation: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BrainRouteRequest {
+    pub message: String,
+    pub language: Option<String>,
+    pub user_subscription_tier: String,
+    pub safety_context: Option<serde_json::Value>,
+    #[serde(default)]
+    pub request_id: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct BrainTraceStep {
+    pub step: String,
+    pub outcome: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct BrainDecisionTrace {
+    pub request_id: String,
+    pub user_id: Option<String>,
+    pub input_type: String,
+    pub intent: String,
+    pub language: String,
+    pub risk_level: String,
+    pub selected_agent: String,
+    pub selected_model: String,
+    pub selected_pipeline: String,
+    pub source_strategy: String,
+    pub evaluation_result: String,
+    pub final_action: String,
+    pub audit_event_id: String,
+    pub execution_trace: Vec<BrainTraceStep>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BrainEvaluationReport {
+    pub evaluation_score: f32,
+    pub review_result: String,
+    pub reason: String,
+    pub citations_present: bool,
+    pub grounded_in_islamic_sources: bool,
+    pub escalation_needed: bool,
+    pub tone_ok: bool,
+    pub language_ok: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct BrainAuditRecord {
+    pub request_id: String,
+    pub user_id: Option<String>,
+    pub decision_path: Vec<String>,
+    pub selected_agent: String,
+    pub selected_model: String,
+    pub final_action: String,
+    pub audit_event_id: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct EvaluationCheckRequest {
+    pub answer: String,
+    pub citations: Vec<String>,
+    pub language: String,
+    pub grounded_in_islamic_sources: Option<bool>,
+    pub safety_level: Option<String>,
+    pub tone: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct EvaluationCheckResponse {
+    pub evaluation_score: f32,
+    pub review_result: String,
+    pub reason: String,
+    pub citation_present: bool,
+    pub grounding_present: bool,
+    pub language_match: bool,
+    pub escalation_needed: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct KnowledgeGraphHealthResponse {
+    pub status: String,
+    pub entities_table: bool,
+    pub edges_table: bool,
+    pub ready: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BrainRouteResponse {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    pub selected_agent: String,
+    pub selected_model: String,
+    pub selected_pipeline: String,
+    pub source_strategy: String,
+    pub language: String,
+    pub risk_level: String,
+    pub confidence: f32,
+    pub rag_required: bool,
+    pub wasm_required: bool,
+    pub evaluation_required: bool,
+    pub scholar_review_required: bool,
+    pub can_generate: bool,
+    pub execution_trace: Vec<BrainTraceStep>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -225,6 +341,7 @@ pub struct AddMessageResponse {
     pub user_message_id: Uuid,
     pub assistant_message_id: Option<Uuid>,
     pub response: Option<String>,
+    pub trace_id: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]

@@ -1,0 +1,112 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.56s
+SECURITY REGRESSION PASS
+sakina-backend/src/main.rs:1:use actix_cors::Cors;
+sakina-backend/src/main.rs:387:fn build_cors() -> Cors {
+sakina-backend/src/main.rs:388:    let allowed_origins = std::env::var("CORS_ALLOWED_ORIGINS")
+sakina-backend/src/main.rs:398:    let mut cors = Cors::default()
+sakina-backend/src/main.rs:407:    for origin in allowed_origins {
+sakina-backend/src/main.rs:408:        cors = cors.allowed_origin(&origin);
+sakina-backend/src/error.rs:23:    pub fn unauthorized(message: impl Into<String>) -> Self {
+sakina-backend/src/error.rs:25:            code: "unauthorized",
+sakina-backend/src/services/mod.rs:31:pub use auth::authenticated_user_id;
+sakina-backend/src/handlers/waitlist.rs:88:            "rate_limited",
+sakina-backend/src/services/brain_controller.rs:261:            return Err(ApiError::unauthorized(
+sakina-backend/src/services/brain_controller.rs:287:            return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/sync.rs:8:use crate::services::authenticated_user_id;
+sakina-backend/src/handlers/sync.rs:22:    let authenticated_user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src/handlers/sync.rs:23:    if authenticated_user_id != requested_user_id {
+sakina-backend/src/handlers/sync.rs:26:            "unauthorized",
+sakina-backend/src/handlers/sync.rs:27:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/sync.rs:68:    let authenticated_user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src/handlers/sync.rs:69:    if authenticated_user_id != requested_user_id {
+sakina-backend/src/handlers/sync.rs:72:            "unauthorized",
+sakina-backend/src/handlers/sync.rs:73:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/iman_journey.rs:7:use crate::services::authenticated_user_id;
+sakina-backend/src/handlers/iman_journey.rs:108:    authenticated_user_id(req, pool)
+sakina-backend/src/handlers/iman_journey.rs:110:        .and_then(|authenticated_user_id| {
+sakina-backend/src/handlers/iman_journey.rs:111:            if authenticated_user_id != requested_user_id {
+sakina-backend/src/handlers/iman_journey.rs:112:                Err(ApiError::unauthorized(
+sakina-backend/src/handlers/iman_journey.rs:113:                    "requested user_id does not match authenticated user",
+sakina-backend/src/services/phase2.rs:252:            return Err(ApiError::unauthorized("invalid email or password"));
+sakina-backend/src/services/phase2.rs:257:            return Err(ApiError::unauthorized("invalid email or password"));
+sakina-backend/src/services/phase2.rs:732:                    revoked_at = NULL,
+sakina-backend/src/services/phase2.rs:771:              AND ue.revoked_at IS NULL
+sakina-backend/src/handlers/chat.rs:10:use crate::services::{authenticated_user_id, AiaOrchestrator};
+sakina-backend/src/handlers/chat.rs:18:    let authenticated_user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src/handlers/chat.rs:37:        if requested_user_id != authenticated_user_id {
+sakina-backend/src/handlers/chat.rs:40:                "unauthorized",
+sakina-backend/src/handlers/chat.rs:41:                "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/chat.rs:55:            "forbidden",
+sakina-backend/src/handlers/chat.rs:67:    .bind(authenticated_user_id)
+sakina-backend/src/handlers/chat.rs:97:    let authenticated_user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src/handlers/chat.rs:110:    .bind(authenticated_user_id)
+sakina-backend/src/handlers/chat.rs:197:    let authenticated_user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src/handlers/chat.rs:206:    .bind(authenticated_user_id)
+sakina-backend/src/handlers/chat.rs:238:            "forbidden",
+sakina-backend/src/handlers/chat.rs:263:    .bind(authenticated_user_id)
+sakina-backend/src/handlers/chat.rs:366:                revoked_at TIMESTAMPTZ NULL,
+sakina-backend/src/handlers/chat.rs:378:            "ALTER TABLE public.auth_sessions ADD COLUMN IF NOT EXISTS revoked_at TIMESTAMPTZ NULL, ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now()",
+sakina-backend/src/handlers/chat.rs:570:        assert!(text.contains("\"code\":\"unauthorized\""));
+sakina-backend/src/handlers/chat.rs:604:        assert!(text.contains("\"code\":\"forbidden\""));
+sakina-backend/src/services/auth.rs:12:pub fn bearer_token(req: &HttpRequest) -> Result<&str, ApiError> {
+sakina-backend/src/services/auth.rs:17:        .ok_or_else(|| ApiError::unauthorized("authorization bearer token is required"))?;
+sakina-backend/src/services/auth.rs:24:        .ok_or_else(|| ApiError::unauthorized("authorization bearer token is required"))?;
+sakina-backend/src/services/auth.rs:96:        return Err(ApiError::unauthorized("invalid JWT"));
+sakina-backend/src/services/auth.rs:101:        return Err(ApiError::unauthorized("invalid JWT signature"));
+sakina-backend/src/services/auth.rs:105:        .map_err(|_| ApiError::unauthorized("invalid JWT payload"))?;
+sakina-backend/src/services/auth.rs:107:        .map_err(|_| ApiError::unauthorized("invalid JWT payload"))?;
+sakina-backend/src/services/auth.rs:110:        .ok_or_else(|| ApiError::unauthorized("JWT exp is required"))?;
+sakina-backend/src/services/auth.rs:112:        return Err(ApiError::unauthorized("expired JWT"));
+sakina-backend/src/services/auth.rs:116:        .ok_or_else(|| ApiError::unauthorized("JWT sub is required"))?;
+sakina-backend/src/services/auth.rs:117:    Uuid::parse_str(sub).map_err(|_| ApiError::unauthorized("invalid JWT subject"))
+sakina-backend/src/services/auth.rs:120:pub async fn authenticated_user_id(req: &HttpRequest, pool: &PgPool) -> Result<Uuid, ApiError> {
+sakina-backend/src/services/auth.rs:121:    let token = match bearer_token(req) {
+sakina-backend/src/services/auth.rs:139:          AND revoked_at IS NULL
+sakina-backend/src/services/auth.rs:150:        return Err(ApiError::unauthorized("invalid or expired session token"));
+sakina-backend/src/services/auth.rs:155:        return Err(ApiError::unauthorized("JWT/session subject mismatch"));
+sakina-backend/src/services/auth.rs:165:    let authenticated_user_id = authenticated_user_id(req, pool).await?;
+sakina-backend/src/services/auth.rs:166:    if authenticated_user_id != requested_user_id {
+sakina-backend/src/services/auth.rs:167:        return Err(ApiError::unauthorized(
+sakina-backend/src/services/auth.rs:168:            "requested user_id does not match authenticated user",
+sakina-backend/src/services/auth.rs:171:    Ok(authenticated_user_id)
+sakina-backend/src/handlers/phase2.rs:5:use crate::services::authenticated_user_id;
+sakina-backend/src/handlers/phase2.rs:74:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:83:    let token = crate::services::auth::bearer_token(&req)?;
+sakina-backend/src/handlers/phase2.rs:86:        "UPDATE public.auth_sessions SET revoked_at = now(), updated_at = now() WHERE session_token_hash = $1 AND revoked_at IS NULL",
+sakina-backend/src/handlers/phase2.rs:107:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:109:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/phase2.rs:110:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/phase2.rs:126:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:128:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/phase2.rs:129:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/phase2.rs:148:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:150:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/phase2.rs:151:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/phase2.rs:165:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:167:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/phase2.rs:168:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/phase2.rs:182:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src/handlers/phase2.rs:195:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src/handlers/phase2.rs:322:    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:333:    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:344:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src/handlers/phase2.rs:360:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:366:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/phase2.rs:382:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/multimodal.rs:9:    authenticated_user_id, AiaOrchestrator, IslamicAnswerService, MultimodalAnalysisRequest,
+sakina-backend/src/handlers/multimodal.rs:87:    let user_id = authenticated_user_id(&req, service.pool()).await?;
+sakina-backend/src/handlers/multimodal.rs:127:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/multimodal.rs:157:    let user_id = authenticated_user_id(&req, service.pool()).await?;
+sakina-backend/src/handlers/multimodal.rs:171:    let user_id = authenticated_user_id(&req, service.pool()).await?;
+sakina-backend/src/handlers/memory.rs:5:use crate::services::authenticated_user_id;
+sakina-backend/src/handlers/memory.rs:22:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src/handlers/memory.rs:24:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/memory.rs:25:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/memory.rs:36:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/memory.rs:49:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src/handlers/memory.rs:51:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/memory.rs:52:            "requested user_id does not match authenticated user",
+sakina-backend/src/handlers/memory.rs:68:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src/handlers/memory.rs:70:        return Err(ApiError::unauthorized(
+sakina-backend/src/handlers/memory.rs:71:            "requested user_id does not match authenticated user",
+OWASP_API_SECURITY_OK security regression and API security code-path proof completed.

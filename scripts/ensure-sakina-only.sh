@@ -45,4 +45,4 @@ if command -v kubectl >/dev/null 2>&1; then
   fi
 fi
 
-echo "sakina-only guard passed"
+echo "sakina-only guard completed."

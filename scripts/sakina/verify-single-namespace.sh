@@ -34,4 +34,4 @@ for file in "${files[@]}"; do
   fi
 done
 
-echo "namespace verification passed for ${TARGET_NAMESPACE}"
+echo "namespace verification completed for ${TARGET_NAMESPACE}"

@@ -1,0 +1,220 @@
+Checked backend readiness at http://localhost:8080/health/ready
+sakina-backend/src/handlers/islamic.rs:3:    AiaOrchestrator, AskIslamicRequest, IslamicAnswerService, IslamicKnowledgeRepository,
+sakina-backend/src/handlers/islamic.rs:91:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/rag.rs:13:    AiaOrchestrator, EmbeddingsService, Guardrails, HybridRagService, QdrantVectorDB,
+sakina-backend/src/handlers/rag.rs:56:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/rag.rs:65:    let _trace = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/rag.rs:121:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/rag.rs:126:    let route = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/rag.rs:259:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/rag.rs:384:    fn aia_data() -> web::Data<AiaOrchestrator> {
+sakina-backend/src/handlers/rag.rs:385:        web::Data::new(AiaOrchestrator::new(Arc::new(
+sakina-backend/src/handlers/chat.rs:10:use crate::services::{authenticated_user_id, AiaOrchestrator};
+sakina-backend/src/handlers/chat.rs:14:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/chat.rs:45:    let brain = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/chat.rs:176:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/chat.rs:228:    let brain = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/chat.rs:434:    fn aia_data() -> web::Data<AiaOrchestrator> {
+sakina-backend/src/handlers/chat.rs:435:        web::Data::new(AiaOrchestrator::new(std::sync::Arc::new(
+{
+  "request_id": "brain-proof-1780631827-13301",
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Islamic Guidance Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=2057;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "59dfcf8f-a736-49bb-b3c3-3b92907de7aa"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+Brain trace count before=1272 after=1273
+{
+  "request_id": "d54b421d-bbdb-441c-af69-750a7106af01",
+  "selected_agent": "Safety/Escalation Agent",
+  "selected_model": "safety_agent",
+  "selected_pipeline": "mother_brain>safety_gate>human_escalation",
+  "source_strategy": "safety_only",
+  "language": "en",
+  "risk_level": "critical",
+  "confidence": 0.84,
+  "rag_required": false,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": false,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "short_form"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "critical"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Safety/Escalation Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "safety_only"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=804;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "not_required"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_blocked"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "FAIL:0.12"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "safety policy requires escalation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "9915cace-9e39-451d-9a50-d54b1faa8ef5"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "blocked"
+    }
+  ]
+}
+{
+  "error": {
+    "code": "feature_disabled",
+    "message": "module is disabled by feature flag"
+  }
+}
+BRAIN_ORCHESTRATOR_OK mandatory Brain proof checks completed.

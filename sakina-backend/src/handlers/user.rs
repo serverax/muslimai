@@ -14,6 +14,7 @@ pub async fn get_server_pubkey() -> HttpResponse {
 }
 
 #[cfg(test)]
+#[allow(clippy::await_holding_lock)]
 mod tests {
     use super::*;
     use actix_web::http::StatusCode;

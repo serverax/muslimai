@@ -131,14 +131,17 @@ void main() {
         return http.Response(jsonEncode({'user_id': 'user-1'}), 200);
       }
       if (path.endsWith('/profiles/user-1/family')) {
-        return http.Response(jsonEncode({'family_profile_id': 'family-1'}), 201);
+        return http.Response(
+            jsonEncode({'family_profile_id': 'family-1'}), 201);
       }
       if (path.endsWith('/subscriptions/user-1/activate')) {
         return http.Response(jsonEncode({'subscription_id': 'sub-1'}), 201);
       }
       if (path.endsWith('/subscriptions/user-1/entitlements')) {
         return http.Response(
-          jsonEncode({'entitlements': ['chat_premium', 'rag_verified']}),
+          jsonEncode({
+            'entitlements': ['chat_premium', 'rag_verified']
+          }),
           200,
         );
       }
@@ -157,7 +160,8 @@ void main() {
       if (path.endsWith('/support/tickets/ticket-1/messages')) {
         return http.Response(jsonEncode({'id': 'message-1'}), 201);
       }
-      if (path.endsWith('/support/tickets/ticket-1') && request.method == 'GET') {
+      if (path.endsWith('/support/tickets/ticket-1') &&
+          request.method == 'GET') {
         return http.Response(
           jsonEncode({
             'ticket_id': 'ticket-1',
@@ -190,14 +194,30 @@ void main() {
         userAgent: 'test',
       ),
     );
-    await api.upsertProfile(register.userId, UpsertProfileRequest(displayName: 'Test'));
+    await api.upsertProfile(
+        register.userId, UpsertProfileRequest(displayName: 'Test'));
     await api.createFamilyProfile(
       register.userId,
       CreateFamilyProfileRequest(familyName: 'Family'),
     );
     await api.activateSubscription(
       register.userId,
-      ActivateSubscriptionRequest(providerKey: 'stripe', planKey: 'premium'),
+      ActivateSubscriptionRequest(
+        providerKey: 'closed_beta_manual',
+        providerDisplayName: 'Closed Beta Manual Grant',
+        providerCustomerRef: 'customer-ref',
+        planKey: 'premium',
+        planName: 'Premium',
+        billingInterval: 'monthly',
+        providerSubscriptionRef: 'subscription-ref',
+        providerInvoiceRef: 'invoice-ref',
+        providerTransactionRef: 'transaction-ref',
+        currencyCode: 'USD',
+        amountMinor: 1999,
+        entitlementKeys: const ['chat_premium', 'rag_verified'],
+        currentPeriodStart: DateTime.now().toUtc(),
+        currentPeriodEnd: DateTime.now().toUtc().add(const Duration(days: 30)),
+      ),
     );
     await api.listEntitlements(register.userId);
     final templateId = await api.createNotificationTemplate(

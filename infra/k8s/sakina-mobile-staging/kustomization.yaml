@@ -10,8 +10,9 @@ commonLabels:
 resources:
   - namespace.yaml
   - postgres.yaml
+  - qdrant.yaml
+  - redis.yaml
   - db-migrations.yaml
   - rag.yaml
   - backend.yaml
   - admin.yaml
-  - smoke-tests.yaml

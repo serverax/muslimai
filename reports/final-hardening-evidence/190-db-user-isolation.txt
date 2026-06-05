@@ -1,0 +1,64 @@
+DROP OWNED
+DROP ROLE
+CREATE ROLE
+GRANT
+GRANT
+GRANT
+ set_config 
+------------
+ on
+(1 row)
+
+ set_config 
+------------
+ 
+(1 row)
+
+SELECT 1
+GRANT
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+SET
+ set_config 
+------------
+ off
+(1 row)
+
+              set_config              
+--------------------------------------
+ 2a6dc2ee-0306-4bd1-be4a-79706cc30c31
+(1 row)
+
+DO
+              set_config              
+--------------------------------------
+ 9c9ffa45-42f9-47b4-b6a9-69e715c8845d
+(1 row)
+
+DO
+ set_config 
+------------
+ 
+(1 row)
+
+DO
+RESET
+ set_config 
+------------
+ on
+(1 row)
+
+ set_config 
+------------
+ 
+(1 row)
+
+DO
+INSERT 0 1
+                user_a                |                user_b                |         result         
+--------------------------------------+--------------------------------------+------------------------
+ 2a6dc2ee-0306-4bd1-be4a-79706cc30c31 | 9c9ffa45-42f9-47b4-b6a9-69e715c8845d | DB USER ISOLATION PASS
+(1 row)
+

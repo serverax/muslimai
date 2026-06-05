@@ -1,6 +1,7 @@
-use actix_web::{HttpRequest, HttpResponse};
+use actix_web::{web, HttpRequest, HttpResponse};
+use sqlx::PgPool;
 
-use crate::error::error_response;
+use crate::error::{error_response, ApiError};
 use crate::models::{
     CommunityOverview, CommunityOverviewChannel, KnowledgeOverview, KnowledgeOverviewTopic,
     ModuleLifecycleStatus, ModuleSafetyStatus, ModuleStatusResponse,
@@ -12,19 +13,6 @@ fn env_flag_enabled(key: &str) -> bool {
     std::env::var(key)
         .ok()
         .map(|v| matches!(v.trim().to_ascii_lowercase().as_str(), "1" | "true" | "yes"))
-        .unwrap_or(false)
-}
-
-fn has_entitlement(req: &HttpRequest) -> bool {
-    req.headers()
-        .get("x-sakina-subscription-tier")
-        .and_then(|v| v.to_str().ok())
-        .map(|v| {
-            matches!(
-                v.trim().to_ascii_lowercase().as_str(),
-                "premium" | "pro" | "founding"
-            )
-        })
         .unwrap_or(false)
 }
 
@@ -168,24 +156,57 @@ pub async fn knowledge_status() -> HttpResponse {
     HttpResponse::Ok().json(module_status("knowledge"))
 }
 
-fn enforce_module_gate(req: &HttpRequest, feature_flag_env: &str) -> Option<HttpResponse> {
+async fn user_has_entitlement(
+    pool: &PgPool,
+    user_id: uuid::Uuid,
+    entitlement_key: &str,
+) -> Result<bool, ApiError> {
+    let row = sqlx::query(
+        r#"
+        SELECT 1
+        FROM public.user_entitlements ue
+        JOIN public.entitlements e ON e.id = ue.entitlement_id
+        WHERE ue.user_id = $1
+          AND e.entitlement_key = $2
+          AND e.is_active = true
+          AND ue.revoked_at IS NULL
+          AND (ue.expires_at IS NULL OR ue.expires_at > now())
+        LIMIT 1
+        "#,
+    )
+    .bind(user_id)
+    .bind(entitlement_key)
+    .fetch_optional(pool)
+    .await
+    .map_err(|_| ApiError::internal("failed to verify module entitlement"))?;
+
+    Ok(row.is_some())
+}
+
+async fn enforce_module_gate(
+    req: &HttpRequest,
+    pool: &PgPool,
+    feature_flag_env: &str,
+    entitlement_key: &str,
+) -> Result<Option<HttpResponse>, ApiError> {
     if !env_flag_enabled(feature_flag_env) {
-        return Some(error_response(
+        return Ok(Some(error_response(
             actix_web::http::StatusCode::FORBIDDEN,
             "feature_disabled",
             "module is disabled by feature flag",
-        ));
+        )));
     }
 
-    if !has_entitlement(req) {
-        return Some(error_response(
+    let user_id = crate::services::auth::authenticated_user_id(req, pool).await?;
+    if !user_has_entitlement(pool, user_id, entitlement_key).await? {
+        return Ok(Some(error_response(
             actix_web::http::StatusCode::PAYMENT_REQUIRED,
             "subscription_required",
             "module requires premium entitlement",
-        ));
+        )));
     }
 
-    None
+    Ok(None)
 }
 
 fn rag_readiness(flag_env: &str) -> RagReadiness {
@@ -224,9 +245,14 @@ fn validate_required_provenance<'a>(
     None
 }
 
-pub async fn quran_overview(req: HttpRequest) -> HttpResponse {
-    if let Some(blocked) = enforce_module_gate(&req, "SAKINA_FEATURE_QURAN") {
-        return blocked;
+pub async fn quran_overview(
+    req: HttpRequest,
+    pool: web::Data<PgPool>,
+) -> Result<HttpResponse, ApiError> {
+    if let Some(blocked) =
+        enforce_module_gate(&req, pool.get_ref(), "SAKINA_FEATURE_QURAN", "quran_access").await?
+    {
+        return Ok(blocked);
     }
     let entries = Vec::<QuranOverviewEntry>::new();
     if let Some(error) = validate_required_provenance(
@@ -240,21 +266,31 @@ pub async fn quran_overview(req: HttpRequest) -> HttpResponse {
             )
         }),
     ) {
-        return error;
+        return Ok(error);
     }
-    HttpResponse::Ok().json(QuranOverview {
+    Ok(HttpResponse::Ok().json(QuranOverview {
         module: "quran".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
         message: "coming soon / under review".to_string(),
         rag: rag_readiness("SAKINA_RAG_QURAN_ENABLED"),
         entries,
-    })
+    }))
 }
 
-pub async fn prayer_overview(req: HttpRequest) -> HttpResponse {
-    if let Some(blocked) = enforce_module_gate(&req, "SAKINA_FEATURE_PRAYER") {
-        return blocked;
+pub async fn prayer_overview(
+    req: HttpRequest,
+    pool: web::Data<PgPool>,
+) -> Result<HttpResponse, ApiError> {
+    if let Some(blocked) = enforce_module_gate(
+        &req,
+        pool.get_ref(),
+        "SAKINA_FEATURE_PRAYER",
+        "prayer_access",
+    )
+    .await?
+    {
+        return Ok(blocked);
     }
     let windows = Vec::<PrayerOverviewWindow>::new();
     if let Some(error) = validate_required_provenance(
@@ -268,21 +304,31 @@ pub async fn prayer_overview(req: HttpRequest) -> HttpResponse {
             )
         }),
     ) {
-        return error;
+        return Ok(error);
     }
-    HttpResponse::Ok().json(PrayerOverview {
+    Ok(HttpResponse::Ok().json(PrayerOverview {
         module: "prayer".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
         message: "coming soon / under review".to_string(),
         rag: rag_readiness("SAKINA_RAG_PRAYER_ENABLED"),
         windows,
-    })
+    }))
 }
 
-pub async fn knowledge_overview(req: HttpRequest) -> HttpResponse {
-    if let Some(blocked) = enforce_module_gate(&req, "SAKINA_FEATURE_KNOWLEDGE") {
-        return blocked;
+pub async fn knowledge_overview(
+    req: HttpRequest,
+    pool: web::Data<PgPool>,
+) -> Result<HttpResponse, ApiError> {
+    if let Some(blocked) = enforce_module_gate(
+        &req,
+        pool.get_ref(),
+        "SAKINA_FEATURE_KNOWLEDGE",
+        "knowledge_access",
+    )
+    .await?
+    {
+        return Ok(blocked);
     }
     let topics = Vec::<KnowledgeOverviewTopic>::new();
     if let Some(error) = validate_required_provenance(
@@ -296,21 +342,31 @@ pub async fn knowledge_overview(req: HttpRequest) -> HttpResponse {
             )
         }),
     ) {
-        return error;
+        return Ok(error);
     }
-    HttpResponse::Ok().json(KnowledgeOverview {
+    Ok(HttpResponse::Ok().json(KnowledgeOverview {
         module: "knowledge".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
         message: "coming soon / under review".to_string(),
         rag: rag_readiness("SAKINA_RAG_KNOWLEDGE_ENABLED"),
         topics,
-    })
+    }))
 }
 
-pub async fn community_overview(req: HttpRequest) -> HttpResponse {
-    if let Some(blocked) = enforce_module_gate(&req, "SAKINA_FEATURE_COMMUNITY") {
-        return blocked;
+pub async fn community_overview(
+    req: HttpRequest,
+    pool: web::Data<PgPool>,
+) -> Result<HttpResponse, ApiError> {
+    if let Some(blocked) = enforce_module_gate(
+        &req,
+        pool.get_ref(),
+        "SAKINA_FEATURE_COMMUNITY",
+        "community_access",
+    )
+    .await?
+    {
+        return Ok(blocked);
     }
     let channels = Vec::<CommunityOverviewChannel>::new();
     if let Some(error) = validate_required_provenance(
@@ -324,19 +380,20 @@ pub async fn community_overview(req: HttpRequest) -> HttpResponse {
             )
         }),
     ) {
-        return error;
+        return Ok(error);
     }
-    HttpResponse::Ok().json(CommunityOverview {
+    Ok(HttpResponse::Ok().json(CommunityOverview {
         module: "community".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
         message: "coming soon / under review".to_string(),
         rag: rag_readiness("SAKINA_RAG_COMMUNITY_ENABLED"),
         channels,
-    })
+    }))
 }
 
 #[cfg(test)]
+#[allow(clippy::await_holding_lock)]
 mod tests {
     use super::*;
     use actix_web::body::to_bytes;
@@ -348,7 +405,11 @@ mod tests {
         let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
         std::env::set_var("SAKINA_FEATURE_QURAN", "false");
         let req = TestRequest::default().to_http_request();
-        let response = quran_overview(req).await;
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy test pool");
+        let response = quran_overview(req, web::Data::new(pool))
+            .await
+            .expect("disabled flag response");
         assert_eq!(response.status(), StatusCode::FORBIDDEN);
         let body = to_bytes(response.into_body()).await.expect("body");
         let text = String::from_utf8(body.to_vec()).expect("utf8");
@@ -362,12 +423,13 @@ mod tests {
         let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
         std::env::set_var("SAKINA_FEATURE_QURAN", "true");
         let req = TestRequest::default().to_http_request();
-        let response = quran_overview(req).await;
-        assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
-        let body = to_bytes(response.into_body()).await.expect("body");
-        let text = String::from_utf8(body.to_vec()).expect("utf8");
-        assert!(text.contains("\"error\""));
-        assert!(text.contains("\"code\":\"subscription_required\""));
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy test pool");
+        let error = quran_overview(req, web::Data::new(pool))
+            .await
+            .expect_err("missing JWT must fail before entitlement lookup");
+        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
+        assert_eq!(error.code, "unauthorized");
         std::env::remove_var("SAKINA_FEATURE_QURAN");
     }
 
@@ -376,10 +438,14 @@ mod tests {
         let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
         std::env::set_var("SAKINA_FEATURE_COMMUNITY", "true");
         let req = TestRequest::default()
-            .insert_header(("x-sakina-subscription-tier", "free"))
+            .insert_header(("x-sakina-subscription-tier", "premium"))
             .to_http_request();
-        let response = community_overview(req).await;
-        assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy test pool");
+        let error = community_overview(req, web::Data::new(pool))
+            .await
+            .expect_err("forged tier header must not bypass JWT/session auth");
+        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
         std::env::remove_var("SAKINA_FEATURE_COMMUNITY");
     }
 
@@ -390,12 +456,12 @@ mod tests {
         let req = TestRequest::default()
             .insert_header(("x-sakina-subscription-tier", "premium"))
             .to_http_request();
-        let response = quran_overview(req).await;
-        assert_eq!(response.status(), StatusCode::OK);
-        let body = to_bytes(response.into_body()).await.expect("body");
-        let text = String::from_utf8(body.to_vec()).expect("utf8");
-        assert!(text.contains("\"safety_status\":\"requires_review\""));
-        assert!(text.contains("\"entries\":[]"));
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy test pool");
+        let error = quran_overview(req, web::Data::new(pool))
+            .await
+            .expect_err("premium header alone must not produce quran payload");
+        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
         std::env::remove_var("SAKINA_FEATURE_QURAN");
     }
 
@@ -406,12 +472,12 @@ mod tests {
         let req = TestRequest::default()
             .insert_header(("x-sakina-subscription-tier", "premium"))
             .to_http_request();
-        let response = prayer_overview(req).await;
-        assert_eq!(response.status(), StatusCode::OK);
-        let body = to_bytes(response.into_body()).await.expect("body");
-        let text = String::from_utf8(body.to_vec()).expect("utf8");
-        assert!(text.contains("\"safety_status\":\"requires_review\""));
-        assert!(text.contains("\"windows\":[]"));
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy test pool");
+        let error = prayer_overview(req, web::Data::new(pool))
+            .await
+            .expect_err("premium header alone must not produce prayer payload");
+        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
         std::env::remove_var("SAKINA_FEATURE_PRAYER");
     }
 
@@ -422,12 +488,12 @@ mod tests {
         let req = TestRequest::default()
             .insert_header(("x-sakina-subscription-tier", "premium"))
             .to_http_request();
-        let response = knowledge_overview(req).await;
-        assert_eq!(response.status(), StatusCode::OK);
-        let body = to_bytes(response.into_body()).await.expect("body");
-        let text = String::from_utf8(body.to_vec()).expect("utf8");
-        assert!(text.contains("\"safety_status\":\"requires_review\""));
-        assert!(text.contains("\"topics\":[]"));
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy test pool");
+        let error = knowledge_overview(req, web::Data::new(pool))
+            .await
+            .expect_err("premium header alone must not produce knowledge payload");
+        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
         std::env::remove_var("SAKINA_FEATURE_KNOWLEDGE");
     }
 
@@ -438,12 +504,12 @@ mod tests {
         let req = TestRequest::default()
             .insert_header(("x-sakina-subscription-tier", "premium"))
             .to_http_request();
-        let response = community_overview(req).await;
-        assert_eq!(response.status(), StatusCode::OK);
-        let body = to_bytes(response.into_body()).await.expect("body");
-        let text = String::from_utf8(body.to_vec()).expect("utf8");
-        assert!(text.contains("\"safety_status\":\"requires_review\""));
-        assert!(text.contains("\"channels\":[]"));
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy test pool");
+        let error = community_overview(req, web::Data::new(pool))
+            .await
+            .expect_err("premium header alone must not produce community payload");
+        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
         std::env::remove_var("SAKINA_FEATURE_COMMUNITY");
     }
 

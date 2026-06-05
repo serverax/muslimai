@@ -7,6 +7,7 @@ import '../config/api_config.dart';
 import 'api_service.dart';
 
 enum ModuleKey { quran, prayer, knowledge, community }
+
 enum ModuleStatusKey { chat, quran, prayer, knowledge, community }
 
 enum ModuleSafetyStatus {
@@ -298,11 +299,14 @@ class ModuleApiClient {
   ModuleApiClient({
     String? baseUrl,
     http.Client? client,
+    String? authToken,
   })  : _baseUrl = baseUrl ?? ApiConfig.baseUrl,
-        _client = client ?? http.Client();
+        _client = client ?? http.Client(),
+        _authToken = authToken;
 
   final String _baseUrl;
   final http.Client _client;
+  final String? _authToken;
 
   Future<QuranOverviewDto> fetchQuranOverview({required String tier}) async {
     final response = await _get('/modules/quran/overview', tier: tier);
@@ -326,7 +330,8 @@ class ModuleApiClient {
     return CommunityOverviewDto.fromJson(response);
   }
 
-  Future<List<ModuleStatusDto>> fetchModulesStatus({required String tier}) async {
+  Future<List<ModuleStatusDto>> fetchModulesStatus(
+      {required String tier}) async {
     final response = await _get('/modules', tier: tier);
     final raw = response['modules'] as List<dynamic>? ?? const [];
     return raw
@@ -345,9 +350,14 @@ class ModuleApiClient {
 
   Future<Map<String, dynamic>> _get(String path, {required String tier}) async {
     final uri = Uri.parse('${_endpointBase()}$path');
-    final res = await _client.get(uri, headers: {
+    final headers = <String, String>{
       'x-sakina-subscription-tier': tier,
-    });
+    };
+    final token = _authToken?.trim();
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    final res = await _client.get(uri, headers: headers);
     if (res.statusCode == 200) {
       return jsonDecode(res.body) as Map<String, dynamic>;
     }
@@ -447,7 +457,7 @@ class ModuleService {
       return const ModuleResult(
         module: ModuleKey.quran,
         state: ModuleAccessState.featureDisabled,
-        message: 'coming soon / under review',
+        message: 'feature unavailable in this release',
       );
     }
     if (!_entitlementGate.canAccess(ModuleKey.quran)) {
@@ -472,7 +482,7 @@ class ModuleService {
       return const ModuleResult(
         module: ModuleKey.prayer,
         state: ModuleAccessState.featureDisabled,
-        message: 'coming soon / under review',
+        message: 'feature unavailable in this release',
       );
     }
     if (!_entitlementGate.canAccess(ModuleKey.prayer)) {
@@ -497,7 +507,7 @@ class ModuleService {
       return const ModuleResult(
         module: ModuleKey.knowledge,
         state: ModuleAccessState.featureDisabled,
-        message: 'coming soon / under review',
+        message: 'feature unavailable in this release',
       );
     }
     if (!_entitlementGate.canAccess(ModuleKey.knowledge)) {
@@ -523,7 +533,7 @@ class ModuleService {
       return const ModuleResult(
         module: ModuleKey.community,
         state: ModuleAccessState.featureDisabled,
-        message: 'coming soon / under review',
+        message: 'feature unavailable in this release',
       );
     }
     if (!_entitlementGate.canAccess(ModuleKey.community)) {

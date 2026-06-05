@@ -39,7 +39,7 @@ class AppStrings {
           'تابع عاداتك الروحية بتجربة واضحة وهادئة تحترم خصوصيتك.',
     },
     'onboardingTitle2': {
-      AppLanguage.english: 'Verified guidance, no fake confidence',
+      AppLanguage.english: 'Verified guidance with clear confidence',
       AppLanguage.arabic: 'إرشاد موثوق بدون ثقة وهمية',
     },
     'onboardingBody2': {

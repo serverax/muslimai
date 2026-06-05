@@ -1,57 +1,54 @@
-# Dependencies
-target/
-dist/
-node_modules/
-.dart_tool/
-build/
 
-# Python
-__pycache__/
-*.pyc
-
-# Environment
-.env
-.env.local
-*.key
-
-# IDEs
-.vscode
-.idea
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-logs/
-
-# Kubernetes
-/manifests/*.yaml.bak
-kubeconfig
-
-# Node/npm
-package-lock.json
-yarn.lock
-
-# Cache
-.cargo/
-.flutter-cli/
 
 # Build artifacts
-*.apk
-*.ipa
-*.so
-
+# Cache
+# Dependencies
+# Environment
+# IDEs
+# Kubernetes
+# Local security/tool binaries - never commit
+# Logs
+# Node/npm
+# OS
+# Python
 # Security-sensitive local handoff/cluster files
-sakina-secure-handoff/
-sakina-secure-handoff.zip
-sakina-developer-kubeconfig.yaml
-*kubeconfig*.yaml
-*.kubeconfig
+*.apk
 *.env
 *.env.*
+*.ipa
+*.key
+*.kubeconfig
+*.log
+*.pyc
+*.so
+*.swo
+*.swp
+*kubeconfig*.yaml
+.DS_Store
+.cargo/
+.dart_tool/
+.env
+.env.local
+.flutter-cli/
+.idea
+.local-bin/
+.local-tools/
+.vscode
+/manifests/*.yaml.bak
+Thumbs.db
+__pycache__/
+bin/trivy
+build/
+dist/
+kubeconfig
+logs/
+node_modules/
+package-lock.json
+sakina-developer-kubeconfig.yaml
 sakina-frontend/android/key.properties
 sakina-frontend/android/keystore/
+sakina-secure-handoff.zip
+sakina-secure-handoff/
+target/
+trivy
+yarn.lock

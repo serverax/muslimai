@@ -1,0 +1,1176 @@
+{"indexed_chunks": 27, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.52s
+DELETE 3
+{
+  "answer": "The Quran points to fasting in Al-Baqarah 2:183.",
+  "brain_execution_trace": [
+    {
+      "outcome": "ok",
+      "step": "input_received"
+    },
+    {
+      "outcome": "checked",
+      "step": "authenticated_user"
+    },
+    {
+      "outcome": "premium",
+      "step": "safe_user_context_loaded"
+    },
+    {
+      "outcome": "question",
+      "step": "input_type_classified"
+    },
+    {
+      "outcome": "applied",
+      "step": "pii_redaction"
+    },
+    {
+      "outcome": "en",
+      "step": "language_detected"
+    },
+    {
+      "outcome": "quran",
+      "step": "intent_detected"
+    },
+    {
+      "outcome": "safe",
+      "step": "risk_detected"
+    },
+    {
+      "outcome": "clear",
+      "step": "prompt_injection_guard"
+    },
+    {
+      "outcome": "Islamic Guidance Agent",
+      "step": "agent_selected"
+    },
+    {
+      "outcome": "hybrid_rag",
+      "step": "source_strategy_selected"
+    },
+    {
+      "outcome": "estimated_units=2148;budget_units=16000;decision=allow",
+      "step": "cost_governor"
+    },
+    {
+      "outcome": "verified_evidence_requested",
+      "step": "evidence_retrieved"
+    },
+    {
+      "outcome": "compressed",
+      "step": "context_compressed"
+    },
+    {
+      "outcome": "draft_ready",
+      "step": "draft_generated"
+    },
+    {
+      "outcome": "PASS:0.91",
+      "step": "answer_evaluated"
+    },
+    {
+      "outcome": "answer passed evaluation",
+      "step": "safety_policy_applied"
+    },
+    {
+      "outcome": "no_sensitive_memory_write",
+      "step": "memory_action"
+    },
+    {
+      "outcome": "10d8d306-807f-4384-a6eb-791cc5517251",
+      "step": "decision_logged"
+    },
+    {
+      "outcome": "answer_returned",
+      "step": "final_response_returned"
+    }
+  ],
+  "brain_selected_agent": "Islamic Guidance Agent",
+  "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "cache_hit": false,
+  "cache_status": "miss",
+  "cache_ttl_seconds": 86400,
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:201",
+      "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 1:1-7",
+      "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 677,
+  "compressed_tokens_before": 864,
+  "compression_ratio": 0.7835648059844971,
+  "confidence": 0.8799999952316284,
+  "fallback_used": false,
+  "fatwa_sensitive": false,
+  "generated_from_verified_sources": true,
+  "graph_path": [
+    "patience"
+  ],
+  "language": "en",
+  "question": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.8799999952316284,
+      "graph_score": 0.0,
+      "keyword_score": 1.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 1.0
+    },
+    {
+      "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+      "citation": "Quran 1:1-7",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3304117023944855,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4700365662574768
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.32354816794395447,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.29858797788619995
+    },
+    {
+      "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+      "citation": "Quran 2:201",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31900155544281006,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.43437978625297546
+    },
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31897878646850586,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4343086779117584
+    }
+  ],
+  "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.88",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
+  ],
+  "source_version": "hybrid-v1:27:fed0a6b5da8b6464149ac0f1d9f1df06",
+  "trace_id": "70478499-5513-4984-ba6b-4b0cd6c90a7d",
+  "weak_evidence_blocked": false
+}
+{
+  "answer": "The Quran points to fasting in Al-Baqarah 2:183.",
+  "brain_execution_trace": [
+    {
+      "outcome": "ok",
+      "step": "input_received"
+    },
+    {
+      "outcome": "checked",
+      "step": "authenticated_user"
+    },
+    {
+      "outcome": "premium",
+      "step": "safe_user_context_loaded"
+    },
+    {
+      "outcome": "question",
+      "step": "input_type_classified"
+    },
+    {
+      "outcome": "applied",
+      "step": "pii_redaction"
+    },
+    {
+      "outcome": "en",
+      "step": "language_detected"
+    },
+    {
+      "outcome": "quran",
+      "step": "intent_detected"
+    },
+    {
+      "outcome": "safe",
+      "step": "risk_detected"
+    },
+    {
+      "outcome": "clear",
+      "step": "prompt_injection_guard"
+    },
+    {
+      "outcome": "Islamic Guidance Agent",
+      "step": "agent_selected"
+    },
+    {
+      "outcome": "hybrid_rag",
+      "step": "source_strategy_selected"
+    },
+    {
+      "outcome": "estimated_units=2148;budget_units=16000;decision=allow",
+      "step": "cost_governor"
+    },
+    {
+      "outcome": "verified_evidence_requested",
+      "step": "evidence_retrieved"
+    },
+    {
+      "outcome": "compressed",
+      "step": "context_compressed"
+    },
+    {
+      "outcome": "draft_ready",
+      "step": "draft_generated"
+    },
+    {
+      "outcome": "PASS:0.91",
+      "step": "answer_evaluated"
+    },
+    {
+      "outcome": "answer passed evaluation",
+      "step": "safety_policy_applied"
+    },
+    {
+      "outcome": "no_sensitive_memory_write",
+      "step": "memory_action"
+    },
+    {
+      "outcome": "67a5cd1b-1e39-4f88-b890-264b038abc2c",
+      "step": "decision_logged"
+    },
+    {
+      "outcome": "answer_returned",
+      "step": "final_response_returned"
+    }
+  ],
+  "brain_selected_agent": "Islamic Guidance Agent",
+  "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "cache_hit": true,
+  "cache_hit_count": 1,
+  "cache_status": "hit",
+  "cache_ttl_seconds": 86400,
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:201",
+      "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 1:1-7",
+      "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 677,
+  "compressed_tokens_before": 864,
+  "compression_ratio": 0.7835648059844971,
+  "confidence": 0.8799999952316284,
+  "fallback_used": false,
+  "fatwa_sensitive": false,
+  "generated_from_verified_sources": true,
+  "graph_path": [
+    "patience"
+  ],
+  "language": "en",
+  "question": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.8799999952316284,
+      "graph_score": 0.0,
+      "keyword_score": 1.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 1.0
+    },
+    {
+      "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+      "citation": "Quran 1:1-7",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3304117023944855,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4700365662574768
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.32354816794395447,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.29858797788619995
+    },
+    {
+      "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+      "citation": "Quran 2:201",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31900155544281006,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.43437978625297546
+    },
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31897878646850586,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4343086779117584
+    }
+  ],
+  "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.88",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
+  ],
+  "source_version": "hybrid-v1:27:fed0a6b5da8b6464149ac0f1d9f1df06",
+  "trace_id": "ab8fbad5-5eb8-40fa-a1db-c3c405b59685",
+  "weak_evidence_blocked": false
+}
+{
+  "answer": "The Quran points to fasting in Al-Baqarah 2:183.",
+  "brain_execution_trace": [
+    {
+      "outcome": "ok",
+      "step": "input_received"
+    },
+    {
+      "outcome": "checked",
+      "step": "authenticated_user"
+    },
+    {
+      "outcome": "premium",
+      "step": "safe_user_context_loaded"
+    },
+    {
+      "outcome": "question",
+      "step": "input_type_classified"
+    },
+    {
+      "outcome": "applied",
+      "step": "pii_redaction"
+    },
+    {
+      "outcome": "en",
+      "step": "language_detected"
+    },
+    {
+      "outcome": "quran",
+      "step": "intent_detected"
+    },
+    {
+      "outcome": "safe",
+      "step": "risk_detected"
+    },
+    {
+      "outcome": "clear",
+      "step": "prompt_injection_guard"
+    },
+    {
+      "outcome": "Islamic Guidance Agent",
+      "step": "agent_selected"
+    },
+    {
+      "outcome": "hybrid_rag",
+      "step": "source_strategy_selected"
+    },
+    {
+      "outcome": "estimated_units=2148;budget_units=16000;decision=allow",
+      "step": "cost_governor"
+    },
+    {
+      "outcome": "verified_evidence_requested",
+      "step": "evidence_retrieved"
+    },
+    {
+      "outcome": "compressed",
+      "step": "context_compressed"
+    },
+    {
+      "outcome": "draft_ready",
+      "step": "draft_generated"
+    },
+    {
+      "outcome": "PASS:0.91",
+      "step": "answer_evaluated"
+    },
+    {
+      "outcome": "answer passed evaluation",
+      "step": "safety_policy_applied"
+    },
+    {
+      "outcome": "no_sensitive_memory_write",
+      "step": "memory_action"
+    },
+    {
+      "outcome": "bb4f578b-4273-4679-8e99-76227baf25b6",
+      "step": "decision_logged"
+    },
+    {
+      "outcome": "answer_returned",
+      "step": "final_response_returned"
+    }
+  ],
+  "brain_selected_agent": "Islamic Guidance Agent",
+  "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "cache_hit": false,
+  "cache_status": "miss",
+  "cache_ttl_seconds": 86400,
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:201",
+      "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 1:1-7",
+      "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 677,
+  "compressed_tokens_before": 864,
+  "compression_ratio": 0.7835648059844971,
+  "confidence": 0.8799999952316284,
+  "fallback_used": false,
+  "fatwa_sensitive": false,
+  "generated_from_verified_sources": true,
+  "graph_path": [
+    "patience"
+  ],
+  "language": "en",
+  "question": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.8799999952316284,
+      "graph_score": 0.0,
+      "keyword_score": 1.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 1.0
+    },
+    {
+      "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+      "citation": "Quran 1:1-7",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3304117023944855,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4700365662574768
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.32354816794395447,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.29858797788619995
+    },
+    {
+      "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+      "citation": "Quran 2:201",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31900155544281006,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.43437978625297546
+    },
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31897878646850586,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4343086779117584
+    }
+  ],
+  "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.88",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
+  ],
+  "source_version": "hybrid-v1:27:fed0a6b5da8b6464149ac0f1d9f1df06",
+  "trace_id": "a6572ac5-3624-4ebd-8743-a4000b54bd9c",
+  "weak_evidence_blocked": false
+}
+Semantic cache row proof: 2|2|2
+{
+  "answer": "This question requires scholar review with a verified source. I will not invent a ruling or fatwa without evidence.",
+  "brain_execution_trace": [
+    {
+      "outcome": "ok",
+      "step": "input_received"
+    },
+    {
+      "outcome": "checked",
+      "step": "authenticated_user"
+    },
+    {
+      "outcome": "premium",
+      "step": "safe_user_context_loaded"
+    },
+    {
+      "outcome": "short_form",
+      "step": "input_type_classified"
+    },
+    {
+      "outcome": "not_required",
+      "step": "pii_redaction"
+    },
+    {
+      "outcome": "en",
+      "step": "language_detected"
+    },
+    {
+      "outcome": "general_guidance",
+      "step": "intent_detected"
+    },
+    {
+      "outcome": "medium",
+      "step": "risk_detected"
+    },
+    {
+      "outcome": "clear",
+      "step": "prompt_injection_guard"
+    },
+    {
+      "outcome": "Family/Marriage Advice Agent",
+      "step": "agent_selected"
+    },
+    {
+      "outcome": "hybrid_rag",
+      "step": "source_strategy_selected"
+    },
+    {
+      "outcome": "estimated_units=2059;budget_units=16000;decision=allow",
+      "step": "cost_governor"
+    },
+    {
+      "outcome": "verified_evidence_requested",
+      "step": "evidence_retrieved"
+    },
+    {
+      "outcome": "compressed",
+      "step": "context_compressed"
+    },
+    {
+      "outcome": "draft_ready",
+      "step": "draft_generated"
+    },
+    {
+      "outcome": "PASS:0.91",
+      "step": "answer_evaluated"
+    },
+    {
+      "outcome": "answer passed evaluation",
+      "step": "safety_policy_applied"
+    },
+    {
+      "outcome": "no_sensitive_memory_write",
+      "step": "memory_action"
+    },
+    {
+      "outcome": "5796e9af-70ed-471b-9d8a-b657a6b0024d",
+      "step": "decision_logged"
+    },
+    {
+      "outcome": "answer_returned",
+      "step": "final_response_returned"
+    }
+  ],
+  "brain_selected_agent": "Family/Marriage Advice Agent",
+  "brain_selected_pipeline": "mother_brain>hybrid_rag>evaluation",
+  "cache_hit": false,
+  "cache_status": "miss",
+  "cache_ttl_seconds": 86400,
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 16:90",
+      "id": "015995a1-5b41-4286-8468-593ee173f681",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:183",
+      "id": "54502981-a35a-4628-b2c5-244e9effd35c",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 672,
+  "compressed_tokens_before": 807,
+  "compression_ratio": 0.832713782787323,
+  "confidence": 0.8799999952316284,
+  "fallback_used": true,
+  "fatwa_sensitive": true,
+  "generated_from_verified_sources": true,
+  "graph_path": [
+    "patience"
+  ],
+  "language": "en",
+  "question": "medical diagnosis and legal fatwa for illness while fasting",
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3130280077457428,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.41571250557899475
+    },
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.30038732290267944,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.37621039152145386
+    },
+    {
+      "chunk_id": "54502981-a35a-4628-b2c5-244e9effd35c",
+      "chunk_text": "Quran 2:183 establishes fasting as an obligation for believers and connects fasting with taqwa.",
+      "citation": "Quran 2:183",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.28207865357398987,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.31899580359458923
+    },
+    {
+      "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+      "chunk_text": "Quran 16:90 commands justice, excellence, and giving to relatives, and forbids immorality, bad conduct, and oppression.",
+      "citation": "Quran 16:90",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.26694217324256897,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.27169424295425415
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.2637258768081665,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.11164338886737823
+    }
+  ],
+  "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.28",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.27",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.26"
+  ],
+  "source_version": "hybrid-v1:27:fed0a6b5da8b6464149ac0f1d9f1df06",
+  "trace_id": "590de9a7-e1fc-4203-a58b-88cd9ed908f4",
+  "weak_evidence_blocked": false
+}
+Sensitive request HTTP status: 200 rows before=1 after=1
+UPDATE 1
+{
+  "answer": "The Quran points to fasting in Al-Baqarah 2:183.",
+  "brain_execution_trace": [
+    {
+      "outcome": "ok",
+      "step": "input_received"
+    },
+    {
+      "outcome": "checked",
+      "step": "authenticated_user"
+    },
+    {
+      "outcome": "premium",
+      "step": "safe_user_context_loaded"
+    },
+    {
+      "outcome": "question",
+      "step": "input_type_classified"
+    },
+    {
+      "outcome": "applied",
+      "step": "pii_redaction"
+    },
+    {
+      "outcome": "en",
+      "step": "language_detected"
+    },
+    {
+      "outcome": "quran",
+      "step": "intent_detected"
+    },
+    {
+      "outcome": "safe",
+      "step": "risk_detected"
+    },
+    {
+      "outcome": "clear",
+      "step": "prompt_injection_guard"
+    },
+    {
+      "outcome": "Islamic Guidance Agent",
+      "step": "agent_selected"
+    },
+    {
+      "outcome": "hybrid_rag",
+      "step": "source_strategy_selected"
+    },
+    {
+      "outcome": "estimated_units=2148;budget_units=16000;decision=allow",
+      "step": "cost_governor"
+    },
+    {
+      "outcome": "verified_evidence_requested",
+      "step": "evidence_retrieved"
+    },
+    {
+      "outcome": "compressed",
+      "step": "context_compressed"
+    },
+    {
+      "outcome": "draft_ready",
+      "step": "draft_generated"
+    },
+    {
+      "outcome": "PASS:0.91",
+      "step": "answer_evaluated"
+    },
+    {
+      "outcome": "answer passed evaluation",
+      "step": "safety_policy_applied"
+    },
+    {
+      "outcome": "no_sensitive_memory_write",
+      "step": "memory_action"
+    },
+    {
+      "outcome": "92c36e37-1a68-48db-837e-9dcb7489c195",
+      "step": "decision_logged"
+    },
+    {
+      "outcome": "answer_returned",
+      "step": "final_response_returned"
+    }
+  ],
+  "brain_selected_agent": "Islamic Guidance Agent",
+  "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "cache_hit": false,
+  "cache_status": "miss",
+  "cache_ttl_seconds": 86400,
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:201",
+      "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 1:1-7",
+      "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 677,
+  "compressed_tokens_before": 911,
+  "compression_ratio": 0.743139386177063,
+  "confidence": 0.8799999952316284,
+  "fallback_used": false,
+  "fatwa_sensitive": false,
+  "generated_from_verified_sources": true,
+  "graph_path": [
+    "patience"
+  ],
+  "language": "en",
+  "question": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days. semantic-cache-source-version-1780648916-10204",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.8799999952316284,
+      "graph_score": 0.0,
+      "keyword_score": 1.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 1.0
+    },
+    {
+      "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+      "citation": "Quran 1:1-7",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3304117023944855,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4700365662574768
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.32354816794395447,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.29858797788619995
+    },
+    {
+      "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+      "citation": "Quran 2:201",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31900155544281006,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.43437978625297546
+    },
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31897878646850586,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4343086779117584
+    }
+  ],
+  "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.88",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
+  ],
+  "source_version": "hybrid-v1:27:c4b76a78ebe15219b974329d0e143724",
+  "trace_id": "a3623876-7d4d-4819-aa33-fc1b5292a6d3",
+  "weak_evidence_blocked": false
+}
+{
+  "enabled": true,
+  "entries": 113,
+  "hits": 2,
+  "status": "ok"
+}
+sakina-backend/src/services/semantic_cache.rs:14:    pub source_version: String,
+sakina-backend/src/services/semantic_cache.rs:32:    pub const TTL_SECONDS: i64 = 86_400;
+sakina-backend/src/services/semantic_cache.rs:42:        source_version: &str,
+sakina-backend/src/services/semantic_cache.rs:49:        hasher.update(source_version.trim().to_ascii_lowercase().as_bytes());
+sakina-backend/src/services/semantic_cache.rs:54:    pub fn is_cacheable(safety_level: &str, payload: &Value) -> bool {
+sakina-backend/src/services/semantic_cache.rs:72:    pub async fn source_version(&self) -> Result<String, sqlx::Error> {
+sakina-backend/src/services/semantic_cache.rs:106:            SELECT cache_key, user_id, language, intent, safety_level, source_version,
+sakina-backend/src/services/semantic_cache.rs:111:              AND updated_at > now() - ($3::text::interval)
+sakina-backend/src/services/semantic_cache.rs:116:        .bind(format!("{} seconds", Self::TTL_SECONDS))
+sakina-backend/src/services/semantic_cache.rs:140:                source_version: row.get("source_version"),
+sakina-backend/src/services/semantic_cache.rs:153:                cache_key, user_id, language, intent, safety_level, source_version, hit_count, payload, updated_at
+sakina-backend/src/services/semantic_cache.rs:162:                source_version = EXCLUDED.source_version,
+sakina-backend/src/services/semantic_cache.rs:173:        .bind(&entry.source_version)
+sakina-backend/src/services/semantic_cache.rs:214:        assert!(!SemanticCacheService::is_cacheable("safe", &payload));
+sakina-backend/src/services/islamic_knowledge.rs:287:        let source_version =
+sakina-backend/src/services/islamic_knowledge.rs:288:            self.cache.source_version().await.map_err(|_| {
+sakina-backend/src/services/islamic_knowledge.rs:299:            &source_version,
+sakina-backend/src/services/islamic_knowledge.rs:310:                object.insert("cache_status".to_string(), json!("hit"));
+sakina-backend/src/services/islamic_knowledge.rs:311:                object.insert("cache_hit".to_string(), json!(true));
+sakina-backend/src/services/islamic_knowledge.rs:313:                    "cache_hit_count".to_string(),
+sakina-backend/src/services/islamic_knowledge.rs:398:            "cache_status": "miss",
+sakina-backend/src/services/islamic_knowledge.rs:399:            "cache_hit": false,
+sakina-backend/src/services/islamic_knowledge.rs:400:            "cache_ttl_seconds": SemanticCacheService::TTL_SECONDS,
+sakina-backend/src/services/islamic_knowledge.rs:401:            "source_version": source_version,
+sakina-backend/src/services/islamic_knowledge.rs:404:        if SemanticCacheService::is_cacheable(safety_level, &payload) {
+sakina-backend/src/services/islamic_knowledge.rs:407:                user_id: request.user_id,
+sakina-backend/src/services/islamic_knowledge.rs:411:                source_version,
+SEMANTIC_CACHE_OK mandatory semantic cache proof checks completed.

@@ -1,0 +1,68 @@
+=== kube context ===
+admin@ordinox-talos
+
+=== namespace check ===
+NAME                    STATUS   AGE
+sakina-mobile-staging   Active   11h
+
+=== workload inventory ===
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/sakina-admin           1/1     1            1           11h
+deployment.apps/sakina-backend         1/1     1            1           11h
+deployment.apps/sakina-rag-ingestion   1/1     1            1           11h
+deployment.apps/sakina-rag-retrieval   1/1     1            1           11h
+
+NAME                               READY   AGE
+statefulset.apps/sakina-postgres   1/1     11h
+
+NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/sakina-admin           ClusterIP   10.109.99.158    <none>        80/TCP     11h
+service/sakina-backend         ClusterIP   10.111.116.117   <none>        8080/TCP   11h
+service/sakina-postgres        ClusterIP   10.99.78.69      <none>        5432/TCP   11h
+service/sakina-rag-ingestion   ClusterIP   10.110.187.84    <none>        8082/TCP   11h
+service/sakina-rag-retrieval   ClusterIP   10.102.175.134   <none>        8081/TCP   11h
+
+NAME                                        READY   STATUS      RESTARTS   AGE
+pod/sakina-admin-7dc6cd7fb4-vxffz           1/1     Running     0          11h
+pod/sakina-admin-smoke-4qfzh                0/1     Completed   0          11h
+pod/sakina-backend-865cbb6875-lq7wv         1/1     Running     0          11h
+pod/sakina-backend-smoke-kxkn6              0/1     Completed   0          11h
+pod/sakina-db-migrate-xz67b                 0/1     Completed   0          11h
+pod/sakina-db-verify-jrnk9                  0/1     Completed   0          11h
+pod/sakina-live-smoke-nhcff                 0/1     Completed   0          11h
+pod/sakina-postgres-0                       1/1     Running     0          11h
+pod/sakina-rag-ingestion-67fb88b879-qt88c   1/1     Running     0          11h
+pod/sakina-rag-retrieval-75685d87b5-6dnnp   1/1     Running     0          11h
+pod/sakina-rag-smoke-847cv                  0/1     Completed   0          11h
+
+NAME                                                       STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/postgres-storage-sakina-postgres-0   Bound     pvc-5b6bd416-8702-42be-8a5c-f4eed5df2613   10Gi       RWO            local-path     <unset>                 11h
+persistentvolumeclaim/sakina-postgres-pvc                  Pending                                                                        local-path     <unset>                 11h
+
+=== secrets names only ===
+NAME                     TYPE     DATA   AGE
+sakina-postgres-secret   Opaque   3      11h
+
+=== backend env var names ===
+
+=== rag ingestion env var names ===
+
+=== rag retrieval env var names ===
+
+=== pods wide ===
+NAME                                    READY   STATUS      RESTARTS   AGE   IP            NODE                    NOMINATED NODE   READINESS GATES
+sakina-admin-7dc6cd7fb4-vxffz           1/1     Running     0          11h   10.244.4.35   talos-5h3-83r           <none>           <none>
+sakina-admin-smoke-4qfzh                0/1     Completed   0          11h   10.244.4.39   talos-5h3-83r           <none>           <none>
+sakina-backend-865cbb6875-lq7wv         1/1     Running     0          11h   10.244.4.33   talos-5h3-83r           <none>           <none>
+sakina-backend-smoke-kxkn6              0/1     Completed   0          11h   10.244.4.38   talos-5h3-83r           <none>           <none>
+sakina-db-migrate-xz67b                 0/1     Completed   0          11h   10.244.4.36   talos-5h3-83r           <none>           <none>
+sakina-db-verify-jrnk9                  0/1     Completed   0          11h   10.244.5.17   talos-138-201-202-174   <none>           <none>
+sakina-live-smoke-nhcff                 0/1     Completed   0          11h   10.244.4.40   talos-5h3-83r           <none>           <none>
+sakina-postgres-0                       1/1     Running     0          11h   10.244.5.16   talos-138-201-202-174   <none>           <none>
+sakina-rag-ingestion-67fb88b879-qt88c   1/1     Running     0          11h   10.244.4.28   talos-5h3-83r           <none>           <none>
+sakina-rag-retrieval-75685d87b5-6dnnp   1/1     Running     0          11h   10.244.4.27   talos-5h3-83r           <none>           <none>
+sakina-rag-smoke-847cv                  0/1     Completed   0          11h   10.244.4.37   talos-5h3-83r           <none>           <none>
+
+=== recent events ===
+LAST SEEN   TYPE     REASON                 OBJECT                                      MESSAGE
+2m51s       Normal   WaitForFirstConsumer   persistentvolumeclaim/sakina-postgres-pvc   waiting for first consumer to be created before binding

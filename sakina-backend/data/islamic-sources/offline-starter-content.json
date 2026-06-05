@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "content_version": "rahma-offline-starter-2026-05-18",
+  "generated_from": "hand_curated_starter_content",
+  "disclaimer_ar": "هذه حزمة تأسيسية محدودة للمحتوى المحلي. لا تدعي اكتمال المصحف أو الحديث أو الفتوى.",
+  "quran": {
+    "source_id": "tanzil-quran-text",
+    "mode": "starter_sample",
+    "surahs": [
+      {
+        "id": 1,
+        "name_ar": "الفاتحة",
+        "name_en": "Al-Fatihah",
+        "revelation_type": "مكية",
+        "ayah_count": 7,
+        "ayahs": [
+          "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+          "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+          "الرَّحْمَٰنِ الرَّحِيمِ",
+          "مَالِكِ يَوْمِ الدِّينِ",
+          "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+          "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+          "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"
+        ]
+      },
+      {
+        "id": 112,
+        "name_ar": "الإخلاص",
+        "name_en": "Al-Ikhlas",
+        "revelation_type": "مكية",
+        "ayah_count": 4,
+        "ayahs": [
+          "قُلْ هُوَ اللَّهُ أَحَدٌ",
+          "اللَّهُ الصَّمَدُ",
+          "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+          "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ"
+        ]
+      }
+    ]
+  },
+  "adhkar": {
+    "mode": "starter_reviewed_snippets",
+    "categories": [
+      {
+        "id": "morning",
+        "title_ar": "أذكار الصباح",
+        "entries": [
+          { "id": "morning-001", "text_ar": "أصبحنا وأصبح الملك لله، والحمد لله.", "repeat_count": 1, "source_id": "hisnul-muslim-review", "source_approved": false },
+          { "id": "morning-002", "text_ar": "رضيت بالله رباً، وبالإسلام ديناً، وبمحمد صلى الله عليه وسلم نبياً.", "repeat_count": 3, "source_id": "hisnul-muslim-review", "source_approved": false }
+        ]
+      },
+      {
+        "id": "evening",
+        "title_ar": "أذكار المساء",
+        "entries": [
+          { "id": "evening-001", "text_ar": "أمسينا وأمسى الملك لله، والحمد لله.", "repeat_count": 1, "source_id": "hisnul-muslim-review", "source_approved": false }
+        ]
+      }
+    ]
+  },
+  "children": {
+    "mode": "local_foundation",
+    "games": [
+      { "id": "wudu-order-001", "age_group": "4-6", "title_ar": "ترتيب الوضوء", "prompt_ar": "ما أول خطوة في الوضوء؟", "options_ar": ["غسل اليدين", "السجود", "قراءة قصة"], "answer_index": 0, "reward_points": 10 },
+      { "id": "pillars-001", "age_group": "7-9", "title_ar": "أركان الإسلام", "prompt_ar": "كم عدد أركان الإسلام؟", "options_ar": ["ثلاثة", "خمسة", "سبعة"], "answer_index": 1, "reward_points": 10 }
+    ]
+  },
+  "sheikh_answers": {
+    "mode": "cached_examples_not_fatwa",
+    "items": [
+      { "id": "cached-answer-001", "category_id": "adhkar", "question_ar": "هل يمكن قراءة الأذكار من الهاتف؟", "answer_ar": "نعم، قراءة الأذكار من الهاتف جائزة، والمقصود حضور القلب والمحافظة على الذكر." }
+    ]
+  }
+}

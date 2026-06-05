@@ -9,6 +9,11 @@ enum ChatRole {
   assistant,
 }
 
+enum ChatSyncStatus {
+  synced,
+  pending,
+}
+
 enum ChatErrorType {
   historyUnavailable,
   authFailed,
@@ -23,6 +28,7 @@ class ChatMessage {
     required this.content,
     required this.timestamp,
     this.sources = const [],
+    this.syncStatus = ChatSyncStatus.synced,
   });
 
   final String id;
@@ -30,8 +36,10 @@ class ChatMessage {
   final String content;
   final DateTime timestamp;
   final List<Citation> sources;
+  final ChatSyncStatus syncStatus;
 
   bool get isUser => role == ChatRole.user;
+  bool get isPending => syncStatus == ChatSyncStatus.pending;
 
   local_db.Message toLocalMessage() {
     return local_db.Message(
@@ -42,6 +50,7 @@ class ChatMessage {
       sources: sources.isEmpty
           ? null
           : jsonEncode(sources.map(_citationToJson).toList()),
+      syncStatus: syncStatus.name,
       createdAt: DateTime.now().millisecondsSinceEpoch,
     );
   }
@@ -53,6 +62,18 @@ class ChatMessage {
       content: message.content,
       timestamp: DateTime.fromMillisecondsSinceEpoch(message.timestamp),
       sources: _parseSources(message.sources),
+      syncStatus: ChatSyncStatus.values.byName(message.syncStatus),
+    );
+  }
+
+  ChatMessage withSyncStatus(ChatSyncStatus status) {
+    return ChatMessage(
+      id: id,
+      role: role,
+      content: content,
+      timestamp: timestamp,
+      sources: sources,
+      syncStatus: status,
     );
   }
 
@@ -157,6 +178,9 @@ class ChatController {
   ChatErrorType? _errorType;
 
   List<ChatMessage> get messages => List.unmodifiable(_messages);
+  List<ChatMessage> get pendingMessages => _messages
+      .where((message) => message.isUser && message.isPending)
+      .toList();
   bool get isSending => _isSending;
   ChatErrorType? get errorType => _errorType;
   String? get errorMessage {
@@ -212,6 +236,37 @@ class ChatController {
       await _saveBestEffort(assistantMessage);
     } on ApiException catch (error) {
       _errorType = _friendlyErrorType(error.message);
+      await _markPending(userMessage);
+    } catch (_) {
+      _errorType = ChatErrorType.serviceUnavailable;
+      await _markPending(userMessage);
+    } finally {
+      _isSending = false;
+    }
+  }
+
+  Future<void> retryPending() async {
+    await initialize();
+    if (_isSending) return;
+    final pending = pendingMessages;
+    if (pending.isEmpty) return;
+
+    _errorType = null;
+    _isSending = true;
+    try {
+      for (final message in pending) {
+        final response = await _backend.query(message.content);
+        await _replaceMessage(message.withSyncStatus(ChatSyncStatus.synced));
+        final assistantMessage = _newMessage(
+          ChatRole.assistant,
+          response.answer,
+          sources: response.sources,
+        );
+        _messages.add(assistantMessage);
+        await _saveBestEffort(assistantMessage);
+      }
+    } on ApiException catch (error) {
+      _errorType = _friendlyErrorType(error.message);
     } catch (_) {
       _errorType = ChatErrorType.serviceUnavailable;
     } finally {
@@ -247,6 +302,19 @@ class ChatController {
     } catch (_) {
       _errorType = ChatErrorType.historyUnavailable;
     }
+  }
+
+  Future<void> _markPending(ChatMessage message) async {
+    await _replaceMessage(message.withSyncStatus(ChatSyncStatus.pending));
+  }
+
+  Future<void> _replaceMessage(ChatMessage replacement) async {
+    final index =
+        _messages.indexWhere((message) => message.id == replacement.id);
+    if (index >= 0) {
+      _messages[index] = replacement;
+    }
+    await _saveBestEffort(replacement);
   }
 
   ChatErrorType _friendlyErrorType(String? detail) {

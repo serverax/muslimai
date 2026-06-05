@@ -73,4 +73,4 @@ jobs:
             echo "Smoke validation failed; deployment is not accepted."
             exit 1
           fi
-          echo "Smoke validation passed; deployment accepted."
+          echo "Smoke validation completed with real command assertions."

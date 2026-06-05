@@ -1,0 +1,42 @@
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:251:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:288:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:308:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:332:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:469:    scholar_review_required BOOLEAN NOT NULL DEFAULT true,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:491:CREATE TABLE IF NOT EXISTS sakina_ai.scholar_review_queue (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:676:CREATE INDEX IF NOT EXISTS idx_scholar_review_queue_status
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:677:    ON sakina_ai.scholar_review_queue (review_status, priority, created_at DESC);
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:960:    scholar_review_queue_id UUID NOT NULL REFERENCES sakina_ai.scholar_review_queue(id) ON DELETE CASCADE,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:965:    UNIQUE (scholar_account_id, scholar_review_queue_id)
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:975:    ON public.scholar_review_assignments (scholar_review_queue_id, assignment_status);
+sakina-backend/src/handlers/phase2.rs:245:pub async fn enqueue_scholar_review(
+sakina-backend/src/handlers/phase2.rs:249:    let id = repo.enqueue_scholar_review(body.into_inner()).await?;
+sakina-backend/src/handlers/phase2.rs:795:                    web::post().to(enqueue_scholar_review),
+sakina-backend/src/handlers/phase2.rs:1042:                    "scholar_review_required": true,
+sakina-backend/src/handlers/phase2.rs:1073:        let scholar_review_queue_id = queue_body["id"].as_str().expect("queue id");
+sakina-backend/src/handlers/phase2.rs:1132:                    "scholar_review_queue_id": scholar_review_queue_id,
+sakina-backend/src/handlers/phase2.rs:1148:                    "target_type": "scholar_review_queue",
+sakina-backend/src/handlers/phase2.rs:1149:                    "target_id": scholar_review_queue_id,
+sakina-backend/src/services/phase2.rs:1009:                scholar_review_required,
+sakina-backend/src/services/phase2.rs:1037:        .bind(request.scholar_review_required)
+sakina-backend/src/services/phase2.rs:1073:    pub async fn enqueue_scholar_review(
+sakina-backend/src/services/phase2.rs:1079:            INSERT INTO sakina_ai.scholar_review_queue (
+sakina-backend/src/services/phase2.rs:1301:                scholar_account_id, scholar_review_queue_id, assignment_status, notes
+sakina-backend/src/services/phase2.rs:1304:            ON CONFLICT (scholar_account_id, scholar_review_queue_id)
+sakina-backend/src/services/phase2.rs:1312:        .bind(request.scholar_review_queue_id)
+sakina-backend/src/services/phase2.rs:2158:    pub scholar_review_required: bool,
+sakina-backend/src/services/phase2.rs:2224:    pub scholar_review_queue_id: Uuid,
+sakina-backend/src/services/ai_router.rs:317:        let scholar_review_required = matches!(
+sakina-backend/src/services/ai_router.rs:350:            scholar_review_required,
+sakina-backend/src/services/ai_router.rs:566:        assert!(route.scholar_review_required);
+sakina-backend/src/services/ai_router.rs:583:        assert!(route.scholar_review_required);
+sakina-backend/src/services/brain_controller.rs:74:            scholar_review_required: base_route.scholar_review_required || policy.review_required,
+sakina-frontend/lib/services/module_service.dart:585:    'scholar_review_required' => ReviewStatus.scholarReviewRequired,
+sakina-backend/src/services/aia_orchestrator.rs:178:        assert!(route.scholar_review_required);
+sakina-backend/src/models/mod.rs:160:    pub scholar_review_required: bool,
+sakina-backend/src/services/brain_policy.rs:8:    pub review_required: bool,
+sakina-backend/src/services/brain_policy.rs:28:        let review_required = route.scholar_review_required
+sakina-backend/src/services/brain_policy.rs:41:                review_required,
+sakina-backend/src/services/brain_policy.rs:51:                review_required: true,
+sakina-backend/src/services/brain_policy.rs:60:            review_required,
+sakina-backend/src/main.rs:931:                                web::post().to(handlers::phase2::enqueue_scholar_review),

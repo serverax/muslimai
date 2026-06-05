@@ -1,0 +1,1227 @@
+./.github/workflows/backend-ci.yml:7:      - '.github/workflows/backend-ci.yml'
+./.github/workflows/backend-ci.yml:62:          cargo install cargo-audit --locked
+./.github/workflows/backend-ci.yml:64:          cargo audit
+./.github/workflows/dependency-scan.yml:12:  backend-audit:
+./.github/workflows/dependency-scan.yml:17:      - name: Install cargo-audit
+./.github/workflows/dependency-scan.yml:18:        run: cargo install cargo-audit --locked
+./.github/workflows/dependency-scan.yml:19:      - name: Run cargo audit
+./.github/workflows/dependency-scan.yml:22:          cargo audit
+./.github/workflows/frontend-ci.yml:4:  workflow_dispatch:
+./.github/workflows/frontend-ci.yml:8:      - '.github/workflows/frontend-ci.yml'
+./.github/workflows/infra-ci.yml:8:      - '.github/workflows/infra-ci.yml'
+./.github/workflows/infra-ci.yml:13:      - '.github/workflows/infra-ci.yml'
+./.github/workflows/infra-ci.yml:14:  workflow_dispatch:
+./.github/workflows/post-deploy-smoke.yml:4:  workflow_dispatch:
+./.github/workflows/release-images.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-admin-ci.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-admin-ci.yml:9:      - ".github/workflows/sakina-admin-ci.yml"
+./.github/workflows/sakina-admin-ci.yml:14:      - ".github/workflows/sakina-admin-ci.yml"
+./.github/workflows/sakina-backend-ci.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-backend-ci.yml:8:      - ".github/workflows/sakina-backend-ci.yml"
+./.github/workflows/sakina-backend-ci.yml:12:      - ".github/workflows/sakina-backend-ci.yml"
+./.github/workflows/sakina-build-images.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-build-images.yml:15:      - ".github/workflows/sakina-build-images.yml"
+./.github/workflows/sakina-deploy-staging.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-deploy-staging.yml:23:      - name: Verify namespace guardrails
+./.github/workflows/sakina-mobile-ci.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-mobile-ci.yml:8:      - ".github/workflows/sakina-mobile-ci.yml"
+./.github/workflows/sakina-mobile-ci.yml:12:      - ".github/workflows/sakina-mobile-ci.yml"
+./.github/workflows/sakina-mobile-db-verify.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-mobile-infra-plan.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-mobile-rag-ci.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-mobile-smoke.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-mobile-staging-deploy.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-rag-ci.yml:4:  workflow_dispatch:
+./.github/workflows/sakina-rag-ci.yml:8:      - ".github/workflows/sakina-rag-ci.yml"
+./.github/workflows/sakina-rag-ci.yml:12:      - ".github/workflows/sakina-rag-ci.yml"
+./.github/workflows/sakinaai-images.yml:15:      - '.github/workflows/sakinaai-images.yml'
+./.github/workflows/sakinaai-images.yml:23:      - '.github/workflows/sakinaai-images.yml'
+./.github/workflows/sakinaai-images.yml:24:  workflow_dispatch:
+./00-START-HERE.md:9:- ✅ Zero hallucinations (strict RAG guardrails)
+./00-START-HERE.md:99:├── .github/workflows/   # CI/CD pipelines
+./00-START-HERE.md:262:- Everything audited
+./00-START-HERE.md:272:- Append-only audit logs
+./00-START-HERE.md:277:- RAG with guardrails
+./ARCHITECTURE.md:60:- **Payload**: Madhhab, scholar, authenticity grade
+./ARCHITECTURE.md:63:- **Schema**: `verified_knowledge`, `audit`, `outbox`, `public`
+./ARCHITECTURE.md:77:   - If below threshold → guardrail rejection
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:205:- Regular audits
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:351:consultation with qualified Islamic scholars for important matters.
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:589:            <intent-filter>
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:590:                <action android:name="android.intent.action.MAIN" />
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:591:                <category android:name="android.intent.category.LAUNCHER" />
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:592:            </intent-filter>
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:726:- [ ] Privacy policy provided
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:744:- [ ] Privacy policy accessible in app
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:796:- [ ] Privacy policy URL provided
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:830:- [ ] Privacy policy linked
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:887:- [ ] No memory leaks
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:949:- [ ] Update privacy policy/terms if needed
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:1038:9. Confirm: Content policy compliance
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:1078:✅ Privacy policy accessible in app
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:1099:✅ Privacy policy URL provided
+./CLAUDE-CODE-APP-STORE-SHORT-COMMAND.md:37:- ✅ Create privacy policy
+./CLAUDE-CODE-COMPLETE-ORDER.md:24:mkdir F:\SakinaAL\sakina-backend\{src,db,tests,migrations,.github\workflows}
+./CLAUDE-CODE-COMPLETE-ORDER.md:28:mkdir F:\SakinaAL\sakina-frontend\{lib,test,.github\workflows,android,ios}
+./CLAUDE-CODE-COMPLETE-ORDER.md:42:# GitHub workflows
+./CLAUDE-CODE-COMPLETE-ORDER.md:43:mkdir F:\SakinaAL\.github\workflows
+./CLAUDE-CODE-COMPLETE-ORDER.md:222:- audit
+./CLAUDE-CODE-COMPLETE-ORDER.md:233:- scholar (VARCHAR)
+./CLAUDE-CODE-COMPLETE-ORDER.md:248:### audit.logs
+./CLAUDE-CODE-COMPLETE-ORDER.md:380:                    .route("/classify", web::post().to(handlers::classify::classify_intent))
+./CLAUDE-CODE-COMPLETE-ORDER.md:388:                            .route("/guardrails", web::get().to(handlers::dashboard::get_guardrails))
+./CLAUDE-CODE-COMPLETE-ORDER.md:422:    pub confidence: f32,
+./CLAUDE-CODE-COMPLETE-ORDER.md:423:    pub guardrail_triggered: bool,
+./CLAUDE-CODE-COMPLETE-ORDER.md:443:    pub intent: String,
+./CLAUDE-CODE-COMPLETE-ORDER.md:444:    pub confidence: f32,
+./CLAUDE-CODE-COMPLETE-ORDER.md:445:    pub routing_decision: String,
+./CLAUDE-CODE-COMPLETE-ORDER.md:535:        confidence: 0.92,
+./CLAUDE-CODE-COMPLETE-ORDER.md:536:        guardrail_triggered: false,
+./CLAUDE-CODE-COMPLETE-ORDER.md:549:pub async fn classify_intent(req: web::Json<ClassifyRequest>) -> HttpResponse {
+./CLAUDE-CODE-COMPLETE-ORDER.md:551:        intent: "FiqhQuery".to_string(),
+./CLAUDE-CODE-COMPLETE-ORDER.md:552:        confidence: 0.95,
+./CLAUDE-CODE-COMPLETE-ORDER.md:553:        routing_decision: "RAG".to_string(),
+./CLAUDE-CODE-COMPLETE-ORDER.md:584:pub async fn get_guardrails() -> HttpResponse {
+./CLAUDE-CODE-COMPLETE-ORDER.md:599:pub mod guardrails;
+./CLAUDE-CODE-COMPLETE-ORDER.md:600:pub mod semantic_router;
+./CLAUDE-CODE-COMPLETE-ORDER.md:604:pub use guardrails::Guardrails;
+./CLAUDE-CODE-COMPLETE-ORDER.md:605:pub use semantic_router::SemanticRouter;
+./CLAUDE-CODE-COMPLETE-ORDER.md:637:CREATE SCHEMA IF NOT EXISTS audit;
+./CLAUDE-CODE-COMPLETE-ORDER.md:655:    scholar VARCHAR,
+./CLAUDE-CODE-COMPLETE-ORDER.md:664:CREATE TABLE audit.logs (
+./CLAUDE-CODE-COMPLETE-ORDER.md:672:CREATE INDEX idx_audit_logs_timestamp ON audit.logs(timestamp);
+./CLAUDE-CODE-COMPLETE-ORDER.md:673:CREATE INDEX idx_audit_logs_event_type ON audit.logs(event_type);
+./CLAUDE-CODE-COMPLETE-ORDER.md:712:GRANT ALL PRIVILEGES ON SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+./CLAUDE-CODE-COMPLETE-ORDER.md:713:GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+./CLAUDE-CODE-COMPLETE-ORDER.md:745:     "--gpu-memory-utilization", "0.90", \
+./CLAUDE-CODE-COMPLETE-ORDER.md:1051:	kubectl create namespace sakina-audit
+./CLAUDE-CODE-COMPLETE-ORDER.md:1321:**File: F:\SakinaAL\.github\workflows\backend-ci.yml**
+./CLAUDE-CODE-COMPLETE-ORDER.md:1329:      - '.github/workflows/backend-ci.yml'
+./CLAUDE-CODE-COMPLETE-ORDER.md:1379:**File: F:\SakinaAL\.github\workflows\frontend-ci.yml**
+./CLAUDE-CODE-COMPLETE-ORDER.md:1387:      - '.github/workflows/frontend-ci.yml'
+./CLAUDE-CODE-COMPLETE-ORDER.md:1478:def test_classify_intent(client):
+./CLAUDE-CODE-COMPLETE-ORDER.md:1483:    assert "intent" in data
+./CLAUDE-CODE-COMPLETE-ORDER.md:1484:    assert "confidence" in data
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:12:> Job or PyO3, a decision flagged in SPRINT-GAP-ANALYSIS.md). Treat each block as
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:23:**File:** `sakina-backend/src/services/semantic_router.rs`
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:38:    pub intent: QueryIntent,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:39:    pub confidence: f32,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:40:    pub routing_decision: String,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:52:    /// Classify incoming query to determine intent
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:53:    /// Returns QueryIntent and confidence score
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:60:        // Parse response for intent + confidence
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:64:            intent: QueryIntent::FiqhQuery,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:65:            confidence: 0.95,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:66:            routing_decision: "RAG".to_string(),
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:73:- Call `self.router.classify(&req.query).await?`
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:74:- Return `ClassifyResponse` with intent, confidence
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:75:- Log to `audit.logs` (via middleware)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:83:**File:** `sakina-backend/src/services/guardrails.rs`
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:92:    pub confidence: f32,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:108:    /// Check if query meets confidence threshold
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:109:    /// If similarity score < 0.85, return guardrail_triggered=true
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:120:        //         reason: Some("Query below confidence threshold".to_string()),
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:121:        //         confidence: results.get(0).map(|r| r.score).unwrap_or(0.0),
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:125:        // For now, return stub (passed=true, high confidence)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:129:            confidence: 0.92,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:137:- Call `self.guardrails.check(&embedding).await?`
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:138:- If `!passed`: return fallback response "Consult a scholar"
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:139:- Log to `audit.logs` with `guardrail_triggered: true`
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:203:**File:** `sakina-backend/src/middleware/audit.rs`
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:264:            // Log to audit.logs
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:283:- Logs all HTTP requests to tracing (which writes to audit.logs)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:299:    router: web::Data<Arc<SemanticRouter>>,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:300:    guardrails: web::Data<Arc<Guardrails>>,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:303:    // 1. Classify intent
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:304:    let intent = router.classify(&req.query).await?;
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:306:    // 2. Check guardrails
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:308:    let guardrail_result = guardrails.check(&embedding).await?;
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:310:    if !guardrail_result.passed {
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:311:        audit_log("guardrail_triggered", &req.query);
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:313:            answer: "To maintain accuracy, I cannot provide an answer below our confidence threshold. Please consult a qualified Islamic scholar.".to_string(),
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:315:            confidence: 0.0,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:316:            guardrail_triggered: true,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:334:        confidence: guardrail_result.confidence,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:335:        guardrail_triggered: false,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:345:    router: web::Data<Arc<SemanticRouter>>,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:347:    let result = router.classify(&req.text).await?;
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:349:        intent: format!("{:?}", result.intent),
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:350:        confidence: result.confidence,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:351:        routing_decision: result.routing_decision,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:475:        scholar: &str,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:484:             (title, author, madhhab, scholar, integrity_hash, approved_at)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:489:        .bind(scholar)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:491:        .bind(scholar)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:508:                 (source_document_id, content_chunk, madhhab, scholar, token_count)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:515:            .bind(scholar)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:857:    final algorithm = X25519();
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:858:    final keyPair = await algorithm.newKeyPair();
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:900:    final algorithm = ChaCha20Poly1305Aead();
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:901:    final secretKey = await algorithm.newSecretKey();
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:904:    final ciphertext = await algorithm.encrypt(
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:916:    final algorithm = ChaCha20Poly1305Aead();
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:923:    final secretKey = await algorithm.newSecretKey();
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:925:    final plaintext = await algorithm.decrypt(
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1045:  final double confidence;
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1046:  final bool guardrailTriggered;
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1052:    required this.confidence,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1053:    required this.guardrailTriggered,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1062:    confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1063:    guardrailTriggered: json['guardrail_triggered'] as bool? ?? false,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1069:  final String intent;
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1070:  final double confidence;
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1074:    required this.intent,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1075:    required this.confidence,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1080:    intent: json['intent'] as String,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1081:    confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1082:    routingDecision: json['routing_decision'] as String? ?? '',
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1274:- Real-time guardrail triggers
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1364:- Architecture decisions (why each choice)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1376:1. ✅ **Zero hallucinations** — All responses cite sources; guardrail threshold enforced
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1379:4. ✅ **Observable** — Full metrics, traces, and audit logs
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1382:7. ✅ **Documented** — Every decision recorded; runbooks for operators
+./COMPLETE-DELIVERY-GUIDE.md:35:├── .github/workflows/         # CI/CD pipelines
+./COMPLETE-DELIVERY-GUIDE.md:246:🔒 Append-only audit logs  
+./COMPLETE-DELIVERY-GUIDE.md:252:🧠 RAG with guardrails  
+./COMPLETE-DELIVERY-GUIDE.md:286:- Everything audited
+./CONTRIBUTING.md:20:feat: add semantic router implementation
+./DELIVERY-SUMMARY.txt:90:   .github/workflows/          CI/CD pipelines
+./DELIVERY-SUMMARY.txt:102:   • Append-only audit logs
+./DELIVERY-SUMMARY.txt:108:   • RAG with guardrails
+./DELIVERY-SUMMARY.txt:110:   • Intent classification
+./DELIVERY-SUMMARY.txt:127:   • Kubernetes orchestration
+./DELIVERY-SUMMARY.txt:334:   Encryption, audit logs, zero trust networking.
+./DELIVERY-SUMMARY.txt:340:   CI/CD pipelines, automated tests, proven workflows.
+./DELIVERY-SUMMARY.txt:389:✅ CI/CD workflows configured
+./DELIVERY-SUMMARY.txt:400:• Prevents hallucinations through strict guardrails
+./DELIVERY-SUMMARY.txt:402:• Maintains complete audit trails
+./docs/sakina-github-secret-setup-commands.md:33:- Do not paste secret values into chat, commits, PR comments, or workflow logs.
+./docs/sakina-mobile-aks-hld.md:31:- `sakina-security-staging`: policy agents and admission controls
+./docs/sakina-mobile-aks-hld.md:47:- Security and policy baseline pass.
+./docs/sakina-mobile-aks-lld.md:25:- Image policy and namespace guard rails
+./docs/sakina-mobile-db-schema-plan.md:4:- Provide stable relational model for users, sessions, modules, progress, chat, and audit.
+./docs/sakina-mobile-db-schema-plan.md:17:10. `010_admin_audit.sql`
+./docs/sakina-mobile-rag-plan.md:5:- Maintain traceability from source document to chunk to response citation.
+./docs/sakina-mobile-ui-ux-spec.md:9:- Trust first: no fabricated confidence; authoritative fallback required when evidence is missing.
+./docs/sakina-mobile-ui-ux-spec.md:10:- Privacy by default: user control over personalization, reminders, and stored journey data.
+./docs/sakina-mobile-ui-ux-spec.md:50:- If evidence is malformed or missing, present a safe fallback and advisory language.
+./docs/sakina-mobile-ui-ux-spec.md:64:  - personalization consent
+./docs/sakina-mobile-wireframe-plan.md:39:7. **WF-07 Islamic Q&A result with verified evidence + fallback**  
+./docs/sakina-mobile-wireframe-plan.md:112:- For religious guidance screens, include explicit provenance and fallback blocks.
+./docs/sakina-phase25-ui-implementation-backlog.md:9:| Route architecture baseline (named routes/go_router) | As a user, I want stable navigation so deep links and testing are consistent. | `lib/main.dart`, `lib/navigation/*` (new), all screen files | None new (routing only) | None | Widget test verifies route map and transitions for welcome->onboarding->account->home | M |
+./docs/sakina-phase25-ui-implementation-backlog.md:11:| Chat production UX hardening | As a user, I want clear chat states for loading, retry, and citation validity. | `lib/screens/chat_screen.dart`, `lib/widgets/citation_widget.dart` | `/chat/*`, `/rag/query`, feedback/report endpoints | `chat_threads`, `chat_messages`, RAG tables | Widget + API-mock tests for malformed citations, fallback message, feedback/report success | M |
+./docs/sakina-phase25-ui-implementation-backlog.md:23:| Islamic Q&A dedicated flow | As a user, I want a separate Q&A screen with source filters and safety notices. | `lib/screens/islamic_qa_screen.dart` (new), `lib/services/api_service.dart` | `/islamic/search`, `/islamic/ask` | RAG tables | Integration test checks fallback display when citations absent/malformed | M |
+./docs/sakina-phase25-ui-implementation-backlog.md:30:| Qibla direction screen | As a user, I want qibla direction guidance with calibration hints. | `lib/screens/qibla_screen.dart` (new) | Sensor/service + qibla API likely needed | none or new config tables | Device/integration test verifies orientation update and fallback text | L |
+./docs/sakina-phase25-ui-implementation-backlog.md:43:| Error catalog and fallback copy governance | As a user, I want clear, non-misleading error and safe fallback messaging. | `lib/screens/chat_screen.dart`, `lib/screens/iman_journey_screen.dart`, strings | none | none | Snapshot tests cover standardized error/fallback messages | S |
+./docs/sakina-ui-api-traceability-matrix.md:7:| Screen / Journey | Current UI evidence | API endpoints (client evidence) | DB tables (migration evidence) | RAG / Payment / Notification / Admin dependency | Status | Gap / risk |
+./docs/sakina-ui-api-traceability-matrix.md:9:| Welcome + language | `screens/welcome_screen.dart` | none required | local prefs only (no backend table) | none | BUILT | No analytics traceability yet. |
+./docs/sakina-ui-ux-user-stories.md:51:- **Then** evidence rows are displayed only for verified-shape citations; otherwise safe fallback text is shown.
+./docs/sakina-ui-ux-user-stories.md:56:- **Story:** As a user, I want Islamic answers to enforce citation shape and safe fallback behavior.
+./docs/sakina-ui-ux-user-stories.md:59:- **Then** malformed evidence is discarded and non-authoritative fallback language is shown.
+./DOWNLOAD-ME-FIRST.txt:86:  • CI/CD: GitHub Actions workflows
+./DOWNLOAD-ME-FIRST.txt:97:   • Append-only audit logs
+./DOWNLOAD-ME-FIRST.txt:103:   • RAG with guardrails
+./DOWNLOAD-ME-FIRST.txt:105:   • Intent classification
+./DOWNLOAD-ME-FIRST.txt:257:   - RAG engine with guardrails
+./DOWNLOAD-ME-FIRST.txt:268:   - Kubernetes orchestration
+./FILES-INCLUDED.txt:81:   - RAG engine with guardrails
+./FILES-INCLUDED.txt:93:   - Kubernetes orchestration
+./infra/k8s/sakina-mobile-staging/admin.yaml:61:              memory: "64Mi"
+./infra/k8s/sakina-mobile-staging/admin.yaml:64:              memory: "256Mi"
+./infra/k8s/sakina-mobile-staging/backend.yaml:77:              memory: "256Mi"
+./infra/k8s/sakina-mobile-staging/backend.yaml:80:              memory: "1Gi"
+./infra/k8s/sakina-mobile-staging/db-migrations.yaml:40:              memory: "128Mi"
+./infra/k8s/sakina-mobile-staging/db-migrations.yaml:43:              memory: "512Mi"
+./infra/k8s/sakina-mobile-staging/postgres.yaml:78:              memory: "256Mi"
+./infra/k8s/sakina-mobile-staging/postgres.yaml:81:              memory: "1Gi"
+./infra/k8s/sakina-mobile-staging/rag.yaml:67:              memory: "128Mi"
+./infra/k8s/sakina-mobile-staging/rag.yaml:70:              memory: "768Mi"
+./infra/k8s/sakina-mobile-staging/smoke-tests.yaml:35:              memory: "32Mi"
+./infra/k8s/sakina-mobile-staging/smoke-tests.yaml:38:              memory: "128Mi"
+./infra/sakina-mobile/k8s-staging/22c-db-jobs.yaml:90:              required="users user_profiles modules user_module_progress chat_threads chat_messages rag_documents rag_chunks rag_embeddings notifications admin_audit_events"
+./infra/sakina-mobile/k8s-staging/22d-rag-smoke-job.yaml:39:              echo "unsupported fatwa reject test"
+./infra/sakina-mobile/k8s-staging/22d-rag-smoke-job.yaml:40:              code=$(curl -s -o /tmp/fatwa.json -w "%{http_code}" -X POST http://sakina-rag-retrieval:8081/retrieve -H 'Content-Type: application/json' -d '{"query":"give me a fatwa"}')
+./infra/sakina-mobile/k8s-staging/22d-rag.yaml:12:        {"id": "fiqh-guidance", "type": "scholarly", "lang": ["en"], "freshness_days": 21}
+./infra/sakina-mobile/k8s-staging/22d-rag.yaml:51:        if "fatwa" in query.lower():
+./infra/sakina-mobile/k8s-staging/22d-rag.yaml:52:          self._send(400, {"status": "rejected", "reason": "unsupported_fatwa_request"})
+./infra/sakina-mobile/k8s-staging/22g-live-smoke-job.yaml:33:              echo "check8 unsupported fatwa reject"
+./infra/sakina-mobile/k8s-staging/22g-live-smoke-job.yaml:34:              [ "$(curl -s -o /tmp/8.json -w "%{http_code}" -X POST http://sakina-rag-retrieval:8081/retrieve -H 'Content-Type: application/json' -d '{"query":"give me a fatwa"}')" = "400" ]
+./INSTALLATION.md:357:5. Follow the development workflow for contributing
+./PROJECT-SAKINA-STATUS-REPORT.md:21:│   │   ├── guardrails.rs    ✅ Stub created
+./PROJECT-SAKINA-STATUS-REPORT.md:22:│   │   ├── semantic_router.rs ✅ Stub created
+./PROJECT-SUMMARY.txt:15:✅ Maintain audit trails (append-only logging for transparency)
+./PROJECT-SUMMARY.txt:30:   ├── .github/workflows/       CI/CD pipelines (automated testing & deployment)
+./PROJECT-SUMMARY.txt:44:   ├── GitHub Actions workflows Backend, frontend, integration CI/CD
+./PROJECT-SUMMARY.txt:217:  • RAG engine with guardrails
+./PROJECT-SUMMARY.txt:269:   ✅ Append-only audit logs
+./PROJECT-SUMMARY.txt:277:   ✅ Intent classification
+./PROJECT-SUMMARY.txt:295:   ✅ Kubernetes orchestration
+./PROJECT-SUMMARY.txt:368:✅ Complete audit trail logging
+./README-SETUP.md:77:│   └── .github/workflows/
+./README-SETUP.md:88:│   └── .github/workflows/
+./README-SETUP.md:111:├── .github/workflows/           # CI/CD pipelines
+./README.md:34:✅ **Zero Hallucination** - Strict RAG guardrails prevent theological inaccuracies  
+./README.md:87:├── .github/workflows/       # CI/CD pipelines
+./README.md:122:- ✅ Append-only audit logs
+./sakina-backend/Cargo.lock:87:name = "actix-router"
+./sakina-backend/Cargo.lock:158: "actix-router",
+./sakina-backend/Cargo.lock:198: "actix-router",
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:48:    user_agent TEXT,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:251:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:288:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:308:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:332:    review_status TEXT NOT NULL DEFAULT 'scholar_review_required',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:383:    decision_reason TEXT,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:391:CREATE TABLE IF NOT EXISTS sakina_ai.rag_retrieval_audit (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:407:    confidence NUMERIC(5,4),
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:408:    decision_reason TEXT,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:416:    retrieval_audit_id UUID REFERENCES sakina_ai.rag_retrieval_audit(id) ON DELETE SET NULL,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:423:    verified_by TEXT NOT NULL DEFAULT 'policy',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:427:CREATE TABLE IF NOT EXISTS sakina_ai.safety_classifications (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:440:CREATE TABLE IF NOT EXISTS sakina_ai.entitlement_decisions (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:446:    policy_version TEXT NOT NULL DEFAULT 'v1',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:448:    decision_payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:452:CREATE TABLE IF NOT EXISTS sakina_ai.mastermind_decisions (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:460:    intent TEXT NOT NULL DEFAULT 'unknown',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:469:    scholar_review_required BOOLEAN NOT NULL DEFAULT true,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:470:    final_response_policy TEXT NOT NULL DEFAULT 'defer',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:474:    user_message TEXT NOT NULL DEFAULT 'This question needs verified Islamic sources or scholar review before an answer can be provided.',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:475:    decision_payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:477:    policy_version TEXT NOT NULL DEFAULT 'v1',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:484:ALTER TABLE sakina_ai.mastermind_decisions
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:491:CREATE TABLE IF NOT EXISTS sakina_ai.scholar_review_queue (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:494:    mastermind_decision_id UUID REFERENCES sakina_ai.mastermind_decisions(id) ON DELETE SET NULL,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:511:    decision_type TEXT NOT NULL,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:513:    output_decision JSONB NOT NULL DEFAULT '{}'::jsonb,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:514:    policy_version TEXT NOT NULL DEFAULT 'v1',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:515:    runtime_mode TEXT NOT NULL DEFAULT 'fallback',
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:538:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:571:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:604:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:637:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:660:            CHECK (lower(runtime_mode) IN ('wasm', 'fallback'));
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:672:CREATE INDEX IF NOT EXISTS idx_rag_retrieval_audit_request
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:673:    ON sakina_ai.rag_retrieval_audit (request_id, created_at DESC);
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:674:CREATE INDEX IF NOT EXISTS idx_mastermind_decisions_request
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:675:    ON sakina_ai.mastermind_decisions (request_id, created_at DESC);
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:676:CREATE INDEX IF NOT EXISTS idx_scholar_review_queue_status
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:677:    ON sakina_ai.scholar_review_queue (review_status, priority, created_at DESC);
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:897:CREATE TABLE IF NOT EXISTS public.admin_audit_logs (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:945:CREATE TABLE IF NOT EXISTS public.scholar_accounts (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:948:    scholar_slug TEXT UNIQUE,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:957:CREATE TABLE IF NOT EXISTS public.scholar_review_assignments (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:959:    scholar_account_id UUID NOT NULL REFERENCES public.scholar_accounts(id) ON DELETE CASCADE,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:960:    scholar_review_queue_id UUID NOT NULL REFERENCES sakina_ai.scholar_review_queue(id) ON DELETE CASCADE,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:965:    UNIQUE (scholar_account_id, scholar_review_queue_id)
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:968:CREATE INDEX IF NOT EXISTS idx_admin_audit_logs_admin_user
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:969:    ON public.admin_audit_logs (admin_user_id, created_at DESC);
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:974:CREATE INDEX IF NOT EXISTS idx_scholar_review_assignments_queue
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:975:    ON public.scholar_review_assignments (scholar_review_queue_id, assignment_status);
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1192:-- Domains 15/16/17/18/20: notifications, support, settings, audit, analytics
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1371:CREATE TABLE IF NOT EXISTS public.audit_logs (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1417:    retrieval_audit_id UUID REFERENCES sakina_ai.rag_retrieval_audit(id) ON DELETE SET NULL,
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1441:CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1442:    ON public.audit_logs (created_at DESC);
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2_rollback_procedure.md:25:## Scope guardrails
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2_rollback_procedure.md:28:- No deployment, cluster, or runtime orchestration commands are part of this rollback step.
+./sakina-backend/db/20260602_phase21_daily_iman_journey.sql:22:    confidence_score DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+./sakina-backend/db/20260602_phase21_daily_iman_journey.sql:31:    personalization_enabled BOOLEAN NOT NULL DEFAULT false,
+./sakina-backend/db/20260602_phase21_daily_iman_journey.sql:66:    ON public.iman_journey_privacy_settings (user_id, personalization_enabled, reminders_enabled);
+./sakina-backend/db/init.sql:3:CREATE SCHEMA IF NOT EXISTS audit;
+./sakina-backend/db/init.sql:21:    scholar VARCHAR,
+./sakina-backend/db/init.sql:30:CREATE TABLE audit.logs (
+./sakina-backend/db/init.sql:38:CREATE INDEX idx_audit_logs_timestamp ON audit.logs(timestamp);
+./sakina-backend/db/init.sql:39:CREATE INDEX idx_audit_logs_event_type ON audit.logs(event_type);
+./sakina-backend/db/init.sql:78:GRANT ALL PRIVILEGES ON SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+./sakina-backend/db/init.sql:79:GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+./sakina-backend/db/migrations/010_admin_audit.sql:2:CREATE TABLE IF NOT EXISTS admin_audit_events (
+./sakina-backend/Dockerfile.vllm:16:     "--gpu-memory-utilization", "0.90", \
+./sakina-backend/src/handlers/classify.rs:8:pub async fn classify_intent(
+./sakina-backend/src/handlers/classify.rs:10:    router: web::Data<Arc<SemanticRouter>>,
+./sakina-backend/src/handlers/classify.rs:12:    let result = router.classify(&req.text).await?;
+./sakina-backend/src/handlers/classify.rs:14:        intent: format!("{:?}", result.intent),
+./sakina-backend/src/handlers/classify.rs:15:        confidence: result.confidence,
+./sakina-backend/src/handlers/classify.rs:16:        routing_decision: result.routing_decision,
+./sakina-backend/src/handlers/dashboard.rs:4:pub async fn get_guardrails() -> HttpResponse {
+./sakina-backend/src/handlers/modules.rs:63:                    "quran module flag enabled; restricted content policy still applies".to_string()
+./sakina-backend/src/handlers/modules.rs:80:                    "prayer module flag enabled; restricted content policy still applies"
+./sakina-backend/src/handlers/modules.rs:454:            vec![("tafsir", "", "1:1", "scholar_review_pending")],
+./sakina-backend/src/handlers/phase2.rs:156:pub async fn log_safety_classification(
+./sakina-backend/src/handlers/phase2.rs:160:    let id = repo.log_safety_classification(body.into_inner()).await?;
+./sakina-backend/src/handlers/phase2.rs:164:pub async fn log_mastermind_decision(
+./sakina-backend/src/handlers/phase2.rs:168:    let id = repo.log_mastermind_decision(body.into_inner()).await?;
+./sakina-backend/src/handlers/phase2.rs:172:pub async fn enqueue_scholar_review(
+./sakina-backend/src/handlers/phase2.rs:176:    let id = repo.enqueue_scholar_review(body.into_inner()).await?;
+./sakina-backend/src/handlers/phase2.rs:204:pub async fn create_scholar_account(
+./sakina-backend/src/handlers/phase2.rs:208:    let id = repo.create_scholar_account(body.into_inner()).await?;
+./sakina-backend/src/handlers/phase2.rs:212:pub async fn assign_scholar_review(
+./sakina-backend/src/handlers/phase2.rs:216:    let id = repo.assign_scholar_review(body.into_inner()).await?;
+./sakina-backend/src/handlers/phase2.rs:289:pub async fn create_audit_log(
+./sakina-backend/src/handlers/phase2.rs:293:    let id = repo.create_audit_log(body.into_inner()).await?;
+./sakina-backend/src/handlers/phase2.rs:412:                "user_agent": "phase2-test"
+./sakina-backend/src/handlers/phase2.rs:465:                    "user_agent": "phase2-chain-test"
+./sakina-backend/src/handlers/phase2.rs:674:                .route("/rag/audit/retrieval", web::post().to(log_rag_retrieval))
+./sakina-backend/src/handlers/phase2.rs:675:                .route("/rag/audit/citation", web::post().to(log_citation_event))
+./sakina-backend/src/handlers/phase2.rs:678:                    "/safety/classifications",
+./sakina-backend/src/handlers/phase2.rs:679:                    web::post().to(log_safety_classification),
+./sakina-backend/src/handlers/phase2.rs:682:                    "/safety/mastermind-decisions",
+./sakina-backend/src/handlers/phase2.rs:683:                    web::post().to(log_mastermind_decision),
+./sakina-backend/src/handlers/phase2.rs:686:                    "/safety/scholar-review-queue",
+./sakina-backend/src/handlers/phase2.rs:687:                    web::post().to(enqueue_scholar_review),
+./sakina-backend/src/handlers/phase2.rs:691:                .route("/admin/audit-actions", web::post().to(log_admin_action))
+./sakina-backend/src/handlers/phase2.rs:692:                .route("/admin/scholars", web::post().to(create_scholar_account))
+./sakina-backend/src/handlers/phase2.rs:694:                    "/admin/scholar-assignments",
+./sakina-backend/src/handlers/phase2.rs:695:                    web::post().to(assign_scholar_review),
+./sakina-backend/src/handlers/phase2.rs:830:                .uri("/rag/audit/retrieval")
+./sakina-backend/src/handlers/phase2.rs:840:                    "confidence": 0.0,
+./sakina-backend/src/handlers/phase2.rs:841:                    "decision_reason": "no verified sources"
+./sakina-backend/src/handlers/phase2.rs:848:        let retrieval_audit_id = retrieval_body["id"].as_str().expect("retrieval id");
+./sakina-backend/src/handlers/phase2.rs:853:                .uri("/rag/audit/citation")
+./sakina-backend/src/handlers/phase2.rs:856:                    "retrieval_audit_id": retrieval_audit_id,
+./sakina-backend/src/handlers/phase2.rs:860:                    "verified_by": "policy"
+./sakina-backend/src/handlers/phase2.rs:870:                .uri("/safety/classifications")
+./sakina-backend/src/handlers/phase2.rs:887:                .uri("/safety/mastermind-decisions")
+./sakina-backend/src/handlers/phase2.rs:894:                    "intent": "religious_question",
+./sakina-backend/src/handlers/phase2.rs:903:                    "scholar_review_required": true,
+./sakina-backend/src/handlers/phase2.rs:904:                    "final_response_policy": "defer",
+./sakina-backend/src/handlers/phase2.rs:909:                    "decision_payload": {}
+./sakina-backend/src/handlers/phase2.rs:916:        let mastermind_decision_id = mastermind_body["id"].as_str().expect("mastermind id");
+./sakina-backend/src/handlers/phase2.rs:921:                .uri("/safety/scholar-review-queue")
+./sakina-backend/src/handlers/phase2.rs:924:                    "mastermind_decision_id": mastermind_decision_id,
+./sakina-backend/src/handlers/phase2.rs:934:        let scholar_review_queue_id = queue_body["id"].as_str().expect("queue id");
+./sakina-backend/src/handlers/phase2.rs:943:                    "decision_type": "fallback",
+./sakina-backend/src/handlers/phase2.rs:945:                    "output_decision": {},
+./sakina-backend/src/handlers/phase2.rs:946:                    "policy_version": "v1",
+./sakina-backend/src/handlers/phase2.rs:947:                    "runtime_mode": "fallback"
+./sakina-backend/src/handlers/phase2.rs:968:        let scholar_resp = test::call_service(
+./sakina-backend/src/handlers/phase2.rs:971:                .uri("/admin/scholars")
+./sakina-backend/src/handlers/phase2.rs:974:                    "scholar_slug": unique("scholar"),
+./sakina-backend/src/handlers/phase2.rs:983:        assert_eq!(scholar_resp.status(), StatusCode::CREATED);
+./sakina-backend/src/handlers/phase2.rs:984:        let scholar_body: serde_json::Value = test::read_body_json(scholar_resp).await;
+./sakina-backend/src/handlers/phase2.rs:985:        let scholar_account_id = scholar_body["id"].as_str().expect("scholar id");
+./sakina-backend/src/handlers/phase2.rs:990:                .uri("/admin/scholar-assignments")
+./sakina-backend/src/handlers/phase2.rs:992:                    "scholar_account_id": scholar_account_id,
+./sakina-backend/src/handlers/phase2.rs:993:                    "scholar_review_queue_id": scholar_review_queue_id,
+./sakina-backend/src/handlers/phase2.rs:1001:        let audit_resp = test::call_service(
+./sakina-backend/src/handlers/phase2.rs:1004:                .uri("/admin/audit-actions")
+./sakina-backend/src/handlers/phase2.rs:1009:                    "target_type": "scholar_review_queue",
+./sakina-backend/src/handlers/phase2.rs:1010:                    "target_id": scholar_review_queue_id,
+./sakina-backend/src/handlers/phase2.rs:1018:        assert_eq!(audit_resp.status(), StatusCode::CREATED);
+./sakina-backend/src/handlers/phase2.rs:1045:    async fn notifications_support_and_audit_domains_wire_tables() {
+./sakina-backend/src/handlers/phase2.rs:1072:                .route("/audit/logs", web::post().to(create_audit_log))
+./sakina-backend/src/handlers/phase2.rs:1208:        let audit_resp = test::call_service(
+./sakina-backend/src/handlers/phase2.rs:1211:                .uri("/audit/logs")
+./sakina-backend/src/handlers/phase2.rs:1222:        assert_eq!(audit_resp.status(), StatusCode::CREATED);
+./sakina-backend/src/handlers/phase2.rs:1256:                        "retrieval_audit_id": null,
+./sakina-backend/src/handlers/rag.rs:45:/// Real RAG pipeline (Step 18): classify -> embed -> guardrail -> Qdrant search.
+./sakina-backend/src/handlers/rag.rs:52:    router: web::Data<Arc<SemanticRouter>>,
+./sakina-backend/src/handlers/rag.rs:53:    guardrails: web::Data<Arc<Guardrails>>,
+./sakina-backend/src/handlers/rag.rs:61:    // 1. Classify intent (routing decision; not yet branched on).
+./sakina-backend/src/handlers/rag.rs:62:    let _intent = router.classify(&query.query).await?;
+./sakina-backend/src/handlers/rag.rs:68:    let guard = guardrails.check(&embedding).await?;
+./sakina-backend/src/handlers/rag.rs:73:            confidence: 0.0,
+./sakina-backend/src/handlers/rag.rs:74:            guardrail_triggered: true,
+./sakina-backend/src/handlers/rag.rs:85:            confidence: 0.0,
+./sakina-backend/src/handlers/rag.rs:86:            guardrail_triggered: true,
+./sakina-backend/src/handlers/rag.rs:97:    let confidence = guard.confidence.min(top_similarity);
+./sakina-backend/src/handlers/rag.rs:102:        confidence,
+./sakina-backend/src/handlers/rag.rs:103:        guardrail_triggered: false,
+./sakina-backend/src/handlers/rag.rs:215:    let response: DecisionResponse = crate::services::decision_algorithm::decide(
+./sakina-backend/src/handlers/rag.rs:217:        &crate::services::decision_algorithm::DefaultModuleClassifier,
+./sakina-backend/src/handlers/rag.rs:218:        &crate::services::decision_algorithm::DefaultSafetyClassifier,
+./sakina-backend/src/handlers/rag.rs:219:        &crate::services::decision_algorithm::EmptyRetriever,
+./sakina-backend/src/handlers/rag.rs:220:        &crate::services::decision_algorithm::StrictFormatter,
+./sakina-backend/src/main.rs:41:            "DATABASE_URL is missing and the POSTGRES_* fallback variables are incomplete"
+./sakina-backend/src/main.rs:183:    let router = std::sync::Arc::new(services::SemanticRouter::new());
+./sakina-backend/src/main.rs:184:    let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
+./sakina-backend/src/main.rs:188:    let router_data = web::Data::new(router.clone());
+./sakina-backend/src/main.rs:189:    let guardrails_data = web::Data::new(guardrails.clone());
+./sakina-backend/src/main.rs:232:            .app_data(router_data.clone())
+./sakina-backend/src/main.rs:233:            .app_data(guardrails_data.clone())
+./sakina-backend/src/main.rs:425:                                "/audit/retrieval",
+./sakina-backend/src/main.rs:429:                                "/audit/citation",
+./sakina-backend/src/main.rs:463:                                "/classifications",
+./sakina-backend/src/main.rs:464:                                web::post().to(handlers::phase2::log_safety_classification),
+./sakina-backend/src/main.rs:467:                                "/mastermind-decisions",
+./sakina-backend/src/main.rs:468:                                web::post().to(handlers::phase2::log_mastermind_decision),
+./sakina-backend/src/main.rs:471:                                "/scholar-review-queue",
+./sakina-backend/src/main.rs:472:                                web::post().to(handlers::phase2::enqueue_scholar_review),
+./sakina-backend/src/main.rs:486:                                "/audit-actions",
+./sakina-backend/src/main.rs:498:                                "/scholars",
+./sakina-backend/src/main.rs:499:                                web::post().to(handlers::phase2::create_scholar_account),
+./sakina-backend/src/main.rs:502:                                "/scholar-assignments",
+./sakina-backend/src/main.rs:503:                                web::post().to(handlers::phase2::assign_scholar_review),
+./sakina-backend/src/main.rs:537:                        web::scope("/audit")
+./sakina-backend/src/main.rs:538:                            .route("/logs", web::post().to(handlers::phase2::create_audit_log)),
+./sakina-backend/src/main.rs:556:                        web::post().to(handlers::classify::classify_intent),
+./sakina-backend/src/main.rs:570:                        "/guardrails",
+./sakina-backend/src/main.rs:571:                        web::get().to(handlers::dashboard::get_guardrails),
+./sakina-backend/src/middleware/audit.rs:5://! can persist them to the `audit.logs` table.
+./sakina-backend/src/middleware/mod.rs:2:pub mod audit;
+./sakina-backend/src/middleware/mod.rs:3:pub use audit::AuditMiddleware;
+./sakina-backend/src/models/mod.rs:23:    pub confidence: f32,
+./sakina-backend/src/models/mod.rs:24:    pub guardrail_triggered: bool,
+./sakina-backend/src/models/mod.rs:44:    pub intent: String,
+./sakina-backend/src/models/mod.rs:45:    pub confidence: f32,
+./sakina-backend/src/models/mod.rs:46:    pub routing_decision: String,
+./sakina-backend/src/models/mod.rs:327:    pub confidence: f32,
+./sakina-backend/src/models/mod.rs:333:    pub requires_scholar_review: bool,
+./sakina-backend/src/models/mod.rs:366:    pub confidence_score: f64,
+./sakina-backend/src/models/mod.rs:368:    pub safe_fallback: Option<ImanJourneySafeFallback>,
+./sakina-backend/src/models/mod.rs:373:    pub personalization_enabled: bool,
+./sakina-backend/src/models/mod.rs:388:    pub religious_confidence_score: Option<f64>,
+./sakina-backend/src/models/mod.rs:408:    pub personalization_enabled: bool,
+./sakina-backend/src/services/decision_algorithm.rs:8:    pub confidence: f32,
+./sakina-backend/src/services/decision_algorithm.rs:60:        let confidence = if matches!(module, DecisionModule::Unsupported) {
+./sakina-backend/src/services/decision_algorithm.rs:67:        ModuleClassification { module, confidence }
+./sakina-backend/src/services/decision_algorithm.rs:87:        if text.contains("fatwa") || text.contains("halal") || text.contains("haram") {
+./sakina-backend/src/services/decision_algorithm.rs:197:    let classification = module_classifier.classify(&req.question, &req.selected_module);
+./sakina-backend/src/services/decision_algorithm.rs:199:    let module = classification.module.clone();
+./sakina-backend/src/services/decision_algorithm.rs:208:                confidence: classification.confidence,
+./sakina-backend/src/services/decision_algorithm.rs:214:                requires_scholar_review: false,
+./sakina-backend/src/services/decision_algorithm.rs:224:            confidence: classification.confidence,
+./sakina-backend/src/services/decision_algorithm.rs:230:            requires_scholar_review: false,
+./sakina-backend/src/services/decision_algorithm.rs:234:    if classification.confidence < 0.60 || matches!(module, DecisionModule::Unsupported) {
+./sakina-backend/src/services/decision_algorithm.rs:239:            confidence: classification.confidence,
+./sakina-backend/src/services/decision_algorithm.rs:245:            requires_scholar_review: true,
+./sakina-backend/src/services/decision_algorithm.rs:256:            confidence: classification.confidence * 0.8,
+./sakina-backend/src/services/decision_algorithm.rs:262:            requires_scholar_review: true,
+./sakina-backend/src/services/decision_algorithm.rs:266:    let requires_scholar_review = matches!(
+./sakina-backend/src/services/decision_algorithm.rs:276:    let answer = if requires_scholar_review {
+./sakina-backend/src/services/decision_algorithm.rs:278:            "{} This is educational information only; consult a qualified scholar/professional.",
+./sakina-backend/src/services/decision_algorithm.rs:289:        confidence: classification.confidence,
+./sakina-backend/src/services/decision_algorithm.rs:295:        requires_scholar_review,
+./sakina-backend/src/services/decision_algorithm.rs:309:                confidence: 0.4,
+./sakina-backend/src/services/decision_algorithm.rs:393:    fn missing_entitlement_blocks_algorithm() {
+./sakina-backend/src/services/decision_algorithm.rs:411:    fn low_classifier_confidence_asks_clarification() {
+./sakina-backend/src/services/decision_algorithm.rs:509:    fn sensitive_question_requires_stricter_policy() {
+./sakina-backend/src/services/decision_algorithm.rs:517:            &req("quran", "premium", "is this halal fatwa?"),
+./sakina-backend/src/services/decision_algorithm.rs:523:        assert!(out.requires_scholar_review);
+./sakina-backend/src/services/decision_algorithm.rs:527:            .contains("qualified scholar"));
+./sakina-backend/src/services/decision_algorithm.rs:548:        assert!(out.confidence > 0.0);
+./sakina-backend/src/services/guardrails.rs:1://! Guardrails: enforce the similarity-confidence threshold before answering.
+./sakina-backend/src/services/guardrails.rs:7://! it lands with the real retrieval step, mirroring how the router defers vLLM.
+./sakina-backend/src/services/guardrails.rs:15:    pub confidence: f32,
+./sakina-backend/src/services/guardrails.rs:31:    /// Pure decision: does the top similarity score clear the threshold?
+./sakina-backend/src/services/guardrails.rs:36:                reason: Some("Query below confidence threshold".to_string()),
+./sakina-backend/src/services/guardrails.rs:37:                confidence: top_score,
+./sakina-backend/src/services/guardrails.rs:43:                confidence: top_score,
+./sakina-backend/src/services/guardrails.rs:71:        assert_eq!(r.confidence, 0.50);
+./sakina-backend/src/services/iman_journey.rs:114:                    user_id, journey_date, reminder_text, confidence_score, evidence_bundle, updated_at
+./sakina-backend/src/services/iman_journey.rs:120:                    confidence_score = EXCLUDED.confidence_score,
+./sakina-backend/src/services/iman_journey.rs:128:            .bind(request.religious_confidence_score.unwrap_or(0.0))
+./sakina-backend/src/services/iman_journey.rs:215:                user_id, personalization_enabled, reminders_enabled, store_journey_enabled, updated_at
+./sakina-backend/src/services/iman_journey.rs:220:                personalization_enabled = EXCLUDED.personalization_enabled,
+./sakina-backend/src/services/iman_journey.rs:227:        .bind(request.personalization_enabled)
+./sakina-backend/src/services/iman_journey.rs:243:                user_id, personalization_enabled, reminders_enabled, store_journey_enabled
+./sakina-backend/src/services/iman_journey.rs:247:            RETURNING personalization_enabled, reminders_enabled, store_journey_enabled
+./sakina-backend/src/services/iman_journey.rs:255:            personalization_enabled: row.get("personalization_enabled"),
+./sakina-backend/src/services/iman_journey.rs:352:                confidence_score: 0.0,
+./sakina-backend/src/services/iman_journey.rs:354:                safe_fallback: Some(ImanJourneySafeFallback {
+./sakina-backend/src/services/iman_journey.rs:363:            SELECT reminder_text, confidence_score, evidence_bundle
+./sakina-backend/src/services/iman_journey.rs:374:            return Ok(missing_evidence_fallback("missing_evidence"));
+./sakina-backend/src/services/iman_journey.rs:376:        let confidence_score: f64 = row.get("confidence_score");
+./sakina-backend/src/services/iman_journey.rs:387:        if confidence_score >= 0.7
+./sakina-backend/src/services/iman_journey.rs:397:                confidence_score,
+./sakina-backend/src/services/iman_journey.rs:399:                safe_fallback: None,
+./sakina-backend/src/services/iman_journey.rs:402:            Ok(missing_evidence_fallback("insufficient_evidence"))
+./sakina-backend/src/services/iman_journey.rs:407:fn missing_evidence_fallback(reason: &str) -> ImanJourneyReligiousReminder {
+./sakina-backend/src/services/iman_journey.rs:410:        confidence_score: 0.0,
+./sakina-backend/src/services/iman_journey.rs:412:        safe_fallback: Some(ImanJourneySafeFallback {
+./sakina-backend/src/services/iman_journey.rs:415:                "Verified evidence is not available right now. Please consult a trusted scholar."
+./sakina-backend/src/services/ingestion_producer.rs:11://!     approved_by, approved_at); chunks(content_chunk, madhhab, scholar, token_count).
+./sakina-backend/src/services/ingestion_producer.rs:32:        scholar: &str,
+./sakina-backend/src/services/ingestion_producer.rs:48:        .bind(scholar)
+./sakina-backend/src/services/ingestion_producer.rs:50:        .bind(scholar)
+./sakina-backend/src/services/ingestion_producer.rs:58:                 (source_document_id, content_chunk, madhhab, scholar, token_count) \
+./sakina-backend/src/services/ingestion_producer.rs:64:            .bind(scholar)
+./sakina-backend/src/services/islamic_knowledge.rs:272:        let confidence = hits.iter().map(|h| h.score).fold(0.0_f32, f32::max);
+./sakina-backend/src/services/islamic_knowledge.rs:278:            "confidence": confidence,
+./sakina-backend/src/services/llm.rs:5://! scholar-referral fallback when the context is insufficient.
+./sakina-backend/src/services/llm.rs:145:     sources, schools of law, narrations, scholars, or certainty. If the \
+./sakina-backend/src/services/llm.rs:148:     scholar. Keep the answer concise, respectful, and cite source labels like \
+./sakina-backend/src/services/llm.rs:169:        "Instructions:\n- Answer only from the verified context above.\n- Use source labels like [S1].\n- If the context is insufficient, refuse to answer and advise consulting a qualified Islamic scholar.\n",
+./sakina-backend/src/services/mod.rs:1:pub mod decision_algorithm;
+./sakina-backend/src/services/mod.rs:3:pub mod guardrails;
+./sakina-backend/src/services/mod.rs:10:pub mod semantic_router;
+./sakina-backend/src/services/mod.rs:12:pub use decision_algorithm::decide as decide_request;
+./sakina-backend/src/services/mod.rs:13:pub use decision_algorithm::DefaultModuleClassifier;
+./sakina-backend/src/services/mod.rs:14:pub use decision_algorithm::DefaultSafetyClassifier;
+./sakina-backend/src/services/mod.rs:15:pub use decision_algorithm::EmptyRetriever;
+./sakina-backend/src/services/mod.rs:16:pub use decision_algorithm::StrictFormatter;
+./sakina-backend/src/services/mod.rs:18:pub use guardrails::Guardrails;
+./sakina-backend/src/services/mod.rs:28:pub use semantic_router::SemanticRouter;
+./sakina-backend/src/services/phase2.rs:114:                user_agent,
+./sakina-backend/src/services/phase2.rs:125:        .bind(&request.user_agent)
+./sakina-backend/src/services/phase2.rs:732:            INSERT INTO sakina_ai.rag_retrieval_audit (
+./sakina-backend/src/services/phase2.rs:741:                confidence,
+./sakina-backend/src/services/phase2.rs:742:                decision_reason
+./sakina-backend/src/services/phase2.rs:756:        .bind(request.confidence)
+./sakina-backend/src/services/phase2.rs:757:        .bind(&request.decision_reason)
+./sakina-backend/src/services/phase2.rs:760:        .map_err(|_| ApiError::internal("failed to log rag retrieval audit"))?;
+./sakina-backend/src/services/phase2.rs:772:                retrieval_audit_id,
+./sakina-backend/src/services/phase2.rs:783:        .bind(request.retrieval_audit_id)
+./sakina-backend/src/services/phase2.rs:794:    pub async fn log_safety_classification(
+./sakina-backend/src/services/phase2.rs:800:            INSERT INTO sakina_ai.safety_classifications (
+./sakina-backend/src/services/phase2.rs:815:        .map_err(|_| ApiError::internal("failed to log safety classification"))?;
+./sakina-backend/src/services/phase2.rs:819:    pub async fn log_mastermind_decision(
+./sakina-backend/src/services/phase2.rs:831:        let decision_id = sqlx::query_scalar(
+./sakina-backend/src/services/phase2.rs:833:            INSERT INTO sakina_ai.mastermind_decisions (
+./sakina-backend/src/services/phase2.rs:839:                intent,
+./sakina-backend/src/services/phase2.rs:848:                scholar_review_required,
+./sakina-backend/src/services/phase2.rs:849:                final_response_policy,
+./sakina-backend/src/services/phase2.rs:854:                decision_payload
+./sakina-backend/src/services/phase2.rs:867:        .bind(&request.intent)
+./sakina-backend/src/services/phase2.rs:876:        .bind(request.scholar_review_required)
+./sakina-backend/src/services/phase2.rs:877:        .bind(&request.final_response_policy)
+./sakina-backend/src/services/phase2.rs:882:        .bind(request.decision_payload.unwrap_or_else(|| serde_json::json!({})))
+./sakina-backend/src/services/phase2.rs:885:        .map_err(|_| ApiError::internal("failed to log mastermind decision"))?;
+./sakina-backend/src/services/phase2.rs:889:            INSERT INTO sakina_ai.entitlement_decisions (
+./sakina-backend/src/services/phase2.rs:890:                request_id, user_id, subscription_tier, entitlement_allowed, policy_version, reason, decision_payload
+./sakina-backend/src/services/phase2.rs:903:        .map_err(|_| ApiError::internal("failed to log entitlement decision"))?;
+./sakina-backend/src/services/phase2.rs:909:        Ok(decision_id)
+./sakina-backend/src/services/phase2.rs:912:    pub async fn enqueue_scholar_review(
+./sakina-backend/src/services/phase2.rs:918:            INSERT INTO sakina_ai.scholar_review_queue (
+./sakina-backend/src/services/phase2.rs:920:                mastermind_decision_id,
+./sakina-backend/src/services/phase2.rs:931:        .bind(request.mastermind_decision_id)
+./sakina-backend/src/services/phase2.rs:937:        .map_err(|_| ApiError::internal("failed to enqueue scholar review"))?;
+./sakina-backend/src/services/phase2.rs:950:                decision_type,
+./sakina-backend/src/services/phase2.rs:952:                output_decision,
+./sakina-backend/src/services/phase2.rs:953:                policy_version,
+./sakina-backend/src/services/phase2.rs:962:        .bind(&request.decision_type)
+./sakina-backend/src/services/phase2.rs:966:                .output_decision
+./sakina-backend/src/services/phase2.rs:969:        .bind(&request.policy_version)
+./sakina-backend/src/services/phase2.rs:1078:            INSERT INTO public.admin_audit_logs (
+./sakina-backend/src/services/phase2.rs:1092:        .map_err(|_| ApiError::internal("failed to log admin audit action"))?;
+./sakina-backend/src/services/phase2.rs:1101:    pub async fn create_scholar_account(
+./sakina-backend/src/services/phase2.rs:1107:            INSERT INTO public.scholar_accounts (
+./sakina-backend/src/services/phase2.rs:1108:                user_id, scholar_slug, display_name, verified, credentials_summary, account_status
+./sakina-backend/src/services/phase2.rs:1111:            ON CONFLICT (scholar_slug)
+./sakina-backend/src/services/phase2.rs:1122:        .bind(&request.scholar_slug)
+./sakina-backend/src/services/phase2.rs:1129:        .map_err(|_| ApiError::internal("failed to create scholar account"))?;
+./sakina-backend/src/services/phase2.rs:1133:    pub async fn assign_scholar_review(
+./sakina-backend/src/services/phase2.rs:1139:            INSERT INTO public.scholar_review_assignments (
+./sakina-backend/src/services/phase2.rs:1140:                scholar_account_id, scholar_review_queue_id, assignment_status, notes
+./sakina-backend/src/services/phase2.rs:1143:            ON CONFLICT (scholar_account_id, scholar_review_queue_id)
+./sakina-backend/src/services/phase2.rs:1150:        .bind(request.scholar_account_id)
+./sakina-backend/src/services/phase2.rs:1151:        .bind(request.scholar_review_queue_id)
+./sakina-backend/src/services/phase2.rs:1155:        .map_err(|_| ApiError::internal("failed to assign scholar review"))?;
+./sakina-backend/src/services/phase2.rs:1451:    pub async fn create_audit_log(&self, request: CreateAuditLogRequest) -> Result<i64, ApiError> {
+./sakina-backend/src/services/phase2.rs:1454:            INSERT INTO public.audit_logs (event_type, actor_type, actor_id, request_id, payload)
+./sakina-backend/src/services/phase2.rs:1466:        .map_err(|_| ApiError::internal("failed to create audit log"))?;
+./sakina-backend/src/services/phase2.rs:1531:                INSERT INTO public.rag_events (request_id, user_id, retrieval_audit_id, event_name, event_payload)
+./sakina-backend/src/services/phase2.rs:1578:                    .bind(request.retrieval_audit_id)
+./sakina-backend/src/services/phase2.rs:1637:    pub user_agent: Option<String>,
+./sakina-backend/src/services/phase2.rs:1780:    pub confidence: Option<f64>,
+./sakina-backend/src/services/phase2.rs:1781:    pub decision_reason: Option<String>,
+./sakina-backend/src/services/phase2.rs:1787:    pub retrieval_audit_id: Option<Uuid>,
+./sakina-backend/src/services/phase2.rs:1811:    pub intent: String,
+./sakina-backend/src/services/phase2.rs:1820:    pub scholar_review_required: bool,
+./sakina-backend/src/services/phase2.rs:1821:    pub final_response_policy: String,
+./sakina-backend/src/services/phase2.rs:1826:    pub decision_payload: Option<Value>,
+./sakina-backend/src/services/phase2.rs:1832:    pub mastermind_decision_id: Option<Uuid>,
+./sakina-backend/src/services/phase2.rs:1842:    pub decision_type: String,
+./sakina-backend/src/services/phase2.rs:1844:    pub output_decision: Option<Value>,
+./sakina-backend/src/services/phase2.rs:1845:    pub policy_version: String,
+./sakina-backend/src/services/phase2.rs:1876:    pub scholar_slug: String,
+./sakina-backend/src/services/phase2.rs:1885:    pub scholar_account_id: Uuid,
+./sakina-backend/src/services/phase2.rs:1886:    pub scholar_review_queue_id: Uuid,
+./sakina-backend/src/services/phase2.rs:2004:    pub retrieval_audit_id: Option<Uuid>,
+./sakina-backend/src/services/semantic_router.rs:1://! Semantic router: classifies an incoming query's intent so the RAG pipeline
+./sakina-backend/src/services/semantic_router.rs:5://! call vLLM's completion endpoint and parse intent + confidence.
+./sakina-backend/src/services/semantic_router.rs:19:    pub intent: QueryIntent,
+./sakina-backend/src/services/semantic_router.rs:20:    pub confidence: f32,
+./sakina-backend/src/services/semantic_router.rs:21:    pub routing_decision: String,
+./sakina-backend/src/services/semantic_router.rs:34:    /// Classify an incoming query to determine intent + confidence.
+./sakina-backend/src/services/semantic_router.rs:36:    /// TODO: call vLLM `/v1/completions` with a classification prompt and parse
+./sakina-backend/src/services/semantic_router.rs:37:    /// the intent + confidence from the response. For now this returns a stub
+./sakina-backend/src/services/semantic_router.rs:45:            intent: QueryIntent::FiqhQuery,
+./sakina-backend/src/services/semantic_router.rs:46:            confidence: 0.95,
+./sakina-backend/src/services/semantic_router.rs:47:            routing_decision: "RAG".to_string(),
+./sakina-backend/src/services/semantic_router.rs:58:        let router = SemanticRouter::new();
+./sakina-backend/src/services/semantic_router.rs:59:        let result = router
+./sakina-backend/src/services/semantic_router.rs:63:        assert!(matches!(result.intent, QueryIntent::FiqhQuery));
+./sakina-backend/src/services/semantic_router.rs:64:        assert_eq!(result.confidence, 0.95);
+./sakina-backend/src/services/semantic_router.rs:65:        assert_eq!(result.routing_decision, "RAG");
+./sakina-backend/src/telemetry.rs:3://! Builds an OTel tracer with a stdout span exporter and layers it onto the
+./sakina-backend/src/telemetry.rs:8:use opentelemetry::trace::TracerProvider as _;
+./sakina-backend/src/telemetry.rs:9:use opentelemetry_sdk::trace::SdkTracerProvider;
+./sakina-backend/src/telemetry.rs:19:    let tracer = provider.tracer("sakina-api");
+./sakina-backend/src/telemetry.rs:20:    opentelemetry::global::set_tracer_provider(provider);
+./sakina-backend/src/telemetry.rs:25:        .with(tracing_opentelemetry::layer().with_tracer(tracer))
+./sakina-backend/tests/phase21_iman_journey_contract.rs:40:async fn phase21_core_flow_enforces_fallback_privacy_and_scope() {
+./sakina-backend/tests/phase21_iman_journey_contract.rs:66:                "personalization_enabled": true,
+./sakina-backend/tests/phase21_iman_journey_contract.rs:96:                "religious_confidence_score": 0.2,
+./sakina-backend/tests/phase21_iman_journey_contract.rs:105:        upsert_json["religious_reminder"]["safe_fallback"]["reason"],
+./SAKINA-BRAND-ASSETS.md:88:Usage: Errors, warnings, guardrail triggers
+./SAKINA-BRAND-IDENTITY.md:13:- **Respectful** of Islamic scholarship and traditions
+./SAKINA-BRAND-IDENTITY.md:23:   - Strict RAG guardrails ensure only verified Islamic knowledge is shared
+./SAKINA-BRAND-IDENTITY.md:25:   - Every answer is traced to authenticated Islamic sources
+./SAKINA-BRAND-IDENTITY.md:35:   - Verify sources with Islamic scholars
+./SAKINA-BRAND-IDENTITY.md:41:   - Append-only audit logs
+./SAKINA-BRAND-IDENTITY.md:121:- Respectful of scholars
+./SAKINA-BRAND-IDENTITY.md:151:**Tone:** Respectful, clear, honest, scholarly
+./SAKINA-BRAND-IDENTITY.md:166:and data sovereignty while respecting Islamic scholarship traditions.
+./SAKINA-BRAND-IDENTITY.md:169:✓ Zero Hallucinations      - Strict RAG guardrails
+./SAKINA-BRAND-IDENTITY.md:171:✓ Islamic Authenticity     - Verified sources & scholars
+./SAKINA-BRAND-IDENTITY.md:184:the traditions of Islamic scholarship while leveraging modern AI technology.
+./SAKINA-BRAND-IDENTITY.md:227:Muslim individuals seeking Islamic knowledge with confidence in accuracy and privacy.
+./SAKINA-BRAND-IDENTITY.md:230:AI-powered Islamic guidance that never compromises on scholarly authenticity or user privacy.
+./SAKINA-BRAND-IDENTITY.md:233:- **Zero Hallucinations**: Strict guardrails prevent inaccurate responses
+./SAKINA-BRAND-IDENTITY.md:235:- **Authentic Sources**: All guidance traces to verified Islamic scholarship
+./SAKINA-BRAND-IDENTITY.md:236:- **Transparent**: Append-only audit logs and clear documentation
+./SAKINA-BRAND-IDENTITY.md:246:- Islamic scholars and theologians
+./SAKINA-BRAND-IDENTITY.md:278:- Secure scholarly partnerships
+./SAKINA-BRAND-IDENTITY.md:307:"We commit to respecting scholarly traditions, authenticating sources, and representing Islamic knowledge faithfully."
+./SAKINA-BRAND-IDENTITY.md:334:"I'm not certain about this answer. To maintain our commitment to accuracy, I cannot provide guidance below our verification threshold. Please consult a scholar."
+./SAKINA-BRAND-IDENTITY.md:346:**Project Sakina** is more than code—it's a **commitment to authentic Islamic guidance with complete privacy and scholarly integrity.**
+./sakina-dashboard/app.js:2:   /v1/dashboard/guardrails endpoint. Override the base via window.SAKINA_API_BASE. */
+./sakina-dashboard/app.js:9:    return { guardrails: [], loading: false, error: "" };
+./sakina-dashboard/app.js:19:        const res = await fetch(`${API_BASE}/dashboard/guardrails`);
+./sakina-dashboard/app.js:22:        this.guardrails = Array.isArray(data) ? data : [];
+./sakina-dashboard/app.js:24:        this.error = `Failed to load guardrails: ${e.message}`;
+./sakina-dashboard/index.html:28:          <table v-if="guardrails.length">
+./sakina-dashboard/index.html:33:              <tr v-for="(g, i) in guardrails" :key="i">
+./sakina-dashboard/index.html:43:            No guardrail triggers recorded.
+./sakina-docs/00-START-HERE.md:9:- ✅ Zero hallucinations (strict RAG guardrails)
+./sakina-docs/00-START-HERE.md:99:├── .github/workflows/   # CI/CD pipelines
+./sakina-docs/00-START-HERE.md:262:- Everything audited
+./sakina-docs/00-START-HERE.md:272:- Append-only audit logs
+./sakina-docs/00-START-HERE.md:277:- RAG with guardrails
+./sakina-docs/API.md:74:  "confidence": 0.92,
+./sakina-docs/API.md:75:  "guardrail_triggered": false,
+./sakina-docs/API.md:83:Classify user intent for routing.
+./sakina-docs/API.md:93:  "intent": "FiqhQuery",
+./sakina-docs/API.md:94:  "confidence": 0.95,
+./sakina-docs/API.md:95:  "routing_decision": "RAG"
+./sakina-docs/API.md:109:### GET /dashboard/guardrails
+./sakina-docs/API.md:110:Return recent guardrail trigger events for monitoring.
+./sakina-docs/ARCHITECTURE.md:60:- **Payload**: Madhhab, scholar, authenticity grade
+./sakina-docs/ARCHITECTURE.md:63:- **Schema**: `verified_knowledge`, `audit`, `outbox`, `public`
+./sakina-docs/ARCHITECTURE.md:77:   - If below threshold → guardrail rejection
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:24:mkdir F:\SakinaAL\sakina-backend\{src,db,tests,migrations,.github\workflows}
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:28:mkdir F:\SakinaAL\sakina-frontend\{lib,test,.github\workflows,android,ios}
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:42:# GitHub workflows
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:43:mkdir F:\SakinaAL\.github\workflows
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:222:- audit
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:233:- scholar (VARCHAR)
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:248:### audit.logs
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:380:                    .route("/classify", web::post().to(handlers::classify::classify_intent))
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:388:                            .route("/guardrails", web::get().to(handlers::dashboard::get_guardrails))
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:422:    pub confidence: f32,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:423:    pub guardrail_triggered: bool,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:443:    pub intent: String,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:444:    pub confidence: f32,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:445:    pub routing_decision: String,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:535:        confidence: 0.92,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:536:        guardrail_triggered: false,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:549:pub async fn classify_intent(req: web::Json<ClassifyRequest>) -> HttpResponse {
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:551:        intent: "FiqhQuery".to_string(),
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:552:        confidence: 0.95,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:553:        routing_decision: "RAG".to_string(),
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:584:pub async fn get_guardrails() -> HttpResponse {
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:599:pub mod guardrails;
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:600:pub mod semantic_router;
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:604:pub use guardrails::Guardrails;
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:605:pub use semantic_router::SemanticRouter;
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:637:CREATE SCHEMA IF NOT EXISTS audit;
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:655:    scholar VARCHAR,
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:664:CREATE TABLE audit.logs (
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:672:CREATE INDEX idx_audit_logs_timestamp ON audit.logs(timestamp);
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:673:CREATE INDEX idx_audit_logs_event_type ON audit.logs(event_type);
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:712:GRANT ALL PRIVILEGES ON SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:713:GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:745:     "--gpu-memory-utilization", "0.90", \
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1051:	kubectl create namespace sakina-audit
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1321:**File: F:\SakinaAL\.github\workflows\backend-ci.yml**
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1329:      - '.github/workflows/backend-ci.yml'
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1379:**File: F:\SakinaAL\.github\workflows\frontend-ci.yml**
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1387:      - '.github/workflows/frontend-ci.yml'
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1478:def test_classify_intent(client):
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1483:    assert "intent" in data
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:1484:    assert "confidence" in data
+./sakina-docs/COMPLETE-DELIVERY-GUIDE.md:35:├── .github/workflows/         # CI/CD pipelines
+./sakina-docs/COMPLETE-DELIVERY-GUIDE.md:246:🔒 Append-only audit logs  
+./sakina-docs/COMPLETE-DELIVERY-GUIDE.md:252:🧠 RAG with guardrails  
+./sakina-docs/COMPLETE-DELIVERY-GUIDE.md:286:- Everything audited
+./sakina-docs/CONTRIBUTING.md:20:feat: add semantic router implementation
+./sakina-docs/DATABASE-SCHEMA.md:5:- audit
+./sakina-docs/DATABASE-SCHEMA.md:16:- scholar (VARCHAR)
+./sakina-docs/DATABASE-SCHEMA.md:31:### audit.logs
+./sakina-docs/DELIVERY-SUMMARY.txt:90:   .github/workflows/          CI/CD pipelines
+./sakina-docs/DELIVERY-SUMMARY.txt:102:   • Append-only audit logs
+./sakina-docs/DELIVERY-SUMMARY.txt:108:   • RAG with guardrails
+./sakina-docs/DELIVERY-SUMMARY.txt:110:   • Intent classification
+./sakina-docs/DELIVERY-SUMMARY.txt:127:   • Kubernetes orchestration
+./sakina-docs/DELIVERY-SUMMARY.txt:334:   Encryption, audit logs, zero trust networking.
+./sakina-docs/DELIVERY-SUMMARY.txt:340:   CI/CD pipelines, automated tests, proven workflows.
+./sakina-docs/DELIVERY-SUMMARY.txt:389:✅ CI/CD workflows configured
+./sakina-docs/DELIVERY-SUMMARY.txt:400:• Prevents hallucinations through strict guardrails
+./sakina-docs/DELIVERY-SUMMARY.txt:402:• Maintains complete audit trails
+./sakina-docs/DOWNLOAD-ME-FIRST.txt:86:  • CI/CD: GitHub Actions workflows
+./sakina-docs/DOWNLOAD-ME-FIRST.txt:97:   • Append-only audit logs
+./sakina-docs/DOWNLOAD-ME-FIRST.txt:103:   • RAG with guardrails
+./sakina-docs/DOWNLOAD-ME-FIRST.txt:105:   • Intent classification
+./sakina-docs/DOWNLOAD-ME-FIRST.txt:257:   - RAG engine with guardrails
+./sakina-docs/DOWNLOAD-ME-FIRST.txt:268:   - Kubernetes orchestration
+./sakina-docs/FILES-INCLUDED.txt:81:   - RAG engine with guardrails
+./sakina-docs/FILES-INCLUDED.txt:93:   - Kubernetes orchestration
+./sakina-docs/INSTALLATION.md:357:5. Follow the development workflow for contributing
+./sakina-docs/MOBILE_APP_GUIDE.md:56:- A privacy policy is required by both stores. Project Sakina's design is
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:4:Branch audited: `qa-security-hardening` (`2e85aa7`)  
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:5:Audit intent: mobile-first truth audit, no fake features, no production changes.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:47:- `/v1/dashboard/guardrails` returns sample/demo-like guardrail rows.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:51:- No real admin workflow exists.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:59:- Login UI, subscription UI, and real dashboard product workflows are effectively absent from the current Flutter runtime flow.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:67:- In audited branch code:
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:70:- In currently live runtime during audit, user endpoints still behaved as stubs rather than consistent 501-disabled contract.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:99:   - live runtime matches audited branch behavior
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:134:3. Guardrail/fallback behavior with clear user messaging
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:135:4. No fabricated Islamic content, hadith, dua, or scholar attributions
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:137:6. Safety policy + disclaimer paths in guidance UX
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:164:Admin/moderation | 9 | STUB | Partial | N/A | Not for public | sample dashboard guardrails response | Build RBAC admin module
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:166:No-fake policy enforcement | All | PARTIAL | Partial | Partial | Partial | stubs still visible in some paths | Hide/disable incomplete surfaces
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:127:      summary: Deterministic Sakina decision algorithm (phase-2 shell)
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:136:          description: Safe decision response
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:311:          enum: [unverified, verified, scholar_review_required, rejected, disabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:331:          enum: [unverified, verified, scholar_review_required, rejected, disabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:351:          enum: [unverified, verified, scholar_review_required, rejected, disabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:371:          enum: [unverified, verified, scholar_review_required, rejected, disabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:395:          enum: [unverified, verified, scholar_review_required, rejected, disabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:437:          enum: [unverified, verified, scholar_review_required, rejected, disabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:501:        - confidence
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:507:        - requires_scholar_review
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:516:        confidence:
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:531:          enum: [unverified, verified, scholar_review_required, rejected, disabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:542:        requires_scholar_review:
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:585:      required: [confidence_score, evidence_bundle]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:590:        confidence_score:
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:597:        safe_fallback:
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:603:      required: [personalization_enabled, reminders_enabled, store_journey_enabled]
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:605:        personalization_enabled:
+./sakina-docs/MODULE_CONTRACTS_OPENAPI_2026-05-28.yaml:655:        religious_confidence_score:
+./sakina-docs/MODULE_CONTRACT_SHELL_STATUS_2026-05-28.md:25:  - deterministic decision algorithm must remain auditable and gated
+./sakina-docs/MODULE_CONTRACT_SHELL_STATUS_2026-05-28.md:27:## Non-negotiable release guardrails
+./sakina-docs/MODULE_CONTRACT_SHELL_STATUS_2026-05-28.md:34:4. Review workflow is implemented
+./sakina-docs/MODULE_CONTRACT_SHELL_STATUS_2026-05-28.md:45:## Deployment policy
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:15:- CI workflows: `.github/workflows/`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:34:  - evidence-bundle enforcement and safe fallback orchestration
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:52:- [ ] `.github/workflows/backend-ci.yml`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:53:  - migration validation, contract tests, evidence fallback tests
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:54:- [ ] `.github/workflows/frontend-ci.yml`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:56:- [ ] `.github/workflows/dependency-scan.yml`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:58:- [ ] `.github/workflows/secret-scan.yml`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:77:  - privacy/security notes: aggregate counters preferred over detailed behavior traces
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:95:  - privacy/security notes: immutable audit path for account-sensitive actions
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:96:- `evidence_shield_audit`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:97:  - purpose: Evidence Shield decision trail and fallback triggers
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:98:  - indexes: `(answer_id)`, `(user_id, created_at)`, `(fallback_triggered)`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:107:  - privacy/security notes: default opt-out for personalization from private duas
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:112:- `human_scholar_review_queue`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:115:  - privacy/security notes: strict access control and reviewer action audit
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:157:  - auth/privacy rule: enforce evidence bundle or safe fallback
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:167:- `POST /v1/guidance/human-scholar-review`
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:181:  - state handling: hydrated from `/v1/iman-journey/today`; safe fallback state when evidence missing
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:196:  - state handling: context preview, opt-in toggles, strict error/safe fallback states
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:218:  - evidence bundle enforcement tests (religious output blocked without evidence or safe fallback)
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:221:  - integration tests for consent/privacy toggles and safe fallback UX
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:225:  - scholar-review request flow
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:240:  - explicit user controls for memory/personalization and family sharing
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:243:  - audit logging for privacy actions and evidence decisions
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:245:  - no Qur'an/hadith/fatwa/scholar claim without verifiable evidence bundle
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:246:  - mandatory safe fallback if evidence is missing, invalid, or low confidence
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:257:5. CI gate definitions translated into enforceable checks in backend/frontend workflows.
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:258:6. Religious evidence policy approval: evidence bundle schema, fallback language rules, and audit obligations.
+./sakina-docs/PHASE_2_CLOSEOUT.md:34:- Branch workflow dispatch trigger verification:
+./sakina-docs/PHASE_2_CLOSEOUT.md:35:  - Command: `gh api "repos/serverax/muslimai/contents/.github/workflows/frontend-ci.yml?ref=qa-security-hardening"`
+./sakina-docs/PHASE_2_CLOSEOUT.md:36:  - Result: **PASS** (`on.workflow_dispatch` present on `qa-security-hardening`)
+./sakina-docs/PHASE_2_CLOSEOUT.md:39:  - Dispatch command: `gh workflow run frontend-ci.yml --ref qa-security-hardening`
+./sakina-docs/PHASE_2_CLOSEOUT.md:56:    - Workflow now uses runner-available `grep` in `.github/workflows/frontend-ci.yml`.
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:96:  - Dispatch command: `gh workflow run frontend-ci.yml --ref qa-security-hardening`
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:111:  - Command: `gh api "repos/serverax/muslimai/contents/.github/workflows/frontend-ci.yml?ref=qa-security-hardening"`
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:112:  - Evidence: workflow contains `on.workflow_dispatch`.
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:124:- Non-chat modules remain intentionally disabled/coming-soon unless explicitly enabled by release flags.
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:125:- Frontend release APK is currently built with debug signing fallback when `android/key.properties` is absent.
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:126:- Frontend secret scan workflow step status is now **PASS** on GitHub runner after replacing `rg` with `grep` in `.github/workflows/frontend-ci.yml`.
+./sakina-docs/PHASE_3_DB_MIGRATION_STATUS_REVISION_2.md:17:  Phase 3 hardening for governance and Islamic/RAG decision domains.
+./sakina-docs/PHASE_3_DB_MIGRATION_STATUS_REVISION_2.md:29:  - contains hardcoded local bootstrap credential material and should not be used as an auditable production migration source.
+./sakina-docs/PHASE_3_DB_MIGRATION_STATUS_REVISION_2.md:31:## Revision 2 policy checks
+./sakina-docs/PHASE_3_DB_MIGRATION_STATUS_REVISION_2.md:41:This package is marked **ready for approval review** at schema level and intentionally not applied in this revision.
+./sakina-docs/PHASE_3_DB_MIGRATION_STATUS_REVISION_2.md:47:- A destructive down-SQL file is intentionally not provided for this broad idempotent package because safe rollback depends on pre-apply state capture.
+./sakina-docs/PHASE_3_DB_MIGRATION_STATUS_REVISION_2.md:66:    `idx_islamic_sources_status_type_lang`, `idx_islamic_documents_source_language`, `idx_rag_retrieval_audit_request`
+./sakina-docs/PRODUCTION_DEPLOYMENT.md:16:  cannot embed or generate — RAG returns errors/fallbacks.
+./sakina-docs/PRODUCTION_DEPLOYMENT.md:50:make setup-k8s          # kind cluster + sakina-{data,api,core,audit} namespaces
+./sakina-docs/PRODUCTION_DEPLOYMENT.md:118:  chunks, guardrail triggers, and encrypted backups.
+./sakina-docs/PRODUCTION_DEPLOYMENT.md:144:- vLLM requires GPU quota (`nvidia.com/gpu`) and sufficient CPU/memory; on
+./sakina-docs/PRODUCTION_RELEASE_NOTES_2026-05-27.md:140:- Data-retention decision:
+./sakina-docs/PROJECT-SUMMARY.txt:15:✅ Maintain audit trails (append-only logging for transparency)
+./sakina-docs/PROJECT-SUMMARY.txt:30:   ├── .github/workflows/       CI/CD pipelines (automated testing & deployment)
+./sakina-docs/PROJECT-SUMMARY.txt:44:   ├── GitHub Actions workflows Backend, frontend, integration CI/CD
+./sakina-docs/PROJECT-SUMMARY.txt:217:  • RAG engine with guardrails
+./sakina-docs/PROJECT-SUMMARY.txt:269:   ✅ Append-only audit logs
+./sakina-docs/PROJECT-SUMMARY.txt:277:   ✅ Intent classification
+./sakina-docs/PROJECT-SUMMARY.txt:295:   ✅ Kubernetes orchestration
+./sakina-docs/PROJECT-SUMMARY.txt:368:✅ Complete audit trail logging
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:8:- Secrets in logs: **none intentionally printed**
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:16:| Exposure assessment and rotation plan | **FIXED** | No git-history hits for listed files; keep as low confidence "not committed in this repo clone", still rotate if any file was shared externally. |
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:18:| Add secret scanning gate (gitleaks) | **FIXED** | Added `.github/workflows/secret-scan.yml` + `.gitleaks.toml`. |
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:39:| Rate limiting on public waitlist routes | **FIXED** | Added in-memory per-requester limiter used by `/waitlist` and `/v1/waitlist`. |
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:76:| Align infra CI with active prod path | **FIXED** | Infra/image workflows now validate `sakina-prod` manifests. |
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:77:| Add secret scanning | **FIXED** | Added gitleaks workflow. |
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:78:| Add dependency/security scanning | **FIXED** | Added `dependency-scan.yml` (cargo-audit + Trivy FS scan). |
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:79:| Add post-deploy smoke stage | **FIXED** | Added manual `post-deploy-smoke.yml` workflow. |
+./sakina-docs/README-SETUP.md:77:│   └── .github/workflows/
+./sakina-docs/README-SETUP.md:88:│   └── .github/workflows/
+./sakina-docs/README-SETUP.md:111:├── .github/workflows/           # CI/CD pipelines
+./sakina-docs/README.md:8:✅ **Zero Hallucination** - Strict RAG guardrails prevent theological inaccuracies  
+./sakina-docs/README.md:61:├── .github/workflows/       # CI/CD pipelines
+./sakina-docs/README.md:96:- ✅ Append-only audit logs
+./sakina-docs/SAKINA-BRAND-ASSETS.md:88:Usage: Errors, warnings, guardrail triggers
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:13:- **Respectful** of Islamic scholarship and traditions
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:23:   - Strict RAG guardrails ensure only verified Islamic knowledge is shared
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:25:   - Every answer is traced to authenticated Islamic sources
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:35:   - Verify sources with Islamic scholars
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:41:   - Append-only audit logs
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:121:- Respectful of scholars
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:151:**Tone:** Respectful, clear, honest, scholarly
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:166:and data sovereignty while respecting Islamic scholarship traditions.
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:169:✓ Zero Hallucinations      - Strict RAG guardrails
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:171:✓ Islamic Authenticity     - Verified sources & scholars
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:184:the traditions of Islamic scholarship while leveraging modern AI technology.
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:227:Muslim individuals seeking Islamic knowledge with confidence in accuracy and privacy.
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:230:AI-powered Islamic guidance that never compromises on scholarly authenticity or user privacy.
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:233:- **Zero Hallucinations**: Strict guardrails prevent inaccurate responses
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:235:- **Authentic Sources**: All guidance traces to verified Islamic scholarship
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:236:- **Transparent**: Append-only audit logs and clear documentation
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:246:- Islamic scholars and theologians
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:278:- Secure scholarly partnerships
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:307:"We commit to respecting scholarly traditions, authenticating sources, and representing Islamic knowledge faithfully."
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:334:"I'm not certain about this answer. To maintain our commitment to accuracy, I cannot provide guidance below our verification threshold. Please consult a scholar."
+./sakina-docs/SAKINA-BRAND-IDENTITY.md:346:**Project Sakina** is more than code—it's a **commitment to authentic Islamic guidance with complete privacy and scholarly integrity.**
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:74:- BE-P1-002: CORS policy implementation for intended domains
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:179:- FE-P6-002: source/citation rendering + confidence display
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:180:- FE-P6-003: unsafe/uncertain fallback UX
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:186:- BE-P6-003: citation provenance and guardrails
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:187:- BE-P6-004: model availability/fallback strategy
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:247:- BE-P9-002: moderation/content workflows
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:248:- BE-P9-003: audit log APIs
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:263:- FE-P10-002: privacy policy + terms + data safety disclosures
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:264:- FE-P10-003: crash reporting/release analytics decision
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:265:- BE-P10-001: production config audit (no localhost/no debug)
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:292:- Safe fallback if evidence is missing
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:296:- Phase 21B: Backend journey generation, memory stitching, reminders
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:299:- Phase 21E: Verification gate, contract tests, evidence audits, UX safety checks
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:302:- No fabricated Qur'an, hadith, fatwa, scholar quote, or citation metadata.
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:303:- If verified evidence missing or confidence low, return safe general encouragement only.
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:308:- All religious content audit-logged with evidence_bundle_id.
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:314:- evidence bundle or safe fallback enforced
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:350:- delete memory
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:362:- fatwa/scholar source card
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:364:- confidence/review state
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:365:- safe fallback when evidence is missing
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:366:- religious answer audit log
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:402:- high-risk fiqh routing
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:434:- `privacy_memory_items`
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:436:- `privacy_action_audit_log`
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:438:- `religious_answer_audit_log`
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:451:- `human_review_decisions`
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:454:- `GET /v1/privacy/memory`
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:455:- `DELETE /v1/privacy/memory/{memory_id}`
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:462:- `POST /v1/guidance/audit`
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:495:- Religious evidence enforcement tests (citation card or safe fallback required)
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:503:- Data minimisation review on memory and dua retention fields
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:507:- Access-control audit for privacy endpoints and export jobs
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:512:- Requires Phase 20 verified Islamic knowledge foundation for evidence cards and scholar/fatwa source confidence.
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:532:- Phase 6 (core guidance path with guardrails and honest fallback)
+./sakina-docs/setup-sakina.bat:67:set DIRS=!DIRS! sakina-backend\.github\workflows
+./sakina-docs/setup-sakina.bat:75:set DIRS=!DIRS! sakina-frontend\.github\workflows
+./sakina-docs/setup-sakina.bat:89:set DIRS=!DIRS! .github\workflows
+./sakina-docs/setup-sakina.sh:93:        "sakina-backend/.github/workflows"
+./sakina-docs/setup-sakina.sh:102:        "sakina-frontend/.github/workflows"
+./sakina-docs/setup-sakina.sh:120:        ".github/workflows"
+./sakina-docs/setup-sakina.sh:142:✅ **Zero Hallucination** - Strict RAG guardrails prevent theological inaccuracies  
+./sakina-docs/setup-sakina.sh:197:└── .github/workflows/       # CI/CD pipelines
+./sakina-docs/setup-sakina.sh:231:- ✅ Append-only audit logs
+./sakina-docs/setup-sakina.sh:276:feat: add semantic router implementation
+./sakina-docs/setup-sakina.sh:403:- **Payload**: Madhhab, scholar, authenticity grade
+./sakina-docs/setup-sakina.sh:406:- **Schema**: `verified_knowledge`, `audit`, `outbox`, `public`
+./sakina-docs/setup-sakina.sh:420:   - If below threshold → guardrail rejection
+./sakina-docs/setup-sakina.sh:459:- Append-only audit logs
+./sakina-docs/setup-sakina.sh:463:- Semantic router blocks suspicious inputs
+./sakina-docs/setup-sakina.sh:608:  "confidence": 0.92,
+./sakina-docs/setup-sakina.sh:609:  "guardrail_triggered": false,
+./sakina-docs/setup-sakina.sh:617:  "answer": "I'm not certain about this. Please consult a scholar.",
+./sakina-docs/setup-sakina.sh:619:  "confidence": 0.0,
+./sakina-docs/setup-sakina.sh:620:  "guardrail_triggered": true,
+./sakina-docs/setup-sakina.sh:631:Classify user input intent.
+./sakina-docs/setup-sakina.sh:643:  "intent": "FiqhQuery",
+./sakina-docs/setup-sakina.sh:644:  "confidence": 0.95,
+./sakina-docs/setup-sakina.sh:645:  "routing_decision": "RAG"
+./sakina-docs/setup-sakina.sh:680:**GET** `/dashboard/guardrails` (admin only)
+./sakina-docs/setup-sakina.sh:682:Get all guardrail trigger events.
+./sakina-docs/setup-sakina.sh:864:kubectl create namespace sakina-audit
+./sakina-docs/setup-sakina.sh:874:mkdir -p /tmp/sakina-storage/{postgres,qdrant,audit,models}
+./sakina-docs/setup-sakina.sh:959:kubectl port-forward -n sakina-core svc/vllm-router 8000:8000 &
+./sakina-docs/setup-sakina.sh:1075:kubectl logs deployment/vllm-router -n sakina-core
+./sakina-docs/setup-sakina.sh:1082:kubectl set env deployment/vllm-router \
+./sakina-docs/setup-sakina.sh:1134:	@command -v kind >/dev/null 2>&1 && kind create cluster --name sakina || minikube start --cpus=8 --memory=16384 --disk-size=100g
+./sakina-docs/setup-sakina.sh:1136:	@kubectl create namespace sakina-audit || true
+./sakina-docs/setup-sakina.sh:1141:	@kubectl label namespace sakina-audit name=sakina-audit --overwrite
+./sakina-docs/setup-sakina.sh:1147:	@mkdir -p /tmp/sakina-storage/{postgres,qdrant,audit,models}
+./sakina-docs/setup-sakina.sh:1160:	@echo "  vLLM:       kubectl port-forward -n sakina-core svc/vllm-router 8000:8000 &"
+./sakina-docs/setup-sakina.sh:1231:# Create GitHub workflows
+./sakina-docs/setup-sakina.sh:1232:create_github_workflows() {
+./sakina-docs/setup-sakina.sh:1236:    cat > "$PROJECT_ROOT/.github/workflows/backend-ci.yml" << 'EOF'
+./sakina-docs/setup-sakina.sh:1244:      - '.github/workflows/backend-ci.yml'
+./sakina-docs/setup-sakina.sh:1321:    print_success "Created: .github/workflows/backend-ci.yml"
+./sakina-docs/setup-sakina.sh:1324:    cat > "$PROJECT_ROOT/.github/workflows/frontend-ci.yml" << 'EOF'
+./sakina-docs/setup-sakina.sh:1332:      - '.github/workflows/frontend-ci.yml'
+./sakina-docs/setup-sakina.sh:1384:    print_success "Created: .github/workflows/frontend-ci.yml"
+./sakina-docs/setup-sakina.sh:1474:kubectl create namespace sakina-audit --dry-run=client -o yaml | kubectl apply -f -
+./sakina-docs/setup-sakina.sh:1481:kubectl label namespace sakina-audit name=sakina-audit --overwrite
+./sakina-docs/setup-sakina.sh:1756:    create_github_workflows
+./sakina-docs/TROUBLESHOOTING.md:5:### Build runs out of memory (`rustc-LLVM ERROR: out of memory`)
+./sakina-docs/TROUBLESHOOTING.md:35:### `/rag/query` errors or returns fallbacks
+./sakina-docs/TROUBLESHOOTING.md:40:Without all three, the handler returns the "consult a scholar" fallback or an error.
+./sakina-docs/TROUBLESHOOTING.md:71:### See traces in Jaeger
+./sakina-docs/WINDOWS_SETUP.md:74:kubectl port-forward -n sakina-core svc/vllm-router 8000:8000
+./sakina-frontend/android/app/src/main/AndroidManifest.xml:23:            <intent-filter>
+./sakina-frontend/android/app/src/main/AndroidManifest.xml:24:                <action android:name="android.intent.action.MAIN"/>
+./sakina-frontend/android/app/src/main/AndroidManifest.xml:25:                <category android:name="android.intent.category.LAUNCHER"/>
+./sakina-frontend/android/app/src/main/AndroidManifest.xml:26:            </intent-filter>
+./sakina-frontend/android/app/src/main/AndroidManifest.xml:40:        <intent>
+./sakina-frontend/android/app/src/main/AndroidManifest.xml:41:            <action android:name="android.intent.action.PROCESS_TEXT"/>
+./sakina-frontend/android/app/src/main/AndroidManifest.xml:43:        </intent>
+./sakina-frontend/android/settings.gradle.kts:23:    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+./sakina-frontend/lib/app/app_strings.dart:42:      AppLanguage.english: 'Verified guidance, no fake confidence',
+./sakina-frontend/lib/app/app_strings.dart:131:          'This module is intentionally disabled until backend readiness is complete.',
+./sakina-frontend/lib/screens/chat_screen.dart:292:        return 'This feature is currently disabled by backend policy.';
+./sakina-frontend/lib/screens/iman_journey_screen.dart:32:  bool _personalizationEnabled = false;
+./sakina-frontend/lib/screens/iman_journey_screen.dart:52:        _personalizationEnabled = journey.privacySettings.personalizationEnabled;
+./sakina-frontend/lib/screens/iman_journey_screen.dart:75:          personalizationEnabled: _personalizationEnabled,
+./sakina-frontend/lib/screens/iman_journey_screen.dart:82:        _personalizationEnabled = updated.personalizationEnabled;
+./sakina-frontend/lib/screens/iman_journey_screen.dart:139:    final fallback = journey.religiousReminder.safeFallback;
+./sakina-frontend/lib/screens/iman_journey_screen.dart:209:                  value: _personalizationEnabled,
+./sakina-frontend/lib/screens/iman_journey_screen.dart:211:                      setState(() => _personalizationEnabled = value),
+./sakina-frontend/lib/screens/iman_journey_screen.dart:246:            'Safe fallback if evidence is missing',
+./sakina-frontend/lib/screens/iman_journey_screen.dart:247:            fallback == null
+./sakina-frontend/lib/screens/iman_journey_screen.dart:249:                : Text(fallback.message),
+./sakina-frontend/lib/screens/islamic_library_screen.dart:173:            if (_answer!.fallbackUsed)
+./sakina-frontend/lib/screens/islamic_library_screen.dart:179:                  'Evidence-only fallback active: no verified evidence found.',
+./sakina-frontend/lib/screens/islamic_library_screen.dart:182:            if (_answer!.fatwaSensitive)
+./sakina-frontend/lib/screens/module_read_only_state_screen.dart:40:              return _stateText('$title is disabled by backend policy.');
+./sakina-frontend/lib/screens/module_read_only_state_screen.dart:62:            final scholarReviewWarning = overview != null &&
+./sakina-frontend/lib/screens/module_read_only_state_screen.dart:63:                overview.reviewStatus == ReviewStatus.scholarReviewRequired;
+./sakina-frontend/lib/screens/module_read_only_state_screen.dart:66:                scholarReviewWarning
+./sakina-frontend/lib/screens/module_read_only_state_screen.dart:67:                    ? '$title under review. Please consult a qualified scholar.'
+./sakina-frontend/lib/screens/module_read_only_state_screen.dart:74:                if (scholarReviewWarning)
+./sakina-frontend/lib/services/api_service.dart:679:  String _errorMessage(String fallback, http.Response response) {
+./sakina-frontend/lib/services/api_service.dart:687:          return '$fallback [$code]: $message (HTTP ${response.statusCode})';
+./sakina-frontend/lib/services/api_service.dart:690:          return '$fallback: $message (HTTP ${response.statusCode})';
+./sakina-frontend/lib/services/api_service.dart:694:        return '$fallback: $error (HTTP ${response.statusCode})';
+./sakina-frontend/lib/services/api_service.dart:697:    return '$fallback: HTTP ${response.statusCode}';
+./sakina-frontend/lib/services/api_service.dart:700:  ApiException _apiException(String fallback, http.Response response) {
+./sakina-frontend/lib/services/api_service.dart:714:      _errorMessage(fallback, response),
+./sakina-frontend/lib/services/api_service.dart:725:  final double confidence;
+./sakina-frontend/lib/services/api_service.dart:726:  final bool guardrailTriggered;
+./sakina-frontend/lib/services/api_service.dart:732:    required this.confidence,
+./sakina-frontend/lib/services/api_service.dart:733:    required this.guardrailTriggered,
+./sakina-frontend/lib/services/api_service.dart:743:        confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+./sakina-frontend/lib/services/api_service.dart:744:        guardrailTriggered: json['guardrail_triggered'] as bool? ?? false,
+./sakina-frontend/lib/services/api_service.dart:750:  final String intent;
+./sakina-frontend/lib/services/api_service.dart:751:  final double confidence;
+./sakina-frontend/lib/services/api_service.dart:755:    required this.intent,
+./sakina-frontend/lib/services/api_service.dart:756:    required this.confidence,
+./sakina-frontend/lib/services/api_service.dart:762:        intent: json['intent'] as String? ?? '',
+./sakina-frontend/lib/services/api_service.dart:763:        confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+./sakina-frontend/lib/services/api_service.dart:764:        routingDecision: json['routing_decision'] as String? ?? '',
+./sakina-frontend/lib/services/api_service.dart:924:  final bool fallbackUsed;
+./sakina-frontend/lib/services/api_service.dart:925:  final bool fatwaSensitive;
+./sakina-frontend/lib/services/api_service.dart:931:    required this.fallbackUsed,
+./sakina-frontend/lib/services/api_service.dart:932:    required this.fatwaSensitive,
+./sakina-frontend/lib/services/api_service.dart:940:        fallbackUsed: json['fallback_used'] as bool? ?? false,
+./sakina-frontend/lib/services/api_service.dart:941:        fatwaSensitive: json['fatwa_sensitive'] as bool? ?? false,
+./sakina-frontend/lib/services/api_service.dart:1013:        'user_agent': userAgent,
+./sakina-frontend/lib/services/api_service.dart:1306:  final double confidenceScore;
+./sakina-frontend/lib/services/api_service.dart:1312:    required this.confidenceScore,
+./sakina-frontend/lib/services/api_service.dart:1320:        confidenceScore: (json['confidence_score'] as num?)?.toDouble() ?? 0.0,
+./sakina-frontend/lib/services/api_service.dart:1325:        safeFallback: json['safe_fallback'] is Map<String, dynamic>
+./sakina-frontend/lib/services/api_service.dart:1327:                json['safe_fallback'] as Map<String, dynamic>,
+./sakina-frontend/lib/services/api_service.dart:1334:  final bool personalizationEnabled;
+./sakina-frontend/lib/services/api_service.dart:1339:    required this.personalizationEnabled,
+./sakina-frontend/lib/services/api_service.dart:1346:        personalizationEnabled:
+./sakina-frontend/lib/services/api_service.dart:1347:            json['personalization_enabled'] as bool? ?? false,
+./sakina-frontend/lib/services/api_service.dart:1353:        'personalization_enabled': personalizationEnabled,
+./sakina-frontend/lib/services/api_service.dart:1463:        'religious_confidence_score': religiousConfidenceScore,
+./sakina-frontend/lib/services/module_service.dart:22:  scholarReviewRequired,
+./sakina-frontend/lib/services/module_service.dart:362:  String _errorMessage(String fallback, http.Response response) {
+./sakina-frontend/lib/services/module_service.dart:370:          return '$fallback [$code]: $message (HTTP ${response.statusCode})';
+./sakina-frontend/lib/services/module_service.dart:374:    return '$fallback: HTTP ${response.statusCode}';
+./sakina-frontend/lib/services/module_service.dart:583:    'scholar_review_required' => ReviewStatus.scholarReviewRequired,
+./sakina-frontend/lib/services/module_service.dart:586:    _ => ReviewStatus.scholarReviewRequired,
+./sakina-frontend/lib/services/sync_service.dart:12:/// The backup/restore orchestration (fetch server key, upload/download blobs)
+./sakina-frontend/pubspec.lock:637:  stack_trace:
+./sakina-frontend/pubspec.lock:640:      name: stack_trace
+./sakina-frontend/test/api_service_test.dart:9:  test('query() parses RagResponse (answer + sources + confidence)', () async {
+./sakina-frontend/test/api_service_test.dart:22:            'confidence': 0.92,
+./sakina-frontend/test/api_service_test.dart:23:            'guardrail_triggered': false,
+./sakina-frontend/test/api_service_test.dart:35:    expect(r.confidence, 0.92);
+./sakina-frontend/test/api_service_test.dart:36:    expect(r.guardrailTriggered, isFalse);
+./sakina-frontend/test/api_service_test.dart:44:            'confidence': 0.0,
+./sakina-frontend/test/api_service_test.dart:45:            'guardrail_triggered': true,
+./sakina-frontend/test/api_service_test.dart:54:    expect(response.guardrailTriggered, isTrue);
+./sakina-frontend/test/api_service_test.dart:60:            'intent': 'FiqhQuery',
+./sakina-frontend/test/api_service_test.dart:61:            'confidence': 0.95,
+./sakina-frontend/test/api_service_test.dart:62:            'routing_decision': 'RAG',
+./sakina-frontend/test/api_service_test.dart:69:    expect(c.intent, 'FiqhQuery');
+./sakina-frontend/test/api_service_test.dart:70:    expect(c.confidence, 0.95);
+./sakina-frontend/test/api_service_test.dart:104:            // user_message_id intentionally missing
+./sakina-frontend/test/iman_journey_screen_test.dart:13:    personalizationEnabled: true,
+./sakina-frontend/test/iman_journey_screen_test.dart:41:        confidenceScore: 0.0,
+./sakina-frontend/test/iman_journey_screen_test.dart:76:  testWidgets('renders fallback and privacy switches', (tester) async {
+./sakina-frontend/test/iman_journey_screen_test.dart:90:      find.text('Safe fallback if evidence is missing'),
+./sakina-frontend/test/module_read_only_state_screen_test.dart:40:                reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_read_only_state_screen_test.dart:47:                  reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_read_only_state_screen_test.dart:57:    expect(find.textContaining('consult a qualified scholar'), findsOneWidget);
+./sakina-frontend/test/module_read_only_state_screen_test.dart:60:  testWidgets('scholar-review-required response displays warning',
+./sakina-frontend/test/module_read_only_state_screen_test.dart:74:                reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_read_only_state_screen_test.dart:81:                  reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_read_only_state_screen_test.dart:91:    expect(find.textContaining('consult a qualified scholar'), findsOneWidget);
+./sakina-frontend/test/module_service_test.dart:20:      reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:27:        reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:39:      reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:46:        reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:59:      reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:66:        reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:79:      reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:86:        reviewStatus: ReviewStatus.scholarReviewRequired,
+./sakina-frontend/test/module_service_test.dart:158:          'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:221:      'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:228:        'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:235:          'review_status': 'scholar_review_pending',
+./sakina-frontend/test/module_service_test.dart:248:      'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:255:        'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:274:      'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:281:        'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:300:      'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:307:        'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:311:          'source_type': 'policy',
+./sakina-frontend/test/module_service_test.dart:327:        'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:334:          'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:355:          'review_status': 'scholar_review_required',
+./sakina-frontend/test/module_service_test.dart:362:            'review_status': 'scholar_review_required',
+./sakina-infra/Makefile:12:	kubectl create namespace sakina-audit
+./sakina-infra/manifests/monitoring/jaeger.yaml:2:# OTLP enabled so the API can export traces to :4317 (gRPC) / :4318 (HTTP).
+./sakina-infra/manifests/network-policies.yaml:11:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:21:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:35:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:64:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:126:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:136:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:149:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:173:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:195:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:212:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:222:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:235:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:249:# sakina-audit namespace: default-deny all
+./sakina-infra/manifests/network-policies.yaml:254:  namespace: sakina-audit
+./sakina-infra/manifests/network-policies.yaml:257:  policyTypes:
+./sakina-infra/manifests/network-policies.yaml:264:  namespace: sakina-audit
+./sakina-infra/manifests/network-policies.yaml:267:  policyTypes:
+./sakina-infra/manifests/postgres-deployment.yaml:53:              memory: 256Mi
+./sakina-infra/manifests/postgres-deployment.yaml:56:              memory: 1Gi
+./sakina-infra/manifests/qdrant-deployment.yaml:28:              memory: 256Mi
+./sakina-infra/manifests/qdrant-deployment.yaml:31:              memory: 1Gi
+./sakina-infra/manifests/sakina-api-deployment.yaml:115:            memory: 128Mi
+./sakina-infra/manifests/sakina-api-deployment.yaml:118:            memory: 512Mi
+./sakina-infra/manifests/sakina-api-deployment.yaml:153:# Secrets are intentionally not committed in this manifest.
+./sakina-infra/manifests/sakina-prod/sakina-backend.yaml:91:              memory: 256Mi
+./sakina-infra/manifests/sakina-prod/sakina-backend.yaml:94:              memory: 768Mi
+./sakina-infra/manifests/sakina-prod/sakina-frontend.yaml:50:              memory: 64Mi
+./sakina-infra/manifests/sakina-prod/sakina-frontend.yaml:53:              memory: 128Mi
+./sakina-infra/manifests/sakina-prod/sakina-ingress.yaml:7:    traefik.ingress.kubernetes.io/router.entrypoints: web
+./sakina-local-qa-check.sh:48:  > reports/qa/security/secret-risk-grep.txt || true
+./sakina-local-qa-check.sh:70:  cargo audit > ../reports/qa/security/cargo-audit.txt 2>&1 || true
+./sakina-local-qa-check.sh:100:grep -RInE "quran|ayah|surah|tafsir|hadith|bukhari|muslim|fiqh|fatwa|scholar|madhhab|dua|seerah|zakat|salah|prayer|fasting|hajj|umrah|islamic|authentic|grade|narrator|chain|source|citation" . \
+./sakina-local-qa-check.sh:133:grep -RInE "brain|algorithm|workflow|orchestr|orchestration|agent|planner|router|model_route|policy|guardrail|decision|risk|intent|classification|confidence|fallback|memory|personalization|fatwa|scholar|audit|trace" . \
+./sakina-local-qa-check.sh:140:  > reports/qa/evidence/brain-algorithm-search.txt || true
+./sakina-tests/integration/test_rag_query.py:32:def test_classify_intent(client):
+./sakina-tests/integration/test_rag_query.py:37:    assert "intent" in data
+./sakina-tests/integration/test_rag_query.py:38:    assert "confidence" in data
+./scripts/sakina/verify-db-schema.sh:10:required=(users user_profiles modules user_module_progress chat_threads chat_messages rag_documents rag_chunks rag_embeddings notifications admin_audit_events)
+./scripts/sakina/verify-no-secret-leak.sh:6:  mapfile -t FILES < <(git ls-files --cached --others --exclude-standard .github/workflows docs infra/k8s scripts/sakina sakina-backend sakina-rag admin)
+./setup-sakina.bat:67:set DIRS=!DIRS! sakina-backend\.github\workflows
+./setup-sakina.bat:75:set DIRS=!DIRS! sakina-frontend\.github\workflows
+./setup-sakina.bat:89:set DIRS=!DIRS! .github\workflows
+./setup-sakina.sh:93:        "sakina-backend/.github/workflows"
+./setup-sakina.sh:102:        "sakina-frontend/.github/workflows"
+./setup-sakina.sh:120:        ".github/workflows"
+./setup-sakina.sh:142:✅ **Zero Hallucination** - Strict RAG guardrails prevent theological inaccuracies  
+./setup-sakina.sh:197:└── .github/workflows/       # CI/CD pipelines
+./setup-sakina.sh:231:- ✅ Append-only audit logs
+./setup-sakina.sh:276:feat: add semantic router implementation
+./setup-sakina.sh:403:- **Payload**: Madhhab, scholar, authenticity grade
+./setup-sakina.sh:406:- **Schema**: `verified_knowledge`, `audit`, `outbox`, `public`
+./setup-sakina.sh:420:   - If below threshold → guardrail rejection
+./setup-sakina.sh:459:- Append-only audit logs
+./setup-sakina.sh:463:- Semantic router blocks suspicious inputs
+./setup-sakina.sh:608:  "confidence": 0.92,
+./setup-sakina.sh:609:  "guardrail_triggered": false,
+./setup-sakina.sh:617:  "answer": "I'm not certain about this. Please consult a scholar.",
+./setup-sakina.sh:619:  "confidence": 0.0,
+./setup-sakina.sh:620:  "guardrail_triggered": true,
+./setup-sakina.sh:631:Classify user input intent.
+./setup-sakina.sh:643:  "intent": "FiqhQuery",
+./setup-sakina.sh:644:  "confidence": 0.95,
+./setup-sakina.sh:645:  "routing_decision": "RAG"
+./setup-sakina.sh:680:**GET** `/dashboard/guardrails` (admin only)
+./setup-sakina.sh:682:Get all guardrail trigger events.
+./setup-sakina.sh:864:kubectl create namespace sakina-audit
+./setup-sakina.sh:874:mkdir -p /tmp/sakina-storage/{postgres,qdrant,audit,models}
+./setup-sakina.sh:959:kubectl port-forward -n sakina-core svc/vllm-router 8000:8000 &
+./setup-sakina.sh:1075:kubectl logs deployment/vllm-router -n sakina-core
+./setup-sakina.sh:1082:kubectl set env deployment/vllm-router \
+./setup-sakina.sh:1134:	@command -v kind >/dev/null 2>&1 && kind create cluster --name sakina || minikube start --cpus=8 --memory=16384 --disk-size=100g
+./setup-sakina.sh:1136:	@kubectl create namespace sakina-audit || true
+./setup-sakina.sh:1141:	@kubectl label namespace sakina-audit name=sakina-audit --overwrite
+./setup-sakina.sh:1147:	@mkdir -p /tmp/sakina-storage/{postgres,qdrant,audit,models}
+./setup-sakina.sh:1160:	@echo "  vLLM:       kubectl port-forward -n sakina-core svc/vllm-router 8000:8000 &"
+./setup-sakina.sh:1231:# Create GitHub workflows
+./setup-sakina.sh:1232:create_github_workflows() {
+./setup-sakina.sh:1236:    cat > "$PROJECT_ROOT/.github/workflows/backend-ci.yml" << 'EOF'
+./setup-sakina.sh:1244:      - '.github/workflows/backend-ci.yml'
+./setup-sakina.sh:1321:    print_success "Created: .github/workflows/backend-ci.yml"
+./setup-sakina.sh:1324:    cat > "$PROJECT_ROOT/.github/workflows/frontend-ci.yml" << 'EOF'
+./setup-sakina.sh:1332:      - '.github/workflows/frontend-ci.yml'
+./setup-sakina.sh:1384:    print_success "Created: .github/workflows/frontend-ci.yml"
+./setup-sakina.sh:1474:kubectl create namespace sakina-audit --dry-run=client -o yaml | kubectl apply -f -
+./setup-sakina.sh:1481:kubectl label namespace sakina-audit name=sakina-audit --overwrite
+./setup-sakina.sh:1756:    create_github_workflows
+./SPRINT-GAP-ANALYSIS.md:8:>    2Gi audit PVC.
+./SPRINT-GAP-ANALYSIS.md:26:| Business Logic | ⚠️ stubs only | Router, guardrails, citation, ingestion |
+./SPRINT-GAP-ANALYSIS.md:37:minikube/kind cluster; 4 namespaces (sakina-core/data/audit/api);
+./SPRINT-GAP-ANALYSIS.md:46:✅ PVCs via volumeClaimTemplates: postgres 10Gi, qdrant 5Gi  (NO separate audit PVC)
+./SPRINT-GAP-ANALYSIS.md:48:✅ CI/CD workflows done
+./SPRINT-GAP-ANALYSIS.md:103:❌ real logic, audit logging wiring
+./SPRINT-GAP-ANALYSIS.md:106:### Missing: SemanticRouter logic (`src/services/semantic_router.rs`)
+./SPRINT-GAP-ANALYSIS.md:109:### Missing: Guardrails logic (`src/services/guardrails.rs`)
+./SPRINT-GAP-ANALYSIS.md:110:Embed query → Qdrant top-k → if max score < 0.85 return "consult a scholar" (bypass LLM); madhhab filter; log triggers. **~3-4 days.**
+./SPRINT-GAP-ANALYSIS.md:116:Schema (`audit.logs`) exists; nothing writes to it yet. Wire RAG queries + guardrail triggers. **~2-3 days.**
+./SPRINT-GAP-ANALYSIS.md:124:✅ Actix-web structure; all routes (/v1/users, /v1/rag/query, /v1/classify, /v1/sync/backup, /v1/dashboard/guardrails)
+./SPRINT-GAP-ANALYSIS.md:132:                        confidence:0.92, guardrail_triggered:false, processing_time_ms:450}
+./SPRINT-GAP-ANALYSIS.md:133:POST /v1/classify    → {intent:"FiqhQuery", confidence:0.95, routing_decision:"RAG"}
+./SPRINT-GAP-ANALYSIS.md:137:GET  /v1/dashboard/guardrails  → [{timestamp, query, trigger_reason, user_id:null}]
+./SPRINT-GAP-ANALYSIS.md:140:`answer`/`sources` and `intent`/`confidence`, which match these real stubs.)
+./SPRINT-GAP-ANALYSIS.md:143:- **/v1/rag/query:** route → guardrails(0.85) → vLLM(top-k) → citations → audit log → answer+sources+confidence.
+./SPRINT-GAP-ANALYSIS.md:144:- **/v1/classify:** SemanticRouter → intent+confidence.
+./SPRINT-GAP-ANALYSIS.md:152:Tokenization=Python chunker, embedding=vLLM, encryption=client crypto — none currently WASM. Clarify intent before building.
+./SPRINT-GAP-ANALYSIS.md:188:✅ /dashboard/guardrails endpoint (stub), audit.logs schema
+./SPRINT-GAP-ANALYSIS.md:189:❌ Dashboard UI, audit logging wiring, penetration testing
+./SPRINT-GAP-ANALYSIS.md:192:- **Dashboard UI** (`sakina-dashboard/`): guardrail triggers, low-confidence monitor, system health. Vue + Chart.js. **~5-7 days.**
+./SPRINT-GAP-ANALYSIS.md:193:- **Audit logging wiring**: middleware writing to `audit.logs` (schema exists, unused). **~2-3 days.**
+./SPRINT-GAP-ANALYSIS.md:218:| 2 | Router, guardrails, citation, audit logic | Critical | ~12 days |
+./SPRINT-GAP-ANALYSIS.md:221:| 5 | Dashboard, audit wiring, pentest | High | ~8 days |
+./VERIFICATION-COMMANDS.md:93:# Expected: cluster created; namespaces sakina-data, sakina-api, sakina-core, sakina-audit
+./VERIFICATION-COMMANDS.md:194:#   test_classify_intent PASSED
+./WINDOWS_SETUP.md:74:kubectl port-forward -n sakina-core svc/vllm-router 8000:8000

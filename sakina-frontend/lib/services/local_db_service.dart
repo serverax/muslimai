@@ -7,7 +7,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 /// test/local_db_test.dart.
 class LocalDBService {
   static const String _dbName = 'sakina.db';
-  static const int _dbVersion = 1;
+  static const int _dbVersion = 2;
   late Database _db;
 
   Future<void> init(String password) async {
@@ -28,6 +28,7 @@ class LocalDBService {
         role TEXT NOT NULL,
         timestamp INTEGER NOT NULL,
         sources TEXT,
+        sync_status TEXT NOT NULL DEFAULT 'synced',
         created_at INTEGER NOT NULL
       )
     ''');
@@ -37,11 +38,19 @@ class LocalDBService {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Schema migrations go here.
+    if (oldVersion < 2) {
+      await db.execute(
+        "ALTER TABLE messages ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'synced'",
+      );
+    }
   }
 
   Future<void> saveMessage(Message msg) async {
-    await _db.insert('messages', msg.toMap());
+    await _db.insert(
+      'messages',
+      msg.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<List<Message>> getMessages() async {
@@ -64,6 +73,7 @@ class Message {
   final String role; // 'user' | 'assistant'
   final int timestamp;
   final String? sources;
+  final String syncStatus;
   final int createdAt;
 
   Message({
@@ -72,6 +82,7 @@ class Message {
     required this.role,
     required this.timestamp,
     this.sources,
+    this.syncStatus = 'synced',
     required this.createdAt,
   });
 
@@ -81,6 +92,7 @@ class Message {
         'role': role,
         'timestamp': timestamp,
         'sources': sources,
+        'sync_status': syncStatus,
         'created_at': createdAt,
       };
 
@@ -90,6 +102,7 @@ class Message {
         role: map['role'] as String,
         timestamp: map['timestamp'] as int,
         sources: map['sources'] as String?,
+        syncStatus: map['sync_status'] as String? ?? 'synced',
         createdAt: map['created_at'] as int,
       );
 }

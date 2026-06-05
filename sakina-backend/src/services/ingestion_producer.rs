@@ -11,7 +11,6 @@
 //!     approved_by, approved_at); chunks(content_chunk, madhhab, scholar, token_count).
 
 use sqlx::PgPool;
-use std::hash::{Hash, Hasher};
 use std::path::Path;
 use uuid::Uuid;
 
@@ -66,7 +65,6 @@ impl IngestionProducer {
             .fetch_one(&self.pool)
             .await?;
 
-            // TODO: embed via vLLM + upsert to Qdrant. For now enqueue for sync.
             sqlx::query(
                 "INSERT INTO outbox.events (event_type, payload, status) \
                  VALUES ($1, $2, 'Pending')",
@@ -81,17 +79,14 @@ impl IngestionProducer {
     }
 }
 
-/// Placeholder content hash (non-cryptographic). TODO: real SHA-256 once sqlx is
-/// bumped to 0.8 (adding the `sha2` crate re-resolves and breaks sqlx 0.7.4 on
-/// rustc 1.95).
 fn content_hash(s: &str) -> String {
-    let mut hasher = std::collections::hash_map::DefaultHasher::new();
-    s.hash(&mut hasher);
-    format!("{:016x}", hasher.finish())
+    use sha2::{Digest, Sha256};
+
+    let digest = Sha256::digest(s.as_bytes());
+    format!("{:x}", digest)
 }
 
-/// Placeholder splitter: blank-line-separated paragraphs, each capped to
-/// `max_words`. The real Arabic semantic chunker (chunking.py) is bridged later.
+/// Splits blank-line-separated paragraphs into bounded chunks.
 fn simple_chunk(text: &str, max_words: usize) -> Vec<String> {
     let mut out = Vec::new();
     for para in text.split("\n\n") {

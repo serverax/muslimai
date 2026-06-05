@@ -5,6 +5,7 @@ use sqlx::PgPool;
 use uuid::Uuid;
 
 use crate::error::{error_response, ApiError};
+use crate::services::authenticated_user_id;
 
 #[derive(Debug, Deserialize)]
 pub struct BackupUploadRequest {
@@ -18,11 +19,12 @@ pub async fn upload_backup(
     body: web::Json<BackupUploadRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let requested_user_id = user_id.into_inner();
-    if !authorize_user_access(&req, requested_user_id) {
+    let authenticated_user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+    if authenticated_user_id != requested_user_id {
         return Ok(error_response(
             actix_web::http::StatusCode::UNAUTHORIZED,
             "unauthorized",
-            "requested user_id does not match x-sakina-user-id header",
+            "requested user_id does not match authenticated user",
         ));
     }
     if body.data.len() > 256 * 1024 {
@@ -63,11 +65,12 @@ pub async fn download_backup(
     user_id: web::Path<Uuid>,
 ) -> Result<HttpResponse, ApiError> {
     let requested_user_id = user_id.into_inner();
-    if !authorize_user_access(&req, requested_user_id) {
+    let authenticated_user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+    if authenticated_user_id != requested_user_id {
         return Ok(error_response(
             actix_web::http::StatusCode::UNAUTHORIZED,
             "unauthorized",
-            "requested user_id does not match x-sakina-user-id header",
+            "requested user_id does not match authenticated user",
         ));
     }
     let row: Option<(Vec<u8>, String, chrono::NaiveDateTime)> = sqlx::query_as(
@@ -109,15 +112,6 @@ fn checksum_hex(bytes: &[u8]) -> String {
     use sha2::{Digest, Sha256};
     let digest = Sha256::digest(bytes);
     format!("{:x}", digest)
-}
-
-fn authorize_user_access(req: &HttpRequest, requested_user_id: Uuid) -> bool {
-    req.headers()
-        .get("x-sakina-user-id")
-        .and_then(|h| h.to_str().ok())
-        .and_then(|s| Uuid::parse_str(s).ok())
-        .map(|header_user_id| header_user_id == requested_user_id)
-        .unwrap_or(false)
 }
 
 #[cfg(test)]

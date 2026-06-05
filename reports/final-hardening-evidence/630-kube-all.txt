@@ -1,0 +1,13 @@
+NAME                                   READY   STATUS    RESTARTS   AGE   IP             NODE                    NOMINATED NODE   READINESS GATES
+pod/sakina-waitlist-6d8d678bfd-tqqs5   1/1     Running   0          8h    10.244.5.221   talos-138-201-202-174   <none>           <none>
+
+NAME                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE     SELECTOR
+service/sakina-waitlist   ClusterIP   10.105.2.124   <none>        80/TCP    3d14h   app=sakina-waitlist
+
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES              SELECTOR
+deployment.apps/sakina-waitlist   1/1     1            1           3d14h   nginx        nginx:1.27-alpine   app=sakina-waitlist
+
+NAME                                         DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES              SELECTOR
+replicaset.apps/sakina-waitlist-54b6d5bbf7   0         0         0       3d14h   nginx        nginx:1.27-alpine   app=sakina-waitlist,pod-template-hash=54b6d5bbf7
+replicaset.apps/sakina-waitlist-6d5dc5764    0         0         0       3d14h   nginx        nginx:1.27-alpine   app=sakina-waitlist,pod-template-hash=6d5dc5764
+replicaset.apps/sakina-waitlist-6d8d678bfd   1         1         1       8h      nginx        nginx:1.27-alpine   app=sakina-waitlist,pod-template-hash=6d8d678bfd

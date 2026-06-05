@@ -1,7 +1,8 @@
-use actix_web::{web, HttpResponse};
+use actix_web::{web, HttpRequest, HttpResponse};
 use uuid::Uuid;
 
 use crate::error::ApiError;
+use crate::services::authenticated_user_id;
 use crate::services::phase2::{
     ActivateSubscriptionRequest, AppendSupportTicketMessageRequest, AssignScholarReviewRequest,
     CreateAuditLogRequest, CreateChatFeedbackRequest, CreateEventRequest,
@@ -9,9 +10,9 @@ use crate::services::phase2::{
     CreateSessionRequest, CreateSourceApprovalItemRequest, CreateSupportTicketRequest,
     EnqueueNotificationRequest, EnqueueScholarReviewRequest, LogAdminActionRequest,
     LogCitationEventRequest, LogMastermindDecisionRequest, LogRagRetrievalRequest,
-    LogSafetyClassificationRequest, LogWasmVerificationRequest, Phase2Repository,
-    RegisterUserRequest, ReportAnswerRequest, SourceApprovalItem, UpsertAdminRoleRequest,
-    UpsertDeviceTokenRequest, UpsertProfileRequest,
+    LogSafetyClassificationRequest, LogWasmVerificationRequest, LoginRequest, Phase2Repository,
+    RefreshTokenRequest, RegisterUserRequest, ReportAnswerRequest, SourceApprovalItem,
+    UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
 };
 
 #[derive(Debug, serde::Deserialize)]
@@ -35,11 +36,6 @@ pub async fn register_user(
     if request.email.trim().is_empty() {
         return Err(ApiError::bad_request("email is required"));
     }
-    if request.provider.trim().is_empty() || request.provider_user_id.trim().is_empty() {
-        return Err(ApiError::bad_request(
-            "provider and provider_user_id are required",
-        ));
-    }
     let response = repo.register_user(request).await?;
     Ok(HttpResponse::Created().json(response))
 }
@@ -59,24 +55,120 @@ pub async fn create_session(
     Ok(HttpResponse::Created().json(response))
 }
 
+pub async fn login(
+    repo: web::Data<Phase2Repository>,
+    body: web::Json<LoginRequest>,
+) -> Result<HttpResponse, ApiError> {
+    let request = body.into_inner();
+    if request.email.trim().is_empty() || request.password.is_empty() {
+        return Err(ApiError::bad_request("email and password are required"));
+    }
+    let response = repo.login_password(request).await?;
+    Ok(HttpResponse::Ok().json(response))
+}
+
+pub async fn refresh(
+    repo: web::Data<Phase2Repository>,
+    body: web::Json<RefreshTokenRequest>,
+) -> Result<HttpResponse, ApiError> {
+    let response = repo.refresh_session(body.into_inner()).await?;
+    Ok(HttpResponse::Ok().json(response))
+}
+
+pub async fn current_user(
+    req: HttpRequest,
+    repo: web::Data<Phase2Repository>,
+) -> Result<HttpResponse, ApiError> {
+    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let response = repo.get_user_summary(user_id).await?;
+    Ok(HttpResponse::Ok().json(response))
+}
+
+pub async fn logout(
+    req: HttpRequest,
+    repo: web::Data<Phase2Repository>,
+) -> Result<HttpResponse, ApiError> {
+    let token = crate::services::auth::bearer_token(&req)?;
+    let token_hash = crate::services::auth::session_token_hash(token);
+    let mut tx = repo
+        .pool()
+        .begin()
+        .await
+        .map_err(|_| ApiError::internal("failed to begin logout transaction"))?;
+
+    let session_id = sqlx::query_scalar::<_, Uuid>(
+        r#"
+        UPDATE public.auth_sessions
+        SET revoked_at = now(), updated_at = now()
+        WHERE session_token_hash = $1 AND revoked_at IS NULL
+        RETURNING id
+        "#,
+    )
+    .bind(token_hash)
+    .fetch_optional(&mut *tx)
+    .await
+    .map_err(|_| ApiError::internal("failed to revoke session"))?;
+
+    let mut refresh_rows = 0;
+    if let Some(session_id) = session_id {
+        refresh_rows = sqlx::query(
+            r#"
+            UPDATE public.auth_refresh_tokens
+            SET revoked_at = now()
+            WHERE session_id = $1 AND revoked_at IS NULL
+            "#,
+        )
+        .bind(session_id)
+        .execute(&mut *tx)
+        .await
+        .map_err(|_| ApiError::internal("failed to revoke refresh tokens"))?
+        .rows_affected();
+    }
+
+    tx.commit()
+        .await
+        .map_err(|_| ApiError::internal("failed to commit logout transaction"))?;
+
+    Ok(HttpResponse::Ok().json(serde_json::json!({
+        "revoked": session_id.is_some(),
+        "revoked_refresh_tokens": refresh_rows
+    })))
+}
+
 pub async fn upsert_profile(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
     body: web::Json<UpsertProfileRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let mut request = body.into_inner();
-    request.user_id = path.into_inner();
+    let requested_user_id = path.into_inner();
+    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+    if auth_user_id != requested_user_id {
+        return Err(ApiError::unauthorized(
+            "requested user_id does not match authenticated user",
+        ));
+    }
+    request.user_id = auth_user_id;
     let response = repo.upsert_profile(request).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
 pub async fn create_family_profile(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
     body: web::Json<crate::services::phase2::CreateFamilyProfileRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let mut request = body.into_inner();
-    request.user_id = path.into_inner();
+    let requested_user_id = path.into_inner();
+    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+    if auth_user_id != requested_user_id {
+        return Err(ApiError::unauthorized(
+            "requested user_id does not match authenticated user",
+        ));
+    }
+    request.user_id = auth_user_id;
     if request.family_name.trim().is_empty() {
         return Err(ApiError::bad_request("family_name is required"));
     }
@@ -85,41 +177,79 @@ pub async fn create_family_profile(
 }
 
 pub async fn activate_subscription(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
     body: web::Json<ActivateSubscriptionRequest>,
 ) -> Result<HttpResponse, ApiError> {
+    let grant_secret = std::env::var("SAKINA_MANUAL_ENTITLEMENT_GRANT_SECRET")
+        .map_err(|_| ApiError::service_unavailable("manual entitlement grants are disabled"))?;
+    if grant_secret.trim().len() < 24 {
+        return Err(ApiError::service_unavailable(
+            "manual entitlement grant secret is not strong enough",
+        ));
+    }
+    let supplied_secret = req
+        .headers()
+        .get("X-Sakina-Grant-Secret")
+        .and_then(|value| value.to_str().ok())
+        .unwrap_or_default();
+    if supplied_secret != grant_secret {
+        return Err(ApiError::unauthorized(
+            "manual entitlement grant credential is invalid",
+        ));
+    }
+
     let mut request = body.into_inner();
-    request.user_id = path.into_inner();
+    let requested_user_id = path.into_inner();
+    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+    if auth_user_id != requested_user_id {
+        return Err(ApiError::unauthorized(
+            "requested user_id does not match authenticated user",
+        ));
+    }
+    request.user_id = auth_user_id;
     let response = repo.activate_subscription(request).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
 pub async fn list_entitlements(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
 ) -> Result<HttpResponse, ApiError> {
-    let entries = repo.list_user_entitlements(path.into_inner()).await?;
+    let requested_user_id = path.into_inner();
+    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+    if auth_user_id != requested_user_id {
+        return Err(ApiError::unauthorized(
+            "requested user_id does not match authenticated user",
+        ));
+    }
+    let entries = repo.list_user_entitlements(auth_user_id).await?;
     Ok(HttpResponse::Ok().json(serde_json::json!({ "entitlements": entries })))
 }
 
 pub async fn create_chat_feedback(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
     body: web::Json<CreateChatFeedbackRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let mut request = body.into_inner();
+    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
     request.message_id = Some(path.into_inner());
     let id = repo.create_chat_feedback(request).await?;
     Ok(HttpResponse::Created().json(serde_json::json!({ "id": id })))
 }
 
 pub async fn report_answer(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
     body: web::Json<ReportAnswerRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let mut request = body.into_inner();
+    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
     request.message_id = Some(path.into_inner());
     if request.report_reason.trim().is_empty() {
         return Err(ApiError::bad_request("report_reason is required"));
@@ -241,30 +371,64 @@ pub async fn create_notification_template(
 }
 
 pub async fn enqueue_notification(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     body: web::Json<EnqueueNotificationRequest>,
 ) -> Result<HttpResponse, ApiError> {
-    let id = repo.enqueue_notification(body.into_inner()).await?;
+    let mut request = body.into_inner();
+    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let id = repo.enqueue_notification(request).await?;
     Ok(HttpResponse::Created().json(serde_json::json!({ "id": id })))
 }
 
+pub async fn list_notifications(
+    req: HttpRequest,
+    repo: web::Data<Phase2Repository>,
+) -> Result<HttpResponse, ApiError> {
+    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let notifications = repo.list_notifications(user_id).await?;
+    Ok(HttpResponse::Ok().json(serde_json::json!({ "notifications": notifications })))
+}
+
+pub async fn mark_notification_read(
+    req: HttpRequest,
+    repo: web::Data<Phase2Repository>,
+    notification_id: web::Path<Uuid>,
+) -> Result<HttpResponse, ApiError> {
+    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+    match repo
+        .mark_notification_read(user_id, notification_id.into_inner())
+        .await?
+    {
+        Some(notification) => Ok(HttpResponse::Ok().json(notification)),
+        None => Err(ApiError::not_found("notification not found")),
+    }
+}
+
 pub async fn upsert_device_token(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     body: web::Json<UpsertDeviceTokenRequest>,
 ) -> Result<HttpResponse, ApiError> {
-    let id = repo.upsert_device_token(body.into_inner()).await?;
+    let mut request = body.into_inner();
+    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let id = repo.upsert_device_token(request).await?;
     Ok(HttpResponse::Created().json(serde_json::json!({ "id": id })))
 }
 
 pub async fn create_support_ticket(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     body: web::Json<CreateSupportTicketRequest>,
 ) -> Result<HttpResponse, ApiError> {
-    let response = repo.create_support_ticket(body.into_inner()).await?;
+    let mut request = body.into_inner();
+    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+    let response = repo.create_support_ticket(request).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
 pub async fn append_support_ticket_message(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
     body: web::Json<AppendSupportTicketMessageRequest>,
@@ -274,15 +438,32 @@ pub async fn append_support_ticket_message(
     if request.message_body.trim().is_empty() {
         return Err(ApiError::bad_request("message_body is required"));
     }
+    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let owner_id = repo
+        .support_ticket_owner(request.support_ticket_id)
+        .await?
+        .ok_or_else(|| ApiError::not_found("support ticket not found"))?;
+    if owner_id != auth_user_id {
+        return Err(ApiError::unauthorized(
+            "requested support ticket does not belong to authenticated user",
+        ));
+    }
+    request.sender_user_id = Some(auth_user_id);
+    request.sender_type = "user".to_string();
     let id = repo.append_support_ticket_message(request).await?;
     Ok(HttpResponse::Created().json(serde_json::json!({ "id": id })))
 }
 
 pub async fn get_support_ticket(
+    req: HttpRequest,
     repo: web::Data<Phase2Repository>,
     path: web::Path<Uuid>,
 ) -> Result<HttpResponse, ApiError> {
-    let ticket = repo.get_support_ticket(path.into_inner()).await?;
+    let support_ticket_id = path.into_inner();
+    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let ticket = repo
+        .get_support_ticket_owned_by(support_ticket_id, auth_user_id)
+        .await?;
     Ok(HttpResponse::Ok().json(ticket))
 }
 
@@ -300,6 +481,62 @@ pub async fn create_security_log(
 ) -> Result<HttpResponse, ApiError> {
     let id = repo.create_security_log(body.into_inner()).await?;
     Ok(HttpResponse::Created().json(serde_json::json!({ "id": id })))
+}
+
+pub async fn request_account_deletion(
+    req: HttpRequest,
+    repo: web::Data<Phase2Repository>,
+) -> Result<HttpResponse, ApiError> {
+    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+    let request_id = req
+        .headers()
+        .get("x-request-id")
+        .and_then(|value| value.to_str().ok())
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .map(ToOwned::to_owned)
+        .unwrap_or_else(|| Uuid::new_v4().to_string());
+
+    let audit_id: i64 = sqlx::query_scalar(
+        r#"
+        INSERT INTO public.audit_logs (event_type, actor_type, actor_id, request_id, payload)
+        VALUES ('account_deletion_requested', 'user', $1, $2, $3)
+        RETURNING id
+        "#,
+    )
+    .bind(user_id.to_string())
+    .bind(&request_id)
+    .bind(serde_json::json!({
+        "source": "mobile_app",
+        "status": "queued",
+        "pii_minimized": true
+    }))
+    .fetch_one(repo.pool())
+    .await
+    .map_err(|_| ApiError::internal("failed to create account deletion audit event"))?;
+
+    let outbox_id: Uuid = sqlx::query_scalar(
+        r#"
+        INSERT INTO outbox.events (event_type, payload, status)
+        VALUES ('account_deletion_requested', $1, 'Pending')
+        RETURNING id
+        "#,
+    )
+    .bind(serde_json::json!({
+        "user_id": user_id,
+        "audit_id": audit_id,
+        "request_id": request_id
+    }))
+    .fetch_one(repo.pool())
+    .await
+    .map_err(|_| ApiError::internal("failed to enqueue account deletion event"))?;
+
+    Ok(HttpResponse::Accepted().json(serde_json::json!({
+        "status": "queued",
+        "request_id": request_id,
+        "audit_id": audit_id,
+        "outbox_event_id": outbox_id
+    })))
 }
 
 pub async fn create_app_event(
@@ -341,37 +578,73 @@ mod tests {
     use chrono::{Duration, Utc};
     use sqlx::PgPool;
 
-    async fn maybe_repo_with_pool() -> Option<(Phase2Repository, PgPool)> {
-        let database_url = std::env::var("DATABASE_URL").ok()?;
-        let pool = PgPool::connect(&database_url).await.ok()?;
-        if sqlx::raw_sql(include_str!(
+    async fn required_repo_with_pool() -> (Phase2Repository, PgPool) {
+        let database_url = std::env::var("DATABASE_URL")
+            .expect("DATABASE_URL is required for phase2 DB integration tests");
+        let pool = PgPool::connect(&database_url)
+            .await
+            .expect("connect phase2 DB integration pool");
+
+        sqlx::query("SELECT pg_advisory_lock(7242001)")
+            .execute(&pool)
+            .await
+            .expect("lock phase2 schema setup");
+        let migration_result = sqlx::raw_sql(include_str!(
             "../../db/20260529_phase3_full_product_schema_revision2.sql"
         ))
         .execute(&pool)
-        .await
-        .is_err()
-        {
-            return None;
-        }
+        .await;
+        sqlx::query("SELECT pg_advisory_unlock(7242001)")
+            .execute(&pool)
+            .await
+            .expect("unlock phase2 schema setup");
+        assert!(
+            migration_result.is_ok(),
+            "required phase2 schema migration failed"
+        );
         let repo = Phase2Repository::new(pool.clone());
-        Some((repo, pool))
+        (repo, pool)
     }
 
-    async fn maybe_repo() -> Option<Phase2Repository> {
-        let (repo, _pool) = maybe_repo_with_pool().await?;
-        Some(repo)
+    async fn required_repo() -> Phase2Repository {
+        let (repo, _pool) = required_repo_with_pool().await;
+        repo
     }
 
     fn unique(suffix: &str) -> String {
         format!("phase2-{}-{}", suffix, Uuid::new_v4())
     }
 
+    fn answer_service_data(pool: PgPool) -> web::Data<crate::services::IslamicAnswerService> {
+        let repo = crate::services::IslamicKnowledgeRepository::new(pool.clone());
+        let embeddings = crate::services::EmbeddingsService::new(
+            &std::env::var("SAKINA_EMBEDDING_BASE_URL")
+                .unwrap_or_else(|_| "http://localhost:11434".to_string()),
+        );
+        let collection = std::env::var("ISLAMIC_QDRANT_COLLECTION")
+            .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());
+        let qdrant = crate::services::QdrantVectorDB::new(
+            &std::env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6333".to_string()),
+            &collection,
+        );
+        let graph = crate::services::KnowledgeGraphService::new(pool.clone());
+        let compressor = crate::services::ContextCompressionService::new();
+        let hybrid = crate::services::HybridRagService::new(
+            pool.clone(),
+            embeddings,
+            qdrant,
+            graph,
+            compressor,
+        );
+        let cache = crate::services::SemanticCacheService::new(pool.clone());
+        web::Data::new(crate::services::IslamicAnswerService::new(
+            repo, hybrid, cache,
+        ))
+    }
+
     #[actix_rt::test]
     async fn auth_domain_wires_user_and_session_tables() {
-        let Some(repo) = maybe_repo().await else {
-            eprintln!("DATABASE_URL not set; skipping auth wiring test");
-            return;
-        };
+        let repo = required_repo().await;
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(repo))
@@ -418,10 +691,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn register_session_profile_chain_is_fully_wired() {
-        let Some(repo) = maybe_repo().await else {
-            eprintln!("DATABASE_URL not set; skipping register/session/profile chain test");
-            return;
-        };
+        let repo = required_repo().await;
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(repo))
@@ -473,6 +743,7 @@ mod tests {
             &app,
             test::TestRequest::put()
                 .uri(&format!("/profiles/{user_id}"))
+                .insert_header(("x-sakina-user-id", user_id))
                 .set_json(serde_json::json!({
                     "user_id": user_id,
                     "full_name": "Lifecycle Chain User",
@@ -502,10 +773,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn profile_domain_wires_profile_and_family_tables() {
-        let Some(repo) = maybe_repo().await else {
-            eprintln!("DATABASE_URL not set; skipping profile wiring test");
-            return;
-        };
+        let repo = required_repo().await;
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(repo))
@@ -536,6 +804,7 @@ mod tests {
 
         let profile_req = test::TestRequest::put()
             .uri(&format!("/profiles/{user_id}"))
+            .insert_header(("x-sakina-user-id", user_id))
             .set_json(serde_json::json!({
                 "user_id": user_id,
                 "full_name": "Phase Two User",
@@ -563,6 +832,7 @@ mod tests {
 
         let family_req = test::TestRequest::post()
             .uri(&format!("/profiles/{user_id}/family"))
+            .insert_header(("x-sakina-user-id", user_id))
             .set_json(serde_json::json!({
                 "user_id": user_id,
                 "family_name": "Phase2 Household",
@@ -585,10 +855,11 @@ mod tests {
 
     #[actix_rt::test]
     async fn subscription_domain_wires_plan_payment_and_entitlement_tables() {
-        let Some(repo) = maybe_repo().await else {
-            eprintln!("DATABASE_URL not set; skipping subscription wiring test");
-            return;
-        };
+        std::env::set_var(
+            "SAKINA_MANUAL_ENTITLEMENT_GRANT_SECRET",
+            "sakina-test-manual-grant-secret-minimum-32",
+        );
+        let repo = required_repo().await;
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(repo))
@@ -622,6 +893,11 @@ mod tests {
 
         let activate_req = test::TestRequest::post()
             .uri(&format!("/subscriptions/{user_id}/activate"))
+            .insert_header(("x-sakina-user-id", user_id))
+            .insert_header((
+                "X-Sakina-Grant-Secret",
+                "sakina-test-manual-grant-secret-minimum-32",
+            ))
             .set_json(serde_json::json!({
                 "user_id": user_id,
                 "provider_key": "stripe-test",
@@ -645,6 +921,7 @@ mod tests {
 
         let entitlements_req = test::TestRequest::get()
             .uri(&format!("/subscriptions/{user_id}/entitlements"))
+            .insert_header(("x-sakina-user-id", user_id))
             .to_request();
         let entitlements_resp = test::call_service(&app, entitlements_req).await;
         assert_eq!(entitlements_resp.status(), StatusCode::OK);
@@ -652,16 +929,20 @@ mod tests {
 
     #[actix_rt::test]
     async fn chat_rag_safety_and_admin_domains_wire_tables() {
-        let Some((repo, pool)) = maybe_repo_with_pool().await else {
-            eprintln!("DATABASE_URL not set; skipping chat/rag/safety/admin wiring test");
-            return;
-        };
+        let (repo, pool) = required_repo_with_pool().await;
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(repo))
                 .app_data(web::Data::new(pool.clone()))
+                .app_data(web::Data::new(crate::services::AiaOrchestrator::new(
+                    std::sync::Arc::new(crate::services::SemanticRouter::new()),
+                )))
+                .app_data(answer_service_data(pool.clone()))
                 .route("/auth/register", web::post().to(register_user))
-                .route("/chat/conversations", web::post().to(crate::handlers::chat::create_conversation))
+                .route(
+                    "/chat/conversations",
+                    web::post().to(crate::handlers::chat::create_conversation),
+                )
                 .route(
                     "/chat/conversations/{id}/messages",
                     web::post().to(crate::handlers::chat::add_message),
@@ -706,12 +987,24 @@ mod tests {
         .await;
 
         let request_id = Uuid::new_v4();
+        let user_id: Uuid = sqlx::query_scalar(
+            r#"
+            INSERT INTO public.users (email, auth_provider, is_active)
+            VALUES ($1, 'phase2-chat-test', true)
+            RETURNING id
+            "#,
+        )
+        .bind(format!("{}@example.com", unique("chat-user")))
+        .fetch_one(&pool)
+        .await
+        .expect("insert phase2 chat test user");
         let conversation_resp = test::call_service(
             &app,
             test::TestRequest::post()
                 .uri("/chat/conversations")
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
-                    "user_id": null,
+                    "user_id": user_id,
                     "title": "phase2 lifecycle chat"
                 }))
                 .to_request(),
@@ -725,20 +1018,31 @@ mod tests {
             &app,
             test::TestRequest::post()
                 .uri(&format!("/chat/conversations/{conversation_id}/messages"))
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
                     "content": "phase2 conversation message"
                 }))
                 .to_request(),
         )
         .await;
-        assert_eq!(add_message_resp.status(), StatusCode::OK);
-        let add_message_body: serde_json::Value = test::read_body_json(add_message_resp).await;
-        let message_id = add_message_body["user_message_id"].as_str().expect("message id");
+        let add_message_status = add_message_resp.status();
+        let add_message_body_bytes = test::read_body(add_message_resp).await;
+        assert!(
+            add_message_status == StatusCode::OK,
+            "add_message returned {add_message_status}: {}",
+            String::from_utf8_lossy(&add_message_body_bytes)
+        );
+        let add_message_body: serde_json::Value =
+            serde_json::from_slice(&add_message_body_bytes).expect("add message json");
+        let message_id = add_message_body["user_message_id"]
+            .as_str()
+            .expect("message id");
 
         let feedback_resp = test::call_service(
             &app,
             test::TestRequest::post()
                 .uri(&format!("/chat/messages/{message_id}/feedback"))
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
                     "user_id": null,
                     "conversation_id": null,
@@ -756,6 +1060,7 @@ mod tests {
             &app,
             test::TestRequest::post()
                 .uri(&format!("/chat/messages/{message_id}/report"))
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
                     "user_id": null,
                     "message_id": null,
@@ -843,8 +1148,15 @@ mod tests {
                 .to_request(),
         )
         .await;
-        assert_eq!(retrieval_resp.status(), StatusCode::CREATED);
-        let retrieval_body: serde_json::Value = test::read_body_json(retrieval_resp).await;
+        let retrieval_status = retrieval_resp.status();
+        let retrieval_body_bytes = test::read_body(retrieval_resp).await;
+        assert!(
+            retrieval_status == StatusCode::CREATED,
+            "log_rag_retrieval returned {retrieval_status}: {}",
+            String::from_utf8_lossy(&retrieval_body_bytes)
+        );
+        let retrieval_body: serde_json::Value =
+            serde_json::from_slice(&retrieval_body_bytes).expect("retrieval json");
         let retrieval_audit_id = retrieval_body["id"].as_str().expect("retrieval id");
 
         let citation_resp = test::call_service(
@@ -1043,14 +1355,21 @@ mod tests {
 
     #[actix_rt::test]
     async fn notifications_support_and_audit_domains_wire_tables() {
-        let Some((repo, pool)) = maybe_repo_with_pool().await else {
-            eprintln!("DATABASE_URL not set; skipping notifications/support wiring test");
-            return;
-        };
+        let (repo, pool) = required_repo_with_pool().await;
+        let user_id: Uuid = sqlx::query_scalar(
+            r#"
+            INSERT INTO public.users (email, auth_provider, is_active)
+            VALUES ($1, 'phase2-notification-test', true)
+            RETURNING id
+            "#,
+        )
+        .bind(format!("{}@example.com", unique("notify-user")))
+        .fetch_one(&pool)
+        .await
+        .expect("insert phase2 notification test user");
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(repo))
-                .route("/auth/register", web::post().to(register_user))
                 .route(
                     "/notifications/templates",
                     web::post().to(create_notification_template),
@@ -1078,22 +1397,6 @@ mod tests {
         )
         .await;
 
-        let register_req = test::TestRequest::post()
-            .uri("/auth/register")
-            .set_json(serde_json::json!({
-                "email": format!("{}@example.com", unique("notify")),
-                "pub_key": null,
-                "provider": "internal",
-                "provider_user_id": unique("notify-user"),
-                "provider_email": null,
-                "email_verified_at": null,
-                "metadata": {}
-            }))
-            .to_request();
-        let register_resp = test::call_service(&app, register_req).await;
-        let register_body: serde_json::Value = test::read_body_json(register_resp).await;
-        let user_id = register_body["user_id"].as_str().expect("user id string");
-
         let template_resp = test::call_service(
             &app,
             test::TestRequest::post()
@@ -1116,6 +1419,7 @@ mod tests {
             &app,
             test::TestRequest::post()
                 .uri("/notifications/send")
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
                     "user_id": user_id,
                     "template_id": template_id,
@@ -1146,6 +1450,7 @@ mod tests {
             &app,
             test::TestRequest::post()
                 .uri("/notifications/device-tokens")
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
                     "user_id": user_id,
                     "platform": "android",
@@ -1161,6 +1466,7 @@ mod tests {
             &app,
             test::TestRequest::post()
                 .uri("/support/tickets")
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
                     "user_id": user_id,
                     "priority": "normal",
@@ -1179,6 +1485,7 @@ mod tests {
             &app,
             test::TestRequest::post()
                 .uri(&format!("/support/tickets/{ticket_id}/messages"))
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
                     "support_ticket_id": ticket_id,
                     "sender_type": "support",
@@ -1194,6 +1501,7 @@ mod tests {
             &app,
             test::TestRequest::get()
                 .uri(&format!("/support/tickets/{ticket_id}"))
+                .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .to_request(),
         )
         .await;
@@ -1244,13 +1552,18 @@ mod tests {
             "/events/rag",
             "/events/admin",
         ] {
+            let event_user_id = if route == "/events/rag" {
+                serde_json::Value::Null
+            } else {
+                serde_json::json!(user_id)
+            };
             let event_resp = test::call_service(
                 &app,
                 test::TestRequest::post()
                     .uri(route)
                     .set_json(serde_json::json!({
                         "request_id": Uuid::new_v4(),
-                        "user_id": user_id,
+                        "user_id": event_user_id,
                         "admin_user_id": null,
                         "session_id": null,
                         "retrieval_audit_id": null,
@@ -1262,7 +1575,14 @@ mod tests {
                     .to_request(),
             )
             .await;
-            assert_eq!(event_resp.status(), StatusCode::CREATED);
+            let event_status = event_resp.status();
+            if event_status != StatusCode::CREATED {
+                let body = test::read_body(event_resp).await;
+                panic!(
+                    "route {route} returned {event_status}; body={}",
+                    String::from_utf8_lossy(&body)
+                );
+            }
         }
     }
 }

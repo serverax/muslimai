@@ -1,0 +1,65 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.46s
+Notification proof users: A=a05781f5-79b7-4dd2-a89f-11a919085bb8 B=518a67bb-0aa3-45ed-a43f-f908610e9995
+{
+  "id": "fcae2be2-3796-4f11-b458-fb2704668cd1"
+}
+{"error":{"code":"unauthorized","message":"authorization bearer token is required"}}
+Missing-auth notifications status: 401
+{
+  "id": "f1de36b9-1a56-4f91-8d28-5e4c8815a180"
+}
+Notification owner in DB: a05781f5-79b7-4dd2-a89f-11a919085bb8
+{
+  "notifications": [
+    {
+      "body": "Notification proof body",
+      "channel": "in_app",
+      "created_at": "2026-06-05T08:48:51.948300+00:00",
+      "id": "f1de36b9-1a56-4f91-8d28-5e4c8815a180",
+      "notification_status": "queued",
+      "payload": {
+        "proof_id": "notif-1780649328-27157"
+      },
+      "read_at": null,
+      "scheduled_at": null,
+      "sent_at": null,
+      "title": "Runtime notification proof"
+    }
+  ]
+}
+{
+  "notifications": []
+}
+{"error":{"code":"not_found","message":"notification not found"}}
+Cross-user mark-read status: 404
+{
+  "id": "f1de36b9-1a56-4f91-8d28-5e4c8815a180",
+  "channel": "in_app",
+  "notification_status": "read",
+  "title": "Runtime notification proof",
+  "body": "Notification proof body",
+  "payload": {
+    "proof_id": "notif-1780649328-27157"
+  },
+  "scheduled_at": null,
+  "sent_at": null,
+  "read_at": "2026-06-05T08:48:52.129885+00:00",
+  "created_at": "2026-06-05T08:48:51.948300+00:00"
+}
+DB notification read probe: read|t|1
+sakina-backend/src/main.rs:973:                        web::scope("/notifications")
+sakina-backend/src/handlers/phase2.rs:1374:                    "/notifications/templates",
+sakina-backend/src/handlers/phase2.rs:1377:                .route("/notifications/send", web::post().to(enqueue_notification))
+sakina-backend/src/handlers/phase2.rs:1379:                    "/notifications/device-tokens",
+sakina-backend/src/handlers/phase2.rs:1403:                .uri("/notifications/templates")
+sakina-backend/src/handlers/phase2.rs:1421:                .uri("/notifications/send")
+sakina-backend/src/handlers/phase2.rs:1452:                .uri("/notifications/device-tokens")
+sakina-frontend/lib/services/api_service.dart:487:      '/notifications/templates',
+sakina-frontend/lib/services/api_service.dart:503:  Future<void> sendNotification({
+sakina-frontend/lib/services/api_service.dart:510:      '/notifications/send',
+sakina-frontend/lib/services/api_service.dart:526:  Future<List<UserNotificationDto>> listNotifications() async {
+sakina-frontend/lib/services/api_service.dart:527:    final res = await _get('/notifications');
+sakina-frontend/lib/services/api_service.dart:538:  Future<UserNotificationDto> markNotificationRead({
+sakina-frontend/lib/services/api_service.dart:541:    final res = await _post('/notifications/$notificationId/read', {});
+sakina-frontend/lib/services/api_service.dart:557:      '/notifications/device-tokens',
+REALTIME_NOTIFICATIONS_OK notification was created by backend route, received by owner, hidden from another user, marked read, persisted in DB, and wired in Flutter service.

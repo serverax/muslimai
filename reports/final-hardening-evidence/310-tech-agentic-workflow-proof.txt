@@ -1,0 +1,603 @@
+{
+  "agents": [
+    {
+      "domain": "quran",
+      "model": "lite_llm",
+      "name": "Quran Agent",
+      "pipeline": "mother_brain>quran_rag>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": true,
+      "requires_wasm": false
+    },
+    {
+      "domain": "hadith",
+      "model": "main_llm",
+      "name": "Hadith Agent",
+      "pipeline": "mother_brain>hadith_hybrid_rag>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": true,
+      "requires_wasm": false
+    },
+    {
+      "domain": "fiqh",
+      "model": "main_llm",
+      "name": "Islamic Guidance Agent",
+      "pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": true,
+      "requires_wasm": true
+    },
+    {
+      "domain": "dua",
+      "model": "lite_llm",
+      "name": "Dua/Azkar Agent",
+      "pipeline": "mother_brain>verified_dua_rag>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": true,
+      "requires_wasm": false
+    },
+    {
+      "domain": "support",
+      "model": "lite_llm",
+      "name": "Emotional Support Agent",
+      "pipeline": "mother_brain>support_flow>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": false,
+      "requires_wasm": false
+    },
+    {
+      "domain": "family",
+      "model": "main_llm",
+      "name": "Family/Marriage Advice Agent",
+      "pipeline": "mother_brain>hybrid_rag>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": true,
+      "requires_wasm": true
+    },
+    {
+      "domain": "learning",
+      "model": "lite_llm",
+      "name": "Learning/Quran Memorisation Agent",
+      "pipeline": "mother_brain>memory>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": false,
+      "requires_wasm": false
+    },
+    {
+      "domain": "translation",
+      "model": "lite_llm",
+      "name": "Translation Agent",
+      "pipeline": "mother_brain>translation>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": false,
+      "requires_wasm": false
+    },
+    {
+      "domain": "safety",
+      "model": "safety_agent",
+      "name": "Safety/Escalation Agent",
+      "pipeline": "mother_brain>safety_gate>human_escalation",
+      "requires_evaluation": true,
+      "requires_rag": false,
+      "requires_wasm": true
+    },
+    {
+      "domain": "review",
+      "model": "review_agent",
+      "name": "Content Review Agent",
+      "pipeline": "mother_brain>content_review",
+      "requires_evaluation": true,
+      "requires_rag": true,
+      "requires_wasm": true
+    },
+    {
+      "domain": "general",
+      "model": "lite_llm",
+      "name": "General Chat Agent",
+      "pipeline": "mother_brain>cached_or_cached_rag>evaluation",
+      "requires_evaluation": true,
+      "requires_rag": false,
+      "requires_wasm": false
+    }
+  ]
+}
+sakina-backend/src/services/aia_orchestrator.rs:51:    pub fn agents(&self) -> Vec<BrainAgentSpec> {
+sakina-backend/src/services/aia_orchestrator.rs:176:        assert_eq!(route.selected_agent, "Safety/Escalation Agent");
+sakina-backend/src/services/ai_router.rs:4:enum AgentKind {
+sakina-backend/src/services/ai_router.rs:19:struct AgentProfile {
+sakina-backend/src/services/ai_router.rs:20:    kind: AgentKind,
+sakina-backend/src/services/ai_router.rs:30:impl AgentProfile {
+sakina-backend/src/services/ai_router.rs:46:    agents: Vec<AgentProfile>,
+sakina-backend/src/services/ai_router.rs:52:            agents: vec![
+sakina-backend/src/services/ai_router.rs:53:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:54:                    kind: AgentKind::Quran,
+sakina-backend/src/services/ai_router.rs:63:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:64:                    kind: AgentKind::Hadith,
+sakina-backend/src/services/ai_router.rs:73:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:74:                    kind: AgentKind::IslamicGuidance,
+sakina-backend/src/services/ai_router.rs:83:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:84:                    kind: AgentKind::DuaAzkar,
+sakina-backend/src/services/ai_router.rs:93:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:94:                    kind: AgentKind::EmotionalSupport,
+sakina-backend/src/services/ai_router.rs:103:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:104:                    kind: AgentKind::FamilyMarriage,
+sakina-backend/src/services/ai_router.rs:113:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:114:                    kind: AgentKind::LearningMemorisation,
+sakina-backend/src/services/ai_router.rs:123:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:124:                    kind: AgentKind::Translation,
+sakina-backend/src/services/ai_router.rs:133:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:134:                    kind: AgentKind::SafetyEscalation,
+sakina-backend/src/services/ai_router.rs:143:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:144:                    kind: AgentKind::ContentReview,
+sakina-backend/src/services/ai_router.rs:153:                AgentProfile {
+sakina-backend/src/services/ai_router.rs:154:                    kind: AgentKind::GeneralChat,
+sakina-backend/src/services/ai_router.rs:167:    pub fn agents(&self) -> Vec<BrainAgentSpec> {
+sakina-backend/src/services/ai_router.rs:168:        self.agents.iter().map(AgentProfile::spec).collect()
+sakina-backend/src/services/ai_router.rs:190:            AgentKind::SafetyEscalation
+sakina-backend/src/services/ai_router.rs:197:            AgentKind::FamilyMarriage
+sakina-backend/src/services/ai_router.rs:226:            AgentKind::IslamicGuidance
+sakina-backend/src/services/ai_router.rs:230:            AgentKind::Quran
+sakina-backend/src/services/ai_router.rs:235:            AgentKind::Hadith
+sakina-backend/src/services/ai_router.rs:237:            AgentKind::DuaAzkar
+sakina-backend/src/services/ai_router.rs:242:            AgentKind::EmotionalSupport
+sakina-backend/src/services/ai_router.rs:254:            AgentKind::LearningMemorisation
+sakina-backend/src/services/ai_router.rs:261:            AgentKind::Translation
+sakina-backend/src/services/ai_router.rs:263:            AgentKind::IslamicGuidance
+sakina-backend/src/services/ai_router.rs:265:            AgentKind::DuaAzkar
+sakina-backend/src/services/ai_router.rs:267:            AgentKind::GeneralChat
+sakina-backend/src/services/ai_router.rs:279:                AgentKind::Quran
+sakina-backend/src/services/ai_router.rs:280:                    | AgentKind::Hadith
+sakina-backend/src/services/ai_router.rs:281:                    | AgentKind::IslamicGuidance
+sakina-backend/src/services/ai_router.rs:282:                    | AgentKind::FamilyMarriage
+sakina-backend/src/services/ai_router.rs:283:                    | AgentKind::ContentReview
+sakina-backend/src/services/ai_router.rs:288:                AgentKind::SafetyEscalation
+sakina-backend/src/services/ai_router.rs:289:                    | AgentKind::IslamicGuidance
+sakina-backend/src/services/ai_router.rs:290:                    | AgentKind::FamilyMarriage
+sakina-backend/src/services/ai_router.rs:293:        let source_strategy = if matches!(agent, AgentKind::SafetyEscalation) {
+sakina-backend/src/services/ai_router.rs:297:            AgentKind::Quran
+sakina-backend/src/services/ai_router.rs:298:                | AgentKind::Hadith
+sakina-backend/src/services/ai_router.rs:299:                | AgentKind::IslamicGuidance
+sakina-backend/src/services/ai_router.rs:300:                | AgentKind::FamilyMarriage
+sakina-backend/src/services/ai_router.rs:301:                | AgentKind::ContentReview
+sakina-backend/src/services/ai_router.rs:304:        } else if matches!(agent, AgentKind::DuaAzkar | AgentKind::LearningMemorisation) {
+sakina-backend/src/services/ai_router.rs:311:            matches!(agent, AgentKind::FamilyMarriage | AgentKind::ContentReview);
+sakina-backend/src/services/ai_router.rs:312:        let can_generate = !matches!(agent, AgentKind::SafetyEscalation)
+sakina-backend/src/services/ai_router.rs:317:            AgentKind::IslamicGuidance
+sakina-backend/src/services/ai_router.rs:318:                | AgentKind::FamilyMarriage
+sakina-backend/src/services/ai_router.rs:319:                | AgentKind::SafetyEscalation
+sakina-backend/src/services/ai_router.rs:320:                | AgentKind::ContentReview
+sakina-backend/src/services/ai_router.rs:322:        let confidence = if matches!(agent, AgentKind::GeneralChat) {
+sakina-backend/src/services/ai_router.rs:334:            selected_agent: profile.name.to_string(),
+sakina-backend/src/services/ai_router.rs:364:                    step: "agent_selected".to_string(),
+sakina-backend/src/services/ai_router.rs:477:        assert_eq!(route.selected_agent, "Dua/Azkar Agent");
+sakina-backend/src/services/ai_router.rs:483:            .any(|step| step.step == "agent_selected"));
+sakina-backend/src/services/ai_router.rs:496:        assert_eq!(route.selected_agent, "Family/Marriage Advice Agent");
+sakina-backend/src/services/ai_router.rs:516:        assert_eq!(route.selected_agent, "Safety/Escalation Agent");
+sakina-backend/src/services/ai_router.rs:532:        assert_eq!(route.selected_agent, "Safety/Escalation Agent");
+sakina-backend/src/services/ai_router.rs:550:        assert_eq!(route.selected_agent, "Quran Agent");
+{
+  "request_id": "agentic-quran-1780581461-17302",
+  "selected_agent": "Quran Agent",
+  "selected_model": "lite_llm",
+  "selected_pipeline": "mother_brain>quran_rag>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": false,
+  "evaluation_required": true,
+  "scholar_review_required": false,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "quran"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Quran Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "17527b7d-c29e-46f7-b7e0-bcac64d21c59"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+{
+  "request_id": "agentic-hadith-1780581463-19243",
+  "selected_agent": "Hadith Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hadith_hybrid_rag>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": false,
+  "evaluation_required": true,
+  "scholar_review_required": false,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "hadith"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Hadith Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "ff241d18-b9f1-4deb-a24f-a50c5ecd29d4"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+{
+  "request_id": "agentic-dua-1780581471-14195",
+  "selected_agent": "Dua/Azkar Agent",
+  "selected_model": "lite_llm",
+  "selected_pipeline": "mother_brain>verified_dua_rag>evaluation",
+  "source_strategy": "verified_content",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": false,
+  "evaluation_required": true,
+  "scholar_review_required": false,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "dua_azkar"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Dua/Azkar Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "verified_content"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "2ab9f4fc-84ab-40f3-8684-72c7cd13b81f"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+{
+  "request_id": "agentic-fiqh-1780581472-6039",
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Islamic Guidance Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "666729c3-494b-49d6-8602-e133f986e804"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+{
+  "request_id": "agentic-safety-1780581474-32014",
+  "selected_agent": "Safety/Escalation Agent",
+  "selected_model": "safety_agent",
+  "selected_pipeline": "mother_brain>safety_gate>human_escalation",
+  "source_strategy": "safety_only",
+  "language": "en",
+  "risk_level": "critical",
+  "confidence": 0.84,
+  "rag_required": false,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": false,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "critical"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Safety/Escalation Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "safety_only"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "not_required"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_blocked"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "FAIL:0.12"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "safety policy requires escalation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "66e6f90b-dc14-4782-bd9c-331fbae6eb0d"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "blocked"
+    }
+  ]
+}
+AGENTIC_WORKFLOW_OK mandatory agentic workflow checks completed.

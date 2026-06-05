@@ -1,29 +1,31 @@
 use actix_web::{http::StatusCode, test, web, App};
 use sakina_backend::handlers::iman_journey;
 use sakina_backend::services::ImanJourneyService;
+use sha2::{Digest, Sha256};
 use sqlx::PgPool;
 use uuid::Uuid;
 
-async fn maybe_pool() -> Option<PgPool> {
-    let database_url = std::env::var("DATABASE_URL").ok()?;
-    PgPool::connect(&database_url).await.ok()
+async fn required_pool() -> PgPool {
+    let database_url =
+        std::env::var("DATABASE_URL").expect("DATABASE_URL is required for phase21 DB test");
+    PgPool::connect(&database_url)
+        .await
+        .expect("connect phase21 DB integration pool")
 }
 
-async fn migrate(pool: &PgPool) -> bool {
+async fn migrate(pool: &PgPool) {
     sqlx::raw_sql(include_str!(
         "../db/20260529_phase3_full_product_schema_revision2.sql"
     ))
     .execute(pool)
     .await
-    .is_ok()
-        && sqlx::raw_sql(include_str!("../db/20260601_phase20_islamic_knowledge_schema.sql"))
-            .execute(pool)
-            .await
-            .is_ok()
-        && sqlx::raw_sql(include_str!("../db/20260602_phase21_daily_iman_journey.sql"))
-            .execute(pool)
-            .await
-            .is_ok()
+    .expect("apply phase3 schema");
+    sqlx::raw_sql(include_str!(
+        "../db/20260602_phase21_daily_iman_journey.sql"
+    ))
+    .execute(pool)
+    .await
+    .expect("apply phase21 schema");
 }
 
 async fn create_user(pool: &PgPool, seed: &str) -> Uuid {
@@ -40,19 +42,42 @@ async fn create_user(pool: &PgPool, seed: &str) -> Uuid {
     .expect("insert test user")
 }
 
+fn token_hash(token: &str) -> String {
+    let digest = Sha256::digest(token.as_bytes());
+    format!("{:x}", digest)
+}
+
+async fn create_session(pool: &PgPool, user_id: Uuid, _seed: &str) -> String {
+    std::env::set_var(
+        "SAKINA_JWT_SECRET",
+        "sakina-integration-test-jwt-secret-32-byte-minimum",
+    );
+    let token = sakina_backend::services::auth::issue_jwt(user_id, 3600)
+        .expect("issue phase21 test JWT")
+        .0;
+    sqlx::query(
+        r#"
+        INSERT INTO public.auth_sessions (user_id, session_token_hash, expires_at)
+        VALUES ($1, $2, now() + interval '1 hour')
+        "#,
+    )
+    .bind(user_id)
+    .bind(token_hash(&token))
+    .execute(pool)
+    .await
+    .expect("insert phase21 test auth session");
+    token
+}
+
 #[actix_rt::test]
 async fn phase21_core_flow_enforces_fallback_privacy_and_scope() {
-    let Some(pool) = maybe_pool().await else {
-        eprintln!("DATABASE_URL not set; skipping phase21 iman journey contract test");
-        return;
-    };
-    if !migrate(&pool).await {
-        eprintln!("required migrations failed; skipping phase21 iman journey contract test");
-        return;
-    }
+    let pool = required_pool().await;
+    migrate(&pool).await;
 
     let user_a = create_user(&pool, "a").await;
     let user_b = create_user(&pool, "b").await;
+    let token_a = create_session(&pool, user_a, "a").await;
+    let token_b = create_session(&pool, user_b, "b").await;
     let service = ImanJourneyService::new(pool.clone());
     let app = test::init_service(
         App::new()
@@ -65,7 +90,7 @@ async fn phase21_core_flow_enforces_fallback_privacy_and_scope() {
         &app,
         test::TestRequest::put()
             .uri(&format!("/v1/iman-journey/{user_a}/privacy"))
-            .insert_header(("x-sakina-user-id", user_a.to_string()))
+            .insert_header(("Authorization", format!("Bearer {token_a}")))
             .set_json(serde_json::json!({
                 "personalization_enabled": true,
                 "reminders_enabled": true,
@@ -80,7 +105,7 @@ async fn phase21_core_flow_enforces_fallback_privacy_and_scope() {
         &app,
         test::TestRequest::put()
             .uri(&format!("/v1/iman-journey/{user_a}"))
-            .insert_header(("x-sakina-user-id", user_a.to_string()))
+            .insert_header(("Authorization", format!("Bearer {token_a}")))
             .set_json(serde_json::json!({
                 "today_focus": "Guard the tongue",
                 "continue_yesterday_topic": "Sabr in speech",
@@ -126,7 +151,7 @@ async fn phase21_core_flow_enforces_fallback_privacy_and_scope() {
         &app,
         test::TestRequest::post()
             .uri(&format!("/v1/dua-list/{user_a}"))
-            .insert_header(("x-sakina-user-id", user_a.to_string()))
+            .insert_header(("Authorization", format!("Bearer {token_a}")))
             .set_json(serde_json::json!({ "dua_text": "Ease in my obligations" }))
             .to_request(),
     )
@@ -137,7 +162,7 @@ async fn phase21_core_flow_enforces_fallback_privacy_and_scope() {
         &app,
         test::TestRequest::get()
             .uri(&format!("/v1/dua-list/{user_a}"))
-            .insert_header(("x-sakina-user-id", user_a.to_string()))
+            .insert_header(("Authorization", format!("Bearer {token_a}")))
             .to_request(),
     )
     .await;
@@ -153,7 +178,7 @@ async fn phase21_core_flow_enforces_fallback_privacy_and_scope() {
         &app,
         test::TestRequest::get()
             .uri(&format!("/v1/iman-journey/{user_a}"))
-            .insert_header(("x-sakina-user-id", user_b.to_string()))
+            .insert_header(("Authorization", format!("Bearer {token_b}")))
             .to_request(),
     )
     .await;

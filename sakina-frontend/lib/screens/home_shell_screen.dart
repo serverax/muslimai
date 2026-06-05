@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../app/app_state.dart';
+import '../services/auth_service.dart';
 import '../services/module_service.dart';
 import 'chat_screen.dart';
+import 'compliance_screen.dart';
 import 'iman_journey_screen.dart';
 import 'islamic_library_screen.dart';
 import 'module_read_only_state_screen.dart';
+import 'multimodal_analysis_screen.dart';
 
 class HomeShellScreen extends StatefulWidget {
-  const HomeShellScreen({super.key, required this.appState});
+  const HomeShellScreen({super.key, required this.appState, this.session});
 
   final AppState appState;
+  final AuthSession? session;
 
   @override
   State<HomeShellScreen> createState() => _HomeShellScreenState();
@@ -24,7 +28,7 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
   void initState() {
     super.initState();
     _moduleService = ModuleService(
-      apiClient: ModuleApiClient(),
+      apiClient: ModuleApiClient(authToken: widget.session?.accessToken),
       entitlementGate: EntitlementGate(),
     );
   }
@@ -33,7 +37,7 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
   Widget build(BuildContext context) {
     final app = widget.appState;
     final screens = [
-      ChatScreen(),
+      ChatScreen(session: widget.session),
       ModuleReadOnlyStateScreen(
         title: app.t('quran'),
         load: _moduleService.quran,
@@ -48,6 +52,8 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
       ),
       const IslamicLibraryScreen(),
       ImanJourneyScreen(),
+      MultimodalAnalysisScreen(session: widget.session),
+      ComplianceScreen(session: widget.session),
     ];
 
     return Scaffold(
@@ -88,6 +94,16 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
             icon: Icon(Icons.auto_graph_outlined),
             selectedIcon: Icon(Icons.auto_graph),
             label: 'Iman Journey',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.document_scanner_outlined),
+            selectedIcon: Icon(Icons.document_scanner),
+            label: 'Analyze',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.privacy_tip_outlined),
+            selectedIcon: Icon(Icons.privacy_tip),
+            label: 'Privacy',
           ),
         ],
       ),

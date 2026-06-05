@@ -1,0 +1,39 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_backend-5bd443900cff2969)
+
+running 2 tests
+test services::brain_controller::cost_governor_tests::cost_governor_records_allow_decision_for_normal_request ... ok
+test services::brain_controller::cost_governor_tests::cost_governor_blocks_over_budget_free_request ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 92 filtered out; finished in 0.06s
+
+     Running unittests src/main.rs (/tmp/sakina-cargo-target/debug/deps/sakina_api-a27d8b49d58acb93)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running unittests src/bin/ingest.rs (/tmp/sakina-cargo-target/debug/deps/sakina_ingest-056c7981621b57db)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/islamic_source_registry.rs (/tmp/sakina-cargo-target/debug/deps/islamic_source_registry-c79a93b6bd523858)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/offline_islamic_assets.rs (/tmp/sakina-cargo-target/debug/deps/offline_islamic_assets-465e769dfc1a50b0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase21_iman_journey_contract.rs (/tmp/sakina-cargo-target/debug/deps/phase21_iman_journey_contract-e240ee68cac4ccae)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+

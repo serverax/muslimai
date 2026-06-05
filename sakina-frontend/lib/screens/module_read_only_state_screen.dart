@@ -65,7 +65,7 @@ class ModuleReadOnlyStateScreen<T extends ModuleOverviewDto>
               return _stateText(
                 scholarReviewWarning
                     ? '$title under review. Please consult a qualified scholar.'
-                    : '$title coming soon / under review.',
+                    : '$title is unavailable in this release.',
               );
             }
             return ListView(

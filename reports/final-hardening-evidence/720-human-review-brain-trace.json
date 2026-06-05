@@ -1,0 +1,97 @@
+{
+  "request_id": "31a99fc6-3888-489e-86f0-2727fc21a087",
+  "selected_agent": "Family/Marriage Advice Agent",
+  "selected_model": "safety_agent",
+  "selected_pipeline": "mother_brain>hybrid_rag>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "high",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": false,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "short_form"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "high"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Family/Marriage Advice Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=2056;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "safety policy requires escalation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "a515269a-01cd-4950-860b-60f3f406b194"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}

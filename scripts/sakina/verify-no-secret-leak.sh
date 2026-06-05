@@ -30,4 +30,4 @@ for file in "${FILES[@]}"; do
   fi
 done
 
-echo "secret leak verification passed"
+echo "secret leak verification completed."

@@ -1,0 +1,14 @@
+52:        let cost_decision = evaluate_cost_budget(request, &base_route);
+184:                step: "cost_governor".to_string(),
+269:        let cost_decision = evaluate_cost_budget(&route_request, &route);
+320:fn evaluate_cost_budget(request: &BrainRouteRequest, route: &BrainRouteResponse) -> CostDecision {
+321:    let estimated_units = request.message.chars().count()
+329:    let allowed = estimated_units <= tier_budget;
+333:            "estimated_units={estimated_units};budget_units={tier_budget};decision={}",
+418:mod cost_governor_tests {
+434:    fn cost_governor_records_allow_decision_for_normal_request() {
+446:            .find(|step| step.step == "cost_governor")
+448:        assert!(cost_step.outcome.contains("estimated_units="));
+454:    fn cost_governor_blocks_over_budget_free_request() {
+466:            .find(|step| step.step == "cost_governor")
+468:        assert!(cost_step.outcome.contains("budget_units=6000"));

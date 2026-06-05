@@ -14,4 +14,4 @@ cargo test
 cd "$ROOT"
 cmd.exe /c "cd /d F:\SakinaAl\sakina-frontend && ${FRONTEND_CMD} pub get && ${FRONTEND_CMD} analyze && ${FRONTEND_CMD} test"
 
-echo "Sakina demo verification passed"
+echo "Sakina verification completed with command assertions."

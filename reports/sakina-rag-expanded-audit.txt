@@ -1,0 +1,1259 @@
+sakina-backend/Cargo.lock:8:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:25:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:40:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:79:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:89:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:104:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:115:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:132:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:142:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:152:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:195:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:207:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:213:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:222:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:228:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:237:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:243:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:252:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:258:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:267:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:273:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:279:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:285:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:291:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:300:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:309:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:312: "hybrid-array",
+sakina-backend/Cargo.lock:318:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:329:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:339:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:345:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:351:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:357:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:366:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:378:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:384:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:395:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:409:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:418:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:424:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:430:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:439:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:450:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:456:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:465:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:474:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:483:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:489:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:498:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:507:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:513:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:523:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:526: "hybrid-array",
+sakina-backend/Cargo.lock:532:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:543:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:552:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:561:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:575:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:587:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:598:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:609:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:615:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:624:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:633:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:639:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:649:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:660:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:671:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:677:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:687:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:698:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:704:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:710:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:719:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:729:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:735:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:746:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:757:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:763:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:774:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:780:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:786:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:802:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:812:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:823:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:835:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:849:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:868:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:879:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:885:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:894:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:900:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:906:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:915:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:924:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:933:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:944:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:954:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:964:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:977:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:983:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:987:name = "hybrid-array"
+sakina-backend/Cargo.lock:989:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:998:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1018:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1041:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1056:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1065:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1079:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1092:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1106:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1112:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1126:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1132:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1147:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1153:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1164:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1174:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1180:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1192:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1198:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1204:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1214:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1226:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1232:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1241:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1247:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1253:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1259:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1271:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1281:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1287:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1298:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1304:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1313:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1319:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1329:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1335:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1341:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1351:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1363:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1372:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1388:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1394:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1403:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1414:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1424:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1430:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1444:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1455:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1471:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1477:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1487:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1500:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1509:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1515:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1521:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1532:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1542:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1548:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1554:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1560:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1569:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1575:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1584:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1594:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1603:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1612:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1618:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1624:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1635:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1645:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1656:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1666:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1676:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1685:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1694:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1700:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1709:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1718:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1730:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1741:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1747:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1753:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1785:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1799:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1819:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1828:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1842:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1851:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1862:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1868:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1884: "sakina-fatwa-policy-gate",
+sakina-backend/Cargo.lock:1897:name = "sakina-fatwa-policy-gate"
+sakina-backend/Cargo.lock:1908:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1914:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1920:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1930:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1939:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1950:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1963:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1975:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1986:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:1997:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2008:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2017:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2023:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2033:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2043:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2049:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2055:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2064:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2074:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2084:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2093:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2103:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2116:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2154:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2167:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2192:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2236:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2275:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2301:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2307:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2318:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2324:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2335:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2344:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2355:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2364:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2375:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2384:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2399:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2405:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2415:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2425:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2434:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2440:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2457:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2468:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2479:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2492:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2507:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2525:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2531:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2537:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2549:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2560:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2570:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2581:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2597:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2611:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2617:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2623:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2629:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2635:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2644:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2650:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2656:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2662:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2668:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2680:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2686:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2698:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2704:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2710:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2716:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2725:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2731:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2740:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2749:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2755:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2768:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2778:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2788:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2801:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2810:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2820:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2832:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2844:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2854:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2864:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2873:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2882:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2892:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2905:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2916:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2927:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2933:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2942:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2951:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2960:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2969:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2978:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:2993:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3009:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3015:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3021:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3027:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3033:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3039:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3045:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3051:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3057:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3063:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3069:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3075:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3081:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3087:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3093:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3099:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3108:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3114:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3125:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3141:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3156:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3175:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3193:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3199:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3210:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3222:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3231:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3242:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3251:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3263:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3269:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3280:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3291:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3302:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3308:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3317:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.lock:3326:source = "registry+https://github.com/rust-lang/crates.io-index"
+sakina-backend/Cargo.toml:25:sakina-fatwa-policy-gate = { path = "../sakina-wasm/fatwa-policy-gate" }
+sakina-backend/Cargo.toml:26:# NOTE: Qdrant is accessed via its REST API (reqwest, http) instead of the
+sakina-backend/Cargo.toml:27:# qdrant-client gRPC crate, to avoid the tonic dependency tree / OOM. vLLM
+sakina-backend/Cargo.toml:28:# embeddings also use reqwest.
+sakina-backend/chunking.py:1:"""Arabic semantic chunker for Project Sakina ingestion (Phase 2, Step 6).
+sakina-backend/chunking.py:4:can be unit-tested without `transformers`. `ArabicSemanticChunker.chunk` needs a
+sakina-backend/chunking.py:27:    """Split by Islamic text-structure markers (bab / fasl / mas'ala / paragraph)."""
+sakina-backend/chunking.py:37:class ArabicSemanticChunker:
+sakina-backend/chunking.py:41:        max_chunk_size: int = 512,
+sakina-backend/chunking.py:47:        self.max_chunk_size = max_chunk_size
+sakina-backend/chunking.py:50:    def chunk(self, text: str) -> List[str]:
+sakina-backend/chunking.py:54:        step = self.max_chunk_size - self.overlap_size
+sakina-backend/chunking.py:55:        chunks: List[str] = []
+sakina-backend/chunking.py:59:                window = tokens[i : i + self.max_chunk_size]
+sakina-backend/chunking.py:62:                    chunks.append(piece)
+sakina-backend/chunking.py:63:        return chunks
+sakina-backend/chunking.py:66:__all__ = ["ArabicSemanticChunker", "preprocess", "split_by_markers"]
+sakina-backend/chunking_test.py:1:"""Unit tests for the pure chunker helpers (no transformers/model needed)."""
+sakina-backend/chunking_test.py:2:from chunking import preprocess, split_by_markers
+sakina-backend/chunking_test.py:15:def test_split_by_islamic_markers():
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:3:-- Policy: idempotent, non-destructive, no secrets.
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:207:    source_language VARCHAR(8) NOT NULL DEFAULT 'en',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:217:    ADD COLUMN IF NOT EXISTS source_language VARCHAR(8) DEFAULT 'en',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:226:-- Domains 5/6/7/8/9/19: Islamic DB, RAG, Mastermind, Safety, Scholar, WASM
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:229:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_providers (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:243:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_sources (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:245:    source_key TEXT NOT NULL UNIQUE,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:246:    source_type TEXT NOT NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:247:    source_status TEXT NOT NULL DEFAULT 'pending',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:261:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_licences (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:263:    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:264:    provider_id UUID REFERENCES sakina_ai.islamic_source_providers(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:279:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_documents (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:281:    source_id UUID NOT NULL REFERENCES sakina_ai.islamic_sources(id) ON DELETE RESTRICT,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:286:    source_status TEXT NOT NULL DEFAULT 'pending',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:287:    source_type TEXT NOT NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:298:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_chunks (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:300:    document_id UUID NOT NULL REFERENCES sakina_ai.islamic_documents(id) ON DELETE CASCADE,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:301:    chunk_key TEXT NOT NULL UNIQUE,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:302:    chunk_index INTEGER NOT NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:303:    chunk_text TEXT NOT NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:304:    citation_text TEXT NOT NULL DEFAULT '',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:306:    source_type TEXT NOT NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:307:    source_status TEXT NOT NULL DEFAULT 'pending',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:317:    UNIQUE (document_id, chunk_index)
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:320:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_embeddings (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:322:    chunk_id UUID NOT NULL REFERENCES sakina_ai.islamic_chunks(id) ON DELETE CASCADE,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:323:    embedding_ref TEXT NOT NULL UNIQUE,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:324:    vector_store TEXT NOT NULL DEFAULT 'sakina-qdrant',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:325:    vector_collection TEXT NOT NULL DEFAULT 'verified_knowledge',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:326:    vector_id TEXT NOT NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:327:    embedding_model TEXT NOT NULL DEFAULT 'text-embedding',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:328:    embedding_status TEXT NOT NULL DEFAULT 'pending',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:329:    source_status TEXT NOT NULL DEFAULT 'pending',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:330:    source_type TEXT NOT NULL DEFAULT 'internal-approved',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:341:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_api_sync_jobs (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:343:    provider_id UUID REFERENCES sakina_ai.islamic_source_providers(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:344:    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:359:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_api_sync_items (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:361:    job_id UUID NOT NULL REFERENCES sakina_ai.islamic_api_sync_jobs(id) ON DELETE CASCADE,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:365:    source_external_id TEXT,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:373:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_reviews (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:375:    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:376:    document_id UUID REFERENCES sakina_ai.islamic_documents(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:377:    chunk_id UUID REFERENCES sakina_ai.islamic_chunks(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:378:    licence_id UUID REFERENCES sakina_ai.islamic_source_licences(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:379:    review_type TEXT NOT NULL DEFAULT 'source_governance',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:400:    source_type TEXT,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:401:    source_status TEXT,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:402:    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:403:    document_id UUID REFERENCES sakina_ai.islamic_documents(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:404:    chunk_id UUID REFERENCES sakina_ai.islamic_chunks(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:405:    embedding_id UUID REFERENCES sakina_ai.islamic_embeddings(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:406:    citation TEXT,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:413:CREATE TABLE IF NOT EXISTS sakina_ai.citation_verification_events (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:417:    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:418:    document_id UUID REFERENCES sakina_ai.islamic_documents(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:419:    chunk_id UUID REFERENCES sakina_ai.islamic_chunks(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:420:    citation_text TEXT NOT NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:423:    verified_by TEXT NOT NULL DEFAULT 'policy',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:432:    islamic_sensitivity TEXT NOT NULL DEFAULT 'unknown',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:446:    policy_version TEXT NOT NULL DEFAULT 'v1',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:463:    islamic_sensitivity TEXT NOT NULL DEFAULT 'unknown',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:466:    citations_required BOOLEAN NOT NULL DEFAULT true,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:467:    citation_sufficiency BOOLEAN NOT NULL DEFAULT false,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:470:    final_response_policy TEXT NOT NULL DEFAULT 'defer',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:474:    user_message TEXT NOT NULL DEFAULT 'This question needs verified Islamic sources or scholar review before an answer can be provided.',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:477:    policy_version TEXT NOT NULL DEFAULT 'v1',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:486:    ADD COLUMN IF NOT EXISTS citations_required BOOLEAN DEFAULT true,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:487:    ADD COLUMN IF NOT EXISTS citation_sufficiency BOOLEAN DEFAULT false,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:514:    policy_version TEXT NOT NULL DEFAULT 'v1',
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:523:        WHERE conname = 'chk_islamic_sources_source_status'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:524:          AND conrelid = 'sakina_ai.islamic_sources'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:526:        ALTER TABLE sakina_ai.islamic_sources
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:527:            ADD CONSTRAINT chk_islamic_sources_source_status
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:528:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:533:        WHERE conname = 'chk_islamic_sources_source_type'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:534:          AND conrelid = 'sakina_ai.islamic_sources'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:536:        ALTER TABLE sakina_ai.islamic_sources
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:537:            ADD CONSTRAINT chk_islamic_sources_source_type
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:538:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:543:        WHERE conname = 'chk_islamic_sources_language'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:544:          AND conrelid = 'sakina_ai.islamic_sources'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:546:        ALTER TABLE sakina_ai.islamic_sources
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:547:            ADD CONSTRAINT chk_islamic_sources_language
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:556:        WHERE conname = 'chk_islamic_documents_source_status'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:557:          AND conrelid = 'sakina_ai.islamic_documents'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:559:        ALTER TABLE sakina_ai.islamic_documents
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:560:            ADD CONSTRAINT chk_islamic_documents_source_status
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:561:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:566:        WHERE conname = 'chk_islamic_documents_source_type'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:567:          AND conrelid = 'sakina_ai.islamic_documents'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:569:        ALTER TABLE sakina_ai.islamic_documents
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:570:            ADD CONSTRAINT chk_islamic_documents_source_type
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:571:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:576:        WHERE conname = 'chk_islamic_documents_language'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:577:          AND conrelid = 'sakina_ai.islamic_documents'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:579:        ALTER TABLE sakina_ai.islamic_documents
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:580:            ADD CONSTRAINT chk_islamic_documents_language
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:589:        WHERE conname = 'chk_islamic_chunks_source_status'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:590:          AND conrelid = 'sakina_ai.islamic_chunks'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:592:        ALTER TABLE sakina_ai.islamic_chunks
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:593:            ADD CONSTRAINT chk_islamic_chunks_source_status
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:594:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:599:        WHERE conname = 'chk_islamic_chunks_source_type'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:600:          AND conrelid = 'sakina_ai.islamic_chunks'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:602:        ALTER TABLE sakina_ai.islamic_chunks
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:603:            ADD CONSTRAINT chk_islamic_chunks_source_type
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:604:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:609:        WHERE conname = 'chk_islamic_chunks_language'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:610:          AND conrelid = 'sakina_ai.islamic_chunks'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:612:        ALTER TABLE sakina_ai.islamic_chunks
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:613:            ADD CONSTRAINT chk_islamic_chunks_language
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:622:        WHERE conname = 'chk_islamic_embeddings_source_status'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:623:          AND conrelid = 'sakina_ai.islamic_embeddings'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:625:        ALTER TABLE sakina_ai.islamic_embeddings
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:626:            ADD CONSTRAINT chk_islamic_embeddings_source_status
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:627:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:632:        WHERE conname = 'chk_islamic_embeddings_source_type'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:633:          AND conrelid = 'sakina_ai.islamic_embeddings'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:635:        ALTER TABLE sakina_ai.islamic_embeddings
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:636:            ADD CONSTRAINT chk_islamic_embeddings_source_type
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:637:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:642:        WHERE conname = 'chk_islamic_embeddings_language'
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:643:          AND conrelid = 'sakina_ai.islamic_embeddings'::regclass
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:645:        ALTER TABLE sakina_ai.islamic_embeddings
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:646:            ADD CONSTRAINT chk_islamic_embeddings_language
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:664:CREATE INDEX IF NOT EXISTS idx_islamic_sources_status_type_lang
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:665:    ON sakina_ai.islamic_sources (source_status, source_type, language);
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:666:CREATE INDEX IF NOT EXISTS idx_islamic_documents_source_language
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:667:    ON sakina_ai.islamic_documents (source_id, language, source_status);
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:668:CREATE INDEX IF NOT EXISTS idx_islamic_chunks_document
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:669:    ON sakina_ai.islamic_chunks (document_id, chunk_index);
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:670:CREATE INDEX IF NOT EXISTS idx_islamic_embeddings_chunk
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:671:    ON sakina_ai.islamic_embeddings (chunk_id);
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:933:CREATE TABLE IF NOT EXISTS public.source_approval_queue (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:935:    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:972:CREATE INDEX IF NOT EXISTS idx_source_approval_queue_status
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:973:    ON public.source_approval_queue (approval_status, created_at DESC);
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:999:    source_payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1042:    source_id UUID REFERENCES sakina_ai.islamic_sources(id) ON DELETE SET NULL,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1181:    source_channel TEXT,
+sakina-backend/db/20260529_phase3_full_product_schema_revision2_rollback_procedure.md:25:## Scope guardrails
+sakina-backend/db/init.sql:7:CREATE TABLE verified_knowledge.source_documents (
+sakina-backend/db/init.sql:16:CREATE TABLE verified_knowledge.chunks (
+sakina-backend/db/init.sql:18:    source_document_id UUID REFERENCES verified_knowledge.source_documents(id),
+sakina-backend/db/init.sql:19:    content_chunk TEXT NOT NULL,
+sakina-backend/db/source-candidates/islamic-source-candidates.json:4:  "source_approved_default": false,
+sakina-backend/db/source-candidates/islamic-source-candidates.json:7:      "source_id": "tanzil-quran-text",
+sakina-backend/db/source-candidates/islamic-source-candidates.json:19:      "notes": "Canonical Quran text source. Keep Arabic text verbatim and preserve attribution."
+sakina-backend/db/source-candidates/islamic-source-candidates.json:22:      "source_id": "alquran-cloud-api",
+sakina-backend/db/source-candidates/islamic-source-candidates.json:24:      "provider": "Islamic Network",
+sakina-backend/db/source-candidates/islamic-source-candidates.json:37:      "source_id": "risan-quran-json",
+sakina-backend/db/source-candidates/islamic-source-candidates.json:52:      "source_id": "fawazahmed0-hadith-api",
+sakina-backend/db/source-candidates/islamic-source-candidates.json:64:      "notes": "Keep collection and grading metadata attached to every citation."
+sakina-backend/db/source-candidates/islamic-source-candidates.json:67:      "source_id": "sunnah-now-api",
+sakina-backend/db/source-candidates/islamic-source-candidates.json:82:      "source_id": "aladhan-api",
+sakina-backend/db/source-candidates/islamic-source-candidates.json:84:      "provider": "Islamic Network",
+sakina-backend/src/bin/ingest.rs:26:            println!("  {n} chunks");
+sakina-backend/src/bin/ingest.rs:30:    println!("Done. {total} chunks ingested from {path:?}.");
+sakina-backend/src/brand.rs:16:    vision: "Empower Muslims with Sovereign, Intelligent, and Trustworthy Islamic Guidance",
+sakina-backend/src/brand.rs:17:    mission: "Zero-hallucination Islamic guidance with complete privacy and sovereignty",
+sakina-backend/src/brand.rs:18:    tagline: "Trustworthy. Private. Islamic.",
+sakina-backend/src/brand.rs:24:        "Community - Open source, collaborative",
+sakina-backend/src/brand.rs:37:    primary: "#1B6B5E",    // Islamic Green
+sakina-backend/src/brand.rs:45:    "Authentic Islamic guidance, complete privacy, transparency in every interaction"
+sakina-backend/src/handlers/chat.rs:55:            "conversation creation blocked by Mother Brain safety policy",
+sakina-backend/src/handlers/chat.rs:237:            "message blocked by Mother Brain safety policy",
+sakina-backend/src/handlers/dashboard.rs:4:pub async fn get_guardrails() -> HttpResponse {
+sakina-backend/src/handlers/mod.rs:9:pub mod islamic;
+sakina-backend/src/handlers/modules.rs:63:                    "quran module flag enabled; restricted content policy still applies".to_string()
+sakina-backend/src/handlers/modules.rs:80:                    "prayer module flag enabled; restricted content policy still applies"
+sakina-backend/src/handlers/modules.rs:196:        verified_source_count: 0,
+sakina-backend/src/handlers/modules.rs:207:        |(source_type, source_name, source_reference, review_status)| {
+sakina-backend/src/handlers/modules.rs:208:            source_type.trim().is_empty()
+sakina-backend/src/handlers/modules.rs:209:                || source_name.trim().is_empty()
+sakina-backend/src/handlers/modules.rs:210:                || source_reference.trim().is_empty()
+sakina-backend/src/handlers/modules.rs:219:                "{} module produced unsourced or incomplete provenance payload",
+sakina-backend/src/handlers/modules.rs:236:                e.source_type.as_str(),
+sakina-backend/src/handlers/modules.rs:237:                e.source_name.as_str(),
+sakina-backend/src/handlers/modules.rs:238:                e.source_reference.as_str(),
+sakina-backend/src/handlers/modules.rs:264:                e.source_type.as_str(),
+sakina-backend/src/handlers/modules.rs:265:                e.source_name.as_str(),
+sakina-backend/src/handlers/modules.rs:266:                e.source_reference.as_str(),
+sakina-backend/src/handlers/modules.rs:292:                e.source_type.as_str(),
+sakina-backend/src/handlers/modules.rs:293:                e.source_name.as_str(),
+sakina-backend/src/handlers/modules.rs:294:                e.source_reference.as_str(),
+sakina-backend/src/handlers/modules.rs:320:                e.source_type.as_str(),
+sakina-backend/src/handlers/modules.rs:321:                e.source_name.as_str(),
+sakina-backend/src/handlers/modules.rs:322:                e.source_reference.as_str(),
+sakina-backend/src/handlers/modules.rs:461:    fn provenance_validation_rejects_unsourced_religious_content() {
+sakina-backend/src/handlers/phase2.rs:10:    CreateSessionRequest, CreateSourceApprovalItemRequest, CreateSupportTicketRequest,
+sakina-backend/src/handlers/phase2.rs:12:    LogCitationEventRequest, LogMastermindDecisionRequest, LogRagRetrievalRequest,
+sakina-backend/src/handlers/phase2.rs:14:    LoginRequest, RegisterUserRequest, ReportAnswerRequest, SourceApprovalItem,
+sakina-backend/src/handlers/phase2.rs:190:pub async fn approved_rag_sources(
+sakina-backend/src/handlers/phase2.rs:195:    let items = repo.list_approved_rag_sources(&module).await?;
+sakina-backend/src/handlers/phase2.rs:196:    Ok(HttpResponse::Ok().json(serde_json::json!({ "sources": items })))
+sakina-backend/src/handlers/phase2.rs:207:pub async fn log_citation_event(
+sakina-backend/src/handlers/phase2.rs:209:    body: web::Json<LogCitationEventRequest>,
+sakina-backend/src/handlers/phase2.rs:211:    let id = repo.log_citation_event(body.into_inner()).await?;
+sakina-backend/src/handlers/phase2.rs:279:pub async fn source_approval_queue(
+sakina-backend/src/handlers/phase2.rs:282:    let items: Vec<SourceApprovalItem> = repo.list_source_approval_queue().await?;
+sakina-backend/src/handlers/phase2.rs:286:pub async fn create_source_approval_item(
+sakina-backend/src/handlers/phase2.rs:288:    body: web::Json<CreateSourceApprovalItemRequest>,
+sakina-backend/src/handlers/phase2.rs:290:    let id = repo.create_source_approval_item(body.into_inner()).await?;
+sakina-backend/src/handlers/phase2.rs:764:                .route("/rag/audit/citation", web::post().to(log_citation_event))
+sakina-backend/src/handlers/phase2.rs:765:                .route("/rag/sources/approved", web::get().to(approved_rag_sources))
+sakina-backend/src/handlers/phase2.rs:787:                    "/admin/source-approval-queue",
+sakina-backend/src/handlers/phase2.rs:788:                    web::get().to(source_approval_queue),
+sakina-backend/src/handlers/phase2.rs:791:                    "/admin/source-approval-queue",
+sakina-backend/src/handlers/phase2.rs:792:                    web::post().to(create_source_approval_item),
+sakina-backend/src/handlers/phase2.rs:853:                    "report_reason": "citation_missing",
+sakina-backend/src/handlers/phase2.rs:854:                    "report_details": "no source listed"
+sakina-backend/src/handlers/phase2.rs:861:        let source_id: Uuid = sqlx::query_scalar(
+sakina-backend/src/handlers/phase2.rs:863:            INSERT INTO sakina_ai.islamic_sources (
+sakina-backend/src/handlers/phase2.rs:864:                source_key, source_type, source_status, language, title, review_status
+sakina-backend/src/handlers/phase2.rs:866:            VALUES ($1, 'quran', 'approved', 'ar', 'Verified Source', 'verified')
+sakina-backend/src/handlers/phase2.rs:870:        .bind(unique("source"))
+sakina-backend/src/handlers/phase2.rs:873:        .expect("insert approved source");
+sakina-backend/src/handlers/phase2.rs:876:            INSERT INTO sakina_ai.islamic_documents (
+sakina-backend/src/handlers/phase2.rs:877:                source_id, document_key, title, source_type, source_status, review_status
+sakina-backend/src/handlers/phase2.rs:883:        .bind(source_id)
+sakina-backend/src/handlers/phase2.rs:888:        let _chunk_id: Uuid = sqlx::query_scalar(
+sakina-backend/src/handlers/phase2.rs:890:            INSERT INTO sakina_ai.islamic_chunks (
+sakina-backend/src/handlers/phase2.rs:891:                document_id, chunk_key, chunk_index, chunk_text, citation_text, source_type, source_status, review_status
+sakina-backend/src/handlers/phase2.rs:893:            VALUES ($1, $2, 0, 'verified chunk text', 'verified citation', 'quran', 'approved', 'verified')
+sakina-backend/src/handlers/phase2.rs:898:        .bind(unique("chunk"))
+sakina-backend/src/handlers/phase2.rs:901:        .expect("insert approved chunk");
+sakina-backend/src/handlers/phase2.rs:903:        let approved_sources_resp = test::call_service(
+sakina-backend/src/handlers/phase2.rs:906:                .uri("/rag/sources/approved?module=quran")
+sakina-backend/src/handlers/phase2.rs:910:        assert_eq!(approved_sources_resp.status(), StatusCode::OK);
+sakina-backend/src/handlers/phase2.rs:911:        let approved_sources_body: serde_json::Value =
+sakina-backend/src/handlers/phase2.rs:912:            test::read_body_json(approved_sources_resp).await;
+sakina-backend/src/handlers/phase2.rs:913:        let sources = approved_sources_body["sources"]
+sakina-backend/src/handlers/phase2.rs:915:            .expect("approved sources array");
+sakina-backend/src/handlers/phase2.rs:916:        assert!(!sources.is_empty());
+sakina-backend/src/handlers/phase2.rs:930:                    "citation": null,
+sakina-backend/src/handlers/phase2.rs:932:                    "decision_reason": "no verified sources"
+sakina-backend/src/handlers/phase2.rs:941:        let citation_resp = test::call_service(
+sakina-backend/src/handlers/phase2.rs:944:                .uri("/rag/audit/citation")
+sakina-backend/src/handlers/phase2.rs:948:                    "citation_text": "none",
+sakina-backend/src/handlers/phase2.rs:950:                    "verification_reason": "source not found",
+sakina-backend/src/handlers/phase2.rs:951:                    "verified_by": "policy"
+sakina-backend/src/handlers/phase2.rs:956:        assert_eq!(citation_resp.status(), StatusCode::CREATED);
+sakina-backend/src/handlers/phase2.rs:966:                    "islamic_sensitivity": "religious_sensitive",
+sakina-backend/src/handlers/phase2.rs:988:                    "islamic_sensitivity": "religious_sensitive",
+sakina-backend/src/handlers/phase2.rs:991:                    "citations_required": true,
+sakina-backend/src/handlers/phase2.rs:992:                    "citation_sufficiency": false,
+sakina-backend/src/handlers/phase2.rs:995:                    "final_response_policy": "defer",
+sakina-backend/src/handlers/phase2.rs:1037:                    "policy_version": "v1",
+sakina-backend/src/handlers/phase2.rs:1111:        let source_queue_write_resp = test::call_service(
+sakina-backend/src/handlers/phase2.rs:1114:                .uri("/admin/source-approval-queue")
+sakina-backend/src/handlers/phase2.rs:1116:                    "source_id": null,
+sakina-backend/src/handlers/phase2.rs:1123:        assert_eq!(source_queue_write_resp.status(), StatusCode::CREATED);
+sakina-backend/src/handlers/phase2.rs:1128:                .uri("/admin/source-approval-queue")
+sakina-backend/src/handlers/rag.rs:9:    RagSourceItem, RagSourcesResponse, RagStatusResponse, ReviewStatus,
+sakina-backend/src/handlers/rag.rs:11:use crate::models::{RagQuery, RagResponse, SourceReference};
+sakina-backend/src/handlers/rag.rs:13:    AiaOrchestrator, EmbeddingsService, Guardrails, HybridRagService, QdrantVectorDB,
+sakina-backend/src/handlers/rag.rs:24:fn source_from_payload(
+sakina-backend/src/handlers/rag.rs:25:    hit: &crate::services::qdrant_client::ScoredPoint,
+sakina-backend/src/handlers/rag.rs:26:) -> Option<SourceReference> {
+sakina-backend/src/handlers/rag.rs:28:    let source_id = payload_text(payload, "source_id")
+sakina-backend/src/handlers/rag.rs:29:        .or_else(|| payload_text(payload, "chunk_id"))
+sakina-backend/src/handlers/rag.rs:32:    Some(SourceReference {
+sakina-backend/src/handlers/rag.rs:33:        id: source_id,
+sakina-backend/src/handlers/rag.rs:35:            .or_else(|| payload_text(payload, "source_name"))
+sakina-backend/src/handlers/rag.rs:38:            .or_else(|| payload_text(payload, "source_author"))
+sakina-backend/src/handlers/rag.rs:41:            .or_else(|| payload_text(payload, "source_reference"))
+sakina-backend/src/handlers/rag.rs:49:/// Real RAG pipeline (Step 18): classify -> embed -> guardrail -> Qdrant search.
+sakina-backend/src/handlers/rag.rs:52:/// (embeddings), a live Qdrant with indexed chunks, and a populated Postgres.
+sakina-backend/src/handlers/rag.rs:57:    guardrails: web::Data<Arc<Guardrails>>,
+sakina-backend/src/handlers/rag.rs:58:    qdrant: web::Data<QdrantVectorDB>,
+sakina-backend/src/handlers/rag.rs:59:    embeddings: web::Data<EmbeddingsService>,
+sakina-backend/src/handlers/rag.rs:74:    let embedding = embeddings.embed(&query.query).await?;
+sakina-backend/src/handlers/rag.rs:76:    // 3. Guardrail check on the embedding.
+sakina-backend/src/handlers/rag.rs:77:    let guard = guardrails.check(&embedding).await?;
+sakina-backend/src/handlers/rag.rs:81:            sources: vec![],
+sakina-backend/src/handlers/rag.rs:83:            guardrail_triggered: true,
+sakina-backend/src/handlers/rag.rs:88:    // 4. Vector search for supporting chunks.
+sakina-backend/src/handlers/rag.rs:89:    let hits = qdrant.search(&embedding, THRESHOLD, 5).await?;
+sakina-backend/src/handlers/rag.rs:93:            sources: vec![],
+sakina-backend/src/handlers/rag.rs:95:            guardrail_triggered: true,
+sakina-backend/src/handlers/rag.rs:101:    let sources: Vec<SourceReference> = hits.iter().filter_map(source_from_payload).collect();
+sakina-backend/src/handlers/rag.rs:107:        sources,
+sakina-backend/src/handlers/rag.rs:109:        guardrail_triggered: false,
+sakina-backend/src/handlers/rag.rs:122:    hybrid: web::Data<HybridRagService>,
+sakina-backend/src/handlers/rag.rs:132:    let result = hybrid
+sakina-backend/src/handlers/rag.rs:140:        "retrieved_chunks": result.retrieved_chunks,
+sakina-backend/src/handlers/rag.rs:141:        "source_ranking": result.source_ranking,
+sakina-backend/src/handlers/rag.rs:142:        "citations": result.citations,
+sakina-backend/src/handlers/rag.rs:197:async fn approved_sources_from_db(
+sakina-backend/src/handlers/rag.rs:200:) -> Result<Vec<RagSourceItem>, ApiError> {
+sakina-backend/src/handlers/rag.rs:204:            s.source_type,
+sakina-backend/src/handlers/rag.rs:205:            s.title AS source_name,
+sakina-backend/src/handlers/rag.rs:206:            COALESCE(c.chunk_key, d.document_key, s.source_key) AS source_reference,
+sakina-backend/src/handlers/rag.rs:207:            c.citation_text AS citation,
+sakina-backend/src/handlers/rag.rs:210:            md5(c.chunk_text) AS content_hash
+sakina-backend/src/handlers/rag.rs:211:        FROM sakina_ai.islamic_sources s
+sakina-backend/src/handlers/rag.rs:212:        JOIN sakina_ai.islamic_documents d ON d.source_id = s.id
+sakina-backend/src/handlers/rag.rs:213:        JOIN sakina_ai.islamic_chunks c ON c.document_id = d.id
+sakina-backend/src/handlers/rag.rs:214:        WHERE s.source_status = 'approved'
+sakina-backend/src/handlers/rag.rs:216:          AND d.source_status = 'approved'
+sakina-backend/src/handlers/rag.rs:218:          AND c.source_status = 'approved'
+sakina-backend/src/handlers/rag.rs:220:          AND s.source_type = $1
+sakina-backend/src/handlers/rag.rs:221:        ORDER BY s.created_at DESC, d.created_at DESC, c.chunk_index ASC
+sakina-backend/src/handlers/rag.rs:228:    .map_err(|_| ApiError::internal("failed to load approved rag sources"))?;
+sakina-backend/src/handlers/rag.rs:232:        .map(|row| RagSourceItem {
+sakina-backend/src/handlers/rag.rs:234:            source_type: row.get("source_type"),
+sakina-backend/src/handlers/rag.rs:235:            source_name: row.get("source_name"),
+sakina-backend/src/handlers/rag.rs:236:            source_reference: row.get("source_reference"),
+sakina-backend/src/handlers/rag.rs:237:            citation: row.get("citation"),
+sakina-backend/src/handlers/rag.rs:251:        verified_source_count: 0,
+sakina-backend/src/handlers/rag.rs:265:pub async fn rag_sources(pool: web::Data<sqlx::PgPool>, req: HttpRequest) -> HttpResponse {
+sakina-backend/src/handlers/rag.rs:304:    match approved_sources_from_db(pool.get_ref(), &module).await {
+sakina-backend/src/handlers/rag.rs:305:        Ok(sources) => HttpResponse::Ok().json(RagSourcesResponse { sources }),
+sakina-backend/src/handlers/rag.rs:350:    match approved_sources_from_db(pool.get_ref(), &module).await {
+sakina-backend/src/handlers/rag.rs:356:                    source_type: item.source_type,
+sakina-backend/src/handlers/rag.rs:357:                    source_name: item.source_name,
+sakina-backend/src/handlers/rag.rs:358:                    source_reference: item.source_reference,
+sakina-backend/src/handlers/rag.rs:359:                    citation: item.citation,
+sakina-backend/src/handlers/rag.rs:442:    fn verified_content_includes_citation_and_source_metadata() {
+sakina-backend/src/handlers/rag.rs:443:        let item = RagSourceItem {
+sakina-backend/src/handlers/rag.rs:445:            source_type: "article".to_string(),
+sakina-backend/src/handlers/rag.rs:446:            source_name: "Verified Manual".to_string(),
+sakina-backend/src/handlers/rag.rs:447:            source_reference: "Section 1".to_string(),
+sakina-backend/src/handlers/rag.rs:448:            citation: "Manual, Section 1".to_string(),
+sakina-backend/src/handlers/rag.rs:454:        assert!(!item.citation.is_empty());
+sakina-backend/src/handlers/rag.rs:455:        assert!(!item.source_type.is_empty());
+sakina-backend/src/handlers/rag.rs:456:        assert!(!item.source_name.is_empty());
+sakina-backend/src/handlers/rag.rs:457:        assert!(!item.source_reference.is_empty());
+sakina-backend/src/handlers/waitlist.rs:16:    pub source: Option<String>,
+sakina-backend/src/handlers/waitlist.rs:99:    const MAX_SOURCE_LEN: usize = 120;
+sakina-backend/src/handlers/waitlist.rs:133:            .source
+sakina-backend/src/handlers/waitlist.rs:135:            .map(|v| v.trim().len() > MAX_SOURCE_LEN)
+sakina-backend/src/handlers/waitlist.rs:147:            (name, email, preferred_language, platform, message, source)
+sakina-backend/src/handlers/waitlist.rs:156:            source = EXCLUDED.source
+sakina-backend/src/handlers/waitlist.rs:165:        .bind(req.source.as_deref())
+sakina-backend/src/handlers/waitlist.rs:209:                source TEXT DEFAULT '7jzi.com',
+sakina-backend/src/handlers/waitlist.rs:242:                source: None,
+sakina-backend/src/handlers/waitlist.rs:269:            source: None,
+sakina-backend/src/handlers/waitlist.rs:291:                source: Some("7jzi.com".to_string()),
+sakina-backend/src/handlers/waitlist.rs:298:            "SELECT email, source, status FROM sakina_ai.waitlist WHERE email = $1 LIMIT 1",
+sakina-backend/src/handlers/waitlist.rs:304:        let source: Option<String> = row.get("source");
+sakina-backend/src/handlers/waitlist.rs:306:        assert_eq!(source.as_deref(), Some("7jzi.com"));
+sakina-backend/src/handlers/waitlist.rs:324:                source: None,
+sakina-backend/src/main.rs:119:    // Project Sakina brand banner (single source of truth: src/brand.rs)
+sakina-backend/src/main.rs:184:    let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
+sakina-backend/src/main.rs:187:    let islamic_repo = services::IslamicKnowledgeRepository::new(pool.clone());
+sakina-backend/src/main.rs:193:    let guardrails_data = web::Data::new(guardrails.clone());
+sakina-backend/src/main.rs:196:    let islamic_repo_data = web::Data::new(islamic_repo.clone());
+sakina-backend/src/main.rs:200:    // Background worker: drain the outbox (marks chunk_indexed events Sent).
+sakina-backend/src/main.rs:208:    // RAG dependencies: Qdrant via REST + vLLM embeddings via HTTP (lazy ÔÇö no
+sakina-backend/src/main.rs:210:    let qdrant_url =
+sakina-backend/src/main.rs:211:        std::env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6333".to_string());
+sakina-backend/src/main.rs:212:    let qdrant_collection =
+sakina-backend/src/main.rs:213:        std::env::var("QDRANT_COLLECTION").unwrap_or_else(|_| "verified_knowledge".to_string());
+sakina-backend/src/main.rs:216:    let qdrant = web::Data::new(services::QdrantVectorDB::new(
+sakina-backend/src/main.rs:217:        &qdrant_url,
+sakina-backend/src/main.rs:218:        &qdrant_collection,
+sakina-backend/src/main.rs:220:    let embeddings = web::Data::new(services::EmbeddingsService::new(&vllm_url));
+sakina-backend/src/main.rs:221:    let islamic_qdrant_collection = std::env::var("ISLAMIC_QDRANT_COLLECTION")
+sakina-backend/src/main.rs:222:        .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());
+sakina-backend/src/main.rs:223:    let hybrid_rag_service = web::Data::new(services::HybridRagService::new(
+sakina-backend/src/main.rs:225:        services::EmbeddingsService::new(&vllm_url),
+sakina-backend/src/main.rs:226:        services::QdrantVectorDB::new(&qdrant_url, &islamic_qdrant_collection),
+sakina-backend/src/main.rs:230:    let islamic_answer_service = web::Data::new(services::IslamicAnswerService::new(
+sakina-backend/src/main.rs:231:        islamic_repo.clone(),
+sakina-backend/src/main.rs:232:        hybrid_rag_service.get_ref().clone(),
+sakina-backend/src/main.rs:250:            .app_data(guardrails_data.clone())
+sakina-backend/src/main.rs:253:            .app_data(islamic_repo_data.clone())
+sakina-backend/src/main.rs:256:            .app_data(qdrant.clone())
+sakina-backend/src/main.rs:257:            .app_data(embeddings.clone())
+sakina-backend/src/main.rs:258:            .app_data(islamic_answer_service.clone())
+sakina-backend/src/main.rs:259:            .app_data(hybrid_rag_service.clone())
+sakina-backend/src/main.rs:526:                            .route("/sources", web::get().to(handlers::rag::rag_sources))
+sakina-backend/src/main.rs:528:                                "/sources/approved",
+sakina-backend/src/main.rs:529:                                web::get().to(handlers::phase2::approved_rag_sources),
+sakina-backend/src/main.rs:538:                                "/audit/citation",
+sakina-backend/src/main.rs:539:                                web::post().to(handlers::phase2::log_citation_event),
+sakina-backend/src/main.rs:544:                        web::scope("/islamic")
+sakina-backend/src/main.rs:545:                            .route("/sources", web::get().to(handlers::islamic::list_sources))
+sakina-backend/src/main.rs:548:                                web::get().to(handlers::islamic::list_documents),
+sakina-backend/src/main.rs:551:                                "/documents/{id}/chunks",
+sakina-backend/src/main.rs:552:                                web::get().to(handlers::islamic::list_document_chunks),
+sakina-backend/src/main.rs:554:                            .route("/search", web::get().to(handlers::islamic::search_local))
+sakina-backend/src/main.rs:556:                                "/citations/{id}",
+sakina-backend/src/main.rs:557:                                web::get().to(handlers::islamic::get_citation),
+sakina-backend/src/main.rs:559:                            .route("/ask", web::post().to(handlers::islamic::ask))
+sakina-backend/src/main.rs:561:                                "/qdrant/plan",
+sakina-backend/src/main.rs:562:                                web::post().to(handlers::islamic::qdrant_plan),
+sakina-backend/src/main.rs:566:                                web::get().to(handlers::islamic::ingestion_scaffolds),
+sakina-backend/src/main.rs:599:                                "/source-approval-queue",
+sakina-backend/src/main.rs:600:                                web::get().to(handlers::phase2::source_approval_queue),
+sakina-backend/src/main.rs:603:                                "/source-approval-queue",
+sakina-backend/src/main.rs:604:                                web::post().to(handlers::phase2::create_source_approval_item),
+sakina-backend/src/main.rs:679:                        "/guardrails",
+sakina-backend/src/main.rs:680:                        web::get().to(handlers::dashboard::get_guardrails),
+sakina-backend/src/models/mod.rs:22:    pub sources: Vec<SourceReference>,
+sakina-backend/src/models/mod.rs:24:    pub guardrail_triggered: bool,
+sakina-backend/src/models/mod.rs:29:pub struct SourceReference {
+sakina-backend/src/models/mod.rs:85:    pub source_strategy: String,
+sakina-backend/src/models/mod.rs:97:    pub citations_present: bool,
+sakina-backend/src/models/mod.rs:98:    pub grounded_in_islamic_sources: bool,
+sakina-backend/src/models/mod.rs:118:    pub citations: Vec<String>,
+sakina-backend/src/models/mod.rs:120:    pub grounded_in_islamic_sources: Option<bool>,
+sakina-backend/src/models/mod.rs:130:    pub citation_present: bool,
+sakina-backend/src/models/mod.rs:149:    pub source_strategy: String,
+sakina-backend/src/models/mod.rs:181:pub struct SourceProvenance {
+sakina-backend/src/models/mod.rs:182:    pub source_type: String,
+sakina-backend/src/models/mod.rs:183:    pub source_name: String,
+sakina-backend/src/models/mod.rs:184:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:193:    pub verified_source_count: u64,
+sakina-backend/src/models/mod.rs:210:    pub source_type: String,
+sakina-backend/src/models/mod.rs:211:    pub source_name: String,
+sakina-backend/src/models/mod.rs:212:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:229:    pub source_type: String,
+sakina-backend/src/models/mod.rs:230:    pub source_name: String,
+sakina-backend/src/models/mod.rs:231:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:248:    pub source_type: String,
+sakina-backend/src/models/mod.rs:249:    pub source_name: String,
+sakina-backend/src/models/mod.rs:250:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:267:    pub source_type: String,
+sakina-backend/src/models/mod.rs:268:    pub source_name: String,
+sakina-backend/src/models/mod.rs:269:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:347:    pub verified_source_count: u64,
+sakina-backend/src/models/mod.rs:352:pub struct RagSourceItem {
+sakina-backend/src/models/mod.rs:354:    pub source_type: String,
+sakina-backend/src/models/mod.rs:355:    pub source_name: String,
+sakina-backend/src/models/mod.rs:356:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:357:    pub citation: String,
+sakina-backend/src/models/mod.rs:365:pub struct RagSourcesResponse {
+sakina-backend/src/models/mod.rs:366:    pub sources: Vec<RagSourceItem>,
+sakina-backend/src/models/mod.rs:372:    pub source_type: String,
+sakina-backend/src/models/mod.rs:373:    pub source_name: String,
+sakina-backend/src/models/mod.rs:374:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:375:    pub citation: String,
+sakina-backend/src/models/mod.rs:421:pub struct DecisionSource {
+sakina-backend/src/models/mod.rs:422:    pub source_type: String,
+sakina-backend/src/models/mod.rs:423:    pub source_name: String,
+sakina-backend/src/models/mod.rs:424:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:425:    pub citation: String,
+sakina-backend/src/models/mod.rs:442:    pub sources: Vec<DecisionSource>,
+sakina-backend/src/models/mod.rs:443:    pub citations: Vec<String>,
+sakina-backend/src/models/mod.rs:444:    pub generated_from_verified_sources: bool,
+sakina-backend/src/models/mod.rs:464:    pub source_type: String,
+sakina-backend/src/models/mod.rs:465:    pub source_reference: String,
+sakina-backend/src/models/mod.rs:466:    pub citation: String,
+sakina-backend/src/services/decision_algorithm.rs:2:    DecisionModule, DecisionRequest, DecisionResponse, DecisionSource, ReviewStatus, SafetyRisk,
+sakina-backend/src/services/decision_algorithm.rs:21:        -> Vec<DecisionSource>;
+sakina-backend/src/services/decision_algorithm.rs:29:        evidence: &[DecisionSource],
+sakina-backend/src/services/decision_algorithm.rs:87:        if text.contains("fatwa") || text.contains("halal") || text.contains("haram") {
+sakina-backend/src/services/decision_algorithm.rs:112:    ) -> Vec<DecisionSource> {
+sakina-backend/src/services/decision_algorithm.rs:125:        evidence: &[DecisionSource],
+sakina-backend/src/services/decision_algorithm.rs:133:            question, first.source_name, first.source_reference
+sakina-backend/src/services/decision_algorithm.rs:166:    mut items: Vec<DecisionSource>,
+sakina-backend/src/services/decision_algorithm.rs:167:) -> Vec<DecisionSource> {
+sakina-backend/src/services/decision_algorithm.rs:170:            .source_reference
+sakina-backend/src/services/decision_algorithm.rs:173:            || !it.source_reference.trim().is_empty();
+sakina-backend/src/services/decision_algorithm.rs:176:            && !it.citation.trim().is_empty()
+sakina-backend/src/services/decision_algorithm.rs:211:                sources: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:212:                citations: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:213:                generated_from_verified_sources: false,
+sakina-backend/src/services/decision_algorithm.rs:227:            sources: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:228:            citations: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:229:            generated_from_verified_sources: false,
+sakina-backend/src/services/decision_algorithm.rs:242:            sources: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:243:            citations: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:244:            generated_from_verified_sources: false,
+sakina-backend/src/services/decision_algorithm.rs:253:            answer: "No verified source is available yet. This topic is under review.".to_string(),
+sakina-backend/src/services/decision_algorithm.rs:259:            sources: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:260:            citations: Vec::new(),
+sakina-backend/src/services/decision_algorithm.rs:261:            generated_from_verified_sources: false,
+sakina-backend/src/services/decision_algorithm.rs:274:    let citations: Vec<String> = verified.iter().map(|s| s.citation.clone()).collect();
+sakina-backend/src/services/decision_algorithm.rs:279:            summary.unwrap_or_else(|| "Verified sources found.".to_string())
+sakina-backend/src/services/decision_algorithm.rs:282:        summary.unwrap_or_else(|| "Verified sources found.".to_string())
+sakina-backend/src/services/decision_algorithm.rs:292:        sources: verified,
+sakina-backend/src/services/decision_algorithm.rs:293:        citations,
+sakina-backend/src/services/decision_algorithm.rs:294:        generated_from_verified_sources: true,
+sakina-backend/src/services/decision_algorithm.rs:303:    use crate::models::DecisionSource;
+sakina-backend/src/services/decision_algorithm.rs:325:        items: Vec<DecisionSource>,
+sakina-backend/src/services/decision_algorithm.rs:328:        fn retrieve(&self, _m: &DecisionModule, _l: &str, _q: &str) -> Vec<DecisionSource> {
+sakina-backend/src/services/decision_algorithm.rs:339:        fn summarize(&self, _l: &str, _q: &str, evidence: &[DecisionSource]) -> Option<String> {
+sakina-backend/src/services/decision_algorithm.rs:359:    fn verified_source(sim: f32) -> DecisionSource {
+sakina-backend/src/services/decision_algorithm.rs:360:        DecisionSource {
+sakina-backend/src/services/decision_algorithm.rs:361:            source_type: "tafsir".to_string(),
+sakina-backend/src/services/decision_algorithm.rs:362:            source_name: "Verified Source".to_string(),
+sakina-backend/src/services/decision_algorithm.rs:363:            source_reference: "quran:1:1".to_string(),
+sakina-backend/src/services/decision_algorithm.rs:364:            citation: "Quran 1:1".to_string(),
+sakina-backend/src/services/decision_algorithm.rs:423:        assert!(!out.generated_from_verified_sources);
+sakina-backend/src/services/decision_algorithm.rs:428:    fn unverified_source_is_rejected() {
+sakina-backend/src/services/decision_algorithm.rs:431:        let mut s = verified_source(0.9);
+sakina-backend/src/services/decision_algorithm.rs:444:        assert!(out.sources.is_empty());
+sakina-backend/src/services/decision_algorithm.rs:445:        assert!(!out.generated_from_verified_sources);
+sakina-backend/src/services/decision_algorithm.rs:450:    fn missing_citation_is_rejected() {
+sakina-backend/src/services/decision_algorithm.rs:453:        let mut s = verified_source(0.9);
+sakina-backend/src/services/decision_algorithm.rs:454:        s.citation = "".to_string();
+sakina-backend/src/services/decision_algorithm.rs:466:        assert!(out.sources.is_empty());
+sakina-backend/src/services/decision_algorithm.rs:471:    fn verified_source_is_returned() {
+sakina-backend/src/services/decision_algorithm.rs:476:            items: vec![verified_source(0.91)],
+sakina-backend/src/services/decision_algorithm.rs:486:        assert_eq!(out.sources.len(), 1);
+sakina-backend/src/services/decision_algorithm.rs:487:        assert!(!out.citations.is_empty());
+sakina-backend/src/services/decision_algorithm.rs:488:        assert!(out.generated_from_verified_sources);
+sakina-backend/src/services/decision_algorithm.rs:504:        assert!(!out.generated_from_verified_sources);
+sakina-backend/src/services/decision_algorithm.rs:510:    fn sensitive_question_requires_stricter_policy() {
+sakina-backend/src/services/decision_algorithm.rs:515:            items: vec![verified_source(0.93)],
+sakina-backend/src/services/decision_algorithm.rs:518:            &req("quran", "premium", "is this halal fatwa?"),
+sakina-backend/src/services/decision_algorithm.rs:533:    fn response_contract_includes_safety_and_source_metadata() {
+sakina-backend/src/services/decision_algorithm.rs:538:            items: vec![verified_source(0.88)],
+sakina-backend/src/services/decision_algorithm.rs:550:        assert!(!out.sources[0].content_hash.is_empty());
+sakina-backend/src/services/decision_algorithm.rs:551:        assert!(!out.sources[0].retrieved_at.is_empty());
+sakina-backend/src/services/embeddings.rs:1://! vLLM embeddings client using the OpenAI-compatible `/v1/embeddings` API.
+sakina-backend/src/services/embeddings.rs:8:pub struct EmbeddingRequest {
+sakina-backend/src/services/embeddings.rs:14:struct EmbeddingResponse {
+sakina-backend/src/services/embeddings.rs:15:    data: Vec<EmbeddingData>,
+sakina-backend/src/services/embeddings.rs:19:struct EmbeddingData {
+sakina-backend/src/services/embeddings.rs:20:    embedding: Vec<f32>,
+sakina-backend/src/services/embeddings.rs:24:pub struct EmbeddingsService {
+sakina-backend/src/services/embeddings.rs:30:impl EmbeddingsService {
+sakina-backend/src/services/embeddings.rs:37:        EmbeddingsService {
+sakina-backend/src/services/embeddings.rs:40:            model: std::env::var("VLLM_EMBEDDING_MODEL")
+sakina-backend/src/services/embeddings.rs:41:                .unwrap_or_else(|_| "sakina-local-embedding".to_string()),
+sakina-backend/src/services/embeddings.rs:46:    fn deterministic_embedding(&self, text: &str) -> Vec<f32> {
+sakina-backend/src/services/embeddings.rs:47:        let dim = std::env::var("VLLM_EMBEDDING_DIM")
+sakina-backend/src/services/embeddings.rs:52:        let mut vector = vec![0.0_f32; dim];
+sakina-backend/src/services/embeddings.rs:65:            vector[bucket] += 1.0;
+sakina-backend/src/services/embeddings.rs:67:            vector[neighbor] += 0.25;
+sakina-backend/src/services/embeddings.rs:69:        let norm = vector.iter().map(|value| value * value).sum::<f32>().sqrt();
+sakina-backend/src/services/embeddings.rs:71:            for value in &mut vector {
+sakina-backend/src/services/embeddings.rs:75:        vector
+sakina-backend/src/services/embeddings.rs:78:    /// Get the embedding vector for `text` from vLLM.
+sakina-backend/src/services/embeddings.rs:81:            return Err("mock embedding endpoints are not allowed in production paths".into());
+sakina-backend/src/services/embeddings.rs:83:        let req = EmbeddingRequest {
+sakina-backend/src/services/embeddings.rs:91:                .post(format!("{}/v1/embeddings", self.base_url))
+sakina-backend/src/services/embeddings.rs:98:                    let resp: EmbeddingResponse = resp.json().await?;
+sakina-backend/src/services/embeddings.rs:100:                        Some(d) => Ok(d.embedding),
+sakina-backend/src/services/embeddings.rs:101:                        None => Err("vLLM returned an empty embeddings response"
+sakina-backend/src/services/embeddings.rs:116:            .unwrap_or_else(|| "embedding request failed".to_string())
+sakina-backend/src/services/embeddings.rs:139:        let req = EmbeddingRequest {
+sakina-backend/src/services/embeddings.rs:149:    fn deterministic_test_embeddings_are_normalized() {
+sakina-backend/src/services/embeddings.rs:150:        let service = EmbeddingsService::new("http://embedding-service");
+sakina-backend/src/services/embeddings.rs:151:        let a = service.deterministic_embedding("What is patience in Islam?");
+sakina-backend/src/services/embeddings.rs:152:        let b = service.deterministic_embedding("What is patience in Islam?");
+sakina-backend/src/services/guardrails.rs:1://! Guardrails: enforce the similarity-confidence threshold before answering.
+sakina-backend/src/services/guardrails.rs:9:pub struct GuardrailResult {
+sakina-backend/src/services/guardrails.rs:15:pub struct Guardrails {
+sakina-backend/src/services/guardrails.rs:19:impl Guardrails {
+sakina-backend/src/services/guardrails.rs:20:    /// Threshold-only constructor. The roadmap's `new(qdrant, threshold)` gains
+sakina-backend/src/services/guardrails.rs:21:    /// the Qdrant client when real retrieval is wired.
+sakina-backend/src/services/guardrails.rs:23:        Guardrails {
+sakina-backend/src/services/guardrails.rs:29:    pub fn evaluate_score(&self, top_score: f32) -> GuardrailResult {
+sakina-backend/src/services/guardrails.rs:31:            GuardrailResult {
+sakina-backend/src/services/guardrails.rs:37:            GuardrailResult {
+sakina-backend/src/services/guardrails.rs:49:    ) -> Result<GuardrailResult, Box<dyn std::error::Error>> {
+sakina-backend/src/services/guardrails.rs:65:        let g = Guardrails::new(0.85);
+sakina-backend/src/services/guardrails.rs:74:        let g = Guardrails::new(0.85);
+sakina-backend/src/services/guardrails.rs:82:        let g = Guardrails::new(0.85);
+sakina-backend/src/services/iman_journey.rs:392:        .filter(|item| !item.source_reference.trim().is_empty() && !item.citation.trim().is_empty())
+sakina-backend/src/services/ingestion_producer.rs:1://! Ingestion producer (Phase 2, Step 7): read a verified text, chunk it, and
+sakina-backend/src/services/ingestion_producer.rs:2://! persist the source document + chunks + outbox events to Postgres.
+sakina-backend/src/services/ingestion_producer.rs:5://!   - Qdrant upsert + vLLM embedding are DEFERRED (no qdrant-client ÔåÆ avoids the
+sakina-backend/src/services/ingestion_producer.rs:6://!     OOM dependency tree). The outbox carries a `chunk_indexed` event so the
+sakina-backend/src/services/ingestion_producer.rs:7://!     relay / a real indexer can sync vectors later.
+sakina-backend/src/services/ingestion_producer.rs:8://!   - Chunking uses a simple paragraph splitter here; the Arabic semantic chunker
+sakina-backend/src/services/ingestion_producer.rs:9://!     (Python, chunking.py) is bridged via a subprocess/Job in the data pipeline.
+sakina-backend/src/services/ingestion_producer.rs:10://!   - SQL matches db/init.sql: source_documents(title, author, integrity_hash,
+sakina-backend/src/services/ingestion_producer.rs:11://!     approved_by, approved_at); chunks(content_chunk, madhhab, scholar, token_count).
+sakina-backend/src/services/ingestion_producer.rs:27:    /// Ingest one document. Returns the number of chunks written.
+sakina-backend/src/services/ingestion_producer.rs:42:        let source_id: Uuid = sqlx::query_scalar(
+sakina-backend/src/services/ingestion_producer.rs:43:            "INSERT INTO verified_knowledge.source_documents \
+sakina-backend/src/services/ingestion_producer.rs:54:        let chunks = simple_chunk(&content, 512);
+sakina-backend/src/services/ingestion_producer.rs:55:        for chunk in &chunks {
+sakina-backend/src/services/ingestion_producer.rs:56:            let chunk_id: Uuid = sqlx::query_scalar(
+sakina-backend/src/services/ingestion_producer.rs:57:                "INSERT INTO verified_knowledge.chunks \
+sakina-backend/src/services/ingestion_producer.rs:58:                 (source_document_id, content_chunk, madhhab, scholar, token_count) \
+sakina-backend/src/services/ingestion_producer.rs:61:            .bind(source_id)
+sakina-backend/src/services/ingestion_producer.rs:62:            .bind(chunk)
+sakina-backend/src/services/ingestion_producer.rs:65:            .bind(chunk.split_whitespace().count() as i32)
+sakina-backend/src/services/ingestion_producer.rs:69:            // TODO: embed via vLLM + upsert to Qdrant. For now enqueue for sync.
+sakina-backend/src/services/ingestion_producer.rs:74:            .bind("chunk_indexed")
+sakina-backend/src/services/ingestion_producer.rs:75:            .bind(serde_json::json!({ "chunk_id": chunk_id, "source_id": source_id }))
+sakina-backend/src/services/ingestion_producer.rs:80:        Ok(chunks.len())
+sakina-backend/src/services/ingestion_producer.rs:94:/// `max_words`. The real Arabic semantic chunker (chunking.py) is bridged later.
+sakina-backend/src/services/ingestion_producer.rs:95:fn simple_chunk(text: &str, max_words: usize) -> Vec<String> {
+sakina-backend/src/services/ingestion_producer.rs:102:        for window in words.chunks(max_words) {
+sakina-backend/src/services/ingestion_producer.rs:111:    use super::simple_chunk;
+sakina-backend/src/services/ingestion_producer.rs:115:        let chunks = simple_chunk("alpha beta\n\n\n\ngamma", 10);
+sakina-backend/src/services/ingestion_producer.rs:116:        assert_eq!(chunks, vec!["alpha beta".to_string(), "gamma".to_string()]);
+sakina-backend/src/services/ingestion_producer.rs:121:        let chunks = simple_chunk("a b c d e", 2);
+sakina-backend/src/services/ingestion_producer.rs:122:        assert_eq!(chunks, vec!["a b", "c d", "e"]);
+sakina-backend/src/services/islamic_knowledge.rs:2:use crate::models::SourceReference;
+sakina-backend/src/services/islamic_knowledge.rs:4:    BrainExecutionPermit, HybridRagService, SemanticCacheEntry, SemanticCacheService,
+sakina-backend/src/services/islamic_knowledge.rs:11:use sakina_fatwa_policy_gate::{evaluate as evaluate_fatwa_policy, AnswerInput};
+sakina-backend/src/services/islamic_knowledge.rs:22:pub struct IslamicKnowledgeRepository {
+sakina-backend/src/services/islamic_knowledge.rs:26:impl IslamicKnowledgeRepository {
+sakina-backend/src/services/islamic_knowledge.rs:31:    pub async fn list_sources(
+sakina-backend/src/services/islamic_knowledge.rs:38:            SELECT id, source_key, source_type, source_status, review_status, language, title, canonical_url
+sakina-backend/src/services/islamic_knowledge.rs:39:            FROM sakina_ai.islamic_sources
+sakina-backend/src/services/islamic_knowledge.rs:49:        .map_err(|_| ApiError::internal("failed to list islamic sources"))?;
+sakina-backend/src/services/islamic_knowledge.rs:56:                    "source_key": row.get::<String, _>("source_key"),
+sakina-backend/src/services/islamic_knowledge.rs:57:                    "source_type": row.get::<String, _>("source_type"),
+sakina-backend/src/services/islamic_knowledge.rs:58:                    "source_status": row.get::<String, _>("source_status"),
+sakina-backend/src/services/islamic_knowledge.rs:70:        source_id: Option<Uuid>,
+sakina-backend/src/services/islamic_knowledge.rs:76:            SELECT d.id, d.source_id, d.document_key, d.title, d.document_url, d.language, d.source_status, d.review_status, s.title AS source_title
+sakina-backend/src/services/islamic_knowledge.rs:77:            FROM sakina_ai.islamic_documents d
+sakina-backend/src/services/islamic_knowledge.rs:78:            JOIN sakina_ai.islamic_sources s ON s.id = d.source_id
+sakina-backend/src/services/islamic_knowledge.rs:79:            WHERE ($1::uuid IS NULL OR d.source_id = $1)
+sakina-backend/src/services/islamic_knowledge.rs:85:        .bind(source_id)
+sakina-backend/src/services/islamic_knowledge.rs:90:        .map_err(|_| ApiError::internal("failed to list islamic documents"))?;
+sakina-backend/src/services/islamic_knowledge.rs:97:                    "source_id": row.get::<Uuid, _>("source_id"),
+sakina-backend/src/services/islamic_knowledge.rs:98:                    "source_title": row.get::<String, _>("source_title"),
+sakina-backend/src/services/islamic_knowledge.rs:103:                    "source_status": row.get::<String, _>("source_status"),
+sakina-backend/src/services/islamic_knowledge.rs:110:    pub async fn list_document_chunks(
+sakina-backend/src/services/islamic_knowledge.rs:117:            SELECT id, document_id, chunk_key, chunk_index, citation_text, language, source_status, review_status
+sakina-backend/src/services/islamic_knowledge.rs:118:            FROM sakina_ai.islamic_chunks
+sakina-backend/src/services/islamic_knowledge.rs:120:            ORDER BY chunk_index ASC
+sakina-backend/src/services/islamic_knowledge.rs:128:        .map_err(|_| ApiError::internal("failed to list islamic chunks"))?;
+sakina-backend/src/services/islamic_knowledge.rs:136:                    "chunk_key": row.get::<String, _>("chunk_key"),
+sakina-backend/src/services/islamic_knowledge.rs:137:                    "chunk_index": row.get::<i32, _>("chunk_index"),
+sakina-backend/src/services/islamic_knowledge.rs:138:                    "citation_text": row.get::<String, _>("citation_text"),
+sakina-backend/src/services/islamic_knowledge.rs:140:                    "source_status": row.get::<String, _>("source_status"),
+sakina-backend/src/services/islamic_knowledge.rs:155:            SELECT c.id, c.document_id, c.chunk_key, c.chunk_index, c.citation_text, c.language, c.review_status, d.title AS document_title, s.title AS source_title
+sakina-backend/src/services/islamic_knowledge.rs:156:            FROM sakina_ai.islamic_chunks c
+sakina-backend/src/services/islamic_knowledge.rs:157:            JOIN sakina_ai.islamic_documents d ON d.id = c.document_id
+sakina-backend/src/services/islamic_knowledge.rs:158:            JOIN sakina_ai.islamic_sources s ON s.id = d.source_id
+sakina-backend/src/services/islamic_knowledge.rs:159:            WHERE c.chunk_text ILIKE ('%' || $1 || '%')
+sakina-backend/src/services/islamic_knowledge.rs:170:        .map_err(|_| ApiError::internal("failed to search islamic chunks"))?;
+sakina-backend/src/services/islamic_knowledge.rs:178:                    "chunk_key": row.get::<String, _>("chunk_key"),
+sakina-backend/src/services/islamic_knowledge.rs:179:                    "chunk_index": row.get::<i32, _>("chunk_index"),
+sakina-backend/src/services/islamic_knowledge.rs:180:                    "citation_text": row.get::<String, _>("citation_text"),
+sakina-backend/src/services/islamic_knowledge.rs:184:                    "source_title": row.get::<String, _>("source_title"),
+sakina-backend/src/services/islamic_knowledge.rs:190:    pub async fn get_citation(&self, chunk_id: Uuid) -> Result<Option<Value>, ApiError> {
+sakina-backend/src/services/islamic_knowledge.rs:193:            SELECT c.id, c.chunk_key, c.citation_text, c.chunk_text, c.language, c.review_status, d.id AS document_id, d.title AS document_title, s.id AS source_id, s.title AS source_title
+sakina-backend/src/services/islamic_knowledge.rs:194:            FROM sakina_ai.islamic_chunks c
+sakina-backend/src/services/islamic_knowledge.rs:195:            JOIN sakina_ai.islamic_documents d ON d.id = c.document_id
+sakina-backend/src/services/islamic_knowledge.rs:196:            JOIN sakina_ai.islamic_sources s ON s.id = d.source_id
+sakina-backend/src/services/islamic_knowledge.rs:200:        .bind(chunk_id)
+sakina-backend/src/services/islamic_knowledge.rs:203:        .map_err(|_| ApiError::internal("failed to fetch citation"))?;
+sakina-backend/src/services/islamic_knowledge.rs:208:                "chunk_key": row.get::<String, _>("chunk_key"),
+sakina-backend/src/services/islamic_knowledge.rs:209:                "citation_text": row.get::<String, _>("citation_text"),
+sakina-backend/src/services/islamic_knowledge.rs:210:                "chunk_text": row.get::<String, _>("chunk_text"),
+sakina-backend/src/services/islamic_knowledge.rs:215:                "source_id": row.get::<Uuid, _>("source_id"),
+sakina-backend/src/services/islamic_knowledge.rs:216:                "source_title": row.get::<String, _>("source_title"),
+sakina-backend/src/services/islamic_knowledge.rs:223:pub struct AskIslamicRequest {
+sakina-backend/src/services/islamic_knowledge.rs:231:pub struct QdrantCollectionPlan {
+sakina-backend/src/services/islamic_knowledge.rs:234:    pub expected_vector_size: usize,
+sakina-backend/src/services/islamic_knowledge.rs:239:pub struct IslamicAnswerService {
+sakina-backend/src/services/islamic_knowledge.rs:240:    _repository: IslamicKnowledgeRepository,
+sakina-backend/src/services/islamic_knowledge.rs:241:    hybrid_rag: HybridRagService,
+sakina-backend/src/services/islamic_knowledge.rs:245:impl IslamicAnswerService {
+sakina-backend/src/services/islamic_knowledge.rs:247:        repository: IslamicKnowledgeRepository,
+sakina-backend/src/services/islamic_knowledge.rs:248:        hybrid_rag: HybridRagService,
+sakina-backend/src/services/islamic_knowledge.rs:253:            hybrid_rag,
+sakina-backend/src/services/islamic_knowledge.rs:258:    pub fn qdrant_plan(&self) -> QdrantCollectionPlan {
+sakina-backend/src/services/islamic_knowledge.rs:259:        QdrantCollectionPlan {
+sakina-backend/src/services/islamic_knowledge.rs:260:            collection: std::env::var("ISLAMIC_QDRANT_COLLECTION")
+sakina-backend/src/services/islamic_knowledge.rs:261:                .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string()),
+sakina-backend/src/services/islamic_knowledge.rs:263:            expected_vector_size: std::env::var("VLLM_EMBEDDING_DIM")
+sakina-backend/src/services/islamic_knowledge.rs:274:        request: AskIslamicRequest,
+sakina-backend/src/services/islamic_knowledge.rs:284:        let fatwa_sensitive = is_fatwa_sensitive(question);
+sakina-backend/src/services/islamic_knowledge.rs:285:        let safety_level = if fatwa_sensitive { "high" } else { "safe" };
+sakina-backend/src/services/islamic_knowledge.rs:288:            "islamic_answer",
+sakina-backend/src/services/islamic_knowledge.rs:290:            "hybrid-v1",
+sakina-backend/src/services/islamic_knowledge.rs:302:        let hybrid = self
+sakina-backend/src/services/islamic_knowledge.rs:303:            .hybrid_rag
+sakina-backend/src/services/islamic_knowledge.rs:306:        let mut citations = hybrid.citations.clone();
+sakina-backend/src/services/islamic_knowledge.rs:307:        let mut confidence = hybrid
+sakina-backend/src/services/islamic_knowledge.rs:308:            .retrieved_chunks
+sakina-backend/src/services/islamic_knowledge.rs:310:            .map(|chunk| chunk.final_score)
+sakina-backend/src/services/islamic_knowledge.rs:312:        let mut fallback_used = hybrid.weak_evidence_blocked;
+sakina-backend/src/services/islamic_knowledge.rs:317:                if citations.is_empty() {
+sakina-backend/src/services/islamic_knowledge.rs:318:                    citations = offline.citations.clone();
+sakina-backend/src/services/islamic_knowledge.rs:323:                if let Some(first) = citations.first() {
+sakina-backend/src/services/islamic_knowledge.rs:327:                        format!("I found verified sources related to {}.", first.title)
+sakina-backend/src/services/islamic_knowledge.rs:336:        if !hybrid.citations.is_empty() && confidence < min_score {
+sakina-backend/src/services/islamic_knowledge.rs:339:        let policy = evaluate_fatwa_policy(&AnswerInput {
+sakina-backend/src/services/islamic_knowledge.rs:341:            has_verified_quran_or_hadith_citation: !citations.is_empty(),
+sakina-backend/src/services/islamic_knowledge.rs:342:            publication_mode_public: fatwa_sensitive || citations.is_empty(),
+sakina-backend/src/services/islamic_knowledge.rs:345:        if policy.decision != "allow_publish" {
+sakina-backend/src/services/islamic_knowledge.rs:351:                "This question requires scholar review with a verified source. I will not invent a ruling or fatwa without evidence."
+sakina-backend/src/services/islamic_knowledge.rs:358:                "I found verified sources related to your question. Review the citations below."
+sakina-backend/src/services/islamic_knowledge.rs:367:            "citations": citations,
+sakina-backend/src/services/islamic_knowledge.rs:370:            "fatwa_sensitive": fatwa_sensitive,
+sakina-backend/src/services/islamic_knowledge.rs:371:            "generated_from_verified_sources": !citations.is_empty(),
+sakina-backend/src/services/islamic_knowledge.rs:372:            "retrieval_strategy": hybrid.retrieval_strategy,
+sakina-backend/src/services/islamic_knowledge.rs:373:            "retrieved_chunks": hybrid.retrieved_chunks,
+sakina-backend/src/services/islamic_knowledge.rs:374:            "source_ranking": hybrid.source_ranking,
+sakina-backend/src/services/islamic_knowledge.rs:375:            "graph_path": hybrid.graph_path,
+sakina-backend/src/services/islamic_knowledge.rs:376:            "compressed_tokens_before": hybrid.compressed_tokens_before,
+sakina-backend/src/services/islamic_knowledge.rs:377:            "compressed_tokens_after": hybrid.compressed_tokens_after,
+sakina-backend/src/services/islamic_knowledge.rs:378:            "compression_ratio": hybrid.compression_ratio,
+sakina-backend/src/services/islamic_knowledge.rs:379:            "weak_evidence_blocked": hybrid.weak_evidence_blocked,
+sakina-backend/src/services/islamic_knowledge.rs:387:                intent: "islamic_answer".to_string(),
+sakina-backend/src/services/islamic_knowledge.rs:389:                source_version: "hybrid-v1".to_string(),
+sakina-backend/src/services/islamic_knowledge.rs:403:fn is_fatwa_sensitive(question: &str) -> bool {
+sakina-backend/src/services/islamic_knowledge.rs:406:        "fatwa",
+sakina-backend/src/services/islamic_knowledge.rs:433:// Legacy qdrant citation helper retained for compatibility with older tests.
+sakina-backend/src/services/islamic_knowledge.rs:435:fn qdrant_hit_to_citation(
+sakina-backend/src/services/islamic_knowledge.rs:436:    hit: &crate::services::qdrant_client::ScoredPoint,
+sakina-backend/src/services/islamic_knowledge.rs:437:) -> Option<SourceReference> {
+sakina-backend/src/services/islamic_knowledge.rs:439:    let id = payload_text(payload, "chunk_id")
+sakina-backend/src/services/islamic_knowledge.rs:440:        .or_else(|| payload_text(payload, "source_id"))
+sakina-backend/src/services/islamic_knowledge.rs:444:        .or_else(|| payload_text(payload, "source_name"))
+sakina-backend/src/services/islamic_knowledge.rs:446:        .unwrap_or_else(|| "Verified Source".to_string());
+sakina-backend/src/services/islamic_knowledge.rs:448:        .or_else(|| payload_text(payload, "source_author"))
+sakina-backend/src/services/islamic_knowledge.rs:451:        .or_else(|| payload_text(payload, "source_reference"))
+sakina-backend/src/services/islamic_knowledge.rs:452:        .or_else(|| payload_text(payload, "citation"))
+sakina-backend/src/services/islamic_knowledge.rs:457:    Some(SourceReference {
+sakina-backend/src/services/llm.rs:13:    pub chunk_id: String,
+sakina-backend/src/services/llm.rs:143:    "You are Sakina, a cautious Islamic guidance assistant. Answer only from \
+sakina-backend/src/services/llm.rs:145:     sources, schools of law, narrations, scholars, or certainty. If the \
+sakina-backend/src/services/llm.rs:147:     sources are insufficient and advise the user to consult a qualified Islamic \
+sakina-backend/src/services/llm.rs:148:     scholar. Keep the answer concise, respectful, and cite source labels like \
+sakina-backend/src/services/llm.rs:160:            "[S{}] chunk_id={} title={}\n{}\n\n",
+sakina-backend/src/services/llm.rs:162:            context.chunk_id,
+sakina-backend/src/services/llm.rs:169:        "Instructions:\n- Answer only from the verified context above.\n- Use source labels like [S1].\n- If the context is insufficient, refuse to answer and advise consulting a qualified Islamic scholar.\n",
+sakina-backend/src/services/llm.rs:179:    fn prompt_contains_query_context_and_source_labels() {
+sakina-backend/src/services/llm.rs:183:                chunk_id: "abc".to_string(),
+sakina-backend/src/services/mod.rs:7:pub mod brain_policy;
+sakina-backend/src/services/mod.rs:10:pub mod embeddings;
+sakina-backend/src/services/mod.rs:12:pub mod guardrails;
+sakina-backend/src/services/mod.rs:13:pub mod hybrid_rag;
+sakina-backend/src/services/mod.rs:16:pub mod islamic_knowledge;
+sakina-backend/src/services/mod.rs:21:pub mod offline_islamic_corpus;
+sakina-backend/src/services/mod.rs:24:pub mod qdrant_client;
+sakina-backend/src/services/mod.rs:35:pub use brain_policy::{BrainPolicyDecision, BrainSafetyPolicy};
+sakina-backend/src/services/mod.rs:37:    CompressedEvidenceChunk, CompressionReport, ContextCompressionService,
+sakina-backend/src/services/mod.rs:44:pub use embeddings::EmbeddingsService;
+sakina-backend/src/services/mod.rs:46:pub use guardrails::Guardrails;
+sakina-backend/src/services/mod.rs:47:pub use hybrid_rag::{HybridRagResult, HybridRagService, HybridRetrievedChunk};
+sakina-backend/src/services/mod.rs:50:pub use islamic_knowledge::AskIslamicRequest;
+sakina-backend/src/services/mod.rs:51:pub use islamic_knowledge::IslamicAnswerService;
+sakina-backend/src/services/mod.rs:52:pub use islamic_knowledge::IslamicKnowledgeRepository;
+sakina-backend/src/services/mod.rs:53:pub use islamic_knowledge::QdrantCollectionPlan;
+sakina-backend/src/services/mod.rs:60:pub use offline_islamic_corpus::fallback as offline_fallback;
+sakina-backend/src/services/mod.rs:61:pub use offline_islamic_corpus::lookup as offline_lookup;
+sakina-backend/src/services/mod.rs:64:pub use qdrant_client::QdrantVectorDB;
+sakina-backend/src/services/offline_islamic_corpus.rs:3:use crate::models::SourceReference;
+sakina-backend/src/services/offline_islamic_corpus.rs:10:    pub citations: Vec<SourceReference>,
+sakina-backend/src/services/offline_islamic_corpus.rs:13:    pub fatwa_sensitive: bool,
+sakina-backend/src/services/offline_islamic_corpus.rs:18:    source_id: String,
+sakina-backend/src/services/offline_islamic_corpus.rs:44:    source_id: String,
+sakina-backend/src/services/offline_islamic_corpus.rs:45:    source_approved: bool,
+sakina-backend/src/services/offline_islamic_corpus.rs:60:    source: String,
+sakina-backend/src/services/offline_islamic_corpus.rs:84:    source_id: String,
+sakina-backend/src/services/offline_islamic_corpus.rs:118:            "../../data/islamic-sources/quran-full-tanzil.json"
+sakina-backend/src/services/offline_islamic_corpus.rs:126:        serde_json::from_str(include_str!("../../data/islamic-sources/duas.json"))
+sakina-backend/src/services/offline_islamic_corpus.rs:134:            "../../data/islamic-sources/names_of_allah.json"
+sakina-backend/src/services/offline_islamic_corpus.rs:143:            "../../data/islamic-sources/offline-starter-content.json"
+sakina-backend/src/services/offline_islamic_corpus.rs:169:fn citation(
+sakina-backend/src/services/offline_islamic_corpus.rs:175:) -> SourceReference {
+sakina-backend/src/services/offline_islamic_corpus.rs:176:    SourceReference {
+sakina-backend/src/services/offline_islamic_corpus.rs:185:fn quran_citation(surah_id: u32, name_en: &str, ayah_number: u32) -> SourceReference {
+sakina-backend/src/services/offline_islamic_corpus.rs:186:    citation(
+sakina-backend/src/services/offline_islamic_corpus.rs:212:        "This question requires a trusted scholar review and verified texts. I will not invent a fatwa or ruling without source-backed evidence."
+sakina-backend/src/services/offline_islamic_corpus.rs:221:        "I found verified sources related to your question. Review the citations below.".to_string()
+sakina-backend/src/services/offline_islamic_corpus.rs:242:            citations: Vec::new(),
+sakina-backend/src/services/offline_islamic_corpus.rs:245:            fatwa_sensitive: true,
+sakina-backend/src/services/offline_islamic_corpus.rs:268:                citations: vec![citation(
+sakina-backend/src/services/offline_islamic_corpus.rs:277:                fatwa_sensitive: false,
+sakina-backend/src/services/offline_islamic_corpus.rs:302:                citations: vec![citation(
+sakina-backend/src/services/offline_islamic_corpus.rs:311:                fatwa_sensitive: false,
+sakina-backend/src/services/offline_islamic_corpus.rs:335:                citations: vec![citation(
+sakina-backend/src/services/offline_islamic_corpus.rs:344:                fatwa_sensitive: false,
+sakina-backend/src/services/offline_islamic_corpus.rs:388:                citations: vec![quran_citation(surah.id, &surah.name_en, ayah.ayah_number)],
+sakina-backend/src/services/offline_islamic_corpus.rs:391:                fatwa_sensitive: false,
+sakina-backend/src/services/offline_islamic_corpus.rs:421:                citations: vec![quran_citation(surah.id, &surah.name_en, ayah.ayah_number)],
+sakina-backend/src/services/offline_islamic_corpus.rs:424:                fatwa_sensitive: false,
+sakina-backend/src/services/offline_islamic_corpus.rs:440:                "Yes. The bundled starter answer supports a source-backed offline response for this question.".to_string()
+sakina-backend/src/services/offline_islamic_corpus.rs:442:            citations: vec![citation(
+sakina-backend/src/services/offline_islamic_corpus.rs:451:            fatwa_sensitive: false,
+sakina-backend/src/services/offline_islamic_corpus.rs:461:        citations: Vec::new(),
+sakina-backend/src/services/offline_islamic_corpus.rs:464:        fatwa_sensitive: false,
+sakina-backend/src/services/offline_islamic_corpus.rs:482:pub fn quran_source_title() -> &'static str {
+sakina-backend/src/services/offline_islamic_corpus.rs:486:pub fn quran_source_author() -> &'static str {
+sakina-backend/src/services/offline_islamic_corpus.rs:490:pub fn quran_source_id() -> &'static str {
+sakina-backend/src/services/offline_islamic_corpus.rs:491:    quran().source_id.as_str()
+sakina-backend/src/services/offline_islamic_corpus.rs:508:    fn fasting_questions_return_quran_citation() {
+sakina-backend/src/services/offline_islamic_corpus.rs:511:        assert!(!out.citations.is_empty());
+sakina-backend/src/services/offline_islamic_corpus.rs:518:        assert!(!out.citations.is_empty());
+sakina-backend/src/services/offline_islamic_corpus.rs:525:        assert!(out.fatwa_sensitive);
+sakina-backend/src/services/offline_islamic_corpus.rs:526:        assert!(out.citations.is_empty());
+sakina-backend/src/services/outbox_relay.rs:39:                if event.event_type == "chunk_indexed" {
+sakina-backend/src/services/outbox_relay.rs:40:                    // Chunks are upserted to Qdrant during ingestion; ack here.
+sakina-backend/src/services/phase2.rs:820:    pub async fn list_approved_rag_sources(
+sakina-backend/src/services/phase2.rs:823:    ) -> Result<Vec<ApprovedRagSource>, ApiError> {
+sakina-backend/src/services/phase2.rs:827:                s.id AS source_id,
+sakina-backend/src/services/phase2.rs:828:                s.source_key,
+sakina-backend/src/services/phase2.rs:829:                s.source_type,
+sakina-backend/src/services/phase2.rs:833:                c.id AS chunk_id,
+sakina-backend/src/services/phase2.rs:834:                c.chunk_key,
+sakina-backend/src/services/phase2.rs:835:                c.citation_text
+sakina-backend/src/services/phase2.rs:836:            FROM sakina_ai.islamic_sources s
+sakina-backend/src/services/phase2.rs:837:            JOIN sakina_ai.islamic_documents d ON d.source_id = s.id
+sakina-backend/src/services/phase2.rs:838:            JOIN sakina_ai.islamic_chunks c ON c.document_id = d.id
+sakina-backend/src/services/phase2.rs:839:            WHERE s.source_status = 'approved'
+sakina-backend/src/services/phase2.rs:841:              AND d.source_status = 'approved'
+sakina-backend/src/services/phase2.rs:843:              AND c.source_status = 'approved'
+sakina-backend/src/services/phase2.rs:845:              AND s.source_type = $1
+sakina-backend/src/services/phase2.rs:846:            ORDER BY s.created_at DESC, d.created_at DESC, c.chunk_index ASC
+sakina-backend/src/services/phase2.rs:853:        .map_err(|_| ApiError::internal("failed to list approved rag sources"))?;
+sakina-backend/src/services/phase2.rs:857:            .map(|row| ApprovedRagSource {
+sakina-backend/src/services/phase2.rs:858:                source_id: row.get("source_id"),
+sakina-backend/src/services/phase2.rs:859:                source_key: row.get("source_key"),
+sakina-backend/src/services/phase2.rs:860:                source_type: row.get("source_type"),
+sakina-backend/src/services/phase2.rs:864:                chunk_id: row.get("chunk_id"),
+sakina-backend/src/services/phase2.rs:865:                chunk_key: row.get("chunk_key"),
+sakina-backend/src/services/phase2.rs:866:                citation_text: row.get("citation_text"),
+sakina-backend/src/services/phase2.rs:885:                citation,
+sakina-backend/src/services/phase2.rs:900:        .bind(&request.citation)
+sakina-backend/src/services/phase2.rs:909:    pub async fn log_citation_event(
+sakina-backend/src/services/phase2.rs:911:        request: LogCitationEventRequest,
+sakina-backend/src/services/phase2.rs:915:            INSERT INTO sakina_ai.citation_verification_events (
+sakina-backend/src/services/phase2.rs:918:                citation_text,
+sakina-backend/src/services/phase2.rs:929:        .bind(&request.citation_text)
+sakina-backend/src/services/phase2.rs:935:        .map_err(|_| ApiError::internal("failed to log citation event"))?;
+sakina-backend/src/services/phase2.rs:946:                request_id, user_id, safety_level, islamic_sensitivity, classifier_version, classifier_output
+sakina-backend/src/services/phase2.rs:955:        .bind(&request.islamic_sensitivity)
+sakina-backend/src/services/phase2.rs:987:                islamic_sensitivity,
+sakina-backend/src/services/phase2.rs:990:                citations_required,
+sakina-backend/src/services/phase2.rs:991:                citation_sufficiency,
+sakina-backend/src/services/phase2.rs:994:                final_response_policy,
+sakina-backend/src/services/phase2.rs:1015:        .bind(&request.islamic_sensitivity)
+sakina-backend/src/services/phase2.rs:1018:        .bind(request.citations_required)
+sakina-backend/src/services/phase2.rs:1019:        .bind(request.citation_sufficiency)
+sakina-backend/src/services/phase2.rs:1022:        .bind(&request.final_response_policy)
+sakina-backend/src/services/phase2.rs:1035:                request_id, user_id, subscription_tier, entitlement_allowed, policy_version, reason, decision_payload
+sakina-backend/src/services/phase2.rs:1045:        .bind(serde_json::json!({ "source": "phase2_backend" }))
+sakina-backend/src/services/phase2.rs:1098:                policy_version,
+sakina-backend/src/services/phase2.rs:1114:        .bind(&request.policy_version)
+sakina-backend/src/services/phase2.rs:1304:    pub async fn list_source_approval_queue(&self) -> Result<Vec<SourceApprovalItem>, ApiError> {
+sakina-backend/src/services/phase2.rs:1307:            SELECT id, source_id, approval_status, notes, created_at::text AS created_at
+sakina-backend/src/services/phase2.rs:1308:            FROM public.source_approval_queue
+sakina-backend/src/services/phase2.rs:1315:        .map_err(|_| ApiError::internal("failed to list source approval queue"))?;
+sakina-backend/src/services/phase2.rs:1319:            .map(|row| SourceApprovalItem {
+sakina-backend/src/services/phase2.rs:1321:                source_id: row.get("source_id"),
+sakina-backend/src/services/phase2.rs:1329:    pub async fn create_source_approval_item(
+sakina-backend/src/services/phase2.rs:1331:        request: CreateSourceApprovalItemRequest,
+sakina-backend/src/services/phase2.rs:1335:            INSERT INTO public.source_approval_queue (
+sakina-backend/src/services/phase2.rs:1336:                source_id, submitted_by, approval_status, notes
+sakina-backend/src/services/phase2.rs:1342:        .bind(request.source_id)
+sakina-backend/src/services/phase2.rs:1347:        .map_err(|_| ApiError::internal("failed to create source approval item"))?;
+sakina-backend/src/services/phase2.rs:2059:pub struct ApprovedRagSource {
+sakina-backend/src/services/phase2.rs:2060:    pub source_id: Uuid,
+sakina-backend/src/services/phase2.rs:2061:    pub source_key: String,
+sakina-backend/src/services/phase2.rs:2062:    pub source_type: String,
+sakina-backend/src/services/phase2.rs:2066:    pub chunk_id: Uuid,
+sakina-backend/src/services/phase2.rs:2067:    pub chunk_key: String,
+sakina-backend/src/services/phase2.rs:2068:    pub citation_text: String,
+sakina-backend/src/services/phase2.rs:2080:    pub citation: Option<String>,
+sakina-backend/src/services/phase2.rs:2086:pub struct LogCitationEventRequest {
+sakina-backend/src/services/phase2.rs:2089:    pub citation_text: String,
+sakina-backend/src/services/phase2.rs:2100:    pub islamic_sensitivity: String,
+sakina-backend/src/services/phase2.rs:2115:    pub islamic_sensitivity: String,
+sakina-backend/src/services/phase2.rs:2118:    pub citations_required: bool,
+sakina-backend/src/services/phase2.rs:2119:    pub citation_sufficiency: bool,
+sakina-backend/src/services/phase2.rs:2122:    pub final_response_policy: String,
+sakina-backend/src/services/phase2.rs:2146:    pub policy_version: String,
+sakina-backend/src/services/phase2.rs:2192:pub struct SourceApprovalItem {
+sakina-backend/src/services/phase2.rs:2194:    pub source_id: Option<Uuid>,
+sakina-backend/src/services/phase2.rs:2201:pub struct CreateSourceApprovalItemRequest {
+sakina-backend/src/services/phase2.rs:2202:    pub source_id: Option<Uuid>,
+sakina-backend/src/services/qdrant_client.rs:1://! Qdrant vector-DB client over its REST API (Step 16).
+sakina-backend/src/services/qdrant_client.rs:3://! Uses `reqwest` (http) instead of the `qdrant-client` gRPC crate to avoid the
+sakina-backend/src/services/qdrant_client.rs:4://! `tonic` dependency tree. NOT runtime-tested here (no live Qdrant); the pure
+sakina-backend/src/services/qdrant_client.rs:13:pub struct QdrantVectorDB {
+sakina-backend/src/services/qdrant_client.rs:21:    vector: &'a [f32],
+sakina-backend/src/services/qdrant_client.rs:29:    vectors: VectorParams,
+sakina-backend/src/services/qdrant_client.rs:33:struct VectorParams {
+sakina-backend/src/services/qdrant_client.rs:46:    vector: Vec<f32>,
+sakina-backend/src/services/qdrant_client.rs:57:    /// Qdrant point id (integer or UUID) ÔÇö kept as raw JSON.
+sakina-backend/src/services/qdrant_client.rs:64:impl QdrantVectorDB {
+sakina-backend/src/services/qdrant_client.rs:71:        QdrantVectorDB {
+sakina-backend/src/services/qdrant_client.rs:81:        vector_size: usize,
+sakina-backend/src/services/qdrant_client.rs:91:                vectors: VectorParams {
+sakina-backend/src/services/qdrant_client.rs:92:                    size: vector_size,
+sakina-backend/src/services/qdrant_client.rs:102:    /// Upsert one verified chunk vector with enough payload for citation lookup.
+sakina-backend/src/services/qdrant_client.rs:103:    pub async fn upsert_chunk(
+sakina-backend/src/services/qdrant_client.rs:105:        chunk_id: Uuid,
+sakina-backend/src/services/qdrant_client.rs:106:        source_id: Uuid,
+sakina-backend/src/services/qdrant_client.rs:107:        vector: Vec<f32>,
+sakina-backend/src/services/qdrant_client.rs:117:                map.insert("chunk_id".to_string(), serde_json::json!(chunk_id));
+sakina-backend/src/services/qdrant_client.rs:118:                map.insert("source_id".to_string(), serde_json::json!(source_id));
+sakina-backend/src/services/qdrant_client.rs:122:                "chunk_id": chunk_id,
+sakina-backend/src/services/qdrant_client.rs:123:                "source_id": source_id
+sakina-backend/src/services/qdrant_client.rs:130:                    id: chunk_id,
+sakina-backend/src/services/qdrant_client.rs:131:                    vector,
+sakina-backend/src/services/qdrant_client.rs:144:        query_embedding: &[f32],
+sakina-backend/src/services/qdrant_client.rs:154:            vector: query_embedding,
+sakina-backend/src/services/qdrant_client.rs:181:                    .unwrap_or_else(|| "qdrant search failed".to_string())
+sakina-backend/src/services/qdrant_client.rs:185:        // Qdrant applies score_threshold server-side; filter defensively too.
+sakina-backend/src/services/qdrant_client.rs:199:/// Pure threshold filter (unit-tested without a live Qdrant).
+sakina-backend/src/services/semantic_router.rs:11:    FiqhQuery,     // Islamic jurisprudence question
+sakina-backend/src/services/semantic_router.rs:13:    CompanionChat, // General Islamic discussion
+sakina-backend/src/services/semantic_router.rs:14:    OutOfScope,    // Not an Islamic question
+sakina-backend/src/services/semantic_router.rs:41:        } else if contains_any(&q, &["permissible", "halal", "haram", "ruling", "fatwa", "zakat", "fasting", "Ï¡┘äÏº┘ä", "Ï¡Ï▒Ïº┘à", "Ï¡┘â┘à", "┘üÏ¬┘ê┘ë", "Ï▓┘âÏºÏ®", "ÏÁ┘èÏº┘à"]) {
+sakina-backend/tests/islamic_source_registry.rs:4:fn islamic_source_registry_is_present_and_well_formed() {
+sakina-backend/tests/islamic_source_registry.rs:6:        "../db/source-candidates/islamic-source-candidates.json"
+sakina-backend/tests/islamic_source_registry.rs:11:    assert_eq!(registry["source_approved_default"], false);
+sakina-backend/tests/islamic_source_registry.rs:21:            "source_id",
+sakina-backend/tests/islamic_source_registry.rs:39:                .get("source_id")
+sakina-backend/tests/islamic_source_registry.rs:44:            "source_id should be machine-readable"
+sakina-backend/tests/islamic_source_registry.rs:50:fn islamic_source_registry_contains_core_sources() {
+sakina-backend/tests/islamic_source_registry.rs:52:        "../db/source-candidates/islamic-source-candidates.json"
+sakina-backend/tests/islamic_source_registry.rs:58:        .filter_map(|c| c.get("source_id").and_then(|v| v.as_str()))
+sakina-backend/tests/islamic_source_registry.rs:64:            "missing expected source {expected}"
+scripts/sakina-auto-push.sh:4:SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+scripts/sakina/demo-verify.sh:8:source "$ROOT/scripts/env.sh"

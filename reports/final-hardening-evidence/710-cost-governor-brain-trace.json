@@ -1,0 +1,97 @@
+{
+  "request_id": "bfebd3cf-6593-4205-bc31-b9a85e3f6ca7",
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "free"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Islamic Guidance Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=2032;budget_units=6000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "e0b0f557-b73a-4ca9-9192-abe8371502ce"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}

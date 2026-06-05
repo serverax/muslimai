@@ -18,22 +18,39 @@ spec:
         app.kubernetes.io/environment: staging
     spec:
       restartPolicy: Never
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: db-migrations
-          image: ghcr.io/example/sakina-mobile-backend:staging-latest
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
           imagePullPolicy: Always
           command:
-            - /bin/sh
-            - -c
-            - >
-              echo "Running Sakina DB migrations";
-              /usr/local/bin/sakina-api --help >/dev/null
+            - /usr/local/bin/sakina-migrate
           env:
-            - name: DATABASE_URL
+            - name: POSTGRES_HOST
+              value: sakina-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
-                  key: database-url
+                  name: sakina-postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
           resources:
             requests:
               cpu: "100m"
@@ -41,3 +58,15 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

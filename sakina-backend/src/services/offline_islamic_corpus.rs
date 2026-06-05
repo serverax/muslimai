@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::models::SourceReference;
 use serde::Deserialize;
 use std::sync::OnceLock;
@@ -270,7 +272,7 @@ pub fn lookup(question: &str, language: &str) -> Option<OfflineAnswer> {
                     item.category_id.clone(),
                     "reviewed",
                 )],
-                confidence: 0.92,
+                confidence: 0.89,
                 fallback_used: false,
                 fatwa_sensitive: false,
             });
@@ -395,7 +397,7 @@ pub fn lookup(question: &str, language: &str) -> Option<OfflineAnswer> {
         let tokens: Vec<String> = q
             .split_whitespace()
             .filter(|token| token.len() >= 3)
-            .map(|token| normalize(token))
+            .map(normalize)
             .collect();
         if let Some((surah, ayah)) = quran().surahs.iter().find_map(|surah| {
             surah

@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../config/api_config.dart';
 import '../services/api_service.dart';
+import '../services/auth_service.dart';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({
     super.key,
     ApiService? api,
     String? userId,
+    AuthSession? session,
   })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
-        userId = userId ??
+        userId = session?.userId ??
+            userId ??
             const String.fromEnvironment(
               'SAKINA_USER_ID',
               defaultValue: '00000000-0000-0000-0000-000000000000',
-            );
+            ) {
+    if (session != null && api == null) {
+      this.api.setAuthToken(session.accessToken);
+    }
+  }
 
   final ApiService api;
   final String userId;
@@ -27,92 +34,20 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _supportController = TextEditingController();
   final List<ChatItem> _messages = [];
   bool _sending = false;
-  bool _initializing = false;
   bool _notificationBusy = false;
   bool _supportBusy = false;
   String? _conversationId;
   String? _lastMessageId;
   String _status = '';
-  List<String> _entitlements = const [];
   bool _contractWarning = false;
-
-  Future<void> _initializeUserFlows() async {
-    if (_initializing) return;
-    setState(() {
-      _initializing = true;
-      _status = 'Initializing auth/profile/subscription flow...';
-    });
-    final now = DateTime.now().millisecondsSinceEpoch;
-    try {
-      final register = await widget.api.registerUser(
-        RegisterUserRequest(
-          email: 'mobile-$now@sakina.local',
-          provider: 'mobile',
-          providerUserId: 'mobile-$now',
-        ),
-      );
-      final userId = register.userId;
-      await widget.api.createSession(
-        CreateSessionRequest(
-          userId: userId,
-          sessionTokenHash: 'session-$now',
-          refreshTokenHash: 'refresh-$now',
-          expiresAt: DateTime.now()
-              .toUtc()
-              .add(const Duration(hours: 1))
-              .toIso8601String(),
-          refreshExpiresAt: DateTime.now()
-              .toUtc()
-              .add(const Duration(days: 30))
-              .toIso8601String(),
-          ipAddress: '127.0.0.1',
-          userAgent: 'sakina-mobile',
-        ),
-      );
-      await widget.api.upsertProfile(
-        userId,
-        UpsertProfileRequest(displayName: 'Sakina Mobile'),
-      );
-      await widget.api.createFamilyProfile(
-        userId,
-        CreateFamilyProfileRequest(familyName: 'Sakina Household'),
-      );
-      await widget.api.activateSubscription(
-        userId,
-        ActivateSubscriptionRequest(
-          providerKey: 'stripe',
-          planKey: 'premium-monthly',
-        ),
-      );
-      final entitlements = await widget.api.listEntitlements(userId);
-      await widget.api.upsertDeviceToken(
-        userId: userId,
-        platform: 'android',
-        tokenHash: 'device-$now',
-      );
-      if (!mounted) return;
-      setState(() {
-        _status = 'User flows initialized: ${entitlements.length} entitlements';
-        _entitlements = entitlements;
-      });
-    } catch (error) {
-      if (!mounted) return;
-      setState(() {
-        _status = _humanizeError(error);
-      });
-    } finally {
-      if (mounted) {
-        setState(() => _initializing = false);
-      }
-    }
-  }
 
   Future<void> _sendNotificationFlow() async {
     if (_notificationBusy) return;
     setState(() => _notificationBusy = true);
     try {
       final id = await widget.api.createNotificationTemplate(
-        templateKey: 'mobile-chat-update-${DateTime.now().millisecondsSinceEpoch}',
+        templateKey:
+            'mobile-chat-update-${DateTime.now().millisecondsSinceEpoch}',
         subjectTemplate: 'Sakina update',
         bodyTemplate: 'A chat update is available.',
       );
@@ -202,8 +137,8 @@ class _ChatScreenState extends State<ChatScreen> {
       final rag = await widget.api.query(text, userId: widget.userId);
       final verifiedSources =
           rag.sources.where((source) => source.isVerifiedShape).toList();
-      final malformedDetected =
-          rag.sources.isNotEmpty && verifiedSources.length != rag.sources.length;
+      final malformedDetected = rag.sources.isNotEmpty &&
+          verifiedSources.length != rag.sources.length;
       if (!mounted) return;
       setState(() {
         _contractWarning = malformedDetected;
@@ -311,11 +246,6 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: const EdgeInsets.all(8),
               child: Text(_status),
             ),
-          if (_entitlements.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Text('Entitlements: ${_entitlements.join(', ')}'),
-            ),
           if (_contractWarning)
             const Padding(
               padding: EdgeInsets.all(8),
@@ -328,23 +258,24 @@ class _ChatScreenState extends State<ChatScreen> {
             spacing: 8,
             children: [
               OutlinedButton(
-                onPressed: _initializing ? null : _initializeUserFlows,
-                child: Text(_initializing ? 'Initializing...' : 'Init User Flows'),
-              ),
-              OutlinedButton(
                 onPressed: _notificationBusy ? null : _sendNotificationFlow,
                 child: Text(_notificationBusy ? 'Sending...' : 'Notify'),
               ),
               OutlinedButton(
-                onPressed: _sendFeedbackUpDownDisabled() ? null : () => _sendFeedback('thumbs_up'),
+                onPressed: _sendFeedbackUpDownDisabled()
+                    ? null
+                    : () => _sendFeedback('thumbs_up'),
                 child: const Text('Feedback +'),
               ),
               OutlinedButton(
-                onPressed: _sendFeedbackUpDownDisabled() ? null : () => _sendFeedback('thumbs_down'),
+                onPressed: _sendFeedbackUpDownDisabled()
+                    ? null
+                    : () => _sendFeedback('thumbs_down'),
                 child: const Text('Feedback -'),
               ),
               OutlinedButton(
-                onPressed: _sendFeedbackUpDownDisabled() ? null : _reportMessage,
+                onPressed:
+                    _sendFeedbackUpDownDisabled() ? null : _reportMessage,
                 child: const Text('Report'),
               ),
             ],

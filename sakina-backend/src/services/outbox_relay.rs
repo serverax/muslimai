@@ -8,12 +8,6 @@ use sqlx::PgPool;
 use tokio::time::{sleep, Duration};
 use uuid::Uuid;
 
-#[derive(Debug, sqlx::FromRow)]
-struct OutboxEvent {
-    id: Uuid,
-    event_type: String,
-}
-
 pub struct OutboxRelay {
     pool: PgPool,
 }
@@ -27,21 +21,67 @@ impl OutboxRelay {
     /// a database error (the caller logs it and the task ends).
     pub async fn relay_events(&self) -> Result<(), Box<dyn std::error::Error>> {
         loop {
-            let events: Vec<OutboxEvent> = sqlx::query_as(
-                "SELECT id, event_type FROM outbox.events \
+            let events: Vec<(Uuid, String, i32, i32)> = sqlx::query_as(
+                "SELECT id, event_type, COALESCE(retry_count, 0), COALESCE(max_retries, 5) \
+                 FROM outbox.events \
                  WHERE status = 'Pending' \
-                 FOR UPDATE SKIP LOCKED LIMIT 10",
+                 ORDER BY created_at \
+                 FOR UPDATE SKIP LOCKED LIMIT 25",
             )
             .fetch_all(&self.pool)
             .await?;
 
-            for event in events {
-                if event.event_type == "chunk_indexed" {
-                    // Chunks are upserted to Qdrant during ingestion; ack here.
-                    sqlx::query("UPDATE outbox.events SET status = 'Sent' WHERE id = $1")
-                        .bind(event.id)
+            for (event_id, event_type, retry_count, max_retries) in events {
+                if matches!(
+                    event_type.as_str(),
+                    "chunk_indexed"
+                        | "user_data_deleted"
+                        | "backup_disaster_recovery_verified"
+                        | "human_review_created"
+                        | "notification_created"
+                ) {
+                    sqlx::query(
+                        "UPDATE outbox.events \
+                         SET status = 'Sent', updated_at = now() \
+                         WHERE id = $1",
+                    )
+                    .bind(event_id)
+                    .execute(&self.pool)
+                    .await?;
+                    tracing::info!(event = "outbox_event_sent", %event_id, %event_type);
+                } else {
+                    let next_retry = retry_count + 1;
+                    if next_retry >= max_retries {
+                        sqlx::query(
+                            "UPDATE outbox.events \
+                             SET status = 'DeadLetter', retry_count = $2, updated_at = now() \
+                             WHERE id = $1",
+                        )
+                        .bind(event_id)
+                        .bind(next_retry)
                         .execute(&self.pool)
                         .await?;
+                        sqlx::query(
+                            "INSERT INTO outbox.dead_letters (event_id, error_message) \
+                             VALUES ($1, $2)",
+                        )
+                        .bind(event_id)
+                        .bind(format!("unsupported outbox event type: {event_type}"))
+                        .execute(&self.pool)
+                        .await?;
+                        tracing::warn!(event = "outbox_event_dead_lettered", %event_id, %event_type);
+                    } else {
+                        sqlx::query(
+                            "UPDATE outbox.events \
+                             SET retry_count = $2, updated_at = now() \
+                             WHERE id = $1",
+                        )
+                        .bind(event_id)
+                        .bind(next_retry)
+                        .execute(&self.pool)
+                        .await?;
+                        tracing::warn!(event = "outbox_event_retry_scheduled", %event_id, %event_type, retry_count = next_retry);
+                    }
                 }
             }
 

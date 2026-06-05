@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
@@ -8,18 +9,94 @@ import '../config/api_config.dart';
 class ApiService {
   final String baseUrl;
   final http.Client _client;
-  final String? _apiToken;
+  String? _apiToken;
 
   ApiService({
     required this.baseUrl,
     http.Client? client,
     String? apiToken,
   })  : _client = client ?? http.Client(),
-        _apiToken = apiToken ??
-            (() {
-              const token = String.fromEnvironment('SAKINA_API_TOKEN');
-              return token.isEmpty ? null : token;
-            })();
+        _apiToken = apiToken;
+
+  void setAuthToken(String? token) {
+    _apiToken = token;
+  }
+
+  Future<PasswordAuthResponse> registerWithPassword({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    final res = await _post('/auth/register', {
+      'email': email,
+      'password': password,
+      'name': name,
+      'provider': 'password',
+      'provider_user_id': email.toLowerCase(),
+      'metadata': {'display_name': name},
+    });
+    if (res.statusCode == 201) {
+      final auth = PasswordAuthResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+      setAuthToken(auth.accessToken);
+      return auth;
+    }
+    throw _apiException('password register failed', res);
+  }
+
+  Future<PasswordAuthResponse> loginWithPassword({
+    required String email,
+    required String password,
+  }) async {
+    final res = await _post('/auth/login', {
+      'email': email,
+      'password': password,
+    });
+    if (res.statusCode == 200) {
+      final auth = PasswordAuthResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+      setAuthToken(auth.accessToken);
+      return auth;
+    }
+    throw _apiException('password login failed', res);
+  }
+
+  Future<PasswordAuthResponse> refreshWithToken({
+    required String refreshToken,
+  }) async {
+    final res = await _post('/auth/refresh', {
+      'refresh_token': refreshToken,
+    });
+    if (res.statusCode == 200) {
+      final auth = PasswordAuthResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+      setAuthToken(auth.accessToken);
+      return auth;
+    }
+    throw _apiException('refresh failed', res);
+  }
+
+  Future<UserSummaryResponse> currentUser() async {
+    final res = await _get('/auth/me');
+    if (res.statusCode == 200) {
+      return UserSummaryResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('current user failed', res);
+  }
+
+  Future<void> logout() async {
+    final res = await _post('/auth/logout', {});
+    if (res.statusCode >= 200 && res.statusCode < 300) {
+      setAuthToken(null);
+      return;
+    }
+    throw _apiException('logout failed', res);
+  }
 
   Future<RagResponse> query(
     String message, {
@@ -151,7 +228,8 @@ class ApiService {
   Future<SessionResponse> createSession(CreateSessionRequest request) async {
     final res = await _post('/auth/sessions', request.toJson());
     if (res.statusCode == 201) {
-      return SessionResponse.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      return SessionResponse.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>);
     }
     throw _apiException('create session failed', res);
   }
@@ -160,9 +238,11 @@ class ApiService {
     String userId,
     UpsertProfileRequest request,
   ) async {
-    final res = await _put('/profiles/$userId', request.toJson(), userId: userId);
+    final res =
+        await _put('/profiles/$userId', request.toJson(), userId: userId);
     if (res.statusCode == 200) {
-      return ProfileResponse.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      return ProfileResponse.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>);
     }
     throw _apiException('upsert profile failed', res);
   }
@@ -171,8 +251,8 @@ class ApiService {
     String userId,
     CreateFamilyProfileRequest request,
   ) async {
-    final res =
-        await _post('/profiles/$userId/family', request.toJson(), userId: userId);
+    final res = await _post('/profiles/$userId/family', request.toJson(),
+        userId: userId);
     if (res.statusCode == 201) {
       return FamilyProfileResponse.fromJson(
         jsonDecode(res.body) as Map<String, dynamic>,
@@ -199,7 +279,8 @@ class ApiService {
   }
 
   Future<List<String>> listEntitlements(String userId) async {
-    final res = await _get('/subscriptions/$userId/entitlements', userId: userId);
+    final res =
+        await _get('/subscriptions/$userId/entitlements', userId: userId);
     if (res.statusCode == 200) {
       final json = jsonDecode(res.body) as Map<String, dynamic>;
       return (json['entitlements'] as List<dynamic>? ?? const [])
@@ -209,6 +290,16 @@ class ApiService {
     throw _apiException('list entitlements failed', res);
   }
 
+  Future<AccountDeletionRequestResponse> requestAccountDeletion() async {
+    final res = await _post('/account/delete-request', const {});
+    if (res.statusCode == 202) {
+      return AccountDeletionRequestResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('request account deletion failed', res);
+  }
+
   Future<List<IslamicSourceDto>> getIslamicSources({
     String? language,
     String? source,
@@ -216,9 +307,12 @@ class ApiService {
     final query = <String, String>{};
     if (language != null && language.isNotEmpty) query['language'] = language;
     if (source != null && source.isNotEmpty) query['source'] = source;
-    final uri = Uri.parse(_endpoint('/islamic/sources')).replace(queryParameters: query);
+    final uri = Uri.parse(_endpoint('/islamic/sources'))
+        .replace(queryParameters: query);
     final res = await _withRetry(
-      () => _client.get(uri, headers: _headers()).timeout(const Duration(seconds: 30)),
+      () => _client
+          .get(uri, headers: _headers())
+          .timeout(const Duration(seconds: 30)),
     );
     if (res.statusCode == 200) {
       final decoded = jsonDecode(res.body) as Map<String, dynamic>;
@@ -237,9 +331,12 @@ class ApiService {
     final query = <String, String>{};
     if (language != null && language.isNotEmpty) query['language'] = language;
     if (source != null && source.isNotEmpty) query['source'] = source;
-    final uri = Uri.parse(_endpoint('/islamic/documents')).replace(queryParameters: query);
+    final uri = Uri.parse(_endpoint('/islamic/documents'))
+        .replace(queryParameters: query);
     final res = await _withRetry(
-      () => _client.get(uri, headers: _headers()).timeout(const Duration(seconds: 30)),
+      () => _client
+          .get(uri, headers: _headers())
+          .timeout(const Duration(seconds: 30)),
     );
     if (res.statusCode == 200) {
       final decoded = jsonDecode(res.body) as Map<String, dynamic>;
@@ -272,10 +369,12 @@ class ApiService {
     if (source != null && source.isNotEmpty) {
       params['source'] = source;
     }
-    final uri =
-        Uri.parse(_endpoint('/islamic/search')).replace(queryParameters: params);
+    final uri = Uri.parse(_endpoint('/islamic/search'))
+        .replace(queryParameters: params);
     final res = await _withRetry(
-      () => _client.get(uri, headers: _headers()).timeout(const Duration(seconds: 30)),
+      () => _client
+          .get(uri, headers: _headers())
+          .timeout(const Duration(seconds: 30)),
     );
     if (res.statusCode == 200) {
       final decoded = jsonDecode(res.body) as Map<String, dynamic>;
@@ -299,7 +398,8 @@ class ApiService {
     };
     final res = await _post('/islamic/ask', body);
     if (res.statusCode == 200) {
-      return IslamicAskResponseDto.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      return IslamicAskResponseDto.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>);
     }
     throw _apiException('islamic ask failed', res);
   }
@@ -335,7 +435,8 @@ class ApiService {
       userId: userId,
     );
     if (res.statusCode == 200) {
-      return AddMessageResponse.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      return AddMessageResponse.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>);
     }
     throw _apiException('add message failed', res);
   }
@@ -420,6 +521,30 @@ class ApiService {
     if (res.statusCode != 201) {
       throw _apiException('send notification failed', res);
     }
+  }
+
+  Future<List<UserNotificationDto>> listNotifications() async {
+    final res = await _get('/notifications');
+    if (res.statusCode == 200) {
+      final json = jsonDecode(res.body) as Map<String, dynamic>;
+      return (json['notifications'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(UserNotificationDto.fromJson)
+          .toList();
+    }
+    throw _apiException('list notifications failed', res);
+  }
+
+  Future<UserNotificationDto> markNotificationRead({
+    required String notificationId,
+  }) async {
+    final res = await _post('/notifications/$notificationId/read', {});
+    if (res.statusCode == 200) {
+      return UserNotificationDto.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('mark notification read failed', res);
   }
 
   Future<void> upsertDeviceToken({
@@ -584,9 +709,100 @@ class ApiService {
       userId: userId,
     );
     if (res.statusCode == 201) {
-      return ImanDuaItemDto.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      return ImanDuaItemDto.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>);
     }
     throw _apiException('add dua item failed', res);
+  }
+
+  Future<MemoryWriteResponse> writeMemory(
+    MemoryWriteRequest request,
+  ) async {
+    final res = await _post(
+      '/api/memory/write',
+      request.toJson(),
+      userId: request.userId,
+    );
+    if (res.statusCode == 200) {
+      return MemoryWriteResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('write memory failed', res);
+  }
+
+  Future<MemoryEntryResponse> readMemory({
+    required String userId,
+    required String memoryKey,
+  }) async {
+    final encodedKey = Uri.encodeQueryComponent(memoryKey);
+    final res = await _get(
+      '/api/memory/read?user_id=$userId&memory_key=$encodedKey',
+      userId: userId,
+    );
+    if (res.statusCode == 200) {
+      return MemoryEntryResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('read memory failed', res);
+  }
+
+  Future<int> deleteMemory({
+    required String userId,
+    required String memoryKey,
+  }) async {
+    final encodedKey = Uri.encodeQueryComponent(memoryKey);
+    final res = await _delete(
+      '/api/memory/delete?user_id=$userId&memory_key=$encodedKey',
+      userId: userId,
+    );
+    if (res.statusCode == 200) {
+      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+      return (decoded['deleted'] as num?)?.toInt() ?? 0;
+    }
+    throw _apiException('delete memory failed', res);
+  }
+
+  Future<MultimodalAnalysisResponse> analyzeMultimodal({
+    required Uint8List bytes,
+    required String filename,
+    required String assetType,
+    required String mimeType,
+    required String language,
+    String? requestId,
+  }) async {
+    final traceId =
+        requestId ?? DateTime.now().microsecondsSinceEpoch.toString();
+    final streamed = await _withStreamRetry(
+      () {
+        final multipart = http.MultipartRequest(
+          'POST',
+          Uri.parse(_endpoint('/api/multimodal/analyze')),
+        );
+        final token = _apiToken;
+        if (token != null && token.isNotEmpty) {
+          multipart.headers['Authorization'] = 'Bearer $token';
+        }
+        multipart.headers['x-request-id'] = traceId;
+        multipart.fields['asset_type'] = assetType;
+        multipart.fields['mime_type'] = mimeType;
+        multipart.fields['language'] = language;
+        multipart.files.add(http.MultipartFile.fromBytes(
+          'file',
+          bytes,
+          filename: filename,
+        ));
+        return _client.send(multipart).timeout(const Duration(seconds: 90));
+      },
+    );
+    final res = await http.Response.fromStream(streamed);
+    if (res.statusCode == 200) {
+      return MultimodalAnalysisResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('multimodal analysis failed', res);
   }
 
   void close() => _client.close();
@@ -636,6 +852,34 @@ class ApiService {
     throw ApiException('request failed after retries: $lastError');
   }
 
+  Future<http.StreamedResponse> _withStreamRetry(
+    Future<http.StreamedResponse> Function() run,
+  ) async {
+    Object? lastError;
+    for (var attempt = 0; attempt < ApiConfig.retryAttempts; attempt++) {
+      try {
+        final response = await run();
+        if (response.statusCode >= 500 &&
+            attempt < ApiConfig.retryAttempts - 1) {
+          await Future<void>.delayed(
+            ApiConfig.retryDelay * (attempt + 1),
+          );
+          continue;
+        }
+        return response;
+      } catch (error) {
+        lastError = error;
+        if (attempt < ApiConfig.retryAttempts - 1) {
+          await Future<void>.delayed(
+            ApiConfig.retryDelay * (attempt + 1),
+          );
+          continue;
+        }
+      }
+    }
+    throw ApiException('stream request failed after retries: $lastError');
+  }
+
   Future<http.Response> _post(
     String path,
     Map<String, dynamic> body, {
@@ -672,6 +916,14 @@ class ApiService {
     return _withRetry(
       () => _client
           .get(Uri.parse(_endpoint(path)), headers: _headers(userId: userId))
+          .timeout(const Duration(seconds: 30)),
+    );
+  }
+
+  Future<http.Response> _delete(String path, {String? userId}) {
+    return _withRetry(
+      () => _client
+          .delete(Uri.parse(_endpoint(path)), headers: _headers(userId: userId))
           .timeout(const Duration(seconds: 30)),
     );
   }
@@ -828,7 +1080,8 @@ class IslamicSourceDto {
     this.licenseName,
   });
 
-  factory IslamicSourceDto.fromJson(Map<String, dynamic> json) => IslamicSourceDto(
+  factory IslamicSourceDto.fromJson(Map<String, dynamic> json) =>
+      IslamicSourceDto(
         id: json['id']?.toString() ?? '',
         sourceKey: json['source_key']?.toString() ?? '',
         sourceName: json['source_name']?.toString() ?? '',
@@ -881,7 +1134,8 @@ class IslamicChunkDto {
     required this.citationLabel,
   });
 
-  factory IslamicChunkDto.fromJson(Map<String, dynamic> json) => IslamicChunkDto(
+  factory IslamicChunkDto.fromJson(Map<String, dynamic> json) =>
+      IslamicChunkDto(
         id: json['id']?.toString() ?? '',
         documentId: json['document_id']?.toString() ?? '',
         chunkIndex: (json['chunk_index'] as num?)?.toInt() ?? 0,
@@ -946,6 +1200,103 @@ class IslamicAskResponseDto {
       );
 }
 
+class MemoryWriteRequest {
+  final String userId;
+  final String memoryKey;
+  final String memoryType;
+  final Map<String, dynamic> payload;
+  final String sourceLanguage;
+  final bool consentRequired;
+  final bool consentGranted;
+
+  const MemoryWriteRequest({
+    required this.userId,
+    required this.memoryKey,
+    required this.memoryType,
+    required this.payload,
+    required this.sourceLanguage,
+    required this.consentRequired,
+    required this.consentGranted,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'user_id': userId,
+        'memory_key': memoryKey,
+        'memory_type': memoryType,
+        'payload': payload,
+        'source_language': sourceLanguage,
+        'consent_required': consentRequired,
+        'consent_granted': consentGranted,
+      };
+}
+
+class MemoryWriteResponse {
+  final bool stored;
+  final bool allowed;
+  final String sensitivityLevel;
+  final String reason;
+  final String? memoryId;
+
+  const MemoryWriteResponse({
+    required this.stored,
+    required this.allowed,
+    required this.sensitivityLevel,
+    required this.reason,
+    required this.memoryId,
+  });
+
+  factory MemoryWriteResponse.fromJson(Map<String, dynamic> json) =>
+      MemoryWriteResponse(
+        stored: json['stored'] as bool? ?? false,
+        allowed: json['allowed'] as bool? ?? false,
+        sensitivityLevel: json['sensitivity_level']?.toString() ?? '',
+        reason: json['reason']?.toString() ?? '',
+        memoryId: json['memory_id']?.toString(),
+      );
+}
+
+class MemoryEntryResponse {
+  final String id;
+  final String userId;
+  final String memoryKey;
+  final String memoryType;
+  final String sensitivityLevel;
+  final Map<String, dynamic> payload;
+  final String sourceLanguage;
+  final bool consentRequired;
+  final bool consentGranted;
+  final bool allowed;
+
+  const MemoryEntryResponse({
+    required this.id,
+    required this.userId,
+    required this.memoryKey,
+    required this.memoryType,
+    required this.sensitivityLevel,
+    required this.payload,
+    required this.sourceLanguage,
+    required this.consentRequired,
+    required this.consentGranted,
+    required this.allowed,
+  });
+
+  factory MemoryEntryResponse.fromJson(Map<String, dynamic> json) =>
+      MemoryEntryResponse(
+        id: json['id']?.toString() ?? '',
+        userId: json['user_id']?.toString() ?? '',
+        memoryKey: json['memory_key']?.toString() ?? '',
+        memoryType: json['memory_type']?.toString() ?? '',
+        sensitivityLevel: json['sensitivity_level']?.toString() ?? '',
+        payload: json['payload'] is Map<String, dynamic>
+            ? json['payload'] as Map<String, dynamic>
+            : const {},
+        sourceLanguage: json['source_language']?.toString() ?? '',
+        consentRequired: json['consent_required'] as bool? ?? false,
+        consentGranted: json['consent_granted'] as bool? ?? false,
+        allowed: json['allowed'] as bool? ?? false,
+      );
+}
+
 class RegisterUserRequest {
   final String email;
   final String provider;
@@ -968,6 +1319,54 @@ class RegisterUserRequest {
         'email_verified_at': null,
         'metadata': const <String, dynamic>{},
       };
+}
+
+class PasswordAuthResponse {
+  final String userId;
+  final String accessToken;
+  final String refreshToken;
+  final String? email;
+
+  PasswordAuthResponse({
+    required this.userId,
+    required this.accessToken,
+    required this.refreshToken,
+    this.email,
+  });
+
+  factory PasswordAuthResponse.fromJson(Map<String, dynamic> json) {
+    final accessToken = json['access_token']?.toString() ?? '';
+    if (accessToken.isEmpty) {
+      throw const FormatException('missing access_token in auth response');
+    }
+    return PasswordAuthResponse(
+      userId: json['user_id']?.toString() ?? '',
+      accessToken: accessToken,
+      refreshToken: json['refresh_token']?.toString() ?? '',
+      email: json['email']?.toString(),
+    );
+  }
+}
+
+class UserSummaryResponse {
+  final String userId;
+  final String email;
+
+  const UserSummaryResponse({
+    required this.userId,
+    required this.email,
+  });
+
+  factory UserSummaryResponse.fromJson(Map<String, dynamic> json) {
+    final userId = json['user_id']?.toString() ?? '';
+    if (userId.isEmpty) {
+      throw const FormatException('missing user_id in current user response');
+    }
+    return UserSummaryResponse(
+      userId: userId,
+      email: json['email']?.toString() ?? '',
+    );
+  }
 }
 
 class RegisterUserResponse {
@@ -1060,7 +1459,8 @@ class ProfileResponse {
 
   ProfileResponse({required this.userId});
 
-  factory ProfileResponse.fromJson(Map<String, dynamic> json) => ProfileResponse(
+  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
+      ProfileResponse(
         userId: json['user_id']?.toString() ?? '',
       );
 }
@@ -1092,32 +1492,53 @@ class FamilyProfileResponse {
 
 class ActivateSubscriptionRequest {
   final String providerKey;
+  final String providerDisplayName;
+  final String providerCustomerRef;
   final String planKey;
+  final String planName;
+  final String billingInterval;
+  final String providerSubscriptionRef;
+  final String providerInvoiceRef;
+  final String providerTransactionRef;
+  final String currencyCode;
+  final int amountMinor;
+  final List<String> entitlementKeys;
+  final DateTime currentPeriodStart;
+  final DateTime currentPeriodEnd;
 
   ActivateSubscriptionRequest({
     required this.providerKey,
+    required this.providerDisplayName,
+    required this.providerCustomerRef,
     required this.planKey,
+    required this.planName,
+    required this.billingInterval,
+    required this.providerSubscriptionRef,
+    required this.providerInvoiceRef,
+    required this.providerTransactionRef,
+    required this.currencyCode,
+    required this.amountMinor,
+    required this.entitlementKeys,
+    required this.currentPeriodStart,
+    required this.currentPeriodEnd,
   });
 
-  Map<String, dynamic> toJson() {
-    final now = DateTime.now().toUtc();
-    return {
-      'provider_key': providerKey,
-      'provider_display_name': 'Stripe',
-      'provider_customer_ref': 'cust-$planKey',
-      'plan_key': planKey,
-      'plan_name': 'Premium',
-      'billing_interval': 'monthly',
-      'provider_subscription_ref': 'sub-$planKey',
-      'provider_invoice_ref': 'inv-$planKey',
-      'provider_transaction_ref': 'txn-$planKey',
-      'currency_code': 'USD',
-      'amount_minor': 1999,
-      'current_period_start': now.toIso8601String(),
-      'current_period_end': now.add(const Duration(days: 30)).toIso8601String(),
-      'entitlement_keys': const ['chat_premium', 'rag_verified'],
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'provider_key': providerKey,
+        'provider_display_name': providerDisplayName,
+        'provider_customer_ref': providerCustomerRef,
+        'plan_key': planKey,
+        'plan_name': planName,
+        'billing_interval': billingInterval,
+        'provider_subscription_ref': providerSubscriptionRef,
+        'provider_invoice_ref': providerInvoiceRef,
+        'provider_transaction_ref': providerTransactionRef,
+        'currency_code': currencyCode,
+        'amount_minor': amountMinor,
+        'current_period_start': currentPeriodStart.toUtc().toIso8601String(),
+        'current_period_end': currentPeriodEnd.toUtc().toIso8601String(),
+        'entitlement_keys': entitlementKeys,
+      };
 }
 
 class SubscriptionResponse {
@@ -1128,6 +1549,28 @@ class SubscriptionResponse {
   factory SubscriptionResponse.fromJson(Map<String, dynamic> json) =>
       SubscriptionResponse(
         subscriptionId: json['subscription_id']?.toString() ?? '',
+      );
+}
+
+class AccountDeletionRequestResponse {
+  final String status;
+  final String requestId;
+  final int auditId;
+  final String outboxEventId;
+
+  AccountDeletionRequestResponse({
+    required this.status,
+    required this.requestId,
+    required this.auditId,
+    required this.outboxEventId,
+  });
+
+  factory AccountDeletionRequestResponse.fromJson(Map<String, dynamic> json) =>
+      AccountDeletionRequestResponse(
+        status: json['status']?.toString() ?? '',
+        requestId: json['request_id']?.toString() ?? '',
+        auditId: (json['audit_id'] as num?)?.toInt() ?? 0,
+        outboxEventId: json['outbox_event_id']?.toString() ?? '',
       );
 }
 
@@ -1147,10 +1590,16 @@ class CreateConversationResponse {
 class AddMessageResponse {
   final String conversationId;
   final String userMessageId;
+  final String? assistantMessageId;
+  final String? answer;
+  final String? traceId;
 
   AddMessageResponse({
     required this.conversationId,
     required this.userMessageId,
+    this.assistantMessageId,
+    this.answer,
+    this.traceId,
   });
 
   factory AddMessageResponse.fromJson(Map<String, dynamic> json) {
@@ -1162,6 +1611,9 @@ class AddMessageResponse {
     return AddMessageResponse(
       conversationId: conversationId,
       userMessageId: userMessageId,
+      assistantMessageId: json['assistant_message_id']?.toString(),
+      answer: json['response']?.toString(),
+      traceId: json['trace_id']?.toString(),
     );
   }
 }
@@ -1172,7 +1624,8 @@ class CreateSupportTicketResponse {
   CreateSupportTicketResponse({required this.ticketId});
 
   factory CreateSupportTicketResponse.fromJson(Map<String, dynamic> json) =>
-      CreateSupportTicketResponse(ticketId: json['ticket_id']?.toString() ?? '');
+      CreateSupportTicketResponse(
+          ticketId: json['ticket_id']?.toString() ?? '');
 }
 
 class SupportTicketMessage {
@@ -1452,7 +1905,8 @@ class UpsertImanJourneyRequestDto {
   });
 
   Map<String, dynamic> toJson() => {
-        if (journeyDate != null) 'journey_date': journeyDate!.toIso8601String().split('T').first,
+        if (journeyDate != null)
+          'journey_date': journeyDate!.toIso8601String().split('T').first,
         'today_focus': todayFocus,
         'continue_yesterday_topic': continueYesterdayTopic,
         'progress': progress.toJson(),
@@ -1462,6 +1916,102 @@ class UpsertImanJourneyRequestDto {
         'religious_reminder_text': religiousReminderText,
         'religious_confidence_score': religiousConfidenceScore,
         if (evidenceBundle != null)
-          'evidence_bundle': evidenceBundle!.map((item) => item.toJson()).toList(),
+          'evidence_bundle':
+              evidenceBundle!.map((item) => item.toJson()).toList(),
       };
+}
+
+class UserNotificationDto {
+  final String id;
+  final String channel;
+  final String status;
+  final String? title;
+  final String? body;
+  final Map<String, dynamic> payload;
+  final String? scheduledAt;
+  final String? sentAt;
+  final String? readAt;
+  final String createdAt;
+
+  const UserNotificationDto({
+    required this.id,
+    required this.channel,
+    required this.status,
+    required this.payload,
+    required this.createdAt,
+    this.title,
+    this.body,
+    this.scheduledAt,
+    this.sentAt,
+    this.readAt,
+  });
+
+  factory UserNotificationDto.fromJson(Map<String, dynamic> json) =>
+      UserNotificationDto(
+        id: json['id']?.toString() ?? '',
+        channel: json['channel']?.toString() ?? '',
+        status: json['notification_status']?.toString() ??
+            json['status']?.toString() ??
+            '',
+        title: json['title']?.toString(),
+        body: json['body']?.toString(),
+        payload: json['payload'] is Map<String, dynamic>
+            ? json['payload'] as Map<String, dynamic>
+            : const {},
+        scheduledAt: json['scheduled_at']?.toString(),
+        sentAt: json['sent_at']?.toString(),
+        readAt: json['read_at']?.toString(),
+        createdAt: json['created_at']?.toString() ?? '',
+      );
+}
+
+class MultimodalAnalysisResponse {
+  final String assetId;
+  final String traceId;
+  final String status;
+  final String extractedText;
+  final String redactedText;
+  final String provider;
+  final String safetyLevel;
+  final String workspaceScope;
+  final Map<String, dynamic> islamicAnswer;
+
+  const MultimodalAnalysisResponse({
+    required this.assetId,
+    required this.traceId,
+    required this.status,
+    required this.extractedText,
+    required this.redactedText,
+    required this.provider,
+    required this.safetyLevel,
+    required this.workspaceScope,
+    required this.islamicAnswer,
+  });
+
+  factory MultimodalAnalysisResponse.fromJson(Map<String, dynamic> json) {
+    final assetId = json['asset_id']?.toString() ?? '';
+    if (assetId.isEmpty) {
+      throw const FormatException('missing asset_id in multimodal response');
+    }
+    final answer = json['islamic_answer'];
+    return MultimodalAnalysisResponse(
+      assetId: assetId,
+      traceId: json['trace_id']?.toString() ?? '',
+      status: json['status']?.toString() ?? '',
+      extractedText: json['extracted_text']?.toString() ?? '',
+      redactedText: json['redacted_text']?.toString() ?? '',
+      provider: json['provider']?.toString() ?? '',
+      safetyLevel: json['safety_level']?.toString() ?? '',
+      workspaceScope: json['workspace_scope']?.toString() ?? '',
+      islamicAnswer: answer is Map<String, dynamic> ? answer : const {},
+    );
+  }
+
+  String get answerText => islamicAnswer['answer']?.toString() ?? '';
+
+  List<Citation> get citations =>
+      (islamicAnswer['citations'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(Citation.fromJson)
+          .toList();
 }

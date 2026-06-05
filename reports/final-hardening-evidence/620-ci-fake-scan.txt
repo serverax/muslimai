@@ -1,0 +1,1 @@
+No fake CI/proof-script pass patterns found in required scan scope.

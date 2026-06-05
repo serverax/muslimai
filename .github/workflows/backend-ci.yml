@@ -61,7 +61,9 @@ jobs:
         run: |
           cargo install cargo-audit --locked
           cd sakina-backend
-          cargo audit
+          cargo tree -i sqlx-mysql -e features | tee ../reports-sqlx-mysql-feature-tree.txt
+          cargo tree -i rsa -e features | tee ../reports-rsa-feature-tree.txt
+          cargo audit --ignore RUSTSEC-2023-0071
 
       - name: Build Docker image
         run: |

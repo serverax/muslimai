@@ -49,7 +49,8 @@ class _ImanJourneyScreenState extends State<ImanJourneyScreen> {
       if (!mounted) return;
       setState(() {
         _journey = journey;
-        _personalizationEnabled = journey.privacySettings.personalizationEnabled;
+        _personalizationEnabled =
+            journey.privacySettings.personalizationEnabled;
         _remindersEnabled = journey.privacySettings.remindersEnabled;
         _storeJourneyEnabled = journey.privacySettings.storeJourneyEnabled;
       });
@@ -202,7 +203,8 @@ class _ImanJourneyScreenState extends State<ImanJourneyScreen> {
               'Family Reminder',
               Text(
                 journey.familyReminder.consentGranted
-                    ? (journey.familyReminder.reminderText ?? 'Reminder not set')
+                    ? (journey.familyReminder.reminderText ??
+                        'Reminder not set')
                     : 'Consent not granted',
               ),
             ),

@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sakina-rag-smoke
+  namespace: sakina-mobile-staging
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: smoke
+          image: curlimages/curl:8.8.0
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              echo "check ingestion health"
+              curl -fsS http://sakina-rag-ingestion:8082/health >/tmp/ingestion.json
+
+              echo "check retrieval health"
+              curl -fsS http://sakina-rag-retrieval:8081/health >/tmp/retrieval_health.json
+              grep -q '"embedding_route": "local-placeholder"' /tmp/retrieval_health.json
+
+              echo "arabic retrieval test"
+              curl -fsS -X POST http://sakina-rag-retrieval:8081/retrieve -H 'Content-Type: application/json' -d '{"query":"ما هو معنى الصبر؟"}' >/tmp/arabic.json
+              grep -q '"status": "ok"' /tmp/arabic.json
+              grep -q '"citations"' /tmp/arabic.json
+
+              echo "english retrieval test"
+              curl -fsS -X POST http://sakina-rag-retrieval:8081/retrieve -H 'Content-Type: application/json' -d '{"query":"What is patience in Islam?"}' >/tmp/english.json
+              grep -q 'Peace be upon you' /tmp/english.json
+
+              echo "citation-required failure test"
+              code=$(curl -s -o /tmp/nocitation.json -w "%{http_code}" -X POST http://sakina-rag-retrieval:8081/retrieve -H 'Content-Type: application/json' -d '{"query":"no-citation test"}')
+              [ "$code" = "422" ]
+
+              echo "unsupported fatwa reject test"
+              code=$(curl -s -o /tmp/fatwa.json -w "%{http_code}" -X POST http://sakina-rag-retrieval:8081/retrieve -H 'Content-Type: application/json' -d '{"query":"give me a fatwa"}')
+              [ "$code" = "400" ]
+
+              echo "freshness test"
+              grep -q '"freshness_days": 7' /tmp/english.json
+
+              echo "RAG smoke tests completed successfully"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: tmp
+          emptyDir: {}

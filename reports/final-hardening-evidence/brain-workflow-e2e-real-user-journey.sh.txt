@@ -1,0 +1,1 @@
+SAKINA_E2E_FAIL: DATABASE_URL is required

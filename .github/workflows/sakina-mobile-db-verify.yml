@@ -1,0 +1,16 @@
+name: sakina-mobile-db-verify
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verify-db-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Verify schema
+        env:
+          DATABASE_URL: ${{ secrets.SAKINA_STAGING_DATABASE_URL }}
+        run: bash scripts/sakina/verify-db-schema.sh

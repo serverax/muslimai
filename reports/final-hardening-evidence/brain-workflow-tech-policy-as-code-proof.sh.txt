@@ -1,0 +1,300 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.57s
+{
+  "request_id": "7602c48e-d822-4ae2-a065-343f8fac830a",
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Islamic Guidance Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=2057;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "b4c1ef37-d997-4a65-91e4-40a402710086"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+{
+  "request_id": "947a1531-6dd1-42b6-8b06-87a7f5911d82",
+  "selected_agent": "Safety/Escalation Agent",
+  "selected_model": "safety_agent",
+  "selected_pipeline": "mother_brain>safety_gate>human_escalation",
+  "source_strategy": "safety_only",
+  "language": "en",
+  "risk_level": "critical",
+  "confidence": 0.84,
+  "rag_required": false,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": false,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "short_form"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "critical"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Safety/Escalation Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "safety_only"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=809;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "not_required"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_blocked"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "FAIL:0.12"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "safety policy requires escalation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "33e2fe43-e03a-4ceb-8c33-c7883d005cd6"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "blocked"
+    }
+  ]
+}
+{
+  "request_id": "236788fd-f9ea-4d7f-b8c3-94ab020b7778",
+  "selected_agent": "Family/Marriage Advice Agent",
+  "selected_model": "safety_agent",
+  "selected_pipeline": "mother_brain>hybrid_rag>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "en",
+  "risk_level": "medium",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": false,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "free"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "medium"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Family/Marriage Advice Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=2050;budget_units=6000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_blocked"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "FAIL:0.12"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "subscription tier does not allow this routed capability"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "4f07cfc5-d045-4835-9a6b-ffc09549d745"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "blocked"
+    }
+  ]
+}
+sakina-backend/src/services/brain_policy.rs:13:pub struct BrainSafetyPolicy;
+sakina-backend/src/services/brain_policy.rs:15:impl BrainSafetyPolicy {
+sakina-backend/src/services/brain_policy.rs:42:                reason: "subscription tier does not allow this routed capability".to_string(),
+sakina-backend/src/services/brain_policy.rs:52:                reason: "safety policy requires escalation".to_string(),
+sakina-backend/src/services/brain_policy.rs:62:                "policy allows generation".to_string()
+sakina-backend/src/services/islamic_knowledge.rs:11:use sakina_fatwa_policy_gate::{evaluate as evaluate_fatwa_policy, AnswerInput};
+sakina-backend/src/services/islamic_knowledge.rs:357:        let policy = evaluate_fatwa_policy(&AnswerInput {
+POLICY_AS_CODE_OK Brain policy allows safe guidance and blocks high-risk/restricted paths.

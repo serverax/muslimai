@@ -9,6 +9,7 @@ void main() {
       role: 'user',
       timestamp: 1700000000,
       sources: null,
+      syncStatus: 'pending',
       createdAt: 1700000001,
     );
 
@@ -19,6 +20,7 @@ void main() {
     expect(restored.role, 'user');
     expect(restored.timestamp, 1700000000);
     expect(restored.sources, isNull);
+    expect(restored.syncStatus, 'pending');
     expect(restored.createdAt, 1700000001);
   });
 }

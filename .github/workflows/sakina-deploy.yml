@@ -16,6 +16,10 @@ on:
     branches:
       - qa-security-hardening
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -23,152 +27,213 @@ jobs:
     env:
       STAGING_NAMESPACE: ${{ secrets.SAKINA_STAGING_NAMESPACE }}
       PROD_NAMESPACE: ${{ secrets.SAKINA_PROD_NAMESPACE }}
+      GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+      GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+      SAKINA_STAGING_POSTGRES_DB: ${{ secrets.SAKINA_STAGING_POSTGRES_DB }}
+      SAKINA_STAGING_POSTGRES_USER: ${{ secrets.SAKINA_STAGING_POSTGRES_USER }}
+      SAKINA_STAGING_POSTGRES_PASSWORD: ${{ secrets.SAKINA_STAGING_POSTGRES_PASSWORD }}
+      SAKINA_STAGING_JWT_SECRET: ${{ secrets.SAKINA_STAGING_JWT_SECRET }}
+      SAKINA_STAGING_ENCRYPTION_KEY: ${{ secrets.SAKINA_STAGING_ENCRYPTION_KEY }}
+      BACKEND_IMAGE: ghcr.io/serverax/sakina-backend:qa-security-hardening
+      FRONTEND_IMAGE: ghcr.io/serverax/sakina-frontend:qa-security-hardening
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR for image build and pull
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: sakina-backend/Dockerfile.api
+          push: true
+          tags: |
+            ghcr.io/serverax/sakina-backend:${{ github.sha }}
+            ghcr.io/serverax/sakina-backend:qa-security-hardening
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.frontend
+          push: true
+          tags: |
+            ghcr.io/serverax/sakina-frontend:${{ github.sha }}
+            ghcr.io/serverax/sakina-frontend:qa-security-hardening
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
 
       - name: Configure kubeconfig
         run: |
+          set -euo pipefail
           mkdir -p ~/.kube
           echo "${{ secrets.SAKINA_KUBECONFIG_B64 }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
+          kubectl config current-context
 
       - name: Select namespace
         id: ns
         run: |
+          set -euo pipefail
           if [ "${{ github.event_name }}" = "push" ]; then
-            echo "namespace=${STAGING_NAMESPACE}" >> "$GITHUB_OUTPUT"
+            namespace="${STAGING_NAMESPACE:-sakina-mobile-staging}"
           elif [ "${{ github.event.inputs.environment }}" = "production" ]; then
-            echo "namespace=${PROD_NAMESPACE}" >> "$GITHUB_OUTPUT"
+            namespace="${PROD_NAMESPACE:-sakina-mobile-staging}"
           else
-            echo "namespace=${STAGING_NAMESPACE}" >> "$GITHUB_OUTPUT"
+            namespace="${STAGING_NAMESPACE:-sakina-mobile-staging}"
           fi
+          echo "namespace=$namespace" >> "$GITHUB_OUTPUT"
+          echo "Selected namespace: $namespace"
 
-      - name: Confirm cluster and namespace
-        run: |
-          kubectl get nodes -o wide
-          kubectl get ns "${{ steps.ns.outputs.namespace }}"
-          kubectl -n "${{ steps.ns.outputs.namespace }}" get all
-
-      - name: Apply Kubernetes manifests
+      - name: Confirm cluster access
         run: |
           set -euo pipefail
+          kubectl get nodes -o wide
+          kubectl get ns
 
-          dump_deploy_debug() {
-            status="$?"
-            set +e
-            echo "=== Sakina deploy debug: sakina-data resources ==="
-            kubectl -n sakina-data get statefulset,pods,pvc,svc -o wide
-            echo "=== Sakina deploy debug: qdrant pod description ==="
-            kubectl -n sakina-data describe pod qdrant-0
-            echo "=== Sakina deploy debug: qdrant logs ==="
-            kubectl -n sakina-data logs qdrant-0 --all-containers --tail=200
-            echo "=== Sakina deploy debug: sakina-data events ==="
-            kubectl -n sakina-data get events --sort-by=.lastTimestamp
-            exit "$status"
-          }
-          trap dump_deploy_debug ERR
+      - name: Confirm GHCR images and credentials
+        run: |
+          set -euo pipefail
+          ghcr_user="${GHCR_USERNAME:-${{ github.actor }}}"
+          ghcr_token="${GHCR_PULL_TOKEN:-${{ github.token }}}"
+          printf '%s' "$ghcr_token" | docker login ghcr.io -u "$ghcr_user" --password-stdin
+          docker manifest inspect "$BACKEND_IMAGE" >/dev/null
+          docker manifest inspect "$FRONTEND_IMAGE" >/dev/null
+          echo "GHCR images are reachable with package read credentials."
 
-          apply_manifest() {
+      - name: Apply Kubernetes manifests in strict order
+        run: |
+          set -euo pipefail
+          namespace="${{ steps.ns.outputs.namespace }}"
+          manifest_root="infra/k8s/sakina-mobile-staging"
+
+          require_file() {
             manifest="$1"
             if [ ! -f "$manifest" ]; then
               echo "ERROR: required Kubernetes manifest is missing: $manifest"
               exit 1
             fi
+          }
+
+          apply_file() {
+            manifest="$1"
+            require_file "$manifest"
             echo "Applying Kubernetes manifest: $manifest"
             kubectl apply -f "$manifest"
           }
 
-          echo "Applying Sakina Kubernetes manifests in strict order."
-          apply_manifest sakina-infra/manifests/00-namespaces.yaml
-          apply_manifest sakina-infra/manifests/brand-configmap.yaml
-          kubectl -n sakina-data create configmap postgres-init \
-            --from-file=init.sql=sakina-backend/db/init.sql \
-            --dry-run=client -o yaml | kubectl apply -f -
-          apply_manifest sakina-infra/manifests/storage-class.yaml
-
-          repair_pending_data_claim() {
-            statefulset="$1"
-            claim="$2"
-            if kubectl -n sakina-data get pvc "$claim" >/dev/null 2>&1; then
-              phase="$(kubectl -n sakina-data get pvc "$claim" -o jsonpath='{.status.phase}')"
-              storage_class="$(kubectl -n sakina-data get pvc "$claim" -o jsonpath='{.spec.storageClassName}')"
-              if [ "$phase" = "Pending" ] && [ "$storage_class" != "local-path" ]; then
-                echo "Recreating unbound Sakina data claim $claim for StatefulSet $statefulset."
-                if kubectl -n sakina-data get statefulset "$statefulset" >/dev/null 2>&1; then
-                  kubectl -n sakina-data delete statefulset "$statefulset" --wait=true
-                fi
-                kubectl -n sakina-data delete pvc "$claim" --wait=true
-              fi
-            fi
+          wait_job() {
+            job_name="$1"
+            kubectl -n "$namespace" wait --for=condition=complete "job/$job_name" --timeout=180s
+            kubectl -n "$namespace" logs "job/$job_name" --all-containers --tail=200
           }
 
-          repair_pending_data_claim postgres postgres-storage-postgres-0
-          repair_pending_data_claim qdrant qdrant-storage-qdrant-0
+          ghcr_user="${GHCR_USERNAME:-${{ github.actor }}}"
+          ghcr_token="${GHCR_PULL_TOKEN:-${{ github.token }}}"
+          postgres_db="${SAKINA_STAGING_POSTGRES_DB:-sakina_mobile}"
+          postgres_user="${SAKINA_STAGING_POSTGRES_USER:-sakina}"
+          postgres_password="${SAKINA_STAGING_POSTGRES_PASSWORD:-}"
+          jwt_secret="${SAKINA_STAGING_JWT_SECRET:-}"
+          encryption_key="${SAKINA_STAGING_ENCRYPTION_KEY:-}"
 
-          apply_manifest sakina-infra/manifests/postgres-deployment.yaml
-          apply_manifest sakina-infra/manifests/qdrant-deployment.yaml
-          kubectl -n sakina-data delete pod qdrant-0 --wait=true
-
-          kubectl -n sakina-data rollout status statefulset/postgres --timeout=180s
-          kubectl -n sakina-data rollout status statefulset/qdrant --timeout=180s
-          kubectl -n sakina-data run sakina-qdrant-health \
-            --rm -i --restart=Never --image=curlimages/curl \
-            -- curl -fsS http://qdrant.sakina-data.svc.cluster.local:6333/healthz
-          kubectl -n sakina-data exec -i postgres-0 -- psql -U sakina_user -d sakina < sakina-backend/db/migrations/013_waitlist.sql
-          kubectl -n sakina-data exec postgres-0 -- psql -U sakina_user -d sakina \
-            -c "SELECT to_regclass('sakina_ai.waitlist') AS waitlist_table;"
-
-          apply_manifest sakina-infra/manifests/sakina-api-deployment.yaml
-          kubectl -n sakina-api rollout status deployment/sakina-api --timeout=180s
-
-          apply_manifest sakina-infra/manifests/sakina-prod/sakina-backend.yaml
-          apply_manifest sakina-infra/manifests/sakina-prod/sakina-frontend.yaml
-          kubectl -n sakina-prod rollout status deployment/sakina-backend --timeout=180s
-          kubectl -n sakina-prod rollout status deployment/sakina-frontend --timeout=180s
-
-          apply_manifest sakina-infra/manifests/monitoring/jaeger.yaml
-          apply_manifest sakina-infra/manifests/monitoring/prometheus.yaml
-          apply_manifest sakina-infra/manifests/monitoring/grafana.yaml
-          apply_manifest sakina-infra/manifests/sakina-prod/sakina-ingress.yaml
-          apply_manifest sakina-infra/manifests/network-policies.yaml
-
-      - name: Restart Sakina deployments
-        run: |
-          found="false"
-          for deployment in sakina-backend sakina-admin sakina-rag-ingestion sakina-rag-retrieval sakina-frontend sakina-landing; do
-            if kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment "$deployment" >/dev/null 2>&1; then
-              kubectl -n "${{ steps.ns.outputs.namespace }}" rollout restart "deployment/$deployment"
-              found="true"
-            fi
-          done
-          if [ "$found" != "true" ]; then
-            echo "ERROR: no Sakina deployments found for restart"
-            kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment
+          if [ -z "$postgres_password" ]; then
+            echo "ERROR: SAKINA_STAGING_POSTGRES_PASSWORD GitHub secret is required"
+            exit 1
+          fi
+          if [ ${#jwt_secret} -lt 32 ]; then
+            echo "ERROR: SAKINA_STAGING_JWT_SECRET GitHub secret must be at least 32 characters"
+            exit 1
+          fi
+          if [ ${#encryption_key} -lt 32 ]; then
+            echo "ERROR: SAKINA_STAGING_ENCRYPTION_KEY GitHub secret must be at least 32 characters"
             exit 1
           fi
 
-      - name: Confirm rollout
+          echo "1. namespaces"
+          apply_file "$manifest_root/namespace.yaml"
+          kubectl get ns "$namespace"
+
+          echo "2. secrets/configmaps"
+          kubectl -n "$namespace" create secret docker-registry ghcr-pull-secret \
+            --docker-server=ghcr.io \
+            --docker-username="$ghcr_user" \
+            --docker-password="$ghcr_token" \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$namespace" get secret ghcr-pull-secret
+          kubectl -n "$namespace" create secret generic sakina-postgres-secret \
+            --from-literal=POSTGRES_DB="$postgres_db" \
+            --from-literal=POSTGRES_USER="$postgres_user" \
+            --from-literal=POSTGRES_PASSWORD="$postgres_password" \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$namespace" create secret generic sakina-staging-secrets \
+            --from-literal=jwt-secret="$jwt_secret" \
+            --from-literal=encryption-key="$encryption_key" \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$namespace" get secret sakina-postgres-secret
+          kubectl -n "$namespace" get secret sakina-staging-secrets
+
+          echo "3. storage/PVC/PV and statefulsets"
+          apply_file "$manifest_root/postgres.yaml"
+          kubectl -n "$namespace" rollout status statefulset/sakina-postgres --timeout=180s
+          apply_file "$manifest_root/qdrant.yaml"
+          kubectl -n "$namespace" rollout status statefulset/sakina-qdrant --timeout=180s
+          apply_file "$manifest_root/redis.yaml"
+          kubectl -n "$namespace" rollout status deployment/sakina-redis --timeout=180s
+
+          echo "4. database jobs"
+          kubectl -n "$namespace" delete job sakina-db-migrations --ignore-not-found=true
+          apply_file "$manifest_root/db-migrations.yaml"
+          wait_job sakina-db-migrations
+
+          echo "5. deployments"
+          apply_file "$manifest_root/rag.yaml"
+          apply_file "$manifest_root/backend.yaml"
+          apply_file "$manifest_root/admin.yaml"
+          kubectl -n "$namespace" rollout status deployment/sakina-backend --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
+
+          echo "6. services"
+          kubectl -n "$namespace" get svc -o wide
+
+          echo "7. ingress/network policies"
+          kubectl -n "$namespace" get ingress -o wide
+
+          echo "8. smoke jobs"
+          for job in sakina-staging-smoke; do
+            kubectl -n "$namespace" delete job "$job" --ignore-not-found=true
+          done
+          apply_file "$manifest_root/smoke-tests.yaml"
+          wait_job sakina-staging-smoke
+
+      - name: Confirm rollout and pod health
         run: |
           set -euo pipefail
-          kubectl -n "${{ steps.ns.outputs.namespace }}" get all
-          required="sakina-backend sakina-admin sakina-rag-ingestion sakina-rag-retrieval"
-          if kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment sakina-frontend >/dev/null 2>&1; then
-            required="$required sakina-frontend"
+          namespace="${{ steps.ns.outputs.namespace }}"
+          kubectl -n "$namespace" get deploy,statefulset,pods,svc -o wide
+          kubectl -n "$namespace" rollout status deployment/sakina-backend --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
+          bad_pods="$(kubectl get pods -A | awk '/ImagePullBackOff|CrashLoopBackOff|CreateContainerConfigError|Pending|Error/ { print }')"
+          if [ -n "$bad_pods" ]; then
+            echo "$bad_pods"
+            exit 1
           fi
-          if kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment sakina-landing >/dev/null 2>&1; then
-            required="$required sakina-landing"
-          fi
-          for deployment in $required; do
-            kubectl -n "${{ steps.ns.outputs.namespace }}" get deployment "$deployment"
-            kubectl -n "${{ steps.ns.outputs.namespace }}" rollout status "deployment/$deployment" --timeout=180s
-          done
 
-      - name: Show recent events if needed
+      - name: Show recent events
         if: always()
         run: |
           kubectl -n "${{ steps.ns.outputs.namespace }}" get events --sort-by=.lastTimestamp | tail -80

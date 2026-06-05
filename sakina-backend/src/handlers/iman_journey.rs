@@ -4,6 +4,7 @@ use uuid::Uuid;
 
 use crate::error::ApiError;
 use crate::models::{AddDuaItemRequest, UpsertImanJourneyPrivacyRequest, UpsertImanJourneyRequest};
+use crate::services::authenticated_user_id;
 use crate::services::ImanJourneyService;
 
 #[derive(Debug, serde::Deserialize)]
@@ -33,7 +34,7 @@ pub async fn get_iman_journey(
     query: web::Query<JourneyDateQuery>,
 ) -> Result<HttpResponse, ApiError> {
     let user_id = path.into_inner();
-    authorize_user_scope(&req, user_id)?;
+    ensure_user_scope(&req, service.pool(), user_id).await?;
     let parsed_date = parse_date_query(query.date.as_deref())?;
     let response = service.get_journey(user_id, parsed_date).await?;
     Ok(HttpResponse::Ok().json(response))
@@ -46,7 +47,7 @@ pub async fn upsert_iman_journey(
     body: web::Json<UpsertImanJourneyRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let user_id = path.into_inner();
-    authorize_user_scope(&req, user_id)?;
+    ensure_user_scope(&req, service.pool(), user_id).await?;
     let response = service.upsert_journey(user_id, body.into_inner()).await?;
     Ok(HttpResponse::Ok().json(response))
 }
@@ -57,7 +58,7 @@ pub async fn get_privacy_settings(
     path: web::Path<Uuid>,
 ) -> Result<HttpResponse, ApiError> {
     let user_id = path.into_inner();
-    authorize_user_scope(&req, user_id)?;
+    ensure_user_scope(&req, service.pool(), user_id).await?;
     let response = service.get_or_create_privacy_settings(user_id).await?;
     Ok(HttpResponse::Ok().json(response))
 }
@@ -69,7 +70,7 @@ pub async fn update_privacy_settings(
     body: web::Json<UpsertImanJourneyPrivacyRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let user_id = path.into_inner();
-    authorize_user_scope(&req, user_id)?;
+    ensure_user_scope(&req, service.pool(), user_id).await?;
     let response = service
         .upsert_privacy_settings(user_id, body.into_inner())
         .await?;
@@ -82,7 +83,7 @@ pub async fn list_dua_items(
     path: web::Path<Uuid>,
 ) -> Result<HttpResponse, ApiError> {
     let user_id = path.into_inner();
-    authorize_user_scope(&req, user_id)?;
+    ensure_user_scope(&req, service.pool(), user_id).await?;
     let items = service.list_dua_items(user_id).await?;
     Ok(HttpResponse::Ok().json(serde_json::json!({ "items": items })))
 }
@@ -94,31 +95,36 @@ pub async fn add_dua_item(
     body: web::Json<AddDuaItemRequest>,
 ) -> Result<HttpResponse, ApiError> {
     let user_id = path.into_inner();
-    authorize_user_scope(&req, user_id)?;
+    ensure_user_scope(&req, service.pool(), user_id).await?;
     let item = service.add_dua_item(user_id, body.into_inner()).await?;
     Ok(HttpResponse::Created().json(item))
 }
 
-fn authorize_user_scope(req: &HttpRequest, requested_user_id: Uuid) -> Result<(), ApiError> {
-    let header_user_id = req
-        .headers()
-        .get("x-sakina-user-id")
-        .and_then(|value| value.to_str().ok())
-        .and_then(|value| Uuid::parse_str(value).ok())
-        .ok_or_else(|| ApiError::unauthorized("x-sakina-user-id header is required"))?;
-    if header_user_id != requested_user_id {
-        return Err(ApiError::unauthorized(
-            "requested user_id does not match x-sakina-user-id header",
-        ));
-    }
-    Ok(())
+async fn ensure_user_scope(
+    req: &HttpRequest,
+    pool: &sqlx::PgPool,
+    requested_user_id: Uuid,
+) -> Result<(), ApiError> {
+    authenticated_user_id(req, pool)
+        .await
+        .and_then(|authenticated_user_id| {
+            if authenticated_user_id != requested_user_id {
+                Err(ApiError::unauthorized(
+                    "requested user_id does not match authenticated user",
+                ))
+            } else {
+                Ok(())
+            }
+        })
 }
 
 fn parse_date_query(raw: Option<&str>) -> Result<Option<NaiveDate>, ApiError> {
     match raw {
-        Some(date_str) if !date_str.trim().is_empty() => NaiveDate::parse_from_str(date_str, "%Y-%m-%d")
-            .map(Some)
-            .map_err(|_| ApiError::bad_request("date must be YYYY-MM-DD")),
+        Some(date_str) if !date_str.trim().is_empty() => {
+            NaiveDate::parse_from_str(date_str, "%Y-%m-%d")
+                .map(Some)
+                .map_err(|_| ApiError::bad_request("date must be YYYY-MM-DD"))
+        }
         _ => Ok(None),
     }
 }

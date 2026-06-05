@@ -36,32 +36,65 @@ spec:
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: backend
-          image: ghcr.io/example/sakina-mobile-backend:staging-latest
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
               name: http
           env:
-            - name: DATABASE_URL
+            - name: SAKINA_ENV
+              value: staging
+            - name: SAKINA_LLM_ENABLED
+              value: "false"
+            - name: POSTGRES_HOST
+              value: sakina-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
-                  key: database-url
+                  name: sakina-postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: sakina-staging-secrets
                   key: jwt-secret
-            - name: OPENAI_API_KEY
+            - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
                   name: sakina-staging-secrets
-                  key: openai-api-key
+                  key: encryption-key
+            - name: QDRANT_URL
+              value: http://sakina-qdrant:6333
+            - name: QDRANT_COLLECTION
+              value: sakina_islamic_chunks_en
+            - name: ISLAMIC_QDRANT_COLLECTION
+              value: sakina_islamic_chunks_en
+            - name: SAKINA_REDIS_URL
+              value: redis://sakina-redis:6379
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/ready
               port: http
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -78,3 +111,15 @@ spec:
             limits:
               cpu: "1"
               memory: "1Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

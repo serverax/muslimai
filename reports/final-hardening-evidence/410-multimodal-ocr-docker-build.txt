@@ -1,0 +1,416 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.api
+#1 transferring dockerfile: 824B 0.0s done
+#1 DONE 0.1s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 ...
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 DONE 1.0s
+
+#4 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#4 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/rust:1.88-slim
+#5 ...
+
+#6 [auth] library/rust:pull token for registry-1.docker.io
+#6 DONE 0.0s
+
+#7 [auth] library/debian:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#8 DONE 0.8s
+
+#5 [internal] load metadata for docker.io/library/rust:1.88-slim
+#5 DONE 0.9s
+
+#9 [internal] load .dockerignore
+#9 transferring context: 446B 0.1s
+#9 transferring context: 448B 0.1s done
+#9 DONE 0.1s
+
+#10 [stage-1 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb
+#10 resolve docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb 0.0s done
+#10 DONE 0.0s
+
+#11 [builder 1/6] FROM docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89
+#11 resolve docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89 0.0s done
+#11 DONE 0.0s
+
+#12 [internal] load build context
+#12 transferring context: 131.80kB 5.0s
+#12 transferring context: 194.37kB 9.2s done
+#12 DONE 9.2s
+
+#13 [builder 2/6] WORKDIR /app
+#13 CACHED
+
+#14 [builder 3/6] COPY . .
+#14 DONE 0.9s
+
+#15 [builder 4/6] RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev && rm -rf /var/lib/apt/lists/*
+#15 0.488 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#15 0.558 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#15 0.585 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+#15 0.694 Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8790 kB]
+#15 1.274 Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
+#15 1.284 Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [306 kB]
+#15 2.581 Fetched 9358 kB in 2s (4261 kB/s)
+#15 2.581 Reading package lists...
+#15 3.312 Reading package lists...
+#15 4.049 Building dependency tree...
+#15 4.237 Reading state information...
+#15 4.478 The following additional packages will be installed:
+#15 4.479   libldap-2.5-0 libpq5 libsasl2-2 libsasl2-modules-db libssl-dev libssl3
+#15 4.480   openssl
+#15 4.483 Suggested packages:
+#15 4.483   postgresql-doc-15 libssl-doc
+#15 4.483 Recommended packages:
+#15 4.483   libldap-common libsasl2-modules
+#15 4.564 The following NEW packages will be installed:
+#15 4.567   libldap-2.5-0 libpq-dev libpq5 libsasl2-2 libsasl2-modules-db libssl-dev
+#15 4.571 The following packages will be upgraded:
+#15 4.572   libssl3 openssl
+#15 4.643 2 upgraded, 6 newly installed, 0 to remove and 33 not upgraded.
+#15 4.643 Need to get 6526 kB of archives.
+#15 4.643 After this operation, 14.8 MB of additional disk space will be used.
+#15 4.643 Get:1 http://deb.debian.org/debian bookworm/main amd64 libsasl2-modules-db amd64 2.1.28+dfsg-10 [20.3 kB]
+#15 4.666 Get:2 http://deb.debian.org/debian bookworm/main amd64 libsasl2-2 amd64 2.1.28+dfsg-10 [59.7 kB]
+#15 4.684 Get:3 http://deb.debian.org/debian bookworm/main amd64 libldap-2.5-0 amd64 2.5.13+dfsg-5 [183 kB]
+#15 4.732 Get:4 http://deb.debian.org/debian bookworm/main amd64 libssl3 amd64 3.0.20-1~deb12u1 [2034 kB]
+#15 4.870 Get:5 http://deb.debian.org/debian-security bookworm-security/main amd64 libpq5 amd64 15.18-0+deb12u1 [197 kB]
+#15 4.885 Get:6 http://deb.debian.org/debian bookworm/main amd64 libssl-dev amd64 3.0.20-1~deb12u1 [2443 kB]
+#15 4.998 Get:7 http://deb.debian.org/debian-security bookworm-security/main amd64 libpq-dev amd64 15.18-0+deb12u1 [151 kB]
+#15 5.005 Get:8 http://deb.debian.org/debian bookworm/main amd64 openssl amd64 3.0.20-1~deb12u1 [1438 kB]
+#15 5.225 debconf: delaying package configuration, since apt-utils is not installed
+#15 5.281 Fetched 6526 kB in 0s (13.9 MB/s)
+#15 5.319 Selecting previously unselected package libsasl2-modules-db:amd64.
+#15 5.319 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 9029 files and directories currently installed.)
+#15 5.337 Preparing to unpack .../0-libsasl2-modules-db_2.1.28+dfsg-10_amd64.deb ...
+#15 5.344 Unpacking libsasl2-modules-db:amd64 (2.1.28+dfsg-10) ...
+#15 5.395 Selecting previously unselected package libsasl2-2:amd64.
+#15 5.397 Preparing to unpack .../1-libsasl2-2_2.1.28+dfsg-10_amd64.deb ...
+#15 5.409 Unpacking libsasl2-2:amd64 (2.1.28+dfsg-10) ...
+#15 5.462 Selecting previously unselected package libldap-2.5-0:amd64.
+#15 5.464 Preparing to unpack .../2-libldap-2.5-0_2.5.13+dfsg-5_amd64.deb ...
+#15 5.469 Unpacking libldap-2.5-0:amd64 (2.5.13+dfsg-5) ...
+#15 5.538 Preparing to unpack .../3-libssl3_3.0.20-1~deb12u1_amd64.deb ...
+#15 5.553 Unpacking libssl3:amd64 (3.0.20-1~deb12u1) over (3.0.16-1~deb12u1) ...
+#15 5.780 Selecting previously unselected package libpq5:amd64.
+#15 5.782 Preparing to unpack .../4-libpq5_15.18-0+deb12u1_amd64.deb ...
+#15 5.788 Unpacking libpq5:amd64 (15.18-0+deb12u1) ...
+#15 5.848 Selecting previously unselected package libssl-dev:amd64.
+#15 5.850 Preparing to unpack .../5-libssl-dev_3.0.20-1~deb12u1_amd64.deb ...
+#15 5.855 Unpacking libssl-dev:amd64 (3.0.20-1~deb12u1) ...
+#15 6.134 Selecting previously unselected package libpq-dev.
+#15 6.136 Preparing to unpack .../6-libpq-dev_15.18-0+deb12u1_amd64.deb ...
+#15 6.140 Unpacking libpq-dev (15.18-0+deb12u1) ...
+#15 6.193 Preparing to unpack .../7-openssl_3.0.20-1~deb12u1_amd64.deb ...
+#15 6.208 Unpacking openssl (3.0.20-1~deb12u1) over (3.0.16-1~deb12u1) ...
+#15 6.381 Setting up libssl3:amd64 (3.0.20-1~deb12u1) ...
+#15 6.396 Setting up libsasl2-modules-db:amd64 (2.1.28+dfsg-10) ...
+#15 6.412 Setting up libssl-dev:amd64 (3.0.20-1~deb12u1) ...
+#15 6.425 Setting up libsasl2-2:amd64 (2.1.28+dfsg-10) ...
+#15 6.438 Setting up openssl (3.0.20-1~deb12u1) ...
+#15 6.461 Setting up libldap-2.5-0:amd64 (2.5.13+dfsg-5) ...
+#15 6.476 Setting up libpq5:amd64 (15.18-0+deb12u1) ...
+#15 6.491 Setting up libpq-dev (15.18-0+deb12u1) ...
+#15 6.508 Processing triggers for libc-bin (2.36-9+deb12u10) ...
+#15 DONE 6.7s
+
+#16 [builder 5/6] WORKDIR /app/sakina-backend
+#16 DONE 0.0s
+
+#17 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     cargo build --release --bin sakina-api
+#17 1.002    Compiling unicode-ident v1.0.24
+#17 1.002    Compiling proc-macro2 v1.0.106
+#17 1.003    Compiling quote v1.0.45
+#17 1.008    Compiling libc v0.2.186
+#17 1.014    Compiling cfg-if v1.0.4
+#17 1.019    Compiling serde_core v1.0.228
+#17 1.020    Compiling serde v1.0.228
+#17 1.030    Compiling pin-project-lite v0.2.17
+#17 1.100    Compiling futures-core v0.3.32
+#17 1.142    Compiling log v0.4.32
+#17 1.170    Compiling memchr v2.8.1
+#17 1.292    Compiling bytes v1.11.1
+#17 1.498    Compiling once_cell v1.21.4
+#17 1.523    Compiling futures-sink v0.3.32
+#17 1.611    Compiling parking_lot_core v0.9.12
+#17 1.692    Compiling scopeguard v1.2.0
+#17 1.893    Compiling itoa v1.0.18
+#17 1.922    Compiling typenum v1.20.1
+#17 2.276    Compiling lock_api v0.4.14
+#17 2.713    Compiling stable_deref_trait v1.2.1
+#17 2.971    Compiling version_check v0.9.5
+#17 3.535    Compiling syn v2.0.117
+#17 3.584    Compiling tracing-core v0.1.36
+#17 3.806    Compiling find-msvc-tools v0.1.9
+#17 3.872    Compiling shlex v2.0.1
+#17 3.909    Compiling futures-task v0.3.32
+#17 4.215    Compiling slab v0.4.12
+#17 4.401    Compiling futures-io v0.3.32
+#17 4.555    Compiling percent-encoding v2.3.2
+#17 4.672    Compiling jobserver v0.1.34
+#17 4.757    Compiling writeable v0.6.3
+#17 4.772    Compiling litemap v0.8.2
+#17 5.135    Compiling errno v0.3.14
+#17 5.208    Compiling mio v1.2.1
+#17 5.400    Compiling signal-hook-registry v1.4.8
+#17 5.409    Compiling cc v1.2.63
+#17 5.455    Compiling socket2 v0.6.4
+#17 5.745    Compiling generic-array v0.14.7
+#17 5.811    Compiling icu_normalizer_data v2.2.0
+#17 6.103    Compiling icu_properties_data v2.2.0
+#17 6.115    Compiling utf8_iter v1.0.4
+#17 6.462    Compiling getrandom v0.2.17
+#17 6.510    Compiling subtle v2.6.1
+#17 6.749    Compiling zerocopy v0.8.50
+#17 6.823    Compiling getrandom v0.4.2
+#17 6.948    Compiling rand_core v0.10.1
+#17 7.119    Compiling equivalent v1.0.2
+#17 7.215    Compiling zmij v1.0.21
+#17 7.240    Compiling bitflags v2.12.1
+#17 7.819    Compiling form_urlencoded v1.2.2
+#17 7.889    Compiling pkg-config v0.3.33
+#17 7.973    Compiling serde_json v1.0.150
+#17 8.116    Compiling crypto-common v0.1.7
+#17 8.231    Compiling block-buffer v0.10.4
+#17 8.368    Compiling foldhash v0.1.5
+#17 8.460    Compiling digest v0.10.7
+#17 8.737    Compiling wasm-bindgen-shared v0.2.122
+#17 8.978    Compiling httparse v1.10.1
+#17 9.051    Compiling autocfg v1.5.1
+#17 9.215    Compiling thiserror v2.0.18
+#17 9.261    Compiling base64 v0.22.1
+#17 9.271    Compiling hashbrown v0.17.1
+#17 9.558    Compiling zstd-sys v2.0.16+zstd.1.5.7
+#17 9.770    Compiling ring v0.17.14
+#17 9.941    Compiling num-traits v0.2.19
+#17 10.24    Compiling hybrid-array v0.4.12
+#17 10.34    Compiling crossbeam-utils v0.8.21
+#17 10.86    Compiling zeroize v1.8.2
+#17 11.09    Compiling indexmap v2.14.0
+#17 11.78    Compiling rustls-pki-types v1.14.1
+#17 12.76    Compiling rand_core v0.6.4
+#17 13.22    Compiling aho-corasick v1.1.4
+#17 13.24    Compiling futures-channel v0.3.32
+#17 13.41    Compiling unicode-segmentation v1.13.3
+#17 13.87    Compiling synstructure v0.13.2
+#17 14.54    Compiling fnv v1.0.7
+#17 14.66    Compiling crc32fast v1.5.0
+#17 15.13    Compiling local-waker v0.1.4
+#17 15.27    Compiling cpufeatures v0.3.0
+#17 15.30    Compiling alloc-no-stdlib v2.0.4
+#17 15.34    Compiling regex-syntax v0.8.10
+#17 15.47    Compiling getrandom v0.3.4
+#17 16.01    Compiling zstd-safe v7.2.4
+#17 16.33    Compiling alloc-stdlib v0.2.2
+#17 16.56    Compiling http v0.2.12
+#17 16.82    Compiling convert_case v0.10.0
+#17 17.96    Compiling serde_derive v1.0.228
+#17 19.20    Compiling zerofrom-derive v0.1.7
+#17 19.46    Compiling yoke-derive v0.8.2
+#17 20.05    Compiling zerovec-derive v0.11.3
+#17 22.27    Compiling tokio-macros v2.7.0
+#17 22.85    Compiling tracing-attributes v0.1.31
+#17 22.86    Compiling zerofrom v0.1.8
+#17 23.05    Compiling yoke v0.8.3
+#17 23.34    Compiling displaydoc v0.2.6
+#17 23.46    Compiling zerovec v0.11.6
+#17 23.98    Compiling futures-macro v0.3.32
+#17 25.19    Compiling potential_utf v0.1.5
+#17 25.38    Compiling tinystr v0.8.3
+#17 25.49    Compiling zerotrie v0.2.4
+#17 25.84    Compiling icu_locale_core v2.2.0
+#17 26.30    Compiling futures-util v0.3.32
+#17 26.40    Compiling icu_collections v2.2.0
+#17 26.47    Compiling tracing v0.1.44
+#17 27.06    Compiling ppv-lite86 v0.2.21
+#17 27.45    Compiling thiserror-impl v2.0.18
+#17 27.56    Compiling regex-automata v0.4.14
+#17 27.88    Compiling smallvec v1.15.1
+#17 27.92    Compiling actix-macros v0.2.4
+#17 29.01    Compiling parking_lot v0.12.5
+#17 29.22    Compiling icu_provider v2.2.0
+#17 30.44    Compiling tokio v1.52.3
+#17 30.65    Compiling icu_properties v2.2.0
+#17 30.66    Compiling icu_normalizer v2.2.0
+#17 33.19    Compiling block-buffer v0.12.0
+#17 33.53    Compiling idna_adapter v1.2.2
+#17 33.77    Compiling idna v1.1.0
+#17 33.87    Compiling crypto-common v0.2.2
+#17 34.46    Compiling http v1.4.1
+#17 35.42    Compiling url v2.5.8
+#17 38.04    Compiling adler2 v2.0.1
+#17 38.21    Compiling simd-adler32 v0.3.9
+#17 38.44    Compiling powerfmt v0.2.0
+#17 38.90    Compiling num-conv v0.2.2
+#17 39.01    Compiling unicode-xid v0.2.6
+#17 39.01    Compiling time-core v0.1.8
+#17 39.23    Compiling untrusted v0.9.0
+#17 39.36    Compiling rustversion v1.0.22
+#17 39.36    Compiling const-oid v0.10.2
+#17 39.83    Compiling digest v0.11.3
+#17 40.12    Compiling time-macros v0.2.27
+#17 40.18    Compiling derive_more-impl v2.1.1
+#17 41.31    Compiling bytestring v1.5.1
+#17 41.81    Compiling deranged v0.5.8
+#17 42.40    Compiling miniz_oxide v0.8.9
+#17 43.68    Compiling http-body v1.0.1
+#17 43.91    Compiling regex v1.12.3
+#17 44.81    Compiling tokio-util v0.7.18
+#17 46.33    Compiling actix-rt v2.11.0
+#17 46.87    Compiling brotli-decompressor v5.0.1
+#17 47.63    Compiling chacha20 v0.10.0
+#17 47.78    Compiling actix-utils v3.0.1
+#17 48.07    Compiling cookie v0.16.2
+#17 48.49    Compiling actix-service v2.0.3
+#17 48.83    Compiling iana-time-zone v0.1.65
+#17 48.98    Compiling strsim v0.11.1
+#17 49.51    Compiling ryu v1.0.23
+#17 49.71    Compiling cpufeatures v0.2.17
+#17 49.77    Compiling regex-lite v0.1.9
+#17 49.79    Compiling allocator-api2 v0.2.21
+#17 49.94    Compiling ident_case v1.0.1
+#17 50.08    Compiling tinyvec_macros v0.1.1
+#17 50.15    Compiling rustls v0.23.40
+#17 50.43    Compiling time v0.3.47
+#17 50.60    Compiling tinyvec v1.11.0
+#17 50.78    Compiling hashbrown v0.15.5
+#17 51.62    Compiling actix-router v0.5.4
+#17 51.76    Compiling darling_core v0.20.11
+#17 51.83    Compiling serde_urlencoded v0.7.1
+#17 52.43    Compiling brotli v8.0.3
+#17 52.86    Compiling chrono v0.4.45
+#17 53.44    Compiling derive_more v2.1.1
+#17 53.55    Compiling rand v0.10.1
+#17 54.46    Compiling rand_core v0.9.5
+#17 55.00    Compiling flate2 v1.1.9
+#17 55.72    Compiling actix-codec v0.5.2
+#17 56.35    Compiling h2 v0.3.27
+#17 56.58    Compiling rustls-webpki v0.103.13
+#17 57.54    Compiling sha1 v0.11.0
+#17 58.30    Compiling concurrent-queue v2.5.0
+#17 58.68    Compiling rand_chacha v0.3.1
+#17 58.89    Compiling local-channel v0.1.5
+#17 59.10    Compiling webpki-roots v1.0.7
+#17 59.34    Compiling socket2 v0.5.10
+#17 59.46    Compiling encoding_rs v0.8.35
+#17 60.40    Compiling language-tags v0.3.2
+#17 60.76    Compiling parking v2.2.1
+#17 60.90    Compiling httpdate v1.0.3
+#17 61.09    Compiling lazy_static v1.5.0
+#17 61.20    Compiling tower-service v0.3.3
+#17 61.31    Compiling mime v0.3.17
+#17 61.45    Compiling rustix v1.1.4
+#17 62.13    Compiling crc-catalog v2.5.0
+#17 62.26    Compiling bumpalo v3.20.3
+#17 62.59    Compiling try-lock v0.2.5
+#17 62.70    Compiling want v0.3.1
+#17 62.72    Compiling wasm-bindgen-macro-support v0.2.122
+#17 62.93    Compiling crc v3.4.0
+#17 63.29    Compiling event-listener v5.4.1
+#17 63.40    Compiling actix-server v2.6.0
+#17 64.42    Compiling wasm-bindgen v0.2.122
+#17 65.18    Compiling webpki-roots v0.26.11
+#17 65.32    Compiling rand v0.8.6
+#17 66.61    Compiling darling_macro v0.20.11
+#17 68.00    Compiling rand_chacha v0.9.0
+#17 68.06    Compiling actix-web-codegen v4.3.0
+#17 69.88    Compiling hashlink v0.10.0
+#17 70.55    Compiling unicode-normalization v0.1.25
+#17 70.86    Compiling sha2 v0.10.9
+#17 70.86    Compiling tokio-stream v0.1.18
+#17 71.87    Compiling crossbeam-queue v0.3.12
+#17 72.05    Compiling opentelemetry v0.32.0
+#17 72.25    Compiling futures-intrusive v0.5.0
+#17 73.12    Compiling either v1.16.0
+#17 73.29    Compiling uuid v1.23.2
+#17 73.52    Compiling hmac v0.12.1
+#17 73.60    Compiling sync_wrapper v1.0.2
+#17 73.74    Compiling atomic-waker v1.1.2
+#17 73.86    Compiling linux-raw-sys v0.12.1
+#17 73.94    Compiling tower-layer v0.3.3
+#17 74.10    Compiling unicode-properties v0.1.4
+#17 74.38    Compiling impl-more v0.1.9
+#17 74.38    Compiling unicode-bidi v0.3.18
+#17 74.47    Compiling tower v0.5.3
+#17 74.83    Compiling hyper v1.10.1
+#17 75.93    Compiling stringprep v0.1.5
+#17 76.95    Compiling hkdf v0.12.4
+#17 77.14    Compiling wasm-bindgen-macro v0.2.122
+#17 77.44    Compiling rand v0.9.4
+#17 78.54    Compiling darling v0.20.11
+#17 78.64    Compiling sharded-slab v0.1.7
+#17 78.65    Compiling futures-executor v0.3.32
+#17 79.02    Compiling sqlx-core v0.8.6
+#17 79.37    Compiling atoi v2.0.0
+#17 79.76    Compiling md-5 v0.10.6
+#17 80.00    Compiling tracing-log v0.2.0
+#17 80.12    Compiling thread_local v1.1.9
+#17 80.62    Compiling whoami v1.6.1
+#17 80.76    Compiling dotenvy v0.15.7
+#17 80.89    Compiling nu-ansi-term v0.50.3
+#17 81.09    Compiling parse-size v1.1.0
+#17 81.27    Compiling convert_case v0.4.0
+#17 81.30    Compiling base64ct v1.8.3
+#17 81.35    Compiling ipnet v2.12.0
+#17 81.68    Compiling fastrand v2.4.1
+#17 82.00    Compiling byteorder v1.5.0
+#17 82.13    Compiling hex v0.4.3
+#17 82.17    Compiling home v0.5.12
+#17 82.30    Compiling tempfile v3.27.0
+#17 82.38    Compiling hyper-util v0.1.20
+#17 82.49    Compiling derive_more v0.99.20
+#17 82.77    Compiling password-hash v0.5.0
+#17 83.23    Compiling tracing-subscriber v0.3.23
+#17 83.61    Compiling actix-multipart-derive v0.7.0
+#17 84.22    Compiling opentelemetry_sdk v0.32.1
+#17 85.48    Compiling sqlx-postgres v0.8.6
+#17 88.58    Compiling tower-http v0.6.11
+#17 89.69    Compiling http-body-util v0.1.3
+#17 89.96    Compiling serde_plain v1.0.2
+#17 90.10    Compiling blake2 v0.10.6
+#17 90.37    Compiling reqwest v0.12.28
+#17 90.39    Compiling tracing-opentelemetry v0.33.0
+#17 91.06    Compiling argon2 v0.5.3
+#17 92.02    Compiling sakina-fatwa-policy-gate v0.1.0 (/app/sakina-wasm/fatwa-policy-gate)
+#17 92.57    Compiling sanitize-filename v0.5.0
+#17 93.08    Compiling opentelemetry-stdout v0.32.0
+#17 99.96    Compiling sqlx v0.8.6
+#17 106.7    Compiling zstd v0.13.3
+#17 107.1    Compiling actix-http v3.12.1
+#17 111.9    Compiling actix-web v4.13.0
+#17 117.2    Compiling actix-cors v0.7.1
+#17 117.2    Compiling actix-multipart v0.7.2
+#17 118.1    Compiling sakina-backend v1.0.0 (/app/sakina-backend)
+#17 314.2     Finished `release` profile [optimized] target(s) in 5m 13s
+#17 DONE 314.3s
+
+#18 [stage-1 3/4] RUN groupadd --system sakina && useradd --system --gid sakina --home-dir /nonexistent --shell /usr/sbin/nologin sakina
+#18 CACHED
+
+#19 [stage-1 2/4] RUN apt-get update && apt-get install -y --no-install-recommends libpq5 ca-certificates tesseract-ocr && rm -rf /var/lib/apt/lists/*
+#19 CACHED
+
+#20 [stage-1 4/4] COPY --from=builder /app/sakina-backend/target/release/sakina-api /usr/local/bin/
+#20 CACHED
+
+#21 exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:81eb751f1e48ad90ef1b6398a9e619ad50c0ca95cfea8616bdd83905f8b8e159 done
+#21 exporting config sha256:efd63865f5cc6c2536abdaf4f97fb8d075ef8fb87c6d5317eeda8c82eaab2350 done
+#21 exporting attestation manifest sha256:4fa05e54d87169439684a0c115a12cdae045e4b38186b138e3125c0a22539f0f 0.0s done
+#21 exporting manifest list sha256:f6785ea3dc1949555e73432c2629d9269123104182052a7caaec2e35990fada5 0.0s done
+#21 naming to docker.io/library/sakina-backend-api:multimodal-ocr-proof done
+#21 unpacking to docker.io/library/sakina-backend-api:multimodal-ocr-proof 0.0s done
+#21 DONE 0.2s

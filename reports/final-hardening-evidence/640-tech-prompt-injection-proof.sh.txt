@@ -1,0 +1,302 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.62s
+{
+  "request_id": "8aa015c6-5c39-4180-975a-75a5ac8334e8",
+  "selected_agent": "General Chat Agent",
+  "selected_model": "lite_llm",
+  "selected_pipeline": "mother_brain>cached_or_cached_rag>evaluation",
+  "source_strategy": "cache_or_lightweight",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.62,
+  "rag_required": false,
+  "wasm_required": false,
+  "evaluation_required": true,
+  "scholar_review_required": false,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "General Chat Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "cache_or_lightweight"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=792;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "not_required"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "cc611189-d054-4dc8-8070-f806906f7f20"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+{
+  "request_id": "150f5988-b1a8-44d0-a522-d0265ad63d2c",
+  "selected_agent": "Safety/Escalation Agent",
+  "selected_model": "safety_agent",
+  "selected_pipeline": "mother_brain>safety_gate>human_escalation",
+  "source_strategy": "safety_only",
+  "language": "en",
+  "risk_level": "critical",
+  "confidence": 0.84,
+  "rag_required": false,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": false,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "critical"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "blocked"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Safety/Escalation Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "safety_only"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=845;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "not_required"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_blocked"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "FAIL:0.12"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "safety policy requires escalation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "86d42d3b-aa2e-4ce6-86c3-572c45865513"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "blocked"
+    }
+  ]
+}
+{
+  "request_id": "3e0eb114-2f8b-400d-96f2-b8532ad837ed",
+  "selected_agent": "Safety/Escalation Agent",
+  "selected_model": "safety_agent",
+  "selected_pipeline": "mother_brain>safety_gate>human_escalation",
+  "source_strategy": "safety_only",
+  "language": "en",
+  "risk_level": "critical",
+  "confidence": 0.84,
+  "rag_required": false,
+  "wasm_required": true,
+  "evaluation_required": true,
+  "scholar_review_required": true,
+  "can_generate": false,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "critical"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "blocked"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Safety/Escalation Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "safety_only"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=782;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "not_required"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_blocked"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "FAIL:0.12"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "safety policy requires escalation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "54523dcf-30e1-4d49-92d1-ff08f18232f3"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "blocked"
+    }
+  ]
+}
+sakina-backend/src/services/ai_router.rs:176:            detects_prompt_injection(message, request.safety_context.as_ref());
+sakina-backend/src/services/ai_router.rs:366:                    step: "prompt_injection_guard".to_string(),
+sakina-backend/src/services/ai_router.rs:425:    if detects_prompt_injection_text(&text) {
+sakina-backend/src/services/ai_router.rs:456:fn detects_prompt_injection(message: &str, safety_context: Option<&serde_json::Value>) -> bool {
+sakina-backend/src/services/ai_router.rs:462:    detects_prompt_injection_text(&text)
+sakina-backend/src/services/ai_router.rs:465:fn detects_prompt_injection_text(text: &str) -> bool {
+sakina-backend/src/services/ai_router.rs:469:            "ignore previous instructions",
+sakina-backend/src/services/ai_router.rs:482:            "fabricate citation",
+sakina-backend/src/services/ai_router.rs:485:            "disable guardrails",
+PROMPT_INJECTION_OK Brain prompt-injection guard blocks jailbreak and malicious retrieved-source instructions while allowing a safe control prompt.

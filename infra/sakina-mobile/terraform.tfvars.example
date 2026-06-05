@@ -1,0 +1,8 @@
+location             = "uksouth"
+resource_group_name  = "rg-sakina-mobile-staging-uksouth"
+aks_name             = "aks-sakina-mobile-staging"
+acr_name             = "acrsakinamobilestg"
+postgres_name        = "pg-sakina-mobile-staging"
+redis_name           = "redis-sakina-mobile-staging"
+storage_account_name = "stsakinamobilestg"
+key_vault_name       = "kv-sakina-mobile-stg"

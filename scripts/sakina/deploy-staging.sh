@@ -10,7 +10,11 @@ if ! command -v kubectl >/dev/null 2>&1; then
   exit 1
 fi
 
-ACTIVE_CONTEXT="$(kubectl config current-context 2>/dev/null || true)"
+if kubectl config current-context >/tmp/sakina-active-kube-context.txt 2>/tmp/sakina-active-kube-context.err; then
+  ACTIVE_CONTEXT="$(cat /tmp/sakina-active-kube-context.txt)"
+else
+  ACTIVE_CONTEXT=""
+fi
 if [[ -z "${ACTIVE_CONTEXT}" ]]; then
   echo "Unable to read current kube context" >&2
   exit 1

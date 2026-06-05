@@ -36,6 +36,14 @@ impl ApiError {
         }
     }
 
+    pub fn conflict(message: impl Into<String>) -> Self {
+        Self {
+            code: "conflict",
+            message: message.into(),
+            status: StatusCode::CONFLICT,
+        }
+    }
+
     pub fn not_found(message: impl Into<String>) -> Self {
         Self {
             code: "not_found",

@@ -1,0 +1,20 @@
+2026-06-05T05:08:09+01:00	INFO	[misconfig] Misconfiguration scanning is enabled
+2026-06-05T05:08:09+01:00	INFO	[checks-client] Using existing checks from cache	path="/home/kalshafee/.cache/trivy/policy/content"
+2026-06-05T05:08:10+01:00	INFO	[secret] Secret scanning is enabled
+2026-06-05T05:08:10+01:00	INFO	[secret] If your scanning is slow, please try '--scanners misconfig' to disable secret scanning
+2026-06-05T05:08:10+01:00	INFO	[secret] Please see https://trivy.dev/docs/v0.71/guide/scanner/secret#recommendation for faster secret detection
+2026-06-05T05:08:11+01:00	INFO	Detected OS	family="debian" version="12.14"
+2026-06-05T05:08:11+01:00	INFO	Number of language-specific files	num=0
+2026-06-05T05:08:11+01:00	INFO	Detected config files	num=0
+
+Report Summary
+
+┌──────────────────────────────────────────────────┬────────┬─────────┬───────────────────┐
+│                      Target                      │  Type  │ Secrets │ Misconfigurations │
+├──────────────────────────────────────────────────┼────────┼─────────┼───────────────────┤
+│ sakina-backend-api:sast-sca-proof (debian 12.14) │ debian │    -    │         -         │
+└──────────────────────────────────────────────────┴────────┴─────────┴───────────────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+

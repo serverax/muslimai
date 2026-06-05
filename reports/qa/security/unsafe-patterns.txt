@@ -1,0 +1,340 @@
+./.gitleaks.toml:2:description = "Allow known non-secret placeholders in docs"
+./aia-factory-api/src/routes/rag.js:16:    notImplemented(res, "RAG route stub installed; retrieval is not yet implemented here.");
+./CLAUDE-CODE-APP-STORE-COMPLIANCE-ORDER.md:808:- [ ] No placeholder content
+./CLAUDE-CODE-COMPLETE-ORDER.md:357:        .expect("Failed to connect to database");
+./CLAUDE-CODE-COMPLETE-ORDER.md:492:    // TODO: Insert into database
+./CLAUDE-CODE-COMPLETE-ORDER.md:507:        "message": "User handler stub"
+./CLAUDE-CODE-COMPLETE-ORDER.md:951:    // TODO: Call API
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:55:        // TODO: Call vLLM on /v1/completions with prompt:
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:62:        // For now, return stub that matches test expectations
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:77:**Test:** `cargo test` passes (uses stub until vLLM available)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:114:        // TODO: Search Qdrant for similar chunks
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:125:        // For now, return stub (passed=true, high confidence)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:174:        // TODO: For each chunk_id:
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:181:        // For now, return stub citations
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:479:        let title = path.file_name().unwrap().to_string_lossy().to_string();
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:558:**Test:** `cargo test` passes (mocked vLLM)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:935:**Test:** `flutter test` includes Sync tests (mocked API)
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1037:    // TODO: Get from SharedPreferences or auth provider
+./CLAUDE-CODE-MASTER-EXECUTION-ORDER.md:1120:**Test:** `flutter test` includes API service tests (mocked)
+./DECISION-POINT-CORRECTED-RECORD.md:34:    expect(find.text('Project Sakina'), findsOneWidget);
+./DECISION-POINT-CORRECTED-RECORD.md:35:    expect(find.byType(TextField), findsOneWidget);
+./DECISION-POINT-CORRECTED-RECORD.md:36:    expect(find.byIcon(Icons.send), findsOneWidget);
+./DECISION-POINT-CORRECTED-RECORD.md:46:    expect(find.text('Assalamu alaikum'), findsOneWidget);
+./docs/sakina-mobile-rag-plan.md:21:- Integration smoke test against mock corpus in CI.
+./docs/sakina-mobile-ui-ux-spec.md:44:- Avoid dead ends: every placeholder must include explain-why and next-step CTA.
+./docs/sakina-phase25-ui-implementation-backlog.md:11:| Chat production UX hardening | As a user, I want clear chat states for loading, retry, and citation validity. | `lib/screens/chat_screen.dart`, `lib/widgets/citation_widget.dart` | `/chat/*`, `/rag/query`, feedback/report endpoints | `chat_threads`, `chat_messages`, RAG tables | Widget + API-mock tests for malformed citations, fallback message, feedback/report success | M |
+./docs/sakina-phase25-ui-implementation-backlog.md:29:| Prayer times and calendar screen | As a user, I want daily prayer schedule and calendar context. | `lib/screens/prayer_times_screen.dart` (new) | New prayer-times/calendar APIs required | New prayer/calendar schema required | Failsafe UI test with mocked API and timezone variations | L |
+./infra/sakina-mobile/k8s-staging/22d-rag-smoke-job.yaml:24:              grep -q '"embedding_route": "local-placeholder"' /tmp/retrieval_health.json
+./infra/sakina-mobile/k8s-staging/22d-rag.yaml:38:          self._send(200, {"status": "ok", "service": "retrieval", "embedding_route": "local-placeholder"})
+./infra/sakina-mobile/k8s-staging/22d-rag.yaml:64:          "embedding_route": "local-placeholder",
+./PROJECT-SAKINA-STATUS-REPORT.md:18:│   ├── handlers/mod.rs      ✅ Created with stubs
+./PROJECT-SAKINA-STATUS-REPORT.md:19:│   ├── services/mod.rs      ✅ Created with 4 stub modules:
+./PROJECT-SAKINA-STATUS-REPORT.md:162:    expect(find.text('Project Sakina'), findsOneWidget);
+./PROJECT-SAKINA-STATUS-REPORT.md:163:    expect(find.byType(TextField), findsOneWidget);
+./PROJECT-SAKINA-STATUS-REPORT.md:164:    expect(find.byIcon(Icons.send), findsOneWidget);
+./PROJECT-SAKINA-STATUS-REPORT.md:172:    expect(find.text('Assalamu alaikum'), findsOneWidget);
+./PROJECT-SAKINA-STATUS-REPORT.md:444:  ✅ Handlers: Complete (stubs for API endpoints)
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2_rollback_procedure.md:10:A single generic `DROP ...` rollback SQL would be unsafe because many objects may pre-exist in shared environments and cannot be reliably distinguished from pre-migration state without a baseline snapshot.
+./sakina-backend/src/error.rs:109:        let body = to_bytes(response.into_body()).await.expect("response body");
+./sakina-backend/src/error.rs:110:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/chat.rs:254:            .expect("create sakina_ai schema");
+./sakina-backend/src/handlers/chat.rs:269:        .expect("create conversations table");
+./sakina-backend/src/handlers/chat.rs:284:        .expect("create messages table");
+./sakina-backend/src/handlers/chat.rs:304:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/chat.rs:305:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/chat.rs:310:    async fn add_message_persists_user_message_without_assistant_placeholder() {
+./sakina-backend/src/handlers/chat.rs:323:        .expect("insert conversation");
+./sakina-backend/src/handlers/chat.rs:334:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/chat.rs:335:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/chat.rs:345:        .expect("count messages");
+./sakina-backend/src/handlers/chat.rs:364:        .expect("insert conversation");
+./sakina-backend/src/handlers/chat.rs:373:        .expect("insert message");
+./sakina-backend/src/handlers/chat.rs:378:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/chat.rs:379:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/chat.rs:387:            .expect("lazy pool");
+./sakina-backend/src/handlers/chat.rs:402:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/chat.rs:403:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/chat.rs:411:            .expect("lazy pool");
+./sakina-backend/src/handlers/chat.rs:421:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/chat.rs:422:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:348:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:353:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/modules.rs:354:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:362:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:367:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/modules.rs:368:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:375:    async fn entitlement_bypass_with_free_tier_is_blocked() {
+./sakina-backend/src/handlers/modules.rs:376:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:388:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:395:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/modules.rs:396:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:404:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:411:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/modules.rs:412:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:420:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:427:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/modules.rs:428:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:436:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:443:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/modules.rs:444:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:470:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/modules.rs:531:            .expect("modules body");
+./sakina-backend/src/handlers/modules.rs:532:        let modules_text = String::from_utf8(modules_body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/modules.rs:537:        let quran_body = to_bytes(v1_quran.into_body()).await.expect("quran body");
+./sakina-backend/src/handlers/modules.rs:538:        let quran_text = String::from_utf8(quran_body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/ops.rs:42:            .expect("lazy pool");
+./sakina-backend/src/handlers/ops.rs:45:        let body = to_bytes(response.into_body()).await.expect("metrics body");
+./sakina-backend/src/handlers/ops.rs:46:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/phase2.rs:400:            .expect("user id string")
+./sakina-backend/src/handlers/phase2.rs:452:        let user_id = register_body["user_id"].as_str().expect("user id string");
+./sakina-backend/src/handlers/phase2.rs:535:        let user_id = register_body["user_id"].as_str().expect("user id string");
+./sakina-backend/src/handlers/phase2.rs:621:        let user_id = register_body["user_id"].as_str().expect("user id string");
+./sakina-backend/src/handlers/phase2.rs:722:        let conversation_id = conversation_body["id"].as_str().expect("conversation id");
+./sakina-backend/src/handlers/phase2.rs:736:        let message_id = add_message_body["user_message_id"].as_str().expect("message id");
+./sakina-backend/src/handlers/phase2.rs:782:        .expect("insert approved source");
+./sakina-backend/src/handlers/phase2.rs:796:        .expect("insert approved document");
+./sakina-backend/src/handlers/phase2.rs:810:        .expect("insert approved chunk");
+./sakina-backend/src/handlers/phase2.rs:824:            .expect("approved sources array");
+./sakina-backend/src/handlers/phase2.rs:848:        let retrieval_audit_id = retrieval_body["id"].as_str().expect("retrieval id");
+./sakina-backend/src/handlers/phase2.rs:916:        let mastermind_decision_id = mastermind_body["id"].as_str().expect("mastermind id");
+./sakina-backend/src/handlers/phase2.rs:934:        let scholar_review_queue_id = queue_body["id"].as_str().expect("queue id");
+./sakina-backend/src/handlers/phase2.rs:985:        let scholar_account_id = scholar_body["id"].as_str().expect("scholar id");
+./sakina-backend/src/handlers/phase2.rs:1095:        let user_id = register_body["user_id"].as_str().expect("user id string");
+./sakina-backend/src/handlers/phase2.rs:1113:        let template_id = template_body["id"].as_str().expect("template id");
+./sakina-backend/src/handlers/phase2.rs:1135:            .expect("notification id");
+./sakina-backend/src/handlers/phase2.rs:1142:        .expect("count delivery attempts");
+./sakina-backend/src/handlers/phase2.rs:1176:        let ticket_id = ticket_body["ticket_id"].as_str().expect("ticket id");
+./sakina-backend/src/handlers/phase2.rs:1204:            .expect("messages array")
+./sakina-backend/src/handlers/rag.rs:291:    let feature_flag = module_feature_flag(&module).expect("module validated");
+./sakina-backend/src/handlers/rag.rs:292:    let rag_flag = module_rag_flag(&module).expect("module validated");
+./sakina-backend/src/handlers/rag.rs:349:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env lock");
+./sakina-backend/src/handlers/rag.rs:353:            .expect("lazy pool");
+./sakina-backend/src/handlers/rag.rs:373:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env lock");
+./sakina-backend/src/handlers/rag.rs:377:            .expect("lazy pool");
+./sakina-backend/src/handlers/rag.rs:416:            .expect("lazy pool");
+./sakina-backend/src/handlers/rag.rs:428:        let body = to_bytes(response.into_body()).await.expect("body");
+./sakina-backend/src/handlers/rag.rs:429:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/user.rs:23:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/user.rs:31:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/handlers/waitlist.rs:45:            .expect("waitlist rate limiter lock poisoned");
+./sakina-backend/src/handlers/waitlist.rs:200:            .expect("create waitlist schema");
+./sakina-backend/src/handlers/waitlist.rs:217:            .expect("create waitlist table");
+./sakina-backend/src/handlers/waitlist.rs:231:            .expect("lazy pool");
+./sakina-backend/src/handlers/waitlist.rs:247:        let body = to_bytes(response.into_body()).await.expect("body bytes");
+./sakina-backend/src/handlers/waitlist.rs:248:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/handlers/waitlist.rs:303:        .expect("fetch inserted row");
+./sakina-backend/src/handlers/waitlist.rs:313:            .expect("lazy pool");
+./sakina-backend/src/handlers/waitlist.rs:329:        let body = to_bytes(response.into_body()).await.expect("body bytes");
+./sakina-backend/src/handlers/waitlist.rs:330:        let text = String::from_utf8(body.to_vec()).expect("utf8");
+./sakina-backend/src/main.rs:178:        .expect("Failed to connect to database");
+./sakina-backend/src/main.rs:590:            .expect("lazy pool");
+./sakina-backend/src/main.rs:736:            .expect("metrics body");
+./sakina-backend/src/main.rs:737:        let metrics_text = String::from_utf8(metrics_body.to_vec()).expect("utf8");
+./sakina-backend/src/main.rs:780:            .expect("waitlist bad request body");
+./sakina-backend/src/main.rs:781:        let waitlist_bad_text = String::from_utf8(waitlist_bad_body.to_vec()).expect("utf8");
+./sakina-backend/src/main.rs:798:            .expect("json parse error body");
+./sakina-backend/src/main.rs:799:        let parse_text = String::from_utf8(parse_body.to_vec()).expect("utf8");
+./sakina-backend/src/routes/rag.js:16:    notImplemented(res, "RAG route stub installed; retrieval is not yet implemented here.");
+./sakina-backend/src/services/decision_algorithm.rs:328:            *self.calls.lock().expect("calls lock") += 1;
+./sakina-backend/src/services/decision_algorithm.rs:339:            *self.calls.lock().expect("calls lock") += 1;
+./sakina-backend/src/services/decision_algorithm.rs:375:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:387:        assert_eq!(*retriever.calls.lock().expect("calls lock"), 0);
+./sakina-backend/src/services/decision_algorithm.rs:388:        assert_eq!(*formatter.calls.lock().expect("calls lock"), 0);
+./sakina-backend/src/services/decision_algorithm.rs:394:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:406:        assert_eq!(*retriever.calls.lock().expect("calls lock"), 0);
+./sakina-backend/src/services/decision_algorithm.rs:412:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:428:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:450:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:471:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:493:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:504:        assert_eq!(*formatter.calls.lock().expect("calls lock"), 0);
+./sakina-backend/src/services/decision_algorithm.rs:510:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/decision_algorithm.rs:533:        let _guard = crate::TEST_ENV_LOCK.lock().expect("env test lock");
+./sakina-backend/src/services/embeddings.rs:103:        let json = serde_json::to_string(&req).unwrap();
+./sakina-backend/src/services/guardrails.rs:3://! Step 2 (Phase 1): threshold logic + a stubbed `check()`. The real path will
+./sakina-backend/src/services/guardrails.rs:50:    /// TODO: search Qdrant over `query_embedding`, take the top score, then call
+./sakina-backend/src/services/ingestion_producer.rs:69:            // TODO: embed via vLLM + upsert to Qdrant. For now enqueue for sync.
+./sakina-backend/src/services/ingestion_producer.rs:84:/// Placeholder content hash (non-cryptographic). TODO: real SHA-256 once sqlx is
+./sakina-backend/src/services/semantic_router.rs:4://! Step 1 (Phase 1): stub classifier that returns FiqhQuery. The real path will
+./sakina-backend/src/services/semantic_router.rs:36:    /// TODO: call vLLM `/v1/completions` with a classification prompt and parse
+./sakina-backend/src/services/semantic_router.rs:37:    /// the intent + confidence from the response. For now this returns a stub
+./sakina-backend/src/services/semantic_router.rs:57:    async fn classify_returns_fiqh_stub() {
+./sakina-backend/src/services/semantic_router.rs:62:            .unwrap();
+./sakina-backend/tests/phase21_iman_journey_contract.rs:36:    .expect("insert test user")
+./sakina-backend/tests/phase21_iman_journey_contract.rs:111:            .expect("evidence bundle")
+./sakina-backend/tests/phase21_iman_journey_contract.rs:143:        dua_json["items"].as_array().expect("dua items").len(),
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:357:        .expect("Failed to connect to database");
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:492:    // TODO: Insert into database
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:507:        "message": "User handler stub"
+./sakina-docs/CLAUDE-CODE-COMPLETE-ORDER.md:951:    // TODO: Call API
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:5:Audit intent: mobile-first truth audit, no fake features, no production changes.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:43:## 3) What is fake/mock/stub
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:45:- Flutter chat UI is local-only (`TODO: Call API`) and **not wired** to backend.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:46:- `/v1/classify` behavior is currently stub-like (`FiqhQuery` fixed response path).
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:48:- RAG path has placeholder elements and failed with live dependency error (`localhost:8000` embeddings target).
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:53:Note: mocks are acceptable in tests; user-visible production paths above are currently not acceptable for “full product” claims.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:70:- In currently live runtime during audit, user endpoints still behaved as stubs rather than consistent 501-disabled contract.
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:103:   - no fake success responses
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:132:1. Real RAG + model chain in production (no static/stub answers)
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:158:Dashboard real data | 3 | STUB | Partial | No | No | stub/sample endpoints and static cards | Build real dashboard data contracts
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:161:AI guidance chat | 6 | STUB | Partial | No | No | RAG 500 + chat UI TODO | Wire real model/RAG + mobile UI
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:166:No-fake policy enforcement | All | PARTIAL | Partial | Partial | Partial | stubs still visible in some paths | Hide/disable incomplete surfaces
+./sakina-docs/MOBILE_E2E_FUNCTIONALITY_AUDIT_2026-05-27.md:174:To move forward safely, ship by phases with strict no-fake enforcement: incomplete features must be hidden, disabled, or return 501.
+./sakina-docs/PHASE_21_22_IMPLEMENTATION_CHECKLIST_PLAN.md:4:Scope: planning artifacts only; no deployment, no implementation code, no placeholder claims.
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:24:- Replaced non-chat tabs with placeholder-only status screen (no content screens):
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:26:  - `sakina-frontend/lib/screens/module_status_placeholder_screen.dart`
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:64:Message insert returns only this honest placeholder:
+./sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md:77:- Non-chat modules render placeholder states only (no content screens).
+./sakina-docs/QA_SECURITY_FIX_STATUS_2026-05-27.md:49:| Remove production-looking stubs | **FIXED** | Stub success responses removed; replaced with explicit disabled responses. |
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:10:1. No fake production behavior:
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:11:   - no mock AI answers
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:13:   - no fake dashboard data
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:14:   - no fake login/profile/subscription
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:36:  - release incomplete modules as hidden/disabled (not fake)
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:79:- no demo/mock text in user-facing production build
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:122:- no fake dashboard cards
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:123:- no fake stats/recommendations
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:180:- FE-P6-003: unsafe/uncertain fallback UX
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:190:- no fake AI success
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:224:- FE-P8-003: upgrade prompts (no fake checkout completion)
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:233:- no client-only bypassable gating
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:519:- No fake PASS: Phase 22 cannot be marked PASS until all contracts, data paths, evidence safeguards, privacy gates, and tests are genuinely implemented and verified.
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:549:5. Phase 6 architecture spike in parallel (to avoid fake-chat trap)
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:558:- FE-P2-001 design stub screens hidden behind feature flag until backend ready
+./sakina-docs/SAKINA_MOBILE_PHASED_DELIVERY_PLAN_2026-05-27.md:575:- No fake functionality reaches production.
+./sakina-docs/TROUBLESHOOTING.md:36:Real RAG needs three live services that are **not** stubbed anymore:
+./sakina-frontend/lib/app/app_strings.dart:42:      AppLanguage.english: 'Verified guidance, no fake confidence',
+./sakina-frontend/pubspec.lock:172:  fake_async:
+./sakina-frontend/pubspec.lock:175:      name: fake_async
+./sakina-frontend/test/api_service_test.dart:10:    final mock = MockClient((req) async => http.Response(
+./sakina-frontend/test/api_service_test.dart:29:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:32:    expect(r.answer, 'Response to: x');
+./sakina-frontend/test/api_service_test.dart:33:    expect(r.sources.single.title, 'Sahih al-Bukhari');
+./sakina-frontend/test/api_service_test.dart:34:    expect(r.sources.single.authenticityGrade, 'Sahih');
+./sakina-frontend/test/api_service_test.dart:35:    expect(r.confidence, 0.92);
+./sakina-frontend/test/api_service_test.dart:36:    expect(r.guardrailTriggered, isFalse);
+./sakina-frontend/test/api_service_test.dart:40:    final mock = MockClient((_) async => http.Response(
+./sakina-frontend/test/api_service_test.dart:50:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:52:    expect(response.answer, isEmpty);
+./sakina-frontend/test/api_service_test.dart:53:    expect(response.sources, isEmpty);
+./sakina-frontend/test/api_service_test.dart:54:    expect(response.guardrailTriggered, isTrue);
+./sakina-frontend/test/api_service_test.dart:58:    final mock = MockClient((req) async => http.Response(
+./sakina-frontend/test/api_service_test.dart:66:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:69:    expect(c.intent, 'FiqhQuery');
+./sakina-frontend/test/api_service_test.dart:70:    expect(c.confidence, 0.95);
+./sakina-frontend/test/api_service_test.dart:71:    expect(c.routingDecision, 'RAG');
+./sakina-frontend/test/api_service_test.dart:75:    final mock = MockClient((req) async => http.Response('boom', 500));
+./sakina-frontend/test/api_service_test.dart:76:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:77:    expect(() => api.classify('q'), throwsA(isA<ApiException>()));
+./sakina-frontend/test/api_service_test.dart:81:    final mock = MockClient((_) async => http.Response(
+./sakina-frontend/test/api_service_test.dart:90:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:95:      expect(e.statusCode, 402);
+./sakina-frontend/test/api_service_test.dart:96:      expect(e.errorCode, 'subscription_required');
+./sakina-frontend/test/api_service_test.dart:101:    final mock = MockClient((_) async => http.Response(
+./sakina-frontend/test/api_service_test.dart:108:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:109:    expect(
+./sakina-frontend/test/api_service_test.dart:121:    final mock = MockClient((request) async {
+./sakina-frontend/test/api_service_test.dart:173:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:229:    expect(support.messages, isNotEmpty);
+./sakina-frontend/test/api_service_test.dart:230:    expect(
+./sakina-frontend/test/api_service_test.dart:251:    final mock = MockClient((req) async {
+./sakina-frontend/test/api_service_test.dart:255:    final api = ApiService(baseUrl: 'http://test', client: mock);
+./sakina-frontend/test/api_service_test.dart:265:    expect(captured.url.toString(), 'http://test/v1/waitlist');
+./sakina-frontend/test/api_service_test.dart:267:    expect(body['name'], 'Sakina User');
+./sakina-frontend/test/api_service_test.dart:268:    expect(body['email'], 'waitlist@example.com');
+./sakina-frontend/test/api_service_test.dart:269:    expect(body['preferred_language'], 'en');
+./sakina-frontend/test/api_service_test.dart:270:    expect(body['platform'], 'web');
+./sakina-frontend/test/citation_widget_test.dart:21:    expect(find.text('Sahih al-Bukhari'), findsOneWidget);
+./sakina-frontend/test/citation_widget_test.dart:22:    expect(find.text('by al-Bukhari'), findsOneWidget);
+./sakina-frontend/test/citation_widget_test.dart:28:    expect(find.text('Book of Faith'), findsOneWidget);
+./sakina-frontend/test/citation_widget_test.dart:29:    expect(find.text('Sahih'), findsOneWidget);
+./sakina-frontend/test/citation_widget_test.dart:30:    expect(find.text('Close'), findsOneWidget);
+./sakina-frontend/test/iman_journey_screen_test.dart:88:    expect(find.text('Today\'s Iman Focus'), findsOneWidget);
+./sakina-frontend/test/iman_journey_screen_test.dart:94:    expect(find.textContaining('Verified evidence is not available'), findsOneWidget);
+./sakina-frontend/test/iman_journey_screen_test.dart:95:    expect(find.text('Save Privacy'), findsOneWidget);
+./sakina-frontend/test/iman_journey_screen_test.dart:119:    expect(api.privacy.remindersEnabled, isFalse);
+./sakina-frontend/test/iman_journey_screen_test.dart:131:    expect(find.textContaining('Grant me steadfastness'), findsOneWidget);
+./sakina-frontend/test/local_db_test.dart:17:    expect(restored.id, 'abc');
+./sakina-frontend/test/local_db_test.dart:18:    expect(restored.content, 'Assalamu alaikum');
+./sakina-frontend/test/local_db_test.dart:19:    expect(restored.role, 'user');
+./sakina-frontend/test/local_db_test.dart:20:    expect(restored.timestamp, 1700000000);
+./sakina-frontend/test/local_db_test.dart:21:    expect(restored.sources, isNull);
+./sakina-frontend/test/local_db_test.dart:22:    expect(restored.createdAt, 1700000001);
+./sakina-frontend/test/module_read_only_state_screen_test.dart:23:    expect(
+./sakina-frontend/test/module_read_only_state_screen_test.dart:57:    expect(find.textContaining('consult a qualified scholar'), findsOneWidget);
+./sakina-frontend/test/module_read_only_state_screen_test.dart:91:    expect(find.textContaining('consult a qualified scholar'), findsOneWidget);
+./sakina-frontend/test/module_read_only_state_screen_test.dart:133:    expect(find.text('Verified Source'), findsOneWidget);
+./sakina-frontend/test/module_read_only_state_screen_test.dart:134:    expect(find.textContaining('1:1'), findsOneWidget);
+./sakina-frontend/test/module_read_only_state_screen_test.dart:135:    expect(find.textContaining('review: verified'), findsOneWidget);
+./sakina-frontend/test/module_service_test.dart:108:    final fakeClient = FakeModuleApiClient();
+./sakina-frontend/test/module_service_test.dart:110:      apiClient: fakeClient,
+./sakina-frontend/test/module_service_test.dart:125:    expect(q.state, ModuleAccessState.featureDisabled);
+./sakina-frontend/test/module_service_test.dart:126:    expect(p.state, ModuleAccessState.featureDisabled);
+./sakina-frontend/test/module_service_test.dart:127:    expect(k.state, ModuleAccessState.featureDisabled);
+./sakina-frontend/test/module_service_test.dart:128:    expect(c.state, ModuleAccessState.featureDisabled);
+./sakina-frontend/test/module_service_test.dart:129:    expect(fakeClient.calls, 0);
+./sakina-frontend/test/module_service_test.dart:133:    final fakeClient = FakeModuleApiClient();
+./sakina-frontend/test/module_service_test.dart:135:      apiClient: fakeClient,
+./sakina-frontend/test/module_service_test.dart:146:    expect(result.state, ModuleAccessState.subscriptionRequired);
+./sakina-frontend/test/module_service_test.dart:147:    expect(fakeClient.calls, 0);
+./sakina-frontend/test/module_service_test.dart:152:    final mock = MockClient((request) async {
+./sakina-frontend/test/module_service_test.dart:173:    final client = ModuleApiClient(baseUrl: 'http://test/v1', client: mock);
+./sakina-frontend/test/module_service_test.dart:186:    expect(captured.toString(), 'http://test/v1/modules/quran/overview');
+./sakina-frontend/test/module_service_test.dart:187:    expect(result.state, ModuleAccessState.requiresReview);
+./sakina-frontend/test/module_service_test.dart:188:    expect(result.overview?.provenance, isEmpty);
+./sakina-frontend/test/module_service_test.dart:189:    expect(result.overview?.rag.verifiedSourceCount, 4);
+./sakina-frontend/test/module_service_test.dart:193:    final mock = MockClient((_) async {
+./sakina-frontend/test/module_service_test.dart:204:    final client = ModuleApiClient(baseUrl: 'http://test/v1', client: mock);
+./sakina-frontend/test/module_service_test.dart:205:    expect(
+./sakina-frontend/test/module_service_test.dart:240:    expect(dto.safetyStatus, ModuleSafetyStatus.requiresReview);
+./sakina-frontend/test/module_service_test.dart:241:    expect(dto.provenance.single.sourceName, 'Ibn Kathir');
+./sakina-frontend/test/module_service_test.dart:267:    expect(dto.provenance.single.sourceType, 'calculation');
+./sakina-frontend/test/module_service_test.dart:293:    expect(dto.provenance.single.sourceReference, 'Chapter 2');
+./sakina-frontend/test/module_service_test.dart:319:    expect(dto.provenance.single.reviewStatus, 'moderation_review_pending');
+./sakina-frontend/test/module_service_test.dart:323:    expect(
+./sakina-frontend/test/module_service_test.dart:349:  test('no mock religious payloads in production tests', () async {
+./sakina-frontend/test/module_service_test.dart:350:    final mock = MockClient((_) async {
+./sakina-frontend/test/module_service_test.dart:369:    final client = ModuleApiClient(baseUrl: 'http://test/v1', client: mock);
+./sakina-frontend/test/module_service_test.dart:371:    expect(dto.provenance, isEmpty);
+./sakina-frontend/test/module_service_test.dart:372:    expect(dto.message, contains('under review'));
+./sakina-frontend/test/module_service_test.dart:383:    expect(status.module, ModuleStatusKey.quran);
+./sakina-frontend/test/module_service_test.dart:384:    expect(status.enabled, isFalse);
+./sakina-frontend/test/module_service_test.dart:385:    expect(status.status, ModuleLifecycleStatus.comingSoon);
+./sakina-frontend/test/module_service_test.dart:389:    final fakeClient = FakeModuleApiClient();
+./sakina-frontend/test/module_service_test.dart:391:      apiClient: fakeClient,
+./sakina-frontend/test/module_service_test.dart:402:    expect(status.enabled, isFalse);
+./sakina-frontend/test/module_service_test.dart:403:    expect(status.status, ModuleLifecycleStatus.comingSoon);
+./sakina-frontend/test/module_service_test.dart:404:    expect(status.usedBackendStatus, isFalse);
+./sakina-frontend/test/module_service_test.dart:405:    expect(fakeClient.statusCalls, 0);
+./sakina-frontend/test/module_service_test.dart:409:    final fakeClient = FakeModuleApiClient();
+./sakina-frontend/test/module_service_test.dart:411:      apiClient: fakeClient,
+./sakina-frontend/test/module_service_test.dart:422:    expect(status.enabled, isTrue);
+./sakina-frontend/test/module_service_test.dart:423:    expect(status.status, ModuleLifecycleStatus.active);
+./sakina-frontend/test/module_service_test.dart:424:    expect(status.usedBackendStatus, isTrue);
+./sakina-frontend/test/module_service_test.dart:425:    expect(fakeClient.statusCalls, 1);
+./sakina-frontend/test/sync_service_test.dart:11:    expect(enc, isNot('Assalamu alaikum')); // actually encrypted
+./sakina-frontend/test/sync_service_test.dart:12:    expect(await svc.decryptString(enc, key), 'Assalamu alaikum');
+./sakina-frontend/test/sync_service_test.dart:25:    expect(await svc.decryptString(enc, kBob), 'secret backup');
+./sakina-frontend/test/sync_service_test.dart:35:    expect(() => svc.decryptString(enc, wrong), throwsA(isA<SecretBoxAuthenticationError>()));
+./sakina-frontend/test/widget_test.dart:16:    expect(find.textContaining('Sakina AI'), findsWidgets);
+./sakina-frontend/test/widget_test.dart:17:    expect(find.text('Get Started'), findsOneWidget);
+./sakina-frontend/test/widget_test.dart:18:    expect(find.text('Learn More'), findsOneWidget);
+./sakina-frontend/test/widget_test.dart:35:    expect(find.text('Join Waitlist'), findsOneWidget);
+./sakina-frontend/test/widget_test.dart:36:    expect(find.text('Submit'), findsOneWidget);
+./sakina-local-qa-check.sh:54:grep -RInE "TODO|FIXME|stub|placeholder|mock|fake|bypass|disable_auth|allow_all|skip_auth|insecure|unsafe|unwrap\(|expect\(" . \
+./sakina-local-qa-check.sh:61:  > reports/qa/security/unsafe-patterns.txt || true
+./SPRINT-GAP-ANALYSIS.md:5:> 1. Sprint 3 "What's stubbed" payloads now match the real handlers (the
+./SPRINT-GAP-ANALYSIS.md:18:**Current State:** scaffolding + architecture complete; business logic largely stubbed.
+./SPRINT-GAP-ANALYSIS.md:24:| Endpoints (routes) | ✅ done | logic is stubbed |
+./SPRINT-GAP-ANALYSIS.md:26:| Business Logic | ⚠️ stubs only | Router, guardrails, citation, ingestion |
+./SPRINT-GAP-ANALYSIS.md:110:Embed query → Qdrant top-k → if max score < 0.85 return "consult a scholar" (bypass LLM); madhhab filter; log triggers. **~3-4 days.**
+./SPRINT-GAP-ANALYSIS.md:126:❌ endpoint business logic (stubs), sync/backup encryption
+./SPRINT-GAP-ANALYSIS.md:129:### What's stubbed (ACTUAL current responses — corrected)
+./SPRINT-GAP-ANALYSIS.md:136:GET  /v1/sync/backup/{user_id} → body "encrypted_backup_data" (literal placeholder)
+./SPRINT-GAP-ANALYSIS.md:140:`answer`/`sources` and `intent`/`confidence`, which match these real stubs.)
+./SPRINT-GAP-ANALYSIS.md:188:✅ /dashboard/guardrails endpoint (stub), audit.logs schema
+./SPRINT-GAP-ANALYSIS.md:230:**Delivered:** complete scaffolding, all routes (stubbed), schemas, infra (DB layer
+./VERIFICATION-COMMANDS.md:160:If you have not built/loaded the image yet, bring the stub API up one of these
+./VERIFICATION-COMMANDS.md:173:# Terminal 2: run the stub API
+./VERIFICATION-COMMANDS.md:177:# Handlers are stubs: /health checks the DB pool; /rag/query and /classify

@@ -1,0 +1,23 @@
+NOTICE:  schema "pg_temp" does not exist, skipping
+Pager usage is off.
+DO
+DROP TABLE
+CREATE TABLE
+INSERT 0 1
+             proof             | value 
+-------------------------------+-------
+ cross_user_memory_delete_rows |     0
+(1 row)
+
+INSERT 0 1
+      proof      | deleted_memory | deleted_assets | deleted_sessions | anonymised_messages | anonymised_conversations | anonymised_traces | deleted_profiles | anonymised_users | outbox_events 
+-----------------+----------------+----------------+------------------+---------------------+--------------------------+-------------------+------------------+------------------+---------------
+ deletion_counts |              1 |              1 |                1 |                   1 |                        1 |                 1 |                1 |                1 |             1
+(1 row)
+
+DO
+               proof                |            proof_id             | user_a_active |                       user_a_anonymised_email                       | audit_records | outbox_events 
+------------------------------------+---------------------------------+---------------+---------------------------------------------------------------------+---------------+---------------
+ retention_deletion_db_verification | data-retention-1780631359-36767 | f             | deleted-79e4e2ca-75ac-449e-b0e9-4e26f264cb72@deleted.sakina.invalid |             1 |             1
+(1 row)
+DATA_RETENTION_DELETION_OK owned DB rows were deleted or anonymised, cross-user deletion returned zero rows, asset file was removed, and audit/outbox records were created.

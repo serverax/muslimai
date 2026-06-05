@@ -1,0 +1,154 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s
+     Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_backend-5bd443900cff2969)
+
+running 2 tests
+test services::pii_redaction::tests::safe_text_is_unchanged ... ok
+test services::pii_redaction::tests::redacts_email_and_phone_like_numbers ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 92 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (/tmp/sakina-cargo-target/debug/deps/sakina_api-a27d8b49d58acb93)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running unittests src/bin/ingest.rs (/tmp/sakina-cargo-target/debug/deps/sakina_ingest-056c7981621b57db)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/islamic_source_registry.rs (/tmp/sakina-cargo-target/debug/deps/islamic_source_registry-c79a93b6bd523858)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/offline_islamic_assets.rs (/tmp/sakina-cargo-target/debug/deps/offline_islamic_assets-465e769dfc1a50b0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase21_iman_journey_contract.rs (/tmp/sakina-cargo-target/debug/deps/phase21_iman_journey_contract-e240ee68cac4ccae)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.55s
+{
+  "request_id": "26ef5f21-c4a8-4378-ace1-bfd39441d6c4",
+  "selected_agent": "Dua/Azkar Agent",
+  "selected_model": "lite_llm",
+  "selected_pipeline": "mother_brain>verified_dua_rag>evaluation",
+  "source_strategy": "verified_content",
+  "language": "en",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": false,
+  "evaluation_required": true,
+  "scholar_review_required": false,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "question"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "applied"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "en"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "dua_azkar"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Dua/Azkar Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "verified_content"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=2101;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "09f45193-75bd-430d-aba4-160f186fdbf5"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+sakina-backend/src/services/brain_controller.rs:10:use crate::services::pii_redaction::redact_pii;
+sakina-backend/src/services/brain_controller.rs:117:        let pii = redact_pii(&request.message);
+sakina-backend/src/services/brain_controller.rs:145:                step: "pii_redaction".to_string(),
+sakina-backend/src/services/multimodal.rs:14:use crate::services::pii_redaction;
+sakina-backend/src/services/multimodal.rs:83:        pii_redaction::redact_pii(input).redacted_text
+sakina-backend/src/services/multimodal.rs:311:        let sensitivity_level = if redacted_text.contains("[REDACTED_EMAIL]")
+sakina-backend/src/services/multimodal.rs:312:            || redacted_text.contains("[REDACTED_NUMBER]")
+sakina-backend/src/services/multimodal.rs:439:        assert!(redacted.contains("[REDACTED_EMAIL]"));
+sakina-backend/src/services/multimodal.rs:440:        assert!(redacted.contains("[REDACTED_NUMBER]"));
+sakina-backend/src/services/pii_redaction.rs:7:pub fn redact_pii(input: &str) -> PiiRedactionResult {
+sakina-backend/src/services/pii_redaction.rs:21:            "[REDACTED_EMAIL]"
+sakina-backend/src/services/pii_redaction.rs:24:            "[REDACTED_NUMBER]"
+sakina-backend/src/services/pii_redaction.rs:55:        let result = redact_pii("Email user@example.com or call 07700900123");
+sakina-backend/src/services/pii_redaction.rs:57:        assert!(result.redacted_text.contains("[REDACTED_EMAIL]"));
+sakina-backend/src/services/pii_redaction.rs:58:        assert!(result.redacted_text.contains("[REDACTED_NUMBER]"));
+sakina-backend/src/services/pii_redaction.rs:65:        let result = redact_pii("What is the dua for patience?");
+PII_REDACTION_OK Brain trace applies PII redaction, raw PII is absent from response/logs, and multimodal uses the shared redactor.

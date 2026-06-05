@@ -1,0 +1,39 @@
+=== DNS CHECK ===
+Tue Jun  2 15:56:25 BST 2026
+2a04:4e42:600::649 crates.io
+2a04:4e42:200::649 crates.io
+2a04:4e42::649  crates.io
+2a04:4e42:400::649 crates.io
+2a04:4e42:f::649 dualstack.k.sni.global.fastly.net index.crates.io fastly-index.crates.io
+Server:		10.255.255.254
+Address:	10.255.255.254#53
+
+Non-authoritative answer:
+Name:	crates.io
+Address: 151.101.66.137
+Name:	crates.io
+Address: 151.101.194.137
+Name:	crates.io
+Address: 151.101.2.137
+Name:	crates.io
+Address: 151.101.130.137
+Name:	crates.io
+Address: 2a04:4e42:400::649
+Name:	crates.io
+Address: 2a04:4e42:600::649
+Name:	crates.io
+Address: 2a04:4e42:200::649
+Name:	crates.io
+Address: 2a04:4e42::649
+
+Server:		10.255.255.254
+Address:	10.255.255.254#53
+
+Non-authoritative answer:
+index.crates.io	canonical name = fastly-index.crates.io.
+fastly-index.crates.io	canonical name = dualstack.k.sni.global.fastly.net.
+Name:	dualstack.k.sni.global.fastly.net
+Address: 146.75.74.137
+Name:	dualstack.k.sni.global.fastly.net
+Address: 2a04:4e42:f::649
+

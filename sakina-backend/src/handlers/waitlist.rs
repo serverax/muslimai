@@ -217,12 +217,12 @@ mod tests {
             .expect("create waitlist table");
     }
 
-    async fn maybe_pool() -> Option<PgPool> {
-        let database_url = match std::env::var("DATABASE_URL") {
-            Ok(v) if !v.trim().is_empty() => v,
-            _ => return None,
-        };
-        PgPool::connect(&database_url).await.ok()
+    async fn required_pool() -> PgPool {
+        let database_url = std::env::var("DATABASE_URL")
+            .expect("DATABASE_URL is required for waitlist DB integration tests");
+        PgPool::connect(&database_url)
+            .await
+            .expect("connect waitlist DB integration pool")
     }
 
     #[actix_rt::test]
@@ -253,10 +253,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn insert_and_duplicate_email_are_clean() {
-        let Some(pool) = maybe_pool().await else {
-            eprintln!("DATABASE_URL not set; skipping DB-backed waitlist test");
-            return;
-        };
+        let pool = required_pool().await;
         ensure_waitlist_schema(&pool).await;
         let email = format!("waitlist-{}@example.com", Uuid::new_v4());
 

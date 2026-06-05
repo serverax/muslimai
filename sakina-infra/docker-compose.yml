@@ -18,8 +18,18 @@ services:
     volumes:
       - qdrant-data:/qdrant/storage
 
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+
   vllm:
     image: sakina-backend-vllm:dev-local
+    profiles:
+      - llm
     build:
       context: ../sakina-backend
       dockerfile: Dockerfile.vllm
@@ -31,12 +41,24 @@ services:
   api:
     image: sakina-backend-api:dev-local
     build:
-      context: ../sakina-backend
-      dockerfile: Dockerfile.api
+      context: ..
+      dockerfile: sakina-backend/Dockerfile.api
     ports:
       - "8080:8080"
     environment:
       DATABASE_URL: postgres://sakina_user:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/sakina
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
+      QDRANT_URL: http://qdrant:6333
+      SAKINA_REDIS_URL: redis://redis:6379
+      SAKINA_ENV: ${SAKINA_ENV:-local}
+      SAKINA_LLM_ENABLED: ${SAKINA_LLM_ENABLED:-false}
+      ALLOW_DEMO_MODE: "false"
+      ALLOW_MOCK_AI: "false"
+      ALLOW_MOCK_RAG: "false"
+      ALLOW_MOCK_AUTH: "false"
+      ALLOW_MOCK_PAYMENTS: "false"
+      ALLOW_FAKE_CI_PASS: "false"
       LOG_LEVEL: info
       BRAND_NAME: SAKINA
       BRAND_TAGLINE: "Trustworthy. Private. Islamic."
@@ -45,8 +67,9 @@ services:
     depends_on:
       - postgres
       - qdrant
-      - vllm
+      - redis
 
 volumes:
   postgres-data:
   qdrant-data:
+  redis-data:

@@ -1,10 +1,12 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 use sqlx::{PgPool, Row};
 use uuid::Uuid;
 
 use crate::error::ApiError;
+use crate::services::auth::{issue_jwt, session_token_hash, validate_jwt};
 
 #[derive(Clone)]
 pub struct Phase2Repository {
@@ -16,10 +18,34 @@ impl Phase2Repository {
         Self { pool }
     }
 
+    pub fn pool(&self) -> &PgPool {
+        &self.pool
+    }
+
     pub async fn register_user(
         &self,
-        request: RegisterUserRequest,
+        mut request: RegisterUserRequest,
     ) -> Result<RegisterUserResponse, ApiError> {
+        if request.provider.trim().is_empty() {
+            request.provider = "password".to_string();
+        }
+        request.email = request.email.trim().to_ascii_lowercase();
+        validate_email(&request.email)?;
+        if request.password.is_some() {
+            let existing_user = sqlx::query_scalar::<_, Uuid>(
+                "SELECT id FROM public.users WHERE lower(email) = lower($1) LIMIT 1",
+            )
+            .bind(&request.email)
+            .fetch_optional(&self.pool)
+            .await
+            .map_err(|_| ApiError::internal("failed to check duplicate email"))?;
+            if existing_user.is_some() {
+                return Err(ApiError::conflict("email is already registered"));
+            }
+        }
+        if request.provider_user_id.trim().is_empty() {
+            request.provider_user_id = request.email.trim().to_ascii_lowercase();
+        }
         let mut tx = self
             .pool
             .begin()
@@ -31,19 +57,16 @@ impl Phase2Repository {
             INSERT INTO public.users (pub_key, email, auth_provider, is_active)
             VALUES ($1, $2, $3, true)
             ON CONFLICT (email)
-            DO UPDATE SET
-                pub_key = COALESCE(EXCLUDED.pub_key, public.users.pub_key),
-                auth_provider = EXCLUDED.auth_provider,
-                updated_at = now()
+            DO NOTHING
             RETURNING id, email, pub_key, auth_provider, created_at::text AS created_at, updated_at::text AS updated_at
             "#,
         )
-        .bind(request.pub_key)
-        .bind(request.email)
+        .bind(&request.pub_key)
+        .bind(&request.email)
         .bind(&request.provider)
         .fetch_one(&mut *tx)
         .await
-        .map_err(|_| ApiError::internal("failed to upsert user"))?;
+        .map_err(|_| ApiError::internal("failed to insert user"))?;
 
         let user_id: Uuid = user_row.get("id");
 
@@ -75,16 +98,46 @@ impl Phase2Repository {
         .bind(&request.provider_user_id)
         .bind(&request.provider_email)
         .bind(request.email_verified_at)
-        .bind(request.metadata.unwrap_or_else(|| serde_json::json!({})))
+        .bind(
+            request
+                .metadata
+                .clone()
+                .unwrap_or_else(|| serde_json::json!({})),
+        )
         .fetch_one(&mut *tx)
         .await
         .map_err(|_| ApiError::internal("failed to upsert auth identity"))?;
+
+        if let Some(password) = request.password.as_deref() {
+            validate_password(password)?;
+            let password_hash = password_hash(password)?;
+            sqlx::query(
+                r#"
+                INSERT INTO public.password_credentials (
+                    user_id, password_hash, password_salt, password_version
+                )
+                VALUES ($1, $2, $3, 'argon2id-v1')
+                ON CONFLICT (user_id)
+                DO UPDATE SET
+                    password_hash = EXCLUDED.password_hash,
+                    password_salt = EXCLUDED.password_salt,
+                    password_version = EXCLUDED.password_version,
+                    updated_at = now()
+                "#,
+            )
+            .bind(user_id)
+            .bind(password_hash)
+            .bind("argon2id")
+            .execute(&mut *tx)
+            .await
+            .map_err(|_| ApiError::internal("failed to store password credential"))?;
+        }
 
         tx.commit()
             .await
             .map_err(|_| ApiError::internal("failed to commit auth transaction"))?;
 
-        Ok(RegisterUserResponse {
+        let mut response = RegisterUserResponse {
             user_id,
             identity_id: identity_row.get("id"),
             email: user_row.get("email"),
@@ -92,7 +145,19 @@ impl Phase2Repository {
             auth_provider: user_row.get("auth_provider"),
             created_at: user_row.get("created_at"),
             updated_at: user_row.get("updated_at"),
-        })
+            access_token: None,
+            refresh_token: None,
+        };
+
+        if request.password.is_some() {
+            let issued = self
+                .issue_session_tokens(user_id, None, Some("password-register"))
+                .await?;
+            response.access_token = Some(issued.access_token);
+            response.refresh_token = Some(issued.refresh_token);
+        }
+
+        Ok(response)
     }
 
     pub async fn create_session(
@@ -159,6 +224,172 @@ impl Phase2Repository {
             refresh_token_id: refresh_row.get("id"),
             session_created_at: session_row.get("created_at"),
             refresh_created_at: refresh_row.get("created_at"),
+        })
+    }
+
+    pub async fn login_password(&self, request: LoginRequest) -> Result<LoginResponse, ApiError> {
+        let row = sqlx::query(
+            r#"
+            SELECT
+                users.id AS user_id,
+                users.email,
+                credentials.password_hash,
+                credentials.password_salt
+            FROM public.users
+            JOIN public.password_credentials credentials
+              ON credentials.user_id = users.id
+            WHERE lower(users.email) = lower($1)
+              AND users.is_active = true
+            LIMIT 1
+            "#,
+        )
+        .bind(request.email.trim())
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to load password credential"))?;
+
+        let Some(row) = row else {
+            return Err(ApiError::unauthorized("invalid email or password"));
+        };
+
+        let expected: String = row.get("password_hash");
+        if !verify_password(&request.password, &expected)? {
+            return Err(ApiError::unauthorized("invalid email or password"));
+        }
+
+        let user_id: Uuid = row.get("user_id");
+        let issued = self
+            .issue_session_tokens(
+                user_id,
+                request.ip_address.as_deref(),
+                Some("password-login"),
+            )
+            .await?;
+
+        Ok(LoginResponse {
+            user_id,
+            email: row.get("email"),
+            access_token: issued.access_token,
+            refresh_token: issued.refresh_token,
+            expires_at: issued.expires_at,
+        })
+    }
+
+    pub async fn refresh_session(
+        &self,
+        request: RefreshTokenRequest,
+    ) -> Result<LoginResponse, ApiError> {
+        let refresh_token = request.refresh_token.trim();
+        if refresh_token.is_empty() {
+            return Err(ApiError::unauthorized("refresh_token is required"));
+        }
+        let jwt_user_id = validate_jwt(refresh_token)?;
+        let refresh_hash = session_token_hash(refresh_token);
+
+        let mut tx = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| ApiError::internal("failed to begin refresh transaction"))?;
+
+        let refresh_row = sqlx::query(
+            r#"
+            SELECT rt.id, rt.user_id, u.email
+            FROM public.auth_refresh_tokens rt
+            JOIN public.users u ON u.id = rt.user_id
+            WHERE rt.refresh_token_hash = $1
+              AND rt.expires_at > now()
+              AND rt.used_at IS NULL
+              AND rt.revoked_at IS NULL
+              AND u.is_active = true
+            FOR UPDATE
+            "#,
+        )
+        .bind(&refresh_hash)
+        .fetch_optional(&mut *tx)
+        .await
+        .map_err(|_| ApiError::internal("failed to load refresh token"))?;
+
+        let Some(refresh_row) = refresh_row else {
+            return Err(ApiError::unauthorized("invalid or expired refresh token"));
+        };
+
+        let refresh_user_id: Uuid = refresh_row.get("user_id");
+        if refresh_user_id != jwt_user_id {
+            return Err(ApiError::unauthorized("refresh token subject mismatch"));
+        }
+
+        let refresh_id: Uuid = refresh_row.get("id");
+        sqlx::query(
+            "UPDATE public.auth_refresh_tokens SET used_at = now(), revoked_at = now() WHERE id = $1",
+        )
+        .bind(refresh_id)
+        .execute(&mut *tx)
+        .await
+        .map_err(|_| ApiError::internal("failed to rotate refresh token"))?;
+
+        tx.commit()
+            .await
+            .map_err(|_| ApiError::internal("failed to commit refresh transaction"))?;
+
+        let issued = self
+            .issue_session_tokens(refresh_user_id, None, Some("refresh-token"))
+            .await?;
+
+        Ok(LoginResponse {
+            user_id: refresh_user_id,
+            email: refresh_row.get("email"),
+            access_token: issued.access_token,
+            refresh_token: issued.refresh_token,
+            expires_at: issued.expires_at,
+        })
+    }
+
+    pub async fn get_user_summary(&self, user_id: Uuid) -> Result<UserSummary, ApiError> {
+        let row = sqlx::query(
+            r#"
+            SELECT id, email, auth_provider, is_active, created_at::text AS created_at
+            FROM public.users
+            WHERE id = $1 AND is_active = true
+            "#,
+        )
+        .bind(user_id)
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to load current user"))?
+        .ok_or_else(|| ApiError::not_found("user not found"))?;
+
+        Ok(UserSummary {
+            user_id: row.get("id"),
+            email: row.get("email"),
+            auth_provider: row.get("auth_provider"),
+            created_at: row.get("created_at"),
+        })
+    }
+
+    async fn issue_session_tokens(
+        &self,
+        user_id: Uuid,
+        ip_address: Option<&str>,
+        user_agent: Option<&str>,
+    ) -> Result<IssuedTokens, ApiError> {
+        let (access_token, expires_at) = issue_jwt(user_id, 12 * 60 * 60)?;
+        let (refresh_token, refresh_expires_at) = issue_jwt(user_id, 30 * 24 * 60 * 60)?;
+        self.create_session(CreateSessionRequest {
+            user_id,
+            session_token_hash: token_hash(&access_token),
+            refresh_token_hash: token_hash(&refresh_token),
+            expires_at,
+            refresh_expires_at,
+            ip_address: Some(ip_address.unwrap_or("127.0.0.1").to_string()),
+            user_agent: Some(user_agent.unwrap_or("sakina-api").to_string()),
+        })
+        .await?;
+
+        Ok(IssuedTokens {
+            access_token,
+            refresh_token,
+            expires_at,
         })
     }
 
@@ -1282,6 +1513,90 @@ impl Phase2Repository {
         Ok(notification_id)
     }
 
+    pub async fn list_notifications(
+        &self,
+        user_id: Uuid,
+    ) -> Result<Vec<UserNotificationView>, ApiError> {
+        let rows = sqlx::query(
+            r#"
+            SELECT id, channel, notification_status, title, body, payload,
+                   scheduled_at, sent_at, read_at, created_at
+            FROM public.user_notifications
+            WHERE user_id = $1
+            ORDER BY created_at DESC
+            LIMIT 50
+            "#,
+        )
+        .bind(user_id)
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to list notifications"))?;
+
+        Ok(rows
+            .into_iter()
+            .map(|row| UserNotificationView {
+                id: row.get("id"),
+                channel: row.get("channel"),
+                notification_status: row.get("notification_status"),
+                title: row.get("title"),
+                body: row.get("body"),
+                payload: row.get("payload"),
+                scheduled_at: row
+                    .get::<Option<DateTime<Utc>>, _>("scheduled_at")
+                    .map(|value| value.to_rfc3339()),
+                sent_at: row
+                    .get::<Option<DateTime<Utc>>, _>("sent_at")
+                    .map(|value| value.to_rfc3339()),
+                read_at: row
+                    .get::<Option<DateTime<Utc>>, _>("read_at")
+                    .map(|value| value.to_rfc3339()),
+                created_at: row.get::<DateTime<Utc>, _>("created_at").to_rfc3339(),
+            })
+            .collect())
+    }
+
+    pub async fn mark_notification_read(
+        &self,
+        user_id: Uuid,
+        notification_id: Uuid,
+    ) -> Result<Option<UserNotificationView>, ApiError> {
+        let row = sqlx::query(
+            r#"
+            UPDATE public.user_notifications
+            SET read_at = COALESCE(read_at, now()),
+                notification_status = 'read',
+                updated_at = now()
+            WHERE id = $1 AND user_id = $2
+            RETURNING id, channel, notification_status, title, body, payload,
+                      scheduled_at, sent_at, read_at, created_at
+            "#,
+        )
+        .bind(notification_id)
+        .bind(user_id)
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to mark notification read"))?;
+
+        Ok(row.map(|row| UserNotificationView {
+            id: row.get("id"),
+            channel: row.get("channel"),
+            notification_status: row.get("notification_status"),
+            title: row.get("title"),
+            body: row.get("body"),
+            payload: row.get("payload"),
+            scheduled_at: row
+                .get::<Option<DateTime<Utc>>, _>("scheduled_at")
+                .map(|value| value.to_rfc3339()),
+            sent_at: row
+                .get::<Option<DateTime<Utc>>, _>("sent_at")
+                .map(|value| value.to_rfc3339()),
+            read_at: row
+                .get::<Option<DateTime<Utc>>, _>("read_at")
+                .map(|value| value.to_rfc3339()),
+            created_at: row.get::<DateTime<Utc>, _>("created_at").to_rfc3339(),
+        }))
+    }
+
     pub async fn upsert_device_token(
         &self,
         request: UpsertDeviceTokenRequest,
@@ -1393,6 +1708,23 @@ impl Phase2Repository {
         Ok(id)
     }
 
+    pub async fn support_ticket_owner(
+        &self,
+        support_ticket_id: Uuid,
+    ) -> Result<Option<Uuid>, ApiError> {
+        sqlx::query_scalar(
+            r#"
+            SELECT user_id
+            FROM public.support_tickets
+            WHERE id = $1
+            "#,
+        )
+        .bind(support_ticket_id)
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to fetch support ticket owner"))
+    }
+
     pub async fn get_support_ticket(
         &self,
         support_ticket_id: Uuid,
@@ -1405,6 +1737,63 @@ impl Phase2Repository {
             "#,
         )
         .bind(support_ticket_id)
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to fetch support ticket"))?;
+
+        let Some(ticket_row) = ticket_row else {
+            return Err(ApiError::not_found("support ticket not found"));
+        };
+
+        let message_rows = sqlx::query(
+            r#"
+            SELECT id, sender_type, sender_user_id, message_body, created_at::text AS created_at
+            FROM public.support_ticket_messages
+            WHERE support_ticket_id = $1
+            ORDER BY created_at ASC
+            "#,
+        )
+        .bind(support_ticket_id)
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to fetch support ticket messages"))?;
+
+        Ok(SupportTicketDetail {
+            id: ticket_row.get("id"),
+            ticket_number: ticket_row.get("ticket_number"),
+            ticket_status: ticket_row.get("ticket_status"),
+            priority: ticket_row.get("priority"),
+            category: ticket_row.get("category"),
+            subject: ticket_row.get("subject"),
+            created_at: ticket_row.get("created_at"),
+            updated_at: ticket_row.get("updated_at"),
+            messages: message_rows
+                .into_iter()
+                .map(|row| SupportTicketMessageView {
+                    id: row.get("id"),
+                    sender_type: row.get("sender_type"),
+                    sender_user_id: row.get("sender_user_id"),
+                    message_body: row.get("message_body"),
+                    created_at: row.get("created_at"),
+                })
+                .collect(),
+        })
+    }
+
+    pub async fn get_support_ticket_owned_by(
+        &self,
+        support_ticket_id: Uuid,
+        user_id: Uuid,
+    ) -> Result<SupportTicketDetail, ApiError> {
+        let ticket_row = sqlx::query(
+            r#"
+            SELECT id, ticket_number, ticket_status, priority, category, subject, created_at::text AS created_at, updated_at::text AS updated_at
+            FROM public.support_tickets
+            WHERE id = $1 AND user_id = $2
+            "#,
+        )
+        .bind(support_ticket_id)
+        .bind(user_id)
         .fetch_optional(&self.pool)
         .await
         .map_err(|_| ApiError::internal("failed to fetch support ticket"))?;
@@ -1543,6 +1932,37 @@ impl Phase2Repository {
             _ => return Err(ApiError::internal("unsupported event table")),
         };
 
+        let mut tx = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| ApiError::internal("failed to begin event transaction"))?;
+        let rls_user_id = if table == "public.admin_events" {
+            None
+        } else {
+            request.user_id
+        };
+        if let Some(user_id) = rls_user_id {
+            sqlx::query("SELECT set_config('sakina.service_role', 'off', true)")
+                .execute(&mut *tx)
+                .await
+                .map_err(|_| ApiError::internal("failed to set event service context"))?;
+            sqlx::query("SELECT set_config('sakina.current_user_id', $1, true)")
+                .bind(user_id.to_string())
+                .execute(&mut *tx)
+                .await
+                .map_err(|_| ApiError::internal("failed to set event user context"))?;
+        } else {
+            sqlx::query("SELECT set_config('sakina.current_user_id', '', true)")
+                .execute(&mut *tx)
+                .await
+                .map_err(|_| ApiError::internal("failed to clear event user context"))?;
+            sqlx::query("SELECT set_config('sakina.service_role', 'on', true)")
+                .execute(&mut *tx)
+                .await
+                .map_err(|_| ApiError::internal("failed to set event service context"))?;
+        }
+
         let id = match table {
             "public.app_events" => {
                 sqlx::query_scalar(sql)
@@ -1554,7 +1974,7 @@ impl Phase2Repository {
                             .event_payload
                             .unwrap_or_else(|| serde_json::json!({})),
                     )
-                    .fetch_one(&self.pool)
+                    .fetch_one(&mut *tx)
                     .await
             }
             "public.chat_events" => {
@@ -1568,7 +1988,7 @@ impl Phase2Repository {
                             .event_payload
                             .unwrap_or_else(|| serde_json::json!({})),
                     )
-                    .fetch_one(&self.pool)
+                    .fetch_one(&mut *tx)
                     .await
             }
             "public.rag_events" => {
@@ -1582,7 +2002,7 @@ impl Phase2Repository {
                             .event_payload
                             .unwrap_or_else(|| serde_json::json!({})),
                     )
-                    .fetch_one(&self.pool)
+                    .fetch_one(&mut *tx)
                     .await
             }
             "public.admin_events" => {
@@ -1594,25 +2014,102 @@ impl Phase2Repository {
                             .event_payload
                             .unwrap_or_else(|| serde_json::json!({})),
                     )
-                    .fetch_one(&self.pool)
+                    .fetch_one(&mut *tx)
                     .await
             }
             _ => unreachable!(),
         }
         .map_err(|_| ApiError::internal("failed to create event"))?;
+        tx.commit()
+            .await
+            .map_err(|_| ApiError::internal("failed to commit event transaction"))?;
         Ok(id)
     }
+}
+
+fn token_hash(token: &str) -> String {
+    let digest = Sha256::digest(token.as_bytes());
+    format!("{:x}", digest)
+}
+
+fn validate_password(password: &str) -> Result<(), ApiError> {
+    if password.len() < 8 {
+        return Err(ApiError::bad_request(
+            "password must be at least 8 characters",
+        ));
+    }
+    let has_upper = password.chars().any(char::is_uppercase);
+    let has_lower = password.chars().any(char::is_lowercase);
+    let has_digit = password.chars().any(|ch| ch.is_ascii_digit());
+    if !(has_upper && has_lower && has_digit) {
+        return Err(ApiError::bad_request(
+            "password must include uppercase, lowercase, and a number",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_email(email: &str) -> Result<(), ApiError> {
+    let valid = email.len() <= 254
+        && email.contains('@')
+        && !email.starts_with('@')
+        && !email.ends_with('@')
+        && !email.contains(char::is_whitespace);
+    if valid {
+        Ok(())
+    } else {
+        Err(ApiError::bad_request("valid email is required"))
+    }
+}
+
+fn password_hash(password: &str) -> Result<String, ApiError> {
+    use argon2::password_hash::{PasswordHasher, SaltString};
+    use argon2::Argon2;
+    use rand_core::OsRng;
+
+    let salt = SaltString::generate(&mut OsRng);
+    Argon2::default()
+        .hash_password(password.as_bytes(), &salt)
+        .map(|hash| hash.to_string())
+        .map_err(|_| ApiError::internal("failed to hash password"))
+}
+
+fn verify_password(password: &str, expected_hash: &str) -> Result<bool, ApiError> {
+    use argon2::password_hash::{PasswordHash, PasswordVerifier};
+    use argon2::Argon2;
+
+    let parsed = PasswordHash::new(expected_hash)
+        .map_err(|_| ApiError::internal("stored password hash is invalid"))?;
+    Ok(Argon2::default()
+        .verify_password(password.as_bytes(), &parsed)
+        .is_ok())
+}
+
+struct IssuedTokens {
+    access_token: String,
+    refresh_token: String,
+    expires_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RegisterUserRequest {
     pub email: String,
+    #[serde(default)]
     pub pub_key: Option<String>,
+    #[serde(default)]
     pub provider: String,
+    #[serde(default)]
     pub provider_user_id: String,
+    #[serde(default)]
     pub provider_email: Option<String>,
+    #[serde(default)]
     pub email_verified_at: Option<DateTime<Utc>>,
+    #[serde(default)]
     pub metadata: Option<Value>,
+    #[serde(default)]
+    pub password: Option<String>,
+    #[serde(default, alias = "display_name")]
+    pub name: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1624,6 +2121,40 @@ pub struct RegisterUserResponse {
     pub auth_provider: String,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_token: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LoginRequest {
+    pub email: String,
+    pub password: String,
+    #[serde(default)]
+    pub ip_address: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RefreshTokenRequest {
+    pub refresh_token: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LoginResponse {
+    pub user_id: Uuid,
+    pub email: Option<String>,
+    pub access_token: String,
+    pub refresh_token: String,
+    pub expires_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserSummary {
+    pub user_id: Uuid,
+    pub email: Option<String>,
+    pub auth_provider: String,
+    pub created_at: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1920,6 +2451,20 @@ pub struct EnqueueNotificationRequest {
     pub title: Option<String>,
     pub body: Option<String>,
     pub payload: Option<Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserNotificationView {
+    pub id: Uuid,
+    pub channel: String,
+    pub notification_status: String,
+    pub title: Option<String>,
+    pub body: Option<String>,
+    pub payload: Value,
+    pub scheduled_at: Option<String>,
+    pub sent_at: Option<String>,
+    pub read_at: Option<String>,
+    pub created_at: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

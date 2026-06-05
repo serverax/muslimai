@@ -20,6 +20,7 @@ struct EmbeddingData {
     embedding: Vec<f32>,
 }
 
+#[derive(Debug, Clone)]
 pub struct EmbeddingsService {
     client: Client,
     base_url: String,
@@ -41,8 +42,44 @@ impl EmbeddingsService {
         }
     }
 
+    #[cfg(test)]
+    fn deterministic_embedding(&self, text: &str) -> Vec<f32> {
+        let dim = std::env::var("VLLM_EMBEDDING_DIM")
+            .ok()
+            .and_then(|v| v.parse::<usize>().ok())
+            .unwrap_or(128)
+            .max(8);
+        let mut vector = vec![0.0_f32; dim];
+        for (index, token) in text
+            .split(|ch: char| !ch.is_alphanumeric() && ch != '_' && ch != 'ء' && ch != 'آ')
+            .filter(|token| !token.is_empty())
+            .enumerate()
+        {
+            let mut hash = 0u64;
+            for byte in token.to_lowercase().bytes() {
+                hash = hash
+                    .wrapping_mul(1099511628211)
+                    .wrapping_add(byte as u64 + 1);
+            }
+            let bucket = (hash as usize + index) % dim;
+            vector[bucket] += 1.0;
+            let neighbor = (bucket + 1) % dim;
+            vector[neighbor] += 0.25;
+        }
+        let norm = vector.iter().map(|value| value * value).sum::<f32>().sqrt();
+        if norm > 0.0 {
+            for value in &mut vector {
+                *value /= norm;
+            }
+        }
+        vector
+    }
+
     /// Get the embedding vector for `text` from vLLM.
     pub async fn embed(&self, text: &str) -> Result<Vec<f32>, Box<dyn std::error::Error>> {
+        if self.base_url.starts_with("mock://") {
+            return Err("mock embedding endpoints are not allowed in production paths".into());
+        }
         let req = EmbeddingRequest {
             input: text.to_string(),
             model: self.model.clone(),
@@ -81,6 +118,9 @@ impl EmbeddingsService {
     }
 
     pub async fn health_check(&self) -> bool {
+        if self.base_url.starts_with("mock://") {
+            return false;
+        }
         self.client
             .get(format!("{}/v1/models", self.base_url))
             .send()
@@ -100,8 +140,18 @@ mod tests {
             input: "test".to_string(),
             model: "m".to_string(),
         };
-        let json = serde_json::to_string(&req).unwrap();
+        let json = serde_json::to_string(&req).expect("serialize embedding request");
         assert!(json.contains("\"input\":\"test\""));
         assert!(json.contains("\"model\":\"m\""));
+    }
+
+    #[test]
+    fn deterministic_test_embeddings_are_normalized() {
+        let service = EmbeddingsService::new("http://embedding-service");
+        let a = service.deterministic_embedding("What is patience in Islam?");
+        let b = service.deterministic_embedding("What is patience in Islam?");
+        assert_eq!(a, b);
+        let norm = a.iter().map(|value| value * value).sum::<f32>().sqrt();
+        assert!((norm - 1.0).abs() < 0.0001 || norm == 0.0);
     }
 }

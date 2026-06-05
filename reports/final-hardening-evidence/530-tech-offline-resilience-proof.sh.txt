@@ -1,0 +1,107 @@
+00:00 +0: loading F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart
+00:00 +0: F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart: offline backend failure queues user message and does not fake answer
+00:00 +1: F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart: offline backend failure queues user message and does not fake answer
+00:00 +2: F:/SakinaAL/sakina-frontend/test/offline_resilience_test.dart: retryPending sends queued message to backend and marks it synced
+00:00 +3: All tests passed!
+sakina-frontend/test/offline_resilience_test.dart:52:      historyStore: store,
+sakina-frontend/test/offline_resilience_test.dart:58:    expect(controller.errorType, ChatErrorType.serviceUnavailable);
+sakina-frontend/test/offline_resilience_test.dart:61:    expect(controller.messages.single.syncStatus, ChatSyncStatus.pending);
+sakina-frontend/test/offline_resilience_test.dart:64:    expect(store.rows.values.single.syncStatus, ChatSyncStatus.pending);
+sakina-frontend/test/offline_resilience_test.dart:67:  test('retryPending sends queued message to backend and marks it synced',
+sakina-frontend/test/offline_resilience_test.dart:75:      syncStatus: ChatSyncStatus.pending,
+sakina-frontend/test/offline_resilience_test.dart:81:      historyStore: store,
+sakina-frontend/test/offline_resilience_test.dart:86:    await controller.retryPending();
+sakina-frontend/test/offline_resilience_test.dart:89:    expect(controller.pendingMessages, isEmpty);
+sakina-frontend/test/offline_resilience_test.dart:92:    expect(store.rows['pending-1']!.syncStatus, ChatSyncStatus.synced);
+sakina-frontend/lib/chat/chat_controller.dart:12:enum ChatSyncStatus {
+sakina-frontend/lib/chat/chat_controller.dart:21:  serviceUnavailable,
+sakina-frontend/lib/chat/chat_controller.dart:31:    this.syncStatus = ChatSyncStatus.synced,
+sakina-frontend/lib/chat/chat_controller.dart:39:  final ChatSyncStatus syncStatus;
+sakina-frontend/lib/chat/chat_controller.dart:42:  bool get isPending => syncStatus == ChatSyncStatus.pending;
+sakina-frontend/lib/chat/chat_controller.dart:65:      syncStatus: ChatSyncStatus.values.byName(message.syncStatus),
+sakina-frontend/lib/chat/chat_controller.dart:69:  ChatMessage withSyncStatus(ChatSyncStatus status) {
+sakina-frontend/lib/chat/chat_controller.dart:165:    ChatHistoryStore? historyStore,
+sakina-frontend/lib/chat/chat_controller.dart:168:        _historyStore = historyStore,
+sakina-frontend/lib/chat/chat_controller.dart:172:  final ChatHistoryStore? _historyStore;
+sakina-frontend/lib/chat/chat_controller.dart:181:  List<ChatMessage> get pendingMessages => _messages
+sakina-frontend/lib/chat/chat_controller.dart:196:      case ChatErrorType.serviceUnavailable:
+sakina-frontend/lib/chat/chat_controller.dart:204:    final historyStore = _historyStore;
+sakina-frontend/lib/chat/chat_controller.dart:205:    if (historyStore == null) return;
+sakina-frontend/lib/chat/chat_controller.dart:209:        ..addAll(await historyStore.load());
+sakina-frontend/lib/chat/chat_controller.dart:239:      await _markPending(userMessage);
+sakina-frontend/lib/chat/chat_controller.dart:241:      _errorType = ChatErrorType.serviceUnavailable;
+sakina-frontend/lib/chat/chat_controller.dart:242:      await _markPending(userMessage);
+sakina-frontend/lib/chat/chat_controller.dart:248:  Future<void> retryPending() async {
+sakina-frontend/lib/chat/chat_controller.dart:251:    final pending = pendingMessages;
+sakina-frontend/lib/chat/chat_controller.dart:259:        await _replaceMessage(message.withSyncStatus(ChatSyncStatus.synced));
+sakina-frontend/lib/chat/chat_controller.dart:271:      _errorType = ChatErrorType.serviceUnavailable;
+sakina-frontend/lib/chat/chat_controller.dart:281:    await _historyStore?.close();
+sakina-frontend/lib/chat/chat_controller.dart:301:      await _historyStore?.save(message);
+sakina-frontend/lib/chat/chat_controller.dart:307:  Future<void> _markPending(ChatMessage message) async {
+sakina-frontend/lib/chat/chat_controller.dart:308:    await _replaceMessage(message.withSyncStatus(ChatSyncStatus.pending));
+sakina-frontend/lib/chat/chat_controller.dart:311:  Future<void> _replaceMessage(ChatMessage replacement) async {
+sakina-frontend/lib/chat/chat_controller.dart:327:    return ChatErrorType.serviceUnavailable;
+sakina-frontend/lib/services/local_db_service.dart:1:import 'package:sqflite_sqlcipher/sqflite.dart';
+sakina-frontend/lib/services/local_db_service.dart:31:        sync_status TEXT NOT NULL DEFAULT 'synced',
+sakina-frontend/lib/services/local_db_service.dart:43:        "ALTER TABLE messages ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'synced'",
+sakina-frontend/lib/services/local_db_service.dart:52:      conflictAlgorithm: ConflictAlgorithm.replace,
+sakina-frontend/lib/services/local_db_service.dart:95:        'sync_status': syncStatus,
+sakina-frontend/lib/services/local_db_service.dart:105:        syncStatus: map['sync_status'] as String? ?? 'synced',
+sakina-frontend/lib/chat/chat_controller.dart:21:  serviceUnavailable,
+sakina-frontend/lib/chat/chat_controller.dart:196:      case ChatErrorType.serviceUnavailable:
+sakina-frontend/lib/chat/chat_controller.dart:237:    } on ApiException catch (error) {
+sakina-frontend/lib/chat/chat_controller.dart:241:      _errorType = ChatErrorType.serviceUnavailable;
+sakina-frontend/lib/chat/chat_controller.dart:268:    } on ApiException catch (error) {
+sakina-frontend/lib/chat/chat_controller.dart:271:      _errorType = ChatErrorType.serviceUnavailable;
+sakina-frontend/lib/chat/chat_controller.dart:327:    return ChatErrorType.serviceUnavailable;
+sakina-frontend/lib/config/api_config.dart:14:  static const int retryAttempts = 3;
+sakina-frontend/lib/config/api_config.dart:15:  static const Duration retryDelay = Duration(seconds: 1);
+sakina-frontend/lib/app/app_strings.dart:91:          'Network unavailable. Please check your connection and try again.',
+sakina-frontend/lib/services/api_service.dart:107:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:118:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:127:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:134:          .timeout(const Duration(seconds: 10)),
+sakina-frontend/lib/services/api_service.dart:145:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:148:          .timeout(const Duration(seconds: 10)),
+sakina-frontend/lib/services/api_service.dart:164:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:178:          .timeout(const Duration(seconds: 10)),
+sakina-frontend/lib/services/api_service.dart:189:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:196:          .timeout(const Duration(seconds: 60)),
+sakina-frontend/lib/services/api_service.dart:204:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:210:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:312:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:315:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:336:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:339:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:374:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:377:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:634:    final res = await _withRetry(
+sakina-frontend/lib/services/api_service.dart:637:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:796:        return _client.send(multipart).timeout(const Duration(seconds: 90));
+sakina-frontend/lib/services/api_service.dart:829:  Future<http.Response> _withRetry(Future<http.Response> Function() run) async {
+sakina-frontend/lib/services/api_service.dart:831:    for (var attempt = 0; attempt < ApiConfig.retryAttempts; attempt++) {
+sakina-frontend/lib/services/api_service.dart:835:            attempt < ApiConfig.retryAttempts - 1) {
+sakina-frontend/lib/services/api_service.dart:837:            ApiConfig.retryDelay * (attempt + 1),
+sakina-frontend/lib/services/api_service.dart:844:        if (attempt < ApiConfig.retryAttempts - 1) {
+sakina-frontend/lib/services/api_service.dart:846:            ApiConfig.retryDelay * (attempt + 1),
+sakina-frontend/lib/services/api_service.dart:852:    throw ApiException('request failed after retries: $lastError');
+sakina-frontend/lib/services/api_service.dart:859:    for (var attempt = 0; attempt < ApiConfig.retryAttempts; attempt++) {
+sakina-frontend/lib/services/api_service.dart:863:            attempt < ApiConfig.retryAttempts - 1) {
+sakina-frontend/lib/services/api_service.dart:865:            ApiConfig.retryDelay * (attempt + 1),
+sakina-frontend/lib/services/api_service.dart:872:        if (attempt < ApiConfig.retryAttempts - 1) {
+sakina-frontend/lib/services/api_service.dart:874:            ApiConfig.retryDelay * (attempt + 1),
+sakina-frontend/lib/services/api_service.dart:880:    throw ApiException('stream request failed after retries: $lastError');
+sakina-frontend/lib/services/api_service.dart:888:    return _withRetry(
+sakina-frontend/lib/services/api_service.dart:895:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:904:    return _withRetry(
+sakina-frontend/lib/services/api_service.dart:911:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:916:    return _withRetry(
+sakina-frontend/lib/services/api_service.dart:919:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:924:    return _withRetry(
+sakina-frontend/lib/services/api_service.dart:927:          .timeout(const Duration(seconds: 30)),
+sakina-frontend/lib/services/api_service.dart:952:  ApiException _apiException(String fallback, http.Response response) {
+sakina-frontend/lib/services/api_service.dart:965:    return ApiException(
+sakina-frontend/lib/services/api_service.dart:1050:class ApiException implements Exception {
+sakina-frontend/lib/services/api_service.dart:1055:  ApiException(
+sakina-frontend/lib/services/api_service.dart:1063:  String toString() => 'ApiException: $message';
+OFFLINE_RESILIENCE_OK frontend queues backend-unavailable chat messages as pending, does not fabricate assistant answers, persists pending state in encrypted local DB, retries pending messages when backend becomes available, maps network errors to user-visible state, and production code has no fake offline answer path.

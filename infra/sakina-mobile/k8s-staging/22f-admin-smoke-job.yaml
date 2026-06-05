@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sakina-admin-smoke
+  namespace: sakina-mobile-staging
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: smoke
+          image: curlimages/curl:8.8.0
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              curl -fsS http://sakina-admin:80/ >/tmp/admin.html
+              grep -q 'Sakina Admin Staging' /tmp/admin.html
+              echo "Admin smoke tests completed successfully"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: tmp
+          emptyDir: {}

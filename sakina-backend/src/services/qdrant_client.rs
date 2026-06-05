@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use tokio::time::{sleep, Duration};
 use uuid::Uuid;
 
+#[derive(Debug, Clone)]
 pub struct QdrantVectorDB {
     client: Client,
     base_url: String,

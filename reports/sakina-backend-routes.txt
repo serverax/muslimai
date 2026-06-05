@@ -1,0 +1,346 @@
+sakina-backend/src/handlers/chat.rs:45:    let brain = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/chat.rs:227:    let brain = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/iman_journey.rs:16:    cfg.service(
+sakina-backend/src/handlers/iman_journey.rs:18:            .route("/{user_id}", web::get().to(get_iman_journey))
+sakina-backend/src/handlers/iman_journey.rs:19:            .route("/{user_id}", web::put().to(upsert_iman_journey))
+sakina-backend/src/handlers/iman_journey.rs:20:            .route("/{user_id}/privacy", web::get().to(get_privacy_settings))
+sakina-backend/src/handlers/iman_journey.rs:21:            .route("/{user_id}/privacy", web::put().to(update_privacy_settings)),
+sakina-backend/src/handlers/iman_journey.rs:23:    .service(
+sakina-backend/src/handlers/iman_journey.rs:25:            .route("/{user_id}", web::get().to(list_dua_items))
+sakina-backend/src/handlers/iman_journey.rs:26:            .route("/{user_id}", web::post().to(add_dua_item)),
+sakina-backend/src/handlers/modules.rs:491:                .service(
+sakina-backend/src/handlers/modules.rs:493:                        .route("", web::get().to(modules_status))
+sakina-backend/src/handlers/modules.rs:494:                        .route("/chat/status", web::get().to(chat_status))
+sakina-backend/src/handlers/modules.rs:495:                        .route("/quran/status", web::get().to(quran_status))
+sakina-backend/src/handlers/modules.rs:496:                        .route("/prayer/status", web::get().to(prayer_status))
+sakina-backend/src/handlers/modules.rs:497:                        .route("/community/status", web::get().to(community_status))
+sakina-backend/src/handlers/modules.rs:498:                        .route("/knowledge/status", web::get().to(knowledge_status)),
+sakina-backend/src/handlers/modules.rs:500:                .service(
+sakina-backend/src/handlers/modules.rs:501:                    web::scope("/v1").service(
+sakina-backend/src/handlers/modules.rs:503:                            .route("", web::get().to(modules_status))
+sakina-backend/src/handlers/modules.rs:504:                            .route("/chat/status", web::get().to(chat_status))
+sakina-backend/src/handlers/modules.rs:505:                            .route("/quran/status", web::get().to(quran_status))
+sakina-backend/src/handlers/modules.rs:506:                            .route("/prayer/status", web::get().to(prayer_status))
+sakina-backend/src/handlers/modules.rs:507:                            .route("/community/status", web::get().to(community_status))
+sakina-backend/src/handlers/modules.rs:508:                            .route("/knowledge/status", web::get().to(knowledge_status)),
+sakina-backend/src/handlers/phase2.rs:442:                .route("/auth/register", web::post().to(register_user))
+sakina-backend/src/handlers/phase2.rs:443:                .route("/auth/sessions", web::post().to(create_session)),
+sakina-backend/src/handlers/phase2.rs:492:                .route("/auth/register", web::post().to(register_user))
+sakina-backend/src/handlers/phase2.rs:493:                .route("/auth/sessions", web::post().to(create_session))
+sakina-backend/src/handlers/phase2.rs:494:                .route("/profiles/{user_id}", web::put().to(upsert_profile)),
+sakina-backend/src/handlers/phase2.rs:576:                .route("/auth/register", web::post().to(register_user))
+sakina-backend/src/handlers/phase2.rs:577:                .route("/profiles/{user_id}", web::put().to(upsert_profile))
+sakina-backend/src/handlers/phase2.rs:578:                .route(
+sakina-backend/src/handlers/phase2.rs:580:                    web::post().to(create_family_profile),
+sakina-backend/src/handlers/phase2.rs:659:                .route("/auth/register", web::post().to(register_user))
+sakina-backend/src/handlers/phase2.rs:660:                .route(
+sakina-backend/src/handlers/phase2.rs:662:                    web::post().to(activate_subscription),
+sakina-backend/src/handlers/phase2.rs:664:                .route(
+sakina-backend/src/handlers/phase2.rs:666:                    web::get().to(list_entitlements),
+sakina-backend/src/handlers/phase2.rs:727:                .route("/auth/register", web::post().to(register_user))
+sakina-backend/src/handlers/phase2.rs:728:                .route(
+sakina-backend/src/handlers/phase2.rs:730:                    web::post().to(crate::handlers::chat::create_conversation),
+sakina-backend/src/handlers/phase2.rs:732:                .route(
+sakina-backend/src/handlers/phase2.rs:734:                    web::post().to(crate::handlers::chat::add_message),
+sakina-backend/src/handlers/phase2.rs:736:                .route(
+sakina-backend/src/handlers/phase2.rs:738:                    web::post().to(create_chat_feedback),
+sakina-backend/src/handlers/phase2.rs:740:                .route("/chat/messages/{id}/report", web::post().to(report_answer))
+sakina-backend/src/handlers/phase2.rs:741:                .route("/rag/audit/retrieval", web::post().to(log_rag_retrieval))
+sakina-backend/src/handlers/phase2.rs:742:                .route("/rag/audit/citation", web::post().to(log_citation_event))
+sakina-backend/src/handlers/phase2.rs:743:                .route("/rag/sources/approved", web::get().to(approved_rag_sources))
+sakina-backend/src/handlers/phase2.rs:744:                .route(
+sakina-backend/src/handlers/phase2.rs:746:                    web::post().to(log_safety_classification),
+sakina-backend/src/handlers/phase2.rs:748:                .route(
+sakina-backend/src/handlers/phase2.rs:750:                    web::post().to(log_mastermind_decision),
+sakina-backend/src/handlers/phase2.rs:752:                .route(
+sakina-backend/src/handlers/phase2.rs:754:                    web::post().to(enqueue_scholar_review),
+sakina-backend/src/handlers/phase2.rs:756:                .route("/safety/wasm-events", web::post().to(log_wasm_event))
+sakina-backend/src/handlers/phase2.rs:757:                .route("/admin/roles", web::post().to(upsert_admin_role))
+sakina-backend/src/handlers/phase2.rs:758:                .route("/admin/audit-actions", web::post().to(log_admin_action))
+sakina-backend/src/handlers/phase2.rs:759:                .route("/admin/scholars", web::post().to(create_scholar_account))
+sakina-backend/src/handlers/phase2.rs:760:                .route(
+sakina-backend/src/handlers/phase2.rs:762:                    web::post().to(assign_scholar_review),
+sakina-backend/src/handlers/phase2.rs:764:                .route(
+sakina-backend/src/handlers/phase2.rs:766:                    web::get().to(source_approval_queue),
+sakina-backend/src/handlers/phase2.rs:768:                .route(
+sakina-backend/src/handlers/phase2.rs:770:                    web::post().to(create_source_approval_item),
+sakina-backend/src/handlers/phase2.rs:1122:                .route("/auth/register", web::post().to(register_user))
+sakina-backend/src/handlers/phase2.rs:1123:                .route(
+sakina-backend/src/handlers/phase2.rs:1125:                    web::post().to(create_notification_template),
+sakina-backend/src/handlers/phase2.rs:1127:                .route("/notifications/send", web::post().to(enqueue_notification))
+sakina-backend/src/handlers/phase2.rs:1128:                .route(
+sakina-backend/src/handlers/phase2.rs:1130:                    web::post().to(upsert_device_token),
+sakina-backend/src/handlers/phase2.rs:1132:                .route("/support/tickets", web::post().to(create_support_ticket))
+sakina-backend/src/handlers/phase2.rs:1133:                .route(
+sakina-backend/src/handlers/phase2.rs:1135:                    web::get().to(get_support_ticket),
+sakina-backend/src/handlers/phase2.rs:1137:                .route(
+sakina-backend/src/handlers/phase2.rs:1139:                    web::post().to(append_support_ticket_message),
+sakina-backend/src/handlers/phase2.rs:1141:                .route("/audit/logs", web::post().to(create_audit_log))
+sakina-backend/src/handlers/phase2.rs:1142:                .route("/security/logs", web::post().to(create_security_log))
+sakina-backend/src/handlers/phase2.rs:1143:                .route("/events/app", web::post().to(create_app_event))
+sakina-backend/src/handlers/phase2.rs:1144:                .route("/events/chat", web::post().to(create_chat_event))
+sakina-backend/src/handlers/phase2.rs:1145:                .route("/events/rag", web::post().to(create_rag_event))
+sakina-backend/src/handlers/phase2.rs:1146:                .route("/events/admin", web::post().to(create_admin_event)),
+sakina-backend/src/handlers/rag.rs:66:    let _trace = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/rag.rs:126:    let route = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/rag.rs:487:                .route("/v1/rag/decide", web::post().to(rag_decide)),
+sakina-backend/src/handlers/rag.rs:509:                .route("/v1/rag/decide", web::post().to(rag_decide)),
+sakina-backend/src/handlers/rag.rs:531:                .route("/v1/rag/decide", web::post().to(rag_decide)),
+sakina-backend/src/handlers/rag.rs:553:                .route("/v1/rag/decide", web::post().to(rag_decide)),
+sakina-backend/src/main.rs:282:            .route("/health", web::get().to(handlers::health::health_check))
+sakina-backend/src/main.rs:283:            .route("/ready", web::get().to(readiness_check))
+sakina-backend/src/main.rs:284:            .route("/readiness", web::get().to(readiness_check))
+sakina-backend/src/main.rs:285:            .route("/metrics", web::get().to(handlers::ops::metrics))
+sakina-backend/src/main.rs:286:            .route(
+sakina-backend/src/main.rs:288:                web::post().to(handlers::waitlist::create_waitlist_entry),
+sakina-backend/src/main.rs:290:            .service(
+sakina-backend/src/main.rs:292:                    .route("", web::get().to(handlers::modules::modules_status))
+sakina-backend/src/main.rs:293:                    .route(
+sakina-backend/src/main.rs:295:                        web::get().to(handlers::modules::chat_status),
+sakina-backend/src/main.rs:297:                    .route(
+sakina-backend/src/main.rs:299:                        web::get().to(handlers::modules::quran_status),
+sakina-backend/src/main.rs:301:                    .route(
+sakina-backend/src/main.rs:303:                        web::get().to(handlers::modules::prayer_status),
+sakina-backend/src/main.rs:305:                    .route(
+sakina-backend/src/main.rs:307:                        web::get().to(handlers::modules::community_status),
+sakina-backend/src/main.rs:309:                    .route(
+sakina-backend/src/main.rs:311:                        web::get().to(handlers::modules::knowledge_status),
+sakina-backend/src/main.rs:314:            .service(
+sakina-backend/src/main.rs:316:                    .route(
+sakina-backend/src/main.rs:318:                        web::post().to(handlers::chat::create_conversation),
+sakina-backend/src/main.rs:320:                    .route(
+sakina-backend/src/main.rs:322:                        web::get().to(handlers::chat::get_conversation),
+sakina-backend/src/main.rs:324:                    .route(
+sakina-backend/src/main.rs:326:                        web::post().to(handlers::chat::add_message),
+sakina-backend/src/main.rs:329:            .service(
+sakina-backend/src/main.rs:331:                    .route("/agents", web::get().to(handlers::brain::debug_agents))
+sakina-backend/src/main.rs:332:                    .route("/route", web::post().to(handlers::brain::test_route)),
+sakina-backend/src/main.rs:334:            .route(
+sakina-backend/src/main.rs:336:                web::get().to(handlers::brain::debug_agents),
+sakina-backend/src/main.rs:338:            .route("/api/brain/health", web::get().to(handlers::brain::health))
+sakina-backend/src/main.rs:339:            .route(
+sakina-backend/src/main.rs:341:                web::post().to(handlers::brain::test_route),
+sakina-backend/src/main.rs:343:            .route(
+sakina-backend/src/main.rs:345:                web::get().to(handlers::brain::audit_recent),
+sakina-backend/src/main.rs:347:            .route(
+sakina-backend/src/main.rs:349:                web::post().to(handlers::brain::test_route),
+sakina-backend/src/main.rs:351:            .route(
+sakina-backend/src/main.rs:353:                web::post().to(handlers::rag::api_rag_search),
+sakina-backend/src/main.rs:355:            .route(
+sakina-backend/src/main.rs:357:                web::post().to(handlers::evaluation::check),
+sakina-backend/src/main.rs:359:            .route("/api/cache/stats", web::get().to(handlers::cache::stats))
+sakina-backend/src/main.rs:360:            .route(
+sakina-backend/src/main.rs:362:                web::get().to(handlers::knowledge_graph::health),
+sakina-backend/src/main.rs:364:            .route(
+sakina-backend/src/main.rs:366:                web::post().to(handlers::knowledge_graph::entity),
+sakina-backend/src/main.rs:368:            .route("/api/memory/write", web::post().to(handlers::memory::write))
+sakina-backend/src/main.rs:369:            .route("/api/memory/read", web::get().to(handlers::memory::read))
+sakina-backend/src/main.rs:370:            .route(
+sakina-backend/src/main.rs:372:                web::delete().to(handlers::memory::delete),
+sakina-backend/src/main.rs:374:            .route(
+sakina-backend/src/main.rs:376:                web::post().to(handlers::multimodal::analyze),
+sakina-backend/src/main.rs:378:            .service(
+sakina-backend/src/main.rs:380:                    .route("/health", web::get().to(handlers::health::health_check))
+sakina-backend/src/main.rs:381:                    .route("/ready", web::get().to(readiness_check))
+sakina-backend/src/main.rs:382:                    .route("/readiness", web::get().to(readiness_check))
+sakina-backend/src/main.rs:383:                    .route("/metrics", web::get().to(handlers::ops::metrics))
+sakina-backend/src/main.rs:384:                    .route(
+sakina-backend/src/main.rs:386:                        web::post().to(handlers::waitlist::create_waitlist_entry),
+sakina-backend/src/main.rs:388:                    .route(
+sakina-backend/src/main.rs:390:                        web::get().to(handlers::user::get_server_pubkey),
+sakina-backend/src/main.rs:392:                    .service(
+sakina-backend/src/main.rs:394:                            .route("/register", web::post().to(handlers::phase2::register_user))
+sakina-backend/src/main.rs:395:                            .route(
+sakina-backend/src/main.rs:397:                                web::post().to(handlers::phase2::create_session),
+sakina-backend/src/main.rs:400:                    .service(
+sakina-backend/src/main.rs:402:                            .route(
+sakina-backend/src/main.rs:404:                                web::put().to(handlers::phase2::upsert_profile),
+sakina-backend/src/main.rs:406:                            .route(
+sakina-backend/src/main.rs:408:                                web::post().to(handlers::phase2::create_family_profile),
+sakina-backend/src/main.rs:411:                    .service(
+sakina-backend/src/main.rs:413:                            .route(
+sakina-backend/src/main.rs:415:                                web::post().to(handlers::phase2::activate_subscription),
+sakina-backend/src/main.rs:417:                            .route(
+sakina-backend/src/main.rs:419:                                web::get().to(handlers::phase2::list_entitlements),
+sakina-backend/src/main.rs:423:                    .service(
+sakina-backend/src/main.rs:425:                            .route("", web::get().to(handlers::modules::modules_status))
+sakina-backend/src/main.rs:426:                            .route(
+sakina-backend/src/main.rs:428:                                web::get().to(handlers::modules::chat_status),
+sakina-backend/src/main.rs:430:                            .route(
+sakina-backend/src/main.rs:432:                                web::get().to(handlers::modules::quran_status),
+sakina-backend/src/main.rs:434:                            .route(
+sakina-backend/src/main.rs:436:                                web::get().to(handlers::modules::prayer_status),
+sakina-backend/src/main.rs:438:                            .route(
+sakina-backend/src/main.rs:440:                                web::get().to(handlers::modules::community_status),
+sakina-backend/src/main.rs:442:                            .route(
+sakina-backend/src/main.rs:444:                                web::get().to(handlers::modules::knowledge_status),
+sakina-backend/src/main.rs:446:                            .route(
+sakina-backend/src/main.rs:448:                                web::get().to(handlers::modules::quran_overview),
+sakina-backend/src/main.rs:450:                            .route(
+sakina-backend/src/main.rs:452:                                web::get().to(handlers::modules::prayer_overview),
+sakina-backend/src/main.rs:454:                            .route(
+sakina-backend/src/main.rs:456:                                web::get().to(handlers::modules::knowledge_overview),
+sakina-backend/src/main.rs:458:                            .route(
+sakina-backend/src/main.rs:460:                                web::get().to(handlers::modules::community_overview),
+sakina-backend/src/main.rs:463:                    .service(
+sakina-backend/src/main.rs:465:                            .route(
+sakina-backend/src/main.rs:467:                                web::post().to(handlers::chat::create_conversation),
+sakina-backend/src/main.rs:469:                            .route(
+sakina-backend/src/main.rs:471:                                web::get().to(handlers::chat::get_conversation),
+sakina-backend/src/main.rs:473:                            .route(
+sakina-backend/src/main.rs:475:                                web::post().to(handlers::chat::add_message),
+sakina-backend/src/main.rs:477:                            .route(
+sakina-backend/src/main.rs:479:                                web::post().to(handlers::phase2::create_chat_feedback),
+sakina-backend/src/main.rs:481:                            .route(
+sakina-backend/src/main.rs:483:                                web::post().to(handlers::phase2::report_answer),
+sakina-backend/src/main.rs:486:                    .service(
+sakina-backend/src/main.rs:488:                            .route("/agents", web::get().to(handlers::brain::debug_agents))
+sakina-backend/src/main.rs:489:                            .route("/route", web::post().to(handlers::brain::test_route)),
+sakina-backend/src/main.rs:491:                    .route(
+sakina-backend/src/main.rs:493:                        web::get().to(handlers::brain::debug_agents),
+sakina-backend/src/main.rs:495:                    .route("/api/brain/health", web::get().to(handlers::brain::health))
+sakina-backend/src/main.rs:496:                    .route(
+sakina-backend/src/main.rs:498:                        web::post().to(handlers::brain::test_route),
+sakina-backend/src/main.rs:500:                    .route(
+sakina-backend/src/main.rs:502:                        web::get().to(handlers::brain::audit_recent),
+sakina-backend/src/main.rs:504:                    .route(
+sakina-backend/src/main.rs:506:                        web::post().to(handlers::brain::test_route),
+sakina-backend/src/main.rs:508:                    .route(
+sakina-backend/src/main.rs:510:                        web::post().to(handlers::rag::api_rag_search),
+sakina-backend/src/main.rs:512:                    .route(
+sakina-backend/src/main.rs:514:                        web::post().to(handlers::evaluation::check),
+sakina-backend/src/main.rs:516:                    .route("/api/cache/stats", web::get().to(handlers::cache::stats))
+sakina-backend/src/main.rs:517:                    .route(
+sakina-backend/src/main.rs:519:                        web::get().to(handlers::knowledge_graph::health),
+sakina-backend/src/main.rs:521:                    .service(
+sakina-backend/src/main.rs:523:                            .route("/status", web::get().to(handlers::rag::rag_status))
+sakina-backend/src/main.rs:524:                            .route("/sources", web::get().to(handlers::rag::rag_sources))
+sakina-backend/src/main.rs:525:                            .route(
+sakina-backend/src/main.rs:527:                                web::get().to(handlers::phase2::approved_rag_sources),
+sakina-backend/src/main.rs:529:                            .route("/search", web::get().to(handlers::rag::rag_search))
+sakina-backend/src/main.rs:530:                            .route("/decide", web::post().to(handlers::rag::rag_decide))
+sakina-backend/src/main.rs:531:                            .route(
+sakina-backend/src/main.rs:533:                                web::post().to(handlers::phase2::log_rag_retrieval),
+sakina-backend/src/main.rs:535:                            .route(
+sakina-backend/src/main.rs:537:                                web::post().to(handlers::phase2::log_citation_event),
+sakina-backend/src/main.rs:539:                            .route("/query", web::post().to(handlers::rag::query_rag)),
+sakina-backend/src/main.rs:541:                    .service(
+sakina-backend/src/main.rs:543:                            .route("/sources", web::get().to(handlers::islamic::list_sources))
+sakina-backend/src/main.rs:544:                            .route(
+sakina-backend/src/main.rs:546:                                web::get().to(handlers::islamic::list_documents),
+sakina-backend/src/main.rs:548:                            .route(
+sakina-backend/src/main.rs:550:                                web::get().to(handlers::islamic::list_document_chunks),
+sakina-backend/src/main.rs:552:                            .route("/search", web::get().to(handlers::islamic::search_local))
+sakina-backend/src/main.rs:553:                            .route(
+sakina-backend/src/main.rs:555:                                web::get().to(handlers::islamic::get_citation),
+sakina-backend/src/main.rs:557:                            .route("/ask", web::post().to(handlers::islamic::ask))
+sakina-backend/src/main.rs:558:                            .route(
+sakina-backend/src/main.rs:560:                                web::post().to(handlers::islamic::qdrant_plan),
+sakina-backend/src/main.rs:562:                            .route(
+sakina-backend/src/main.rs:564:                                web::get().to(handlers::islamic::ingestion_scaffolds),
+sakina-backend/src/main.rs:567:                    .service(
+sakina-backend/src/main.rs:569:                            .route(
+sakina-backend/src/main.rs:571:                                web::post().to(handlers::phase2::log_safety_classification),
+sakina-backend/src/main.rs:573:                            .route(
+sakina-backend/src/main.rs:575:                                web::post().to(handlers::phase2::log_mastermind_decision),
+sakina-backend/src/main.rs:577:                            .route(
+sakina-backend/src/main.rs:579:                                web::post().to(handlers::phase2::enqueue_scholar_review),
+sakina-backend/src/main.rs:581:                            .route(
+sakina-backend/src/main.rs:583:                                web::post().to(handlers::phase2::log_wasm_event),
+sakina-backend/src/main.rs:586:                    .service(
+sakina-backend/src/main.rs:588:                            .route(
+sakina-backend/src/main.rs:590:                                web::post().to(handlers::phase2::upsert_admin_role),
+sakina-backend/src/main.rs:592:                            .route(
+sakina-backend/src/main.rs:594:                                web::post().to(handlers::phase2::log_admin_action),
+sakina-backend/src/main.rs:596:                            .route(
+sakina-backend/src/main.rs:598:                                web::get().to(handlers::phase2::source_approval_queue),
+sakina-backend/src/main.rs:600:                            .route(
+sakina-backend/src/main.rs:602:                                web::post().to(handlers::phase2::create_source_approval_item),
+sakina-backend/src/main.rs:604:                            .route(
+sakina-backend/src/main.rs:606:                                web::post().to(handlers::phase2::create_scholar_account),
+sakina-backend/src/main.rs:608:                            .route(
+sakina-backend/src/main.rs:610:                                web::post().to(handlers::phase2::assign_scholar_review),
+sakina-backend/src/main.rs:613:                    .service(
+sakina-backend/src/main.rs:615:                            .route(
+sakina-backend/src/main.rs:617:                                web::post().to(handlers::phase2::create_notification_template),
+sakina-backend/src/main.rs:619:                            .route(
+sakina-backend/src/main.rs:621:                                web::post().to(handlers::phase2::enqueue_notification),
+sakina-backend/src/main.rs:623:                            .route(
+sakina-backend/src/main.rs:625:                                web::post().to(handlers::phase2::upsert_device_token),
+sakina-backend/src/main.rs:628:                    .service(web::scope("/support").route(
+sakina-backend/src/main.rs:630:                        web::post().to(handlers::phase2::create_support_ticket),
+sakina-backend/src/main.rs:632:                    .service(
+sakina-backend/src/main.rs:634:                            .route(
+sakina-backend/src/main.rs:636:                                web::get().to(handlers::phase2::get_support_ticket),
+sakina-backend/src/main.rs:638:                            .route(
+sakina-backend/src/main.rs:640:                                web::post().to(handlers::phase2::append_support_ticket_message),
+sakina-backend/src/main.rs:643:                    .service(
+sakina-backend/src/main.rs:645:                            .route("/logs", web::post().to(handlers::phase2::create_audit_log)),
+sakina-backend/src/main.rs:647:                    .service(web::scope("/security").route(
+sakina-backend/src/main.rs:649:                        web::post().to(handlers::phase2::create_security_log),
+sakina-backend/src/main.rs:651:                    .service(
+sakina-backend/src/main.rs:653:                            .route("/app", web::post().to(handlers::phase2::create_app_event))
+sakina-backend/src/main.rs:654:                            .route("/chat", web::post().to(handlers::phase2::create_chat_event))
+sakina-backend/src/main.rs:655:                            .route("/rag", web::post().to(handlers::phase2::create_rag_event))
+sakina-backend/src/main.rs:656:                            .route(
+sakina-backend/src/main.rs:658:                                web::post().to(handlers::phase2::create_admin_event),
+sakina-backend/src/main.rs:661:                    .route(
+sakina-backend/src/main.rs:663:                        web::post().to(handlers::classify::classify_intent),
+sakina-backend/src/main.rs:665:                    .service(
+sakina-backend/src/main.rs:667:                            .route(
+sakina-backend/src/main.rs:669:                                web::post().to(handlers::sync::upload_backup),
+sakina-backend/src/main.rs:671:                            .route(
+sakina-backend/src/main.rs:673:                                web::get().to(handlers::sync::download_backup),
+sakina-backend/src/main.rs:676:                    .service(web::scope("/dashboard").route(
+sakina-backend/src/main.rs:678:                        web::get().to(handlers::dashboard::get_guardrails),
+sakina-backend/src/main.rs:722:                    .route("/health", web::get().to(handlers::health::health_check))
+sakina-backend/src/main.rs:723:                    .route("/ready", web::get().to(readiness_check))
+sakina-backend/src/main.rs:724:                    .route("/readiness", web::get().to(readiness_check))
+sakina-backend/src/main.rs:725:                    .route("/metrics", web::get().to(handlers::ops::metrics))
+sakina-backend/src/main.rs:726:                    .route(
+sakina-backend/src/main.rs:728:                        web::post().to(handlers::waitlist::create_waitlist_entry),
+sakina-backend/src/main.rs:730:                    .service(
+sakina-backend/src/main.rs:732:                            .route("", web::get().to(handlers::modules::modules_status))
+sakina-backend/src/main.rs:733:                            .route(
+sakina-backend/src/main.rs:735:                                web::get().to(handlers::modules::chat_status),
+sakina-backend/src/main.rs:737:                            .route(
+sakina-backend/src/main.rs:739:                                web::get().to(handlers::modules::quran_status),
+sakina-backend/src/main.rs:741:                            .route(
+sakina-backend/src/main.rs:743:                                web::get().to(handlers::modules::prayer_status),
+sakina-backend/src/main.rs:745:                            .route(
+sakina-backend/src/main.rs:747:                                web::get().to(handlers::modules::community_status),
+sakina-backend/src/main.rs:749:                            .route(
+sakina-backend/src/main.rs:751:                                web::get().to(handlers::modules::knowledge_status),
+sakina-backend/src/main.rs:754:                    .service(
+sakina-backend/src/main.rs:756:                            .route(
+sakina-backend/src/main.rs:758:                                web::post().to(handlers::chat::create_conversation),
+sakina-backend/src/main.rs:760:                            .route(
+sakina-backend/src/main.rs:762:                                web::get().to(handlers::chat::get_conversation),
+sakina-backend/src/main.rs:764:                            .route(
+sakina-backend/src/main.rs:766:                                web::post().to(handlers::chat::add_message),
+sakina-backend/src/main.rs:769:                    .service(
+sakina-backend/src/main.rs:771:                            .route("/health", web::get().to(handlers::health::health_check))
+sakina-backend/src/main.rs:772:                            .route("/ready", web::get().to(readiness_check))
+sakina-backend/src/main.rs:773:                            .route("/readiness", web::get().to(readiness_check))
+sakina-backend/src/main.rs:774:                            .route("/metrics", web::get().to(handlers::ops::metrics))
+sakina-backend/src/main.rs:775:                            .route(
+sakina-backend/src/main.rs:777:                                web::post().to(handlers::waitlist::create_waitlist_entry),
+sakina-backend/src/main.rs:779:                            .service(
+sakina-backend/src/main.rs:781:                                    .route("", web::get().to(handlers::modules::modules_status))
+sakina-backend/src/main.rs:782:                                    .route(
+sakina-backend/src/main.rs:784:                                        web::get().to(handlers::modules::chat_status),
+sakina-backend/src/main.rs:786:                                    .route(
+sakina-backend/src/main.rs:788:                                        web::get().to(handlers::modules::quran_status),
+sakina-backend/src/main.rs:790:                                    .route(
+sakina-backend/src/main.rs:792:                                        web::get().to(handlers::modules::prayer_status),
+sakina-backend/src/main.rs:794:                                    .route(
+sakina-backend/src/main.rs:796:                                        web::get().to(handlers::modules::community_status),
+sakina-backend/src/main.rs:798:                                    .route(
+sakina-backend/src/main.rs:800:                                        web::get().to(handlers::modules::knowledge_status),
+sakina-backend/src/main.rs:803:                            .service(
+sakina-backend/src/main.rs:805:                                    .route(
+sakina-backend/src/main.rs:807:                                        web::post().to(handlers::chat::create_conversation),
+sakina-backend/src/main.rs:809:                                    .route(
+sakina-backend/src/main.rs:811:                                        web::get().to(handlers::chat::get_conversation),
+sakina-backend/src/main.rs:813:                                    .route(
+sakina-backend/src/main.rs:815:                                        web::post().to(handlers::chat::add_message),

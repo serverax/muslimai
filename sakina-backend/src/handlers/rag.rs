@@ -5,11 +5,13 @@ use std::time::Instant;
 
 use crate::error::ApiError;
 use crate::models::{
-    DecisionRequest, DecisionResponse, RagSearchItem, RagSearchResponse, RagSourceItem,
-    RagSourcesResponse, RagStatusResponse, ReviewStatus,
+    BrainRouteRequest, DecisionRequest, DecisionResponse, RagSearchItem, RagSearchResponse,
+    RagSourceItem, RagSourcesResponse, RagStatusResponse, ReviewStatus,
 };
 use crate::models::{RagQuery, RagResponse, SourceReference};
-use crate::services::{EmbeddingsService, Guardrails, QdrantVectorDB, SemanticRouter};
+use crate::services::{
+    AiaOrchestrator, EmbeddingsService, Guardrails, HybridRagService, QdrantVectorDB,
+};
 
 fn payload_text(payload: Option<&serde_json::Value>, key: &str) -> Option<String> {
     payload
@@ -19,7 +21,9 @@ fn payload_text(payload: Option<&serde_json::Value>, key: &str) -> Option<String
         .filter(|value| !value.is_empty())
 }
 
-fn source_from_payload(hit: &crate::services::qdrant_client::ScoredPoint) -> Option<SourceReference> {
+fn source_from_payload(
+    hit: &crate::services::qdrant_client::ScoredPoint,
+) -> Option<SourceReference> {
     let payload = hit.payload.as_ref();
     let source_id = payload_text(payload, "source_id")
         .or_else(|| payload_text(payload, "chunk_id"))
@@ -49,35 +53,28 @@ fn source_from_payload(hit: &crate::services::qdrant_client::ScoredPoint) -> Opt
 /// This endpoint is evidence-only: it does not generate answer text.
 #[tracing::instrument(skip_all)]
 pub async fn query_rag(
-    router: web::Data<Arc<SemanticRouter>>,
+    aia: web::Data<AiaOrchestrator>,
     guardrails: web::Data<Arc<Guardrails>>,
     qdrant: web::Data<QdrantVectorDB>,
     embeddings: web::Data<EmbeddingsService>,
     query: web::Json<RagQuery>,
 ) -> Result<HttpResponse, ApiError> {
     let start = Instant::now();
-    const THRESHOLD: f32 = 0.85;
 
     // 1. Classify intent (routing decision; not yet branched on).
-    let _intent = router.classify(&query.query).await?;
+    let _trace = aia.route(&BrainRouteRequest {
+        message: query.query.clone(),
+        language: None,
+        user_subscription_tier: "premium".to_string(),
+        safety_context: None,
+        request_id: None,
+    });
 
     // 2. Embed the query (vLLM).
     let embedding = embeddings.embed(&query.query).await?;
 
-    // 3. Guardrail check on the embedding.
-    let guard = guardrails.check(&embedding).await?;
-    if !guard.passed {
-        return Ok(HttpResponse::Ok().json(RagResponse {
-            answer: String::new(),
-            sources: vec![],
-            confidence: 0.0,
-            guardrail_triggered: true,
-            processing_time_ms: start.elapsed().as_millis() as u64,
-        }));
-    }
-
-    // 4. Vector search for supporting chunks.
-    let hits = qdrant.search(&embedding, THRESHOLD, 5).await?;
+    // 3. Vector search for supporting chunks.
+    let hits = qdrant.search(&embedding, 0.0, 5).await?;
     if hits.is_empty() {
         return Ok(HttpResponse::Ok().json(RagResponse {
             answer: String::new(),
@@ -88,12 +85,21 @@ pub async fn query_rag(
         }));
     }
 
+    // 4. Guardrail check on the strongest verified retrieval score.
+    let top_similarity = hits.iter().map(|point| point.score).fold(0.0_f32, f32::max);
+    let guard = guardrails.evaluate_score(top_similarity);
+    if !guard.passed {
+        return Ok(HttpResponse::Ok().json(RagResponse {
+            answer: String::new(),
+            sources: vec![],
+            confidence: guard.confidence,
+            guardrail_triggered: true,
+            processing_time_ms: start.elapsed().as_millis() as u64,
+        }));
+    }
+
     // 5. Build evidence references only from returned retrieval metadata.
     let sources: Vec<SourceReference> = hits.iter().filter_map(source_from_payload).collect();
-    let top_similarity = hits
-        .iter()
-        .map(|point| point.score)
-        .fold(0.0_f32, f32::max);
     let confidence = guard.confidence.min(top_similarity);
 
     Ok(HttpResponse::Ok().json(RagResponse {
@@ -103,6 +109,44 @@ pub async fn query_rag(
         guardrail_triggered: false,
         processing_time_ms: start.elapsed().as_millis() as u64,
     }))
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct ApiRagSearchRequest {
+    pub query: String,
+    pub language: Option<String>,
+}
+
+pub async fn api_rag_search(
+    aia: web::Data<AiaOrchestrator>,
+    hybrid: web::Data<HybridRagService>,
+    payload: web::Json<ApiRagSearchRequest>,
+) -> Result<HttpResponse, ApiError> {
+    let request = payload.into_inner();
+    let route = aia.route(&BrainRouteRequest {
+        message: request.query.clone(),
+        language: request.language.clone(),
+        user_subscription_tier: "premium".to_string(),
+        safety_context: None,
+        request_id: None,
+    });
+    let result = hybrid
+        .search(&request.query, request.language.as_deref(), 5)
+        .await?;
+    Ok(HttpResponse::Ok().json(serde_json::json!({
+        "selected_agent": route.selected_agent,
+        "selected_model": route.selected_model,
+        "selected_pipeline": route.selected_pipeline,
+        "retrieval_strategy": result.retrieval_strategy,
+        "retrieved_chunks": result.retrieved_chunks,
+        "source_ranking": result.source_ranking,
+        "citations": result.citations,
+        "graph_path": result.graph_path,
+        "compressed_tokens_before": result.compressed_tokens_before,
+        "compressed_tokens_after": result.compressed_tokens_after,
+        "compression_ratio": result.compression_ratio,
+        "weak_evidence_blocked": result.weak_evidence_blocked,
+    })))
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -210,15 +254,12 @@ pub async fn rag_status() -> HttpResponse {
     })
 }
 
-pub async fn rag_decide(payload: web::Json<DecisionRequest>) -> HttpResponse {
+pub async fn rag_decide(
+    payload: web::Json<DecisionRequest>,
+    aia: web::Data<AiaOrchestrator>,
+) -> HttpResponse {
     let request = payload.into_inner();
-    let response: DecisionResponse = crate::services::decision_algorithm::decide(
-        &request,
-        &crate::services::decision_algorithm::DefaultModuleClassifier,
-        &crate::services::decision_algorithm::DefaultSafetyClassifier,
-        &crate::services::decision_algorithm::EmptyRetriever,
-        &crate::services::decision_algorithm::StrictFormatter,
-    );
+    let response: DecisionResponse = aia.decide(&request);
     HttpResponse::Ok().json(response)
 }
 
@@ -333,10 +374,18 @@ pub async fn rag_search(
 }
 
 #[cfg(test)]
+#[allow(clippy::await_holding_lock)]
 mod contract_tests {
     use super::*;
     use actix_web::body::to_bytes;
     use actix_web::{http::StatusCode, test::TestRequest, web, App};
+    use std::sync::Arc;
+
+    fn aia_data() -> web::Data<AiaOrchestrator> {
+        web::Data::new(AiaOrchestrator::new(Arc::new(
+            crate::services::SemanticRouter::new(),
+        )))
+    }
 
     #[actix_rt::test]
     async fn rag_status_works() {
@@ -434,7 +483,9 @@ mod contract_tests {
     #[actix_rt::test]
     async fn rag_decide_accepts_object_safety_context() {
         let app = actix_web::test::init_service(
-            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+            App::new()
+                .app_data(aia_data())
+                .route("/v1/rag/decide", web::post().to(rag_decide)),
         )
         .await;
         let req = TestRequest::post()
@@ -454,7 +505,9 @@ mod contract_tests {
     #[actix_rt::test]
     async fn rag_decide_accepts_string_safety_context() {
         let app = actix_web::test::init_service(
-            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+            App::new()
+                .app_data(aia_data())
+                .route("/v1/rag/decide", web::post().to(rag_decide)),
         )
         .await;
         let req = TestRequest::post()
@@ -474,7 +527,9 @@ mod contract_tests {
     #[actix_rt::test]
     async fn rag_decide_accepts_null_safety_context() {
         let app = actix_web::test::init_service(
-            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+            App::new()
+                .app_data(aia_data())
+                .route("/v1/rag/decide", web::post().to(rag_decide)),
         )
         .await;
         let req = TestRequest::post()
@@ -494,7 +549,9 @@ mod contract_tests {
     #[actix_rt::test]
     async fn rag_decide_accepts_omitted_safety_context() {
         let app = actix_web::test::init_service(
-            App::new().route("/v1/rag/decide", web::post().to(rag_decide)),
+            App::new()
+                .app_data(aia_data())
+                .route("/v1/rag/decide", web::post().to(rag_decide)),
         )
         .await;
         let req = TestRequest::post()

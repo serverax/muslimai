@@ -2,22 +2,285 @@ use actix_cors::Cors;
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
 use serde_json::json;
 use sqlx::postgres::PgPoolOptions;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tracing::info;
 
 use sakina_backend::{brand, handlers, middleware, services, telemetry};
 
-fn missing_required_env_vars() -> Vec<&'static str> {
-    const REQUIRED_ENV_VARS: [&str; 1] = ["DATABASE_URL"];
-    REQUIRED_ENV_VARS
-        .iter()
-        .copied()
-        .filter(|key| {
-            std::env::var(key)
-                .ok()
-                .map(|value| value.trim().is_empty())
-                .unwrap_or(true)
+async fn default_not_found() -> HttpResponse {
+    sakina_backend::error::error_response(
+        actix_web::http::StatusCode::NOT_FOUND,
+        "not_found",
+        "route not found",
+    )
+}
+
+fn build_database_url() -> Result<String, String> {
+    if let Ok(value) = std::env::var("DATABASE_URL") {
+        let trimmed = value.trim().to_string();
+        if !trimmed.is_empty() {
+            return Ok(trimmed);
+        }
+    }
+
+    let host = std::env::var("POSTGRES_HOST").ok();
+    let port = std::env::var("POSTGRES_PORT").ok();
+    let db = std::env::var("POSTGRES_DB").ok();
+    let user = std::env::var("POSTGRES_USER").ok();
+    let password = std::env::var("POSTGRES_PASSWORD").ok();
+
+    match (host, port, db, user, password) {
+        (Some(host), Some(port), Some(db), Some(user), Some(password))
+            if !host.trim().is_empty()
+                && !port.trim().is_empty()
+                && !db.trim().is_empty()
+                && !user.trim().is_empty()
+                && !password.trim().is_empty() =>
+        {
+            Ok(format!(
+                "postgres://{}:{}@{}:{}/{}",
+                user.trim(),
+                password.trim(),
+                host.trim(),
+                port.trim(),
+                db.trim()
+            ))
+        }
+        _ => Err(
+            "DATABASE_URL is missing and the POSTGRES_* fallback variables are incomplete"
+                .to_string(),
+        ),
+    }
+}
+
+fn database_configuration_ready() -> bool {
+    build_database_url().is_ok()
+}
+
+fn env_value(name: &str) -> Option<String> {
+    std::env::var(name)
+        .ok()
+        .map(|value| value.trim().to_string())
+        .filter(|value| !value.is_empty())
+}
+
+fn env_flag(name: &str) -> bool {
+    matches!(
+        env_value(name).as_deref(),
+        Some("1") | Some("true") | Some("TRUE") | Some("yes") | Some("on")
+    )
+}
+
+fn strong_secret(name: &str) -> bool {
+    env_value(name).is_some_and(|value| {
+        value.len() >= 32
+            && !value.to_ascii_lowercase().contains("demo")
+            && !value.to_ascii_lowercase().contains("dummy")
+            && !value.to_ascii_lowercase().contains("test")
+    })
+}
+
+fn fake_mode_disabled() -> bool {
+    !env_flag("ALLOW_DEMO_MODE")
+        && !env_flag("ALLOW_MOCK_AI")
+        && !env_flag("ALLOW_MOCK_RAG")
+        && !env_flag("ALLOW_MOCK_AUTH")
+        && !env_flag("ALLOW_MOCK_PAYMENTS")
+        && !env_flag("ALLOW_FAKE_CI_PASS")
+}
+
+fn storage_status() -> &'static str {
+    if env_flag("UPLOADS_ENABLED") {
+        if env_value("OBJECT_STORAGE_URL").is_some() || env_value("S3_BUCKET").is_some() {
+            "ok"
+        } else {
+            "missing"
+        }
+    } else {
+        "configured_or_disabled_closed"
+    }
+}
+
+fn payments_status() -> &'static str {
+    if env_flag("PAYMENTS_ENABLED") {
+        if env_value("PAYMENT_PROVIDER").is_some()
+            && (env_value("PAYMENT_SECRET_REF").is_some()
+                || env_value("STRIPE_SECRET_KEY").is_some())
+        {
+            "ok"
+        } else {
+            "missing"
+        }
+    } else {
+        "configured_or_disabled_closed"
+    }
+}
+
+async fn rls_enabled(pool: &sqlx::PgPool) -> bool {
+    sqlx::query_scalar::<_, i64>(
+        r#"
+        SELECT COUNT(*)
+        FROM pg_tables
+        WHERE schemaname IN ('public','sakina_ai','audit','outbox')
+          AND rowsecurity = false
+        "#,
+    )
+    .fetch_one(pool)
+    .await
+    .map(|count| count == 0)
+    .unwrap_or(false)
+}
+
+async fn qdrant_reachable() -> bool {
+    let Some(base) = env_value("QDRANT_URL") else {
+        return false;
+    };
+    let base = base.trim_end_matches('/');
+    let url = format!("{base}/collections");
+    reqwest::Client::new()
+        .get(url)
+        .timeout(std::time::Duration::from_secs(3))
+        .send()
+        .await
+        .map(|response| response.status().is_success())
+        .unwrap_or(false)
+}
+
+fn redis_endpoint_from_url(raw: &str) -> Option<(String, u16)> {
+    let without_scheme = raw
+        .trim()
+        .strip_prefix("redis://")
+        .or_else(|| raw.trim().strip_prefix("valkey://"))
+        .unwrap_or(raw.trim());
+    let without_auth = without_scheme
+        .rsplit_once('@')
+        .map(|(_, host)| host)
+        .unwrap_or(without_scheme);
+    let host_port = without_auth.split('/').next().unwrap_or_default();
+    let (host, port) = host_port.rsplit_once(':')?;
+    let port = port.parse::<u16>().ok()?;
+    if host.trim().is_empty() {
+        return None;
+    }
+    Some((host.to_string(), port))
+}
+
+async fn redis_reachable() -> bool {
+    let Some(raw) = env_value("SAKINA_REDIS_URL")
+        .or_else(|| env_value("VALKEY_URL"))
+        .or_else(|| env_value("REDIS_URL"))
+    else {
+        return false;
+    };
+    let Some((host, port)) = redis_endpoint_from_url(&raw) else {
+        return false;
+    };
+    let Ok(connect_result) = tokio::time::timeout(
+        std::time::Duration::from_secs(3),
+        tokio::net::TcpStream::connect((host.as_str(), port)),
+    )
+    .await
+    else {
+        return false;
+    };
+    let Ok(mut stream) = connect_result else {
+        return false;
+    };
+    if stream.write_all(b"*1\r\n$4\r\nPING\r\n").await.is_err() {
+        return false;
+    }
+    let mut buf = [0_u8; 16];
+    match tokio::time::timeout(std::time::Duration::from_secs(3), stream.read(&mut buf)).await {
+        Ok(Ok(read)) => std::str::from_utf8(&buf[..read])
+            .map(|value| value.starts_with("+PONG"))
+            .unwrap_or(false),
+        _ => false,
+    }
+}
+
+fn llm_disabled_closed() -> bool {
+    matches!(
+        env_value("SAKINA_LLM_ENABLED")
+            .or_else(|| env_value("SAKINA_AI_ENABLED"))
+            .as_deref(),
+        Some("false") | Some("0") | Some("off")
+    )
+}
+
+async fn llm_provider_status() -> &'static str {
+    if llm_disabled_closed() {
+        return "configured_or_disabled_closed";
+    }
+    let Some(base) = env_value("VLLM_URL").or_else(|| env_value("LLM_PROVIDER_URL")) else {
+        return "missing";
+    };
+    if base.starts_with("mock://") {
+        return "missing";
+    }
+    let base = base.trim_end_matches('/');
+    let url = format!("{base}/v1/models");
+    reqwest::Client::new()
+        .get(url)
+        .timeout(std::time::Duration::from_secs(3))
+        .send()
+        .await
+        .map(|response| {
+            if response.status().is_success() {
+                "ok"
+            } else {
+                "missing"
+            }
         })
-        .collect()
+        .unwrap_or("missing")
+}
+
+async fn readiness_snapshot(pool: &sqlx::PgPool) -> serde_json::Value {
+    let database_ok = pool.acquire().await.is_ok();
+    let rls_ok = database_ok && rls_enabled(pool).await;
+    let qdrant_ok = qdrant_reachable().await;
+    let redis_ok = redis_reachable().await;
+    let llm = llm_provider_status().await;
+    let auth_ok = strong_secret("JWT_SECRET") || strong_secret("SAKINA_JWT_SECRET");
+    let encryption_ok = strong_secret("ENCRYPTION_KEY") || strong_secret("SAKINA_ENCRYPTION_KEY");
+    let storage = storage_status();
+    let payments = payments_status();
+    let fake_disabled = fake_mode_disabled();
+
+    json!({
+        "database": if database_ok { "ok" } else { "missing" },
+        "rls": if rls_ok { "ok" } else { "missing" },
+        "qdrant": if qdrant_ok { "ok" } else { "missing" },
+        "redis_valkey": if redis_ok { "ok" } else { "missing" },
+        "llm_provider": llm,
+        "auth": if auth_ok { "ok" } else { "missing" },
+        "encryption": if encryption_ok { "ok" } else { "missing" },
+        "storage": storage,
+        "payments": payments,
+        "fake_mode": if fake_disabled { "disabled" } else { "enabled" },
+        "environment": env_value("SAKINA_ENV").unwrap_or_else(|| "local".to_string()),
+    })
+}
+
+fn readiness_is_ok(snapshot: &serde_json::Value) -> bool {
+    snapshot["database"] == "ok"
+        && snapshot["rls"] == "ok"
+        && snapshot["qdrant"] == "ok"
+        && snapshot["redis_valkey"] == "ok"
+        && matches!(
+            snapshot["llm_provider"].as_str(),
+            Some("ok") | Some("configured_or_disabled_closed")
+        )
+        && snapshot["auth"] == "ok"
+        && snapshot["encryption"] == "ok"
+        && matches!(
+            snapshot["storage"].as_str(),
+            Some("ok") | Some("configured_or_disabled_closed")
+        )
+        && matches!(
+            snapshot["payments"].as_str(),
+            Some("ok") | Some("configured_or_disabled_closed")
+        )
+        && snapshot["fake_mode"] == "disabled"
 }
 
 async fn readiness_check(pool: web::Data<sqlx::PgPool>) -> HttpResponse {
@@ -32,8 +295,8 @@ async fn readiness_check(pool: web::Data<sqlx::PgPool>) -> HttpResponse {
     } else {
         false
     };
-    let missing_env_vars = missing_required_env_vars();
-    let is_ready = db_reachable && waitlist_table_exists && missing_env_vars.is_empty();
+    let db_config_ready = database_configuration_ready();
+    let is_ready = db_reachable && waitlist_table_exists && db_config_ready;
     let status = if is_ready { "ready" } else { "not_ready" };
 
     let response = json!({
@@ -42,15 +305,82 @@ async fn readiness_check(pool: web::Data<sqlx::PgPool>) -> HttpResponse {
         "checks": {
             "database_reachable": db_reachable,
             "waitlist_table_exists": waitlist_table_exists,
-            "required_env_present": missing_env_vars.is_empty(),
+            "required_env_present": db_config_ready,
         },
-        "missing_env_vars": missing_env_vars
+        "missing_env_vars": if db_config_ready {
+            Vec::<&str>::new()
+        } else {
+            vec!["DATABASE_URL or POSTGRES_*"]
+        }
     });
 
     if is_ready {
         HttpResponse::Ok().json(response)
     } else {
         HttpResponse::ServiceUnavailable().json(response)
+    }
+}
+
+async fn production_readiness_check(pool: web::Data<sqlx::PgPool>) -> HttpResponse {
+    let snapshot = readiness_snapshot(pool.get_ref()).await;
+    let response = json!({
+        "status": if readiness_is_ok(&snapshot) { "ready" } else { "not_ready" },
+        "checks": snapshot,
+    });
+
+    if readiness_is_ok(&response["checks"]) {
+        HttpResponse::Ok().json(response)
+    } else {
+        HttpResponse::ServiceUnavailable().json(response)
+    }
+}
+
+async fn observability_check(pool: web::Data<sqlx::PgPool>) -> HttpResponse {
+    let audit_logs = sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM public.audit_logs")
+        .fetch_one(pool.get_ref())
+        .await
+        .unwrap_or(0);
+    let brain_traces =
+        sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM sakina_ai.brain_decision_traces")
+            .fetch_one(pool.get_ref())
+            .await
+            .unwrap_or(0);
+    let rag_traces =
+        sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM sakina_ai.rag_retrieval_audit")
+            .fetch_one(pool.get_ref())
+            .await
+            .unwrap_or(0);
+    let safety_traces =
+        sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM sakina_ai.safety_classifications")
+            .fetch_one(pool.get_ref())
+            .await
+            .unwrap_or(0);
+
+    HttpResponse::Ok().json(json!({
+        "status": "ok",
+        "structured_logs": "enabled",
+        "request_id": "enabled",
+        "audit_logs": audit_logs,
+        "brain_traces": brain_traces,
+        "rag_traces": rag_traces,
+        "safety_traces": safety_traces,
+        "sensitive_log_policy": "do_not_log_secret_values"
+    }))
+}
+
+async fn validate_production_startup(pool: &sqlx::PgPool) -> std::io::Result<()> {
+    if env_value("SAKINA_ENV").as_deref() != Some("production") {
+        return Ok(());
+    }
+
+    let snapshot = readiness_snapshot(pool).await;
+    if readiness_is_ok(&snapshot) {
+        Ok(())
+    } else {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            format!("production readiness validation failed: {snapshot}"),
+        ))
     }
 }
 
@@ -71,7 +401,6 @@ fn build_cors() -> Cors {
             actix_web::http::header::AUTHORIZATION,
             actix_web::http::header::CONTENT_TYPE,
             actix_web::http::header::ACCEPT,
-            actix_web::http::header::HeaderName::from_static("x-sakina-user-id"),
         ])
         .max_age(3600);
 
@@ -132,7 +461,7 @@ async fn main() -> std::io::Result<()> {
     );
 
     // Database connection
-    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let database_url = build_database_url().expect("valid database configuration is required");
     let pool_max_connections = std::env::var("DATABASE_MAX_CONNECTIONS")
         .ok()
         .and_then(|v| v.parse::<u32>().ok())
@@ -146,18 +475,26 @@ async fn main() -> std::io::Result<()> {
         .expect("Failed to connect to database");
 
     info!("Connected to PostgreSQL");
+    validate_production_startup(&pool).await?;
 
     // Phase 1 services — wired into handlers via app_data.
     let router = std::sync::Arc::new(services::SemanticRouter::new());
+    let aia_orchestrator = services::AiaOrchestrator::new_with_pool(router.clone(), pool.clone());
     let guardrails = std::sync::Arc::new(services::Guardrails::new(0.85));
     let phase2_repo = services::Phase2Repository::new(pool.clone());
     let iman_journey_service = services::ImanJourneyService::new(pool.clone());
     let islamic_repo = services::IslamicKnowledgeRepository::new(pool.clone());
+    let knowledge_graph_service = services::KnowledgeGraphService::new(pool.clone());
+    let semantic_cache_service = services::SemanticCacheService::new(pool.clone());
+    let context_compressor = services::ContextCompressionService::new();
     let router_data = web::Data::new(router.clone());
+    let aia_orchestrator_data = web::Data::new(aia_orchestrator.clone());
     let guardrails_data = web::Data::new(guardrails.clone());
     let phase2_repo_data = web::Data::new(phase2_repo.clone());
     let iman_journey_service_data = web::Data::new(iman_journey_service.clone());
     let islamic_repo_data = web::Data::new(islamic_repo.clone());
+    let knowledge_graph_service_data = web::Data::new(knowledge_graph_service.clone());
+    let semantic_cache_service_data = web::Data::new(semantic_cache_service.clone());
 
     // Background worker: drain the outbox (marks chunk_indexed events Sent).
     let relay = services::OutboxRelay::new(pool.clone());
@@ -171,8 +508,8 @@ async fn main() -> std::io::Result<()> {
     // connection until a request actually uses them).
     let qdrant_url =
         std::env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6333".to_string());
-    let qdrant_collection =
-        std::env::var("QDRANT_COLLECTION").unwrap_or_else(|_| "verified_knowledge".to_string());
+    let qdrant_collection = std::env::var("QDRANT_COLLECTION")
+        .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());
     let vllm_url =
         std::env::var("VLLM_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
     let qdrant = web::Data::new(services::QdrantVectorDB::new(
@@ -182,11 +519,21 @@ async fn main() -> std::io::Result<()> {
     let embeddings = web::Data::new(services::EmbeddingsService::new(&vllm_url));
     let islamic_qdrant_collection = std::env::var("ISLAMIC_QDRANT_COLLECTION")
         .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());
+    let hybrid_rag_service = web::Data::new(services::HybridRagService::new(
+        pool.clone(),
+        services::EmbeddingsService::new(&vllm_url),
+        services::QdrantVectorDB::new(&qdrant_url, &islamic_qdrant_collection),
+        knowledge_graph_service.clone(),
+        context_compressor.clone(),
+    ));
     let islamic_answer_service = web::Data::new(services::IslamicAnswerService::new(
         islamic_repo.clone(),
-        services::QdrantVectorDB::new(&qdrant_url, &islamic_qdrant_collection),
-        services::EmbeddingsService::new(&vllm_url),
+        hybrid_rag_service.get_ref().clone(),
+        semantic_cache_service.clone(),
     ));
+    let memory_engine = web::Data::new(services::MemoryEngine::new(pool.clone()));
+    let multimodal_service = web::Data::new(services::MultimodalService::new(pool.clone()));
+    let mcp_registry = web::Data::new(services::McpConnectorRegistry::from_env());
     let waitlist_limiter = web::Data::new(handlers::waitlist::WaitlistRateLimiter::new(
         5,
         std::time::Duration::from_secs(60),
@@ -198,13 +545,20 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(pool.clone()))
             .app_data(router_data.clone())
+            .app_data(aia_orchestrator_data.clone())
             .app_data(guardrails_data.clone())
             .app_data(phase2_repo_data.clone())
             .app_data(iman_journey_service_data.clone())
             .app_data(islamic_repo_data.clone())
+            .app_data(knowledge_graph_service_data.clone())
+            .app_data(semantic_cache_service_data.clone())
             .app_data(qdrant.clone())
             .app_data(embeddings.clone())
             .app_data(islamic_answer_service.clone())
+            .app_data(hybrid_rag_service.clone())
+            .app_data(memory_engine.clone())
+            .app_data(multimodal_service.clone())
+            .app_data(mcp_registry.clone())
             .app_data(waitlist_limiter.clone())
             .app_data(
                 web::JsonConfig::default()
@@ -225,9 +579,27 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .wrap(middleware::AuditMiddleware)
             .route("/health", web::get().to(handlers::health::health_check))
+            .route("/health/ready", web::get().to(production_readiness_check))
+            .route("/health/observability", web::get().to(observability_check))
             .route("/ready", web::get().to(readiness_check))
             .route("/readiness", web::get().to(readiness_check))
             .route("/metrics", web::get().to(handlers::ops::metrics))
+            .service(
+                web::scope("/auth")
+                    .route("/register", web::post().to(handlers::phase2::register_user))
+                    .route("/login", web::post().to(handlers::phase2::login))
+                    .route("/refresh", web::post().to(handlers::phase2::refresh))
+                    .route("/me", web::get().to(handlers::phase2::current_user))
+                    .route("/logout", web::post().to(handlers::phase2::logout)),
+            )
+            .service(
+                web::scope("/api/auth")
+                    .route("/register", web::post().to(handlers::phase2::register_user))
+                    .route("/login", web::post().to(handlers::phase2::login))
+                    .route("/refresh", web::post().to(handlers::phase2::refresh))
+                    .route("/me", web::get().to(handlers::phase2::current_user))
+                    .route("/logout", web::post().to(handlers::phase2::logout)),
+            )
             .route(
                 "/waitlist",
                 web::post().to(handlers::waitlist::create_waitlist_entry),
@@ -272,6 +644,67 @@ async fn main() -> std::io::Result<()> {
                     ),
             )
             .service(
+                web::scope("/debug")
+                    .route("/agents", web::get().to(handlers::brain::debug_agents))
+                    .route("/route", web::post().to(handlers::brain::test_route)),
+            )
+            .route(
+                "/api/debug/agents",
+                web::get().to(handlers::brain::debug_agents),
+            )
+            .route(
+                "/api/brain/agents",
+                web::get().to(handlers::brain::debug_agents),
+            )
+            .route("/api/brain/health", web::get().to(handlers::brain::health))
+            .route(
+                "/api/brain/trace",
+                web::post().to(handlers::brain::test_route),
+            )
+            .route(
+                "/api/brain/audit/recent",
+                web::get().to(handlers::brain::audit_recent),
+            )
+            .route(
+                "/api/test/route",
+                web::post().to(handlers::brain::test_route),
+            )
+            .route(
+                "/api/rag/search",
+                web::post().to(handlers::rag::api_rag_search),
+            )
+            .route(
+                "/api/evaluation/check",
+                web::post().to(handlers::evaluation::check),
+            )
+            .route("/api/cache/stats", web::get().to(handlers::cache::stats))
+            .route(
+                "/api/kg/health",
+                web::get().to(handlers::knowledge_graph::health),
+            )
+            .route(
+                "/api/kg/entity",
+                web::post().to(handlers::knowledge_graph::entity),
+            )
+            .route("/api/memory/write", web::post().to(handlers::memory::write))
+            .route("/api/memory/read", web::get().to(handlers::memory::read))
+            .route(
+                "/api/memory/delete",
+                web::delete().to(handlers::memory::delete),
+            )
+            .route(
+                "/api/multimodal/analyze",
+                web::post().to(handlers::multimodal::analyze),
+            )
+            .route(
+                "/api/multimodal/assets/{asset_id}",
+                web::get().to(handlers::multimodal::get_asset),
+            )
+            .route(
+                "/api/multimodal/assets/{asset_id}",
+                web::delete().to(handlers::multimodal::delete_asset),
+            )
+            .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
                     .route("/ready", web::get().to(readiness_check))
@@ -288,6 +721,10 @@ async fn main() -> std::io::Result<()> {
                     .service(
                         web::scope("/auth")
                             .route("/register", web::post().to(handlers::phase2::register_user))
+                            .route("/login", web::post().to(handlers::phase2::login))
+                            .route("/refresh", web::post().to(handlers::phase2::refresh))
+                            .route("/me", web::get().to(handlers::phase2::current_user))
+                            .route("/logout", web::post().to(handlers::phase2::logout))
                             .route(
                                 "/sessions",
                                 web::post().to(handlers::phase2::create_session),
@@ -315,6 +752,10 @@ async fn main() -> std::io::Result<()> {
                                 web::get().to(handlers::phase2::list_entitlements),
                             ),
                     )
+                    .service(web::scope("/account").route(
+                        "/delete-request",
+                        web::post().to(handlers::phase2::request_account_deletion),
+                    ))
                     .configure(handlers::iman_journey::configure)
                     .service(
                         web::scope("/modules")
@@ -378,6 +819,63 @@ async fn main() -> std::io::Result<()> {
                                 "/messages/{id}/report",
                                 web::post().to(handlers::phase2::report_answer),
                             ),
+                    )
+                    .service(
+                        web::scope("/debug")
+                            .route("/agents", web::get().to(handlers::brain::debug_agents))
+                            .route("/route", web::post().to(handlers::brain::test_route)),
+                    )
+                    .route(
+                        "/api/debug/agents",
+                        web::get().to(handlers::brain::debug_agents),
+                    )
+                    .route(
+                        "/api/brain/agents",
+                        web::get().to(handlers::brain::debug_agents),
+                    )
+                    .route("/api/brain/health", web::get().to(handlers::brain::health))
+                    .route(
+                        "/api/brain/trace",
+                        web::post().to(handlers::brain::test_route),
+                    )
+                    .route(
+                        "/api/brain/audit/recent",
+                        web::get().to(handlers::brain::audit_recent),
+                    )
+                    .route(
+                        "/api/test/route",
+                        web::post().to(handlers::brain::test_route),
+                    )
+                    .route(
+                        "/api/rag/search",
+                        web::post().to(handlers::rag::api_rag_search),
+                    )
+                    .route(
+                        "/api/evaluation/check",
+                        web::post().to(handlers::evaluation::check),
+                    )
+                    .route("/api/cache/stats", web::get().to(handlers::cache::stats))
+                    .route(
+                        "/api/kg/health",
+                        web::get().to(handlers::knowledge_graph::health),
+                    )
+                    .route("/api/memory/write", web::post().to(handlers::memory::write))
+                    .route("/api/memory/read", web::get().to(handlers::memory::read))
+                    .route(
+                        "/api/memory/delete",
+                        web::delete().to(handlers::memory::delete),
+                    )
+                    .route(
+                        "/api/multimodal/analyze",
+                        web::post().to(handlers::multimodal::analyze),
+                    )
+                    .route(
+                        "/api/multimodal/assets/{asset_id}",
+                        web::get().to(handlers::multimodal::get_asset),
+                    )
+                    .route(
+                        "/api/multimodal/assets/{asset_id}",
+                        web::delete().to(handlers::multimodal::delete_asset),
                     )
                     .service(
                         web::scope("/rag")
@@ -473,6 +971,7 @@ async fn main() -> std::io::Result<()> {
                     )
                     .service(
                         web::scope("/notifications")
+                            .route("", web::get().to(handlers::phase2::list_notifications))
                             .route(
                                 "/templates",
                                 web::post().to(handlers::phase2::create_notification_template),
@@ -480,6 +979,10 @@ async fn main() -> std::io::Result<()> {
                             .route(
                                 "/send",
                                 web::post().to(handlers::phase2::enqueue_notification),
+                            )
+                            .route(
+                                "/{notification_id}/read",
+                                web::post().to(handlers::phase2::mark_notification_read),
                             )
                             .route(
                                 "/device-tokens",
@@ -539,6 +1042,7 @@ async fn main() -> std::io::Result<()> {
                         web::get().to(handlers::dashboard::get_guardrails),
                     )),
             )
+            .default_service(web::route().to(default_not_found))
     })
     .bind("0.0.0.0:8080")?
     .run()

@@ -109,16 +109,26 @@ class _IslamicLibraryScreenState extends State<IslamicLibraryScreen> {
                   ? 'مصادر موثوقة، اقتباسات قابلة للتحقق، وتراجع آمن عندما لا توجد أدلة.'
                   : 'Trusted sources, verifiable citations, and safe fallback when evidence is missing.',
               chips: [
-                _MetricChip(label: isArabic ? 'المصادر' : 'Sources', value: _sources.length.toString()),
-                _MetricChip(label: isArabic ? 'الوثائق' : 'Documents', value: _documents.length.toString()),
-                _MetricChip(label: isArabic ? 'الاستشهادات' : 'Citations', value: answerCitations.toString()),
+                _MetricChip(
+                    label: isArabic ? 'المصادر' : 'Sources',
+                    value: _sources.length.toString()),
+                _MetricChip(
+                    label: isArabic ? 'الوثائق' : 'Documents',
+                    value: _documents.length.toString()),
+                _MetricChip(
+                    label: isArabic ? 'الاستشهادات' : 'Citations',
+                    value: answerCitations.toString()),
               ],
             ),
             const SizedBox(height: 12),
             Card(
               elevation: 0,
-              color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              color: Theme.of(context)
+                  .colorScheme
+                  .surfaceContainerHighest
+                  .withValues(alpha: 0.45),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Wrap(
@@ -198,8 +208,12 @@ class _IslamicLibraryScreenState extends State<IslamicLibraryScreen> {
               const SizedBox(height: 12),
               Card(
                 elevation: 0,
-                color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                color: Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerHighest
+                    .withValues(alpha: 0.3),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
                 child: Padding(
                   padding: const EdgeInsets.all(14),
                   child: Column(
@@ -235,7 +249,8 @@ class _IslamicLibraryScreenState extends State<IslamicLibraryScreen> {
                           spacing: 8,
                           runSpacing: 8,
                           children: _answer!.citations
-                              .map((citation) => CitationBadge(source: citation))
+                              .map(
+                                  (citation) => CitationBadge(source: citation))
                               .toList(),
                         ),
                       ],
@@ -258,7 +273,8 @@ class _IslamicLibraryScreenState extends State<IslamicLibraryScreen> {
                                 child: ListTile(
                                   dense: true,
                                   title: Text(d.title),
-                                  subtitle: Text('${d.sourceType} • ${d.language}'),
+                                  subtitle:
+                                      Text('${d.sourceType} • ${d.language}'),
                                 ),
                               ),
                             ),
@@ -313,8 +329,14 @@ class _HeroCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.85),
-            Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+            Theme.of(context)
+                .colorScheme
+                .surfaceContainerHighest
+                .withValues(alpha: 0.85),
+            Theme.of(context)
+                .colorScheme
+                .surfaceContainerHighest
+                .withValues(alpha: 0.55),
           ],
         ),
         border: Border.all(
@@ -326,7 +348,10 @@ class _HeroCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 6),
           Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
@@ -348,7 +373,8 @@ class _MetricChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       label: Text('$label: $value'),
-      side: BorderSide(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)),
+      side: BorderSide(
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)),
     );
   }
 }

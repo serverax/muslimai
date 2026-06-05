@@ -53,11 +53,20 @@ android {
             signingConfig = if (keystorePropertiesFile.exists()) {
                 signingConfigs.getByName("release")
             } else {
-                throw GradleException(
-                    "android/key.properties is required for release builds. Copy android/key.properties.example and provide a production keystore."
-                )
+                null
             }
         }
+    }
+}
+
+gradle.taskGraph.whenReady {
+    val releaseRequested = allTasks.any { task ->
+        task.name.contains("Release", ignoreCase = true)
+    }
+    if (releaseRequested && !keystorePropertiesFile.exists()) {
+        throw GradleException(
+            "android/key.properties is required for release builds. Copy android/key.properties.example and provide a production keystore."
+        )
     }
 }
 

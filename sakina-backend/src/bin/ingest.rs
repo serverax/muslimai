@@ -11,9 +11,8 @@ use std::path::PathBuf;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let path = parse_path_arg().unwrap_or_else(|| PathBuf::from("data/verified-texts"));
 
-    let database_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| {
-        "postgres://sakina_user:sakina_password@localhost:5432/sakina".to_string()
-    });
+    let database_url = std::env::var("DATABASE_URL")
+        .map_err(|_| "DATABASE_URL is required for Sakina ingestion")?;
     let pool = PgPool::connect(&database_url).await?;
     let producer = IngestionProducer::new(pool);
 

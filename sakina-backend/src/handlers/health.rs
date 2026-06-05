@@ -5,6 +5,11 @@ use sqlx::PgPool;
 
 pub async fn health_check(pool: web::Data<PgPool>) -> HttpResponse {
     let db_status = pool.acquire().await.is_ok();
+    let db_label = if db_status {
+        "connected"
+    } else {
+        "disconnected"
+    };
 
     HttpResponse::Ok().json(json!({
         "status": "healthy",
@@ -12,7 +17,8 @@ pub async fn health_check(pool: web::Data<PgPool>) -> HttpResponse {
         "version": "1.0.0",
         "brand": SAKINA.name,
         "tagline": SAKINA.tagline,
-        "database": if db_status { "ok" } else { "error" },
+        "db": db_label,
+        "database": db_label,
         "timestamp": chrono::Utc::now().to_rfc3339(),
         "values": [
             "Integrity",

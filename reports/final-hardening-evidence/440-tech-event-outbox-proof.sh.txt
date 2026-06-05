@@ -1,0 +1,22 @@
+Inserted outbox event: 8e2aaf38-2e4c-4a0d-b6f9-c373e528ccc7
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.56s
+Outbox event final status: Sent
+sakina-backend/db/init.sql:42:CREATE TABLE outbox.events (
+sakina-backend/db/init.sql:55:    event_id UUID REFERENCES outbox.events(id),
+sakina-backend/src/main.rs:500:    let relay = services::OutboxRelay::new(pool.clone());
+sakina-backend/src/main.rs:502:        if let Err(e) = relay.relay_events().await {
+sakina-backend/src/services/ingestion_producer.rs:2://! persist the source document + chunks + outbox events to Postgres.
+sakina-backend/src/services/ingestion_producer.rs:69:                "INSERT INTO outbox.events (event_type, payload, status) \
+sakina-backend/src/services/outbox_relay.rs:1://! Outbox relay (Phase 2, Step 8): drains pending `outbox.events` and marks them
+sakina-backend/src/services/outbox_relay.rs:4://! `SELECT ... FOR UPDATE SKIP LOCKED` so multiple API replicas don't
+sakina-backend/src/services/outbox_relay.rs:11:pub struct OutboxRelay {
+sakina-backend/src/services/outbox_relay.rs:15:impl OutboxRelay {
+sakina-backend/src/services/outbox_relay.rs:17:        OutboxRelay { pool }
+sakina-backend/src/services/outbox_relay.rs:22:    pub async fn relay_events(&self) -> Result<(), Box<dyn std::error::Error>> {
+sakina-backend/src/services/outbox_relay.rs:26:                 FROM outbox.events \
+sakina-backend/src/services/outbox_relay.rs:29:                 FOR UPDATE SKIP LOCKED LIMIT 25",
+sakina-backend/src/services/outbox_relay.rs:44:                        "UPDATE outbox.events \
+sakina-backend/src/services/outbox_relay.rs:45:                         SET status = 'Sent', updated_at = now() \
+sakina-backend/src/services/outbox_relay.rs:56:                            "UPDATE outbox.events \
+sakina-backend/src/services/outbox_relay.rs:75:                            "UPDATE outbox.events \
+EVENT_OUTBOX_OK pending event was relayed to Sent by the running backend.

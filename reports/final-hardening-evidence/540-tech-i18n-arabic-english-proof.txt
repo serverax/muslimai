@@ -1,0 +1,217 @@
+{
+  "profile_id": "b857b41f-13b3-4330-8b7a-e70805b3eccf",
+  "user_id": "f87502e2-7542-4177-896a-15b6441a515d"
+}
+DB Arabic language preference rows: 1
+{
+  "request_id": "i18n-1780643855-31752-brain-ar",
+  "selected_agent": "Quran Agent",
+  "selected_model": "lite_llm",
+  "selected_pipeline": "mother_brain>quran_rag>evaluation",
+  "source_strategy": "hybrid_rag",
+  "language": "ar",
+  "risk_level": "safe",
+  "confidence": 0.84,
+  "rag_required": true,
+  "wasm_required": false,
+  "evaluation_required": true,
+  "scholar_review_required": false,
+  "can_generate": true,
+  "execution_trace": [
+    {
+      "step": "input_received",
+      "outcome": "ok"
+    },
+    {
+      "step": "authenticated_user",
+      "outcome": "checked"
+    },
+    {
+      "step": "safe_user_context_loaded",
+      "outcome": "premium"
+    },
+    {
+      "step": "input_type_classified",
+      "outcome": "short_form"
+    },
+    {
+      "step": "pii_redaction",
+      "outcome": "not_required"
+    },
+    {
+      "step": "language_detected",
+      "outcome": "ar"
+    },
+    {
+      "step": "intent_detected",
+      "outcome": "general_guidance"
+    },
+    {
+      "step": "risk_detected",
+      "outcome": "safe"
+    },
+    {
+      "step": "prompt_injection_guard",
+      "outcome": "clear"
+    },
+    {
+      "step": "agent_selected",
+      "outcome": "Quran Agent"
+    },
+    {
+      "step": "source_strategy_selected",
+      "outcome": "hybrid_rag"
+    },
+    {
+      "step": "cost_governor",
+      "outcome": "estimated_units=2025;budget_units=16000;decision=allow"
+    },
+    {
+      "step": "evidence_retrieved",
+      "outcome": "verified_evidence_requested"
+    },
+    {
+      "step": "context_compressed",
+      "outcome": "compressed"
+    },
+    {
+      "step": "draft_generated",
+      "outcome": "draft_ready"
+    },
+    {
+      "step": "answer_evaluated",
+      "outcome": "PASS:0.91"
+    },
+    {
+      "step": "safety_policy_applied",
+      "outcome": "policy allows generation"
+    },
+    {
+      "step": "memory_action",
+      "outcome": "no_sensitive_memory_write"
+    },
+    {
+      "step": "decision_logged",
+      "outcome": "9c6a1568-ccb2-4099-b43d-f33ca1f411a1"
+    },
+    {
+      "step": "final_response_returned",
+      "outcome": "answer_returned"
+    }
+  ]
+}
+sakina-frontend/lib/screens/welcome_screen.dart:40:                        value: AppLanguage.english,
+sakina-frontend/lib/screens/welcome_screen.dart:44:                        value: AppLanguage.arabic,
+sakina-frontend/lib/app/app_strings.dart:6:      AppLanguage.english: 'Sakina AI',
+sakina-frontend/lib/app/app_strings.dart:7:      AppLanguage.arabic: 'سكينة AI',
+sakina-frontend/lib/app/app_strings.dart:10:      AppLanguage.english: 'Sakina AI - Your AI-Powered Islamic Companion',
+sakina-frontend/lib/app/app_strings.dart:11:      AppLanguage.arabic: 'سكينة AI - رفيقك الإسلامي الذكي',
+sakina-frontend/lib/app/app_strings.dart:14:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:16:      AppLanguage.arabic:
+sakina-frontend/lib/app/app_strings.dart:20:      AppLanguage.english: 'Get Started',
+sakina-frontend/lib/app/app_strings.dart:21:      AppLanguage.arabic: 'ابدأ الآن',
+sakina-frontend/lib/app/app_strings.dart:24:      AppLanguage.english: 'Learn More',
+sakina-frontend/lib/app/app_strings.dart:25:      AppLanguage.arabic: 'اعرف المزيد',
+sakina-frontend/lib/app/app_strings.dart:28:      AppLanguage.english: 'Continue with limited preview',
+sakina-frontend/lib/app/app_strings.dart:29:      AppLanguage.arabic: 'المتابعة في وضع المعاينة المحدود',
+sakina-frontend/lib/app/app_strings.dart:32:      AppLanguage.english: 'Build serenity through consistency',
+sakina-frontend/lib/app/app_strings.dart:33:      AppLanguage.arabic: 'ابنِ السكينة عبر الاستمرارية',
+sakina-frontend/lib/app/app_strings.dart:36:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:38:      AppLanguage.arabic:
+sakina-frontend/lib/app/app_strings.dart:42:      AppLanguage.english: 'Verified guidance with clear confidence',
+sakina-frontend/lib/app/app_strings.dart:43:      AppLanguage.arabic: 'إرشاد موثوق بدون ثقة وهمية',
+sakina-frontend/lib/app/app_strings.dart:46:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:48:      AppLanguage.arabic:
+sakina-frontend/lib/app/app_strings.dart:49:          'سكينة تعرض فقط الميزات المنفذة فعليا بدون تمثيل مزيف.',
+sakina-frontend/lib/app/app_strings.dart:52:      AppLanguage.english: 'Start with waitlist and early access',
+sakina-frontend/lib/app/app_strings.dart:53:      AppLanguage.arabic: 'ابدأ عبر قائمة الانتظار والوصول المبكر',
+sakina-frontend/lib/app/app_strings.dart:56:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:58:      AppLanguage.arabic:
+sakina-frontend/lib/app/app_strings.dart:62:      AppLanguage.english: 'Continue',
+sakina-frontend/lib/app/app_strings.dart:63:      AppLanguage.arabic: 'متابعة',
+sakina-frontend/lib/app/app_strings.dart:66:      AppLanguage.english: 'Join Waitlist',
+sakina-frontend/lib/app/app_strings.dart:67:      AppLanguage.arabic: 'انضم إلى قائمة الانتظار',
+sakina-frontend/lib/app/app_strings.dart:70:      AppLanguage.english: 'Name',
+sakina-frontend/lib/app/app_strings.dart:71:      AppLanguage.arabic: 'الاسم',
+sakina-frontend/lib/app/app_strings.dart:74:      AppLanguage.english: 'Email',
+sakina-frontend/lib/app/app_strings.dart:75:      AppLanguage.arabic: 'البريد الإلكتروني',
+sakina-frontend/lib/app/app_strings.dart:78:      AppLanguage.english: 'Message (optional)',
+sakina-frontend/lib/app/app_strings.dart:79:      AppLanguage.arabic: 'رسالة (اختياري)',
+sakina-frontend/lib/app/app_strings.dart:82:      AppLanguage.english: 'Submit',
+sakina-frontend/lib/app/app_strings.dart:83:      AppLanguage.arabic: 'إرسال',
+sakina-frontend/lib/app/app_strings.dart:86:      AppLanguage.english: 'You are on the waitlist.',
+sakina-frontend/lib/app/app_strings.dart:87:      AppLanguage.arabic: 'تم تسجيلك في قائمة الانتظار.',
+sakina-frontend/lib/app/app_strings.dart:90:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:92:      AppLanguage.arabic:
+sakina-frontend/lib/app/app_strings.dart:93:          'تعذر الاتصال بالشبكة. يرجى التحقق من الاتصال والمحاولة مرة أخرى.',
+sakina-frontend/lib/app/app_strings.dart:96:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:98:      AppLanguage.arabic:
+sakina-frontend/lib/app/app_strings.dart:102:      AppLanguage.english: 'Coming soon',
+sakina-frontend/lib/app/app_strings.dart:103:      AppLanguage.arabic: 'قريبا',
+sakina-frontend/lib/app/app_strings.dart:106:      AppLanguage.english: 'Open Mobile Workspace',
+sakina-frontend/lib/app/app_strings.dart:107:      AppLanguage.arabic: 'افتح مساحة العمل على الجوال',
+sakina-frontend/lib/app/app_strings.dart:110:      AppLanguage.english: 'Chat',
+sakina-frontend/lib/app/app_strings.dart:111:      AppLanguage.arabic: 'المحادثة',
+sakina-frontend/lib/app/app_strings.dart:114:      AppLanguage.english: 'Quran',
+sakina-frontend/lib/app/app_strings.dart:115:      AppLanguage.arabic: 'القرآن',
+sakina-frontend/lib/app/app_strings.dart:118:      AppLanguage.english: 'Prayer',
+sakina-frontend/lib/app/app_strings.dart:119:      AppLanguage.arabic: 'الصلاة',
+sakina-frontend/lib/app/app_strings.dart:122:      AppLanguage.english: 'Community',
+sakina-frontend/lib/app/app_strings.dart:123:      AppLanguage.arabic: 'المجتمع',
+sakina-frontend/lib/app/app_strings.dart:126:      AppLanguage.english: 'Knowledge',
+sakina-frontend/lib/app/app_strings.dart:127:      AppLanguage.arabic: 'المعرفة',
+sakina-frontend/lib/app/app_strings.dart:130:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:132:      AppLanguage.arabic: 'هذه الوحدة معطلة عمدا حتى تكتمل جاهزية الخلفية.',
+sakina-frontend/lib/app/app_strings.dart:135:      AppLanguage.english:
+sakina-frontend/lib/app/app_strings.dart:137:      AppLanguage.arabic:
+sakina-frontend/lib/app/app_strings.dart:141:      AppLanguage.english: 'Language',
+sakina-frontend/lib/app/app_strings.dart:142:      AppLanguage.arabic: 'اللغة',
+sakina-frontend/lib/screens/islamic_library_screen.dart:99:    return Directionality(
+sakina-frontend/lib/screens/islamic_library_screen.dart:100:      textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
+sakina-frontend/lib/screens/islamic_library_screen.dart:142:                        ButtonSegment(value: 'ar', label: Text('العربية')),
+sakina-frontend/lib/services/api_service.dart:1431:        'ui_language': 'en',
+sakina-frontend/lib/services/api_service.dart:1432:        'content_language': 'ar',
+sakina-frontend/lib/app/app_state.dart:20:  bool get isArabic => _language == AppLanguage.arabic;
+sakina-frontend/lib/app/app_state.dart:28:        languageCode == 'ar' ? AppLanguage.arabic : AppLanguage.english;
+sakina-frontend/lib/app/app_state.dart:39:        _languageKey, language == AppLanguage.arabic ? 'ar' : 'en');
+sakina-backend/src/services/semantic_cache.rs:137:                language: row.get("language"),
+sakina-backend/src/services/hybrid_rag.rs:129:                language: row.get("language"),
+sakina-backend/src/services/hybrid_rag.rs:256:                language: row.get("language"),
+sakina-backend/src/handlers/rag.rs:239:            language: row.get("language"),
+sakina-backend/src/handlers/phase2.rs:640:                    "ui_language": "en",
+sakina-backend/src/handlers/phase2.rs:641:                    "content_language": "ar",
+sakina-backend/src/handlers/phase2.rs:701:                "ui_language": "en",
+sakina-backend/src/handlers/phase2.rs:702:                "content_language": "ar",
+sakina-backend/src/services/brain_controller.rs:153:                step: "language_detected".to_string(),
+sakina-backend/src/services/ai_router.rs:174:        let language = detect_language(message, request.language.as_deref());
+sakina-backend/src/services/ai_router.rs:260:        ) || is_arabic_text(message)
+sakina-backend/src/services/ai_router.rs:358:                    step: "language_detected".to_string(),
+sakina-backend/src/services/ai_router.rs:359:                    outcome: detect_language(message, request.language.as_deref()),
+sakina-backend/src/services/ai_router.rs:402:fn detect_language(message: &str, preferred: Option<&str>) -> String {
+sakina-backend/src/services/ai_router.rs:494:fn is_arabic_text(text: &str) -> bool {
+sakina-backend/src/services/phase2.rs:436:                user_id, ui_language, content_language, transliteration_enabled
+sakina-backend/src/services/phase2.rs:441:                ui_language = EXCLUDED.ui_language,
+sakina-backend/src/services/phase2.rs:442:                content_language = EXCLUDED.content_language,
+sakina-backend/src/services/phase2.rs:448:        .bind(&request.ui_language)
+sakina-backend/src/services/phase2.rs:449:        .bind(&request.content_language)
+sakina-backend/src/services/phase2.rs:947:                language: row.get("language"),
+sakina-backend/src/services/phase2.rs:2153:    pub ui_language: String,
+sakina-backend/src/services/phase2.rs:2154:    pub content_language: String,
+sakina-backend/src/services/memory_engine.rs:296:            source_language: row.get("source_language"),
+sakina-backend/src/services/islamic_knowledge.rs:331:        let mut answer_text = crate::services::offline_lookup(question, &language)
+sakina-backend/src/services/knowledge_graph_service.rs:82:            language: row.get("language"),
+sakina-backend/src/services/knowledge_graph_service.rs:130:                        language: row.get("language"),
+sakina-backend/src/services/knowledge_graph_service.rs:196:                    language: row.get("language"),
+00:00 +0: loading F:/SakinaAL/sakina-frontend/test/widget_test.dart
+00:00 +0: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
+00:00 +1: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
+00:00 +2: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
+00:00 +3: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
+00:01 +4: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
+00:02 +5: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
+00:03 +6: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: contract errors expose status and code for gating
+00:03 +7: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: malformed add message payload throws FormatException
+00:03 +8: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: phase3 domain wiring calls required endpoints
+00:03 +9: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: joinWaitlist() posts the expected payload
+00:03 +10: All tests passed!
+I18N_ARABIC_ENGLISH_OK Arabic and English UI strings/RTL controls exist, Arabic profile language preferences persist through authenticated backend API and DB, Arabic and English Brain traces preserve language, backend routes support language-aware retrieval/routing, and frontend tests passed.

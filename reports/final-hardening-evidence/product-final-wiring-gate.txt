@@ -1,0 +1,1 @@
+WIRING_GATE_BLOCKER frontend static/fake scan has hits; review/fix required: reports/final-hardening-evidence/231-frontend-fake-wiring-scan.txt

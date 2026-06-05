@@ -11,7 +11,11 @@ if ! command -v kubectl >/dev/null 2>&1; then
   exit 1
 fi
 
-ACTIVE_CONTEXT="$(kubectl config current-context 2>/dev/null || true)"
+if kubectl config current-context >/tmp/sakina-smoke-kube-context.txt 2>/tmp/sakina-smoke-kube-context.err; then
+  ACTIVE_CONTEXT="$(cat /tmp/sakina-smoke-kube-context.txt)"
+else
+  ACTIVE_CONTEXT=""
+fi
 if [[ -z "${ACTIVE_CONTEXT}" ]]; then
   echo "Unable to read current kube context" >&2
   exit 1
@@ -26,4 +30,4 @@ kubectl delete job "${SMOKE_JOB_NAME}" -n "${TARGET_NAMESPACE}" --ignore-not-fou
 kubectl apply -f "${SMOKE_MANIFEST}"
 kubectl wait --for=condition=complete "job/${SMOKE_JOB_NAME}" -n "${TARGET_NAMESPACE}" --timeout=240s
 
-echo "staging smoke tests passed in ${TARGET_NAMESPACE}"
+echo "staging smoke tests completed in ${TARGET_NAMESPACE}"

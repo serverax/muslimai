@@ -1,6 +1,8 @@
 use crate::error::ApiError;
 use crate::models::SourceReference;
-use crate::services::{EmbeddingsService, QdrantVectorDB};
+use crate::services::{
+    BrainExecutionPermit, HybridRagService, SemanticCacheEntry, SemanticCacheService,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sqlx::Row;
@@ -223,6 +225,7 @@ pub struct AskIslamicRequest {
     pub language: Option<String>,
     pub top_k: Option<usize>,
     pub min_score: Option<f32>,
+    pub user_id: Option<Uuid>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -236,20 +239,20 @@ pub struct QdrantCollectionPlan {
 
 pub struct IslamicAnswerService {
     _repository: IslamicKnowledgeRepository,
-    qdrant: QdrantVectorDB,
-    embeddings: EmbeddingsService,
+    hybrid_rag: HybridRagService,
+    cache: SemanticCacheService,
 }
 
 impl IslamicAnswerService {
     pub fn new(
         repository: IslamicKnowledgeRepository,
-        qdrant: QdrantVectorDB,
-        embeddings: EmbeddingsService,
+        hybrid_rag: HybridRagService,
+        cache: SemanticCacheService,
     ) -> Self {
         Self {
             _repository: repository,
-            qdrant,
-            embeddings,
+            hybrid_rag,
+            cache,
         }
     }
 
@@ -267,7 +270,11 @@ impl IslamicAnswerService {
         }
     }
 
-    pub async fn answer(&self, request: AskIslamicRequest) -> Result<Value, ApiError> {
+    pub async fn answer(
+        &self,
+        request: AskIslamicRequest,
+        _permit: BrainExecutionPermit,
+    ) -> Result<Value, ApiError> {
         let question = request.question.trim();
         if question.is_empty() {
             return Err(ApiError::bad_request("question cannot be empty"));
@@ -275,36 +282,62 @@ impl IslamicAnswerService {
         let language = request.language.unwrap_or_else(|| "en".to_string());
         let top_k = request.top_k.unwrap_or(5).clamp(1, 20);
         let min_score = request.min_score.unwrap_or(0.75).clamp(0.0, 1.0);
+        let fatwa_sensitive = is_fatwa_sensitive(question);
+        let safety_level = if fatwa_sensitive { "high" } else { "safe" };
+        let source_version =
+            self.cache.source_version().await.map_err(|_| {
+                ApiError::internal("failed to calculate semantic cache source version")
+            })?;
+        let user_context = request
+            .user_id
+            .map(|user_id| user_id.to_string())
+            .unwrap_or_else(|| "anonymous".to_string());
+        let cache_key = SemanticCacheService::cache_key(
+            &language,
+            "islamic_answer",
+            safety_level,
+            &source_version,
+            &format!("{user_context}:{question}"),
+        );
+        if let Some(entry) = self
+            .cache
+            .lookup(&cache_key, request.user_id)
+            .await
+            .map_err(|_| ApiError::internal("failed to load semantic cache"))?
+        {
+            let mut payload = entry.payload;
+            if let Some(object) = payload.as_object_mut() {
+                object.insert("cache_status".to_string(), json!("hit"));
+                object.insert("cache_hit".to_string(), json!(true));
+                object.insert(
+                    "cache_hit_count".to_string(),
+                    json!(entry.hit_count.saturating_add(1)),
+                );
+            }
+            return Ok(payload);
+        }
 
-        let mut answer = crate::services::offline_lookup(question, &language)
+        let hybrid = self
+            .hybrid_rag
+            .search(question, Some(&language), top_k)
+            .await?;
+        let mut citations = hybrid.citations.clone();
+        let mut confidence = hybrid
+            .retrieved_chunks
+            .first()
+            .map(|chunk| chunk.final_score)
+            .unwrap_or(0.0);
+        let mut fallback_used = hybrid.weak_evidence_blocked;
+        let mut answer_text = crate::services::offline_lookup(question, &language)
             .map(|offline| {
-                (
-                    offline.answer,
-                    offline.citations,
-                    offline.confidence,
-                    offline.fallback_used,
-                    offline.fatwa_sensitive,
-                )
+                confidence = confidence.max(offline.confidence);
+                fallback_used = fallback_used || offline.fallback_used;
+                if citations.is_empty() {
+                    citations = offline.citations.clone();
+                }
+                offline.answer
             })
-            .unwrap_or_else(|| (String::new(), Vec::new(), 0.0, false, false));
-
-        if answer.1.is_empty() {
-            let embedding = self
-                .embeddings
-                .embed(question)
-                .await
-                .map_err(ApiError::from)?;
-            let hits = self
-                .qdrant
-                .search(&embedding, min_score, top_k)
-                .await
-                .map_err(ApiError::from)?;
-            let confidence = hits.iter().map(|h| h.score).fold(0.0_f32, f32::max);
-            let citations = hits
-                .iter()
-                .filter_map(qdrant_hit_to_citation)
-                .collect::<Vec<_>>();
-            answer = (
+            .unwrap_or_else(|| {
                 if let Some(first) = citations.first() {
                     if language.eq_ignore_ascii_case("ar") {
                         format!("وجدتُ مصادر موثوقة مرتبطة بـ {}.", first.title)
@@ -315,15 +348,12 @@ impl IslamicAnswerService {
                     "لم أجد نصًا موثوقًا كافيًا لهذا السؤال بعد.".to_string()
                 } else {
                     "I could not find enough verified evidence for this question yet.".to_string()
-                },
-                citations,
-                confidence,
-                hits.is_empty(),
-                is_fatwa_sensitive(question),
-            );
-        }
+                }
+            });
 
-        let (mut answer_text, citations, confidence, mut fallback_used, fatwa_sensitive) = answer;
+        if !hybrid.citations.is_empty() && confidence < min_score {
+            fallback_used = true;
+        }
         let policy = evaluate_fatwa_policy(&AnswerInput {
             has_scholar_approval: false,
             has_verified_quran_or_hadith_citation: !citations.is_empty(),
@@ -348,7 +378,7 @@ impl IslamicAnswerService {
             };
         }
 
-        Ok(json!({
+        let payload = json!({
             "question": question,
             "language": language,
             "answer": answer_text,
@@ -357,7 +387,38 @@ impl IslamicAnswerService {
             "fallback_used": fallback_used,
             "fatwa_sensitive": fatwa_sensitive,
             "generated_from_verified_sources": !citations.is_empty(),
-        }))
+            "retrieval_strategy": hybrid.retrieval_strategy,
+            "retrieved_chunks": hybrid.retrieved_chunks,
+            "source_ranking": hybrid.source_ranking,
+            "graph_path": hybrid.graph_path,
+            "compressed_tokens_before": hybrid.compressed_tokens_before,
+            "compressed_tokens_after": hybrid.compressed_tokens_after,
+            "compression_ratio": hybrid.compression_ratio,
+            "weak_evidence_blocked": hybrid.weak_evidence_blocked,
+            "cache_status": "miss",
+            "cache_hit": false,
+            "cache_ttl_seconds": SemanticCacheService::TTL_SECONDS,
+            "source_version": source_version,
+        });
+
+        if SemanticCacheService::is_cacheable(safety_level, &payload) {
+            let cache_entry = SemanticCacheEntry {
+                cache_key,
+                user_id: request.user_id,
+                language,
+                intent: "islamic_answer".to_string(),
+                safety_level: safety_level.to_string(),
+                source_version,
+                hit_count: 0,
+                payload: payload.clone(),
+            };
+            self.cache
+                .upsert(&cache_entry)
+                .await
+                .map_err(|_| ApiError::internal("failed to write semantic cache"))?;
+        }
+
+        Ok(payload)
     }
 }
 
@@ -391,6 +452,8 @@ fn is_fatwa_sensitive(question: &str) -> bool {
     .any(|needle| q.contains(&needle.to_ascii_lowercase()))
 }
 
+// Legacy qdrant citation helper retained for compatibility with older tests.
+#[allow(dead_code)]
 fn qdrant_hit_to_citation(
     hit: &crate::services::qdrant_client::ScoredPoint,
 ) -> Option<SourceReference> {

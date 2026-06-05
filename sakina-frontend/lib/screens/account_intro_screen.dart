@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import '../app/app_state.dart';
-import '../config/api_config.dart';
-import '../services/api_service.dart';
+import '../services/auth_service.dart';
 import 'home_shell_screen.dart';
 
 class AccountIntroScreen extends StatefulWidget {
@@ -19,29 +16,30 @@ class AccountIntroScreen extends StatefulWidget {
 class _AccountIntroScreenState extends State<AccountIntroScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _messageController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _submitting = false;
+  bool _loginMode = false;
   String? _errorText;
-  String? _successText;
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _messageController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _submitWaitlist() async {
+  Future<void> _submitAuth() async {
     final app = widget.appState;
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
-    final message = _messageController.text.trim();
+    final password = _passwordController.text;
 
-    if (name.isEmpty || email.isEmpty) {
+    if ((!_loginMode && name.isEmpty) || email.isEmpty || password.isEmpty) {
       setState(() {
-        _errorText = '${app.t('name')} / ${app.t('email')} required.';
-        _successText = null;
+        _errorText = _loginMode
+            ? '${app.t('email')} / password required.'
+            : '${app.t('name')} / ${app.t('email')} / password required.';
       });
       return;
     }
@@ -49,33 +47,24 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
     setState(() {
       _submitting = true;
       _errorText = null;
-      _successText = null;
     });
 
-    final api = ApiService(baseUrl: ApiConfig.baseUrl);
+    final auth = AuthService();
     try {
-      await api.joinWaitlist(
-        name: name,
-        email: email,
-        preferredLanguage: app.isArabic ? 'ar' : 'en',
-        platform: 'android',
-        message: message.isEmpty ? null : message,
-      );
+      final session = _loginMode
+          ? await auth.login(email: email, password: password)
+          : await auth.register(email: email, password: password, name: name);
       if (!mounted) return;
-      setState(() {
-        _successText = app.t('waitlistSuccess');
-      });
-    } catch (e) {
-      final lower = e.toString().toLowerCase();
-      final offline = e is SocketException ||
-          lower.contains('socketexception') ||
-          lower.contains('failed host lookup') ||
-          lower.contains('network');
-      setState(() {
-        _errorText = offline ? app.t('networkError') : e.toString();
-      });
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => HomeShellScreen(appState: app, session: session),
+        ),
+      );
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _errorText = error.toString());
     } finally {
-      api.close();
+      auth.close();
       if (mounted) {
         setState(() => _submitting = false);
       }
@@ -86,22 +75,26 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
   Widget build(BuildContext context) {
     final app = widget.appState;
     return Scaffold(
-      appBar: AppBar(title: Text(app.t('joinWaitlist'))),
+      appBar: AppBar(title: Text(_loginMode ? 'Sign in' : 'Create account')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              app.t('phase2Notice'),
+              _loginMode
+                  ? 'Sign in to Sakina AI.'
+                  : 'Create your Sakina AI account.',
               textAlign: app.isArabic ? TextAlign.right : TextAlign.left,
             ),
             const SizedBox(height: 18),
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: app.t('name')),
-            ),
-            const SizedBox(height: 10),
+            if (!_loginMode) ...[
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: app.t('name')),
+              ),
+              const SizedBox(height: 10),
+            ],
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
@@ -109,38 +102,39 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: _messageController,
-              minLines: 3,
-              maxLines: 5,
-              decoration: InputDecoration(labelText: app.t('messageOptional')),
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password'),
             ),
             const SizedBox(height: 16),
             if (_errorText != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Text(_errorText!,
-                    style: const TextStyle(color: Colors.red)),
-              ),
-            if (_successText != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
-                  _successText!,
-                  style: const TextStyle(color: Color(0xFF1B6B5E)),
+                  _errorText!,
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
             ElevatedButton(
-              onPressed: _submitting ? null : _submitWaitlist,
+              onPressed: _submitting ? null : _submitAuth,
               child: _submitting
                   ? const SizedBox(
                       height: 18,
                       width: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(app.t('submit')),
+                  : Text(_loginMode ? 'Sign in' : 'Create account'),
             ),
             const SizedBox(height: 12),
             OutlinedButton(
+              onPressed: _submitting
+                  ? null
+                  : () => setState(() => _loginMode = !_loginMode),
+              child: Text(
+                  _loginMode ? 'Create account' : 'I already have an account'),
+            ),
+            const SizedBox(height: 12),
+            TextButton(
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -148,7 +142,7 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
                   ),
                 );
               },
-              child: Text(app.t('openPreviewShell')),
+              child: const Text('Continue without private sync'),
             ),
           ],
         ),

@@ -1,0 +1,1 @@
+NEW_TECH_GATE_OK all new technology subchecks exited successfully.
