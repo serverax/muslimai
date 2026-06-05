@@ -172,7 +172,6 @@ impl AgenticOrchestrator {
             state.risk_level = "blocked".to_string();
             state.next_node = AgentNode::Validator;
             state.record(AgentNode::Orchestrator, "routed_to_validator", 0.99);
-            self.persist_transition(&state).await?;
             state.record(AgentNode::Validator, "blocked_unsafe_query", 1.0);
             self.persist_transition(&state).await?;
             return Err(AgenticRouteError::UnsafeQuery);
@@ -181,7 +180,6 @@ impl AgenticOrchestrator {
         state.intent = classify_intent(&normalized).to_string();
         state.risk_level = classify_risk(&normalized).to_string();
         state.record(AgentNode::Orchestrator, "intent_and_risk_classified", 0.86);
-        self.persist_transition(&state).await?;
 
         let selected_node = if matches!(state.intent.as_str(), "quran" | "hadith" | "fiqh") {
             AgentNode::Researcher
@@ -206,13 +204,11 @@ impl AgenticOrchestrator {
                     "verified_source_context_retrieved",
                     0.9,
                 );
-                self.persist_transition(&state).await?;
                 state.record(
                     AgentNode::Validator,
                     "validator_required_before_response",
                     0.9,
                 );
-                self.persist_transition(&state).await?;
                 Some(context)
             }
             AgentNode::Validator => {
@@ -221,7 +217,6 @@ impl AgenticOrchestrator {
                     "deterministic_validation_required",
                     0.84,
                 );
-                self.persist_transition(&state).await?;
                 None
             }
             AgentNode::Orchestrator | AgentNode::HumanReview => None,
