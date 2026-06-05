@@ -133,6 +133,19 @@ jobs:
             kubectl apply -f "$manifest"
           }
 
+          ensure_statefulset() {
+            sts_name="$1"
+            manifest="$2"
+            require_file "$manifest"
+            if kubectl -n "$namespace" get statefulset "$sts_name" >/dev/null 2>&1; then
+              echo "Reusing existing statefulset/$sts_name in $namespace; immutable StatefulSet fields are not reapplied."
+            else
+              echo "Creating statefulset/$sts_name from $manifest"
+              kubectl apply -f "$manifest"
+            fi
+            kubectl -n "$namespace" rollout status "statefulset/$sts_name" --timeout=180s
+          }
+
           wait_job() {
             job_name="$1"
             kubectl -n "$namespace" wait --for=condition=complete "job/$job_name" --timeout=180s
@@ -193,10 +206,8 @@ jobs:
           kubectl -n "$namespace" get secret sakina-staging-secrets
 
           echo "3. storage/PVC/PV and statefulsets"
-          apply_file "$manifest_root/postgres.yaml"
-          kubectl -n "$namespace" rollout status statefulset/sakina-postgres --timeout=180s
-          apply_file "$manifest_root/qdrant.yaml"
-          kubectl -n "$namespace" rollout status statefulset/sakina-qdrant --timeout=180s
+          ensure_statefulset sakina-postgres "$manifest_root/postgres.yaml"
+          ensure_statefulset sakina-qdrant "$manifest_root/qdrant.yaml"
           apply_file "$manifest_root/redis.yaml"
           kubectl -n "$namespace" rollout status deployment/sakina-redis --timeout=180s
 
