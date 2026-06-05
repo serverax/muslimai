@@ -16,6 +16,15 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_request_event
 CREATE INDEX IF NOT EXISTS idx_audit_logs_actor
     ON public.audit_logs (actor_id, created_at DESC);
 
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.audit_logs FORCE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS rls_public_audit_logs_service ON public.audit_logs;
+CREATE POLICY rls_public_audit_logs_service ON public.audit_logs
+FOR ALL
+USING (sakina_ai.rls_service_role())
+WITH CHECK (sakina_ai.rls_service_role());
+
 CREATE TABLE IF NOT EXISTS outbox.events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     event_type TEXT NOT NULL,
@@ -29,6 +38,15 @@ CREATE TABLE IF NOT EXISTS outbox.events (
 
 CREATE INDEX IF NOT EXISTS idx_outbox_events_type_status
     ON outbox.events (event_type, status, created_at DESC);
+
+ALTER TABLE outbox.events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE outbox.events FORCE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS rls_outbox_events_service ON outbox.events;
+CREATE POLICY rls_outbox_events_service ON outbox.events
+FOR ALL
+USING (sakina_ai.rls_service_role())
+WITH CHECK (sakina_ai.rls_service_role());
 
 CREATE TABLE IF NOT EXISTS sakina_ai.agent_feedback (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
