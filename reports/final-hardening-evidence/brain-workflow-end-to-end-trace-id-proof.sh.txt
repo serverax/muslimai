@@ -1,5 +1,5 @@
 {
-  "request_id": "e2e-trace-1780631878-15177",
+  "request_id": "e2e-trace-1780687721-3921",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -87,7 +87,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "f8226ace-47f7-4288-8952-c3eaac93ae5d"
+      "outcome": "04b2af0c-3670-400f-9814-50a8777d078e"
     },
     {
       "step": "final_response_returned",
@@ -95,22 +95,22 @@
     }
   ]
 }
-Brain DB trace rows for e2e-trace-1780631878-15177: 1
+Brain DB trace rows for e2e-trace-1780687721-3921: 1
 {
   "steps": 20,
-  "request_id": "e2e-trace-1780631878-15177",
+  "request_id": "e2e-trace-1780687721-3921",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation"
 }
-Audit route status for e2e-trace-1780631878-15177: 201
-Audit DB rows for e2e-trace-1780631878-15177: 1
+Audit route status for e2e-trace-1780687721-3921: 201
+Audit DB rows for e2e-trace-1780687721-3921: 1
 {
-  "audit_logs": 27,
-  "brain_traces": 1304,
-  "rag_traces": 16,
+  "audit_logs": 107,
+  "brain_traces": 3338,
+  "rag_traces": 36,
   "request_id": "enabled",
-  "safety_traces": 16,
+  "safety_traces": 36,
   "sensitive_log_policy": "do_not_log_secret_values",
   "status": "ok",
   "structured_logs": "enabled"
@@ -123,29 +123,10 @@ sakina-backend/src/models/mod.rs:67:    pub request_id: Option<String>,
 sakina-backend/src/models/mod.rs:78:    pub request_id: String,
 sakina-backend/src/models/mod.rs:108:    pub request_id: String,
 sakina-backend/src/models/mod.rs:149:    pub request_id: Option<String>,
+sakina-backend/src/handlers/chat.rs:52:        request_id: None,
 sakina-backend/src/middleware/audit.rs:66:            tracing::info!(
 sakina-backend/src/handlers/rag.rs:70:        request_id: None,
 sakina-backend/src/handlers/rag.rs:131:        request_id: None,
-sakina-backend/src/handlers/chat.rs:50:        request_id: None,
-sakina-backend/src/handlers/chat.rs:233:        request_id: None,
-sakina-backend/src/services/brain_evaluator.rs:152:            let request_id = uuid::Uuid::new_v4().to_string();
-sakina-backend/src/services/brain_evaluator.rs:159:                        request_id, evaluation_score, review_result, reason, payload
-sakina-backend/src/services/brain_evaluator.rs:164:                .bind(request_id)
-sakina-backend/src/services/brain_evaluator.rs:177:        request_id: &str,
-sakina-backend/src/services/brain_evaluator.rs:186:            let request_id = request_id.to_string();
-sakina-backend/src/services/brain_evaluator.rs:192:                        request_id, evaluation_score, review_result, reason, payload
-sakina-backend/src/services/brain_evaluator.rs:197:                .bind(request_id)
-sakina-backend/src/handlers/phase2.rs:816:        let request_id = Uuid::new_v4();
-sakina-backend/src/handlers/phase2.rs:964:                    "request_id": request_id,
-sakina-backend/src/handlers/phase2.rs:994:                    "request_id": request_id,
-sakina-backend/src/handlers/phase2.rs:1011:                    "request_id": request_id,
-sakina-backend/src/handlers/phase2.rs:1028:                    "request_id": request_id,
-sakina-backend/src/handlers/phase2.rs:1062:                    "request_id": request_id,
-sakina-backend/src/handlers/phase2.rs:1080:                    "request_id": request_id,
-sakina-backend/src/handlers/phase2.rs:1146:                    "request_id": request_id,
-sakina-backend/src/handlers/phase2.rs:1357:                    "request_id": Uuid::new_v4().to_string(),
-sakina-backend/src/handlers/phase2.rs:1374:                    "request_id": Uuid::new_v4().to_string(),
-sakina-backend/src/handlers/phase2.rs:1393:                        "request_id": Uuid::new_v4(),
 sakina-backend/src/services/brain_controller.rs:63:            request_id: Some(decision_trace.request_id.clone()),
 sakina-backend/src/services/brain_controller.rs:82:            request_id: decision_trace.request_id.clone(),
 sakina-backend/src/services/brain_controller.rs:109:        let request_id = request
@@ -155,70 +136,97 @@ sakina-backend/src/services/brain_controller.rs:257:            request_id: None
 sakina-backend/src/services/brain_controller.rs:272:            .record_answer_evaluation(&trace.request_id, &route, &evaluation);
 sakina-backend/src/services/brain_controller.rs:276:                request_id: trace.request_id.clone(),
 sakina-backend/src/services/brain_controller.rs:293:            request_id: trace.request_id.clone(),
-sakina-backend/src/services/brain_controller.rs:440:            request_id: Some("cost-normal".to_string()),
-sakina-backend/src/services/brain_controller.rs:460:            request_id: Some("cost-block".to_string()),
-sakina-backend/src/handlers/brain.rs:28:    if route_request.request_id.is_none() {
-sakina-backend/src/handlers/brain.rs:29:        route_request.request_id = req
-sakina-backend/src/handlers/brain.rs:31:            .get("x-request-id")
-sakina-backend/src/handlers/brain.rs:90:                request_id: None,
-sakina-backend/src/services/phase2.rs:894:                request_id,
-sakina-backend/src/services/phase2.rs:909:        .bind(request.request_id)
-sakina-backend/src/services/phase2.rs:932:                request_id,
-sakina-backend/src/services/phase2.rs:943:        .bind(request.request_id)
-sakina-backend/src/services/phase2.rs:962:                request_id, user_id, safety_level, islamic_sensitivity, classifier_version, classifier_output
-sakina-backend/src/services/phase2.rs:968:        .bind(request.request_id)
-sakina-backend/src/services/phase2.rs:990:        let request_id = request.request_id;
-sakina-backend/src/services/phase2.rs:995:                request_id,
-sakina-backend/src/services/phase2.rs:1023:        .bind(request_id)
-sakina-backend/src/services/phase2.rs:1051:                request_id, user_id, subscription_tier, entitlement_allowed, policy_version, reason, decision_payload
-sakina-backend/src/services/phase2.rs:1056:        .bind(request_id)
-sakina-backend/src/services/phase2.rs:1080:                request_id,
-sakina-backend/src/services/phase2.rs:1091:        .bind(request.request_id)
-sakina-backend/src/services/phase2.rs:1109:                request_id,
-sakina-backend/src/services/phase2.rs:1121:        .bind(request.request_id)
-sakina-backend/src/services/phase2.rs:1239:            INSERT INTO public.admin_audit_logs (
-sakina-backend/src/services/phase2.rs:1240:                admin_user_id, action_key, entity_type, entity_id, new_value, request_id
-sakina-backend/src/services/phase2.rs:1250:        .bind(request.request_id.to_string())
-sakina-backend/src/services/phase2.rs:1689:            INSERT INTO public.audit_logs (event_type, actor_type, actor_id, request_id, payload)
-sakina-backend/src/services/phase2.rs:1697:        .bind(&request.request_id)
-sakina-backend/src/services/phase2.rs:1711:            INSERT INTO public.security_logs (event_type, severity, user_id, ip_address, request_id, details)
-sakina-backend/src/services/phase2.rs:1720:        .bind(&request.request_id)
-sakina-backend/src/services/phase2.rs:1766:                INSERT INTO public.rag_events (request_id, user_id, retrieval_audit_id, event_name, event_payload)
-sakina-backend/src/services/phase2.rs:1811:                    .bind(request.request_id)
-sakina-backend/src/services/phase2.rs:2110:    pub request_id: Uuid,
-sakina-backend/src/services/phase2.rs:2124:    pub request_id: Uuid,
-sakina-backend/src/services/phase2.rs:2134:    pub request_id: Uuid,
-sakina-backend/src/services/phase2.rs:2144:    pub request_id: Uuid,
-sakina-backend/src/services/phase2.rs:2169:    pub request_id: Uuid,
-sakina-backend/src/services/phase2.rs:2178:    pub request_id: Uuid,
-sakina-backend/src/services/phase2.rs:2202:    pub request_id: Uuid,
-sakina-backend/src/services/phase2.rs:2322:    pub request_id: Option<String>,
-sakina-backend/src/services/phase2.rs:2332:    pub request_id: Option<String>,
-sakina-backend/src/services/phase2.rs:2338:    pub request_id: Option<Uuid>,
-sakina-backend/src/services/brain_audit.rs:35:        tracing::info!(
-sakina-backend/src/services/brain_audit.rs:37:            request_id = %record.request_id,
-sakina-backend/src/services/brain_audit.rs:57:                        INSERT INTO sakina_ai.brain_decision_traces (
-sakina-backend/src/services/brain_audit.rs:58:                            request_id,
-sakina-backend/src/services/brain_audit.rs:77:                    .bind(&trace.request_id)
-sakina-backend/src/handlers/multimodal.rs:90:        .get("x-request-id")
-sakina-backend/src/handlers/multimodal.rs:122:            "request_id": trace_id
-sakina-backend/src/handlers/multimodal.rs:124:        request_id: Some(trace_id.clone()),
-sakina-backend/src/handlers/multimodal.rs:141:                request_id: trace_id.clone(),
-sakina-backend/src/handlers/multimodal.rs:148:        .insert_header(("x-request-id", trace_id))
-sakina-backend/src/handlers/memory.rs:33:        request_id: None,
-sakina-backend/src/services/aia_orchestrator.rs:65:            request_id: None,
-sakina-backend/src/services/aia_orchestrator.rs:92:            request_id: None,
-sakina-backend/src/services/aia_orchestrator.rs:174:            request_id: None,
-sakina-backend/src/services/aia_orchestrator.rs:193:            request_id: None,
+sakina-backend/src/services/brain_controller.rs:307:            object.insert("trace_id".to_string(), serde_json::json!(trace.request_id));
+sakina-backend/src/services/brain_controller.rs:457:            request_id: Some("cost-normal".to_string()),
+sakina-backend/src/services/brain_controller.rs:477:            request_id: Some("cost-block".to_string()),
 sakina-backend/src/services/ai_router.rs:335:            request_id: request.request_id.clone(),
 sakina-backend/src/services/ai_router.rs:522:            request_id: None,
 sakina-backend/src/services/ai_router.rs:541:            request_id: None,
 sakina-backend/src/services/ai_router.rs:561:            request_id: None,
 sakina-backend/src/services/ai_router.rs:577:            request_id: None,
 sakina-backend/src/services/ai_router.rs:594:            request_id: None,
+sakina-backend/src/handlers/brain.rs:28:    if route_request.request_id.is_none() {
+sakina-backend/src/handlers/brain.rs:29:        route_request.request_id = req
+sakina-backend/src/handlers/brain.rs:31:            .get("x-request-id")
+sakina-backend/src/handlers/brain.rs:90:                request_id: None,
+sakina-backend/src/services/aia_orchestrator.rs:65:            request_id: None,
+sakina-backend/src/services/aia_orchestrator.rs:92:            request_id: None,
+sakina-backend/src/services/aia_orchestrator.rs:174:            request_id: None,
+sakina-backend/src/services/aia_orchestrator.rs:193:            request_id: None,
+sakina-backend/src/handlers/phase2.rs:491:    let request_id = req
+sakina-backend/src/handlers/phase2.rs:493:        .get("x-request-id")
+sakina-backend/src/handlers/phase2.rs:502:        INSERT INTO public.audit_logs (event_type, actor_type, actor_id, request_id, payload)
+sakina-backend/src/handlers/phase2.rs:508:    .bind(&request_id)
+sakina-backend/src/handlers/phase2.rs:528:        "request_id": request_id
+sakina-backend/src/handlers/phase2.rs:536:        "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:989:        let request_id = Uuid::new_v4();
+sakina-backend/src/handlers/phase2.rs:1137:                    "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:1167:                    "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:1184:                    "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:1201:                    "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:1235:                    "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:1253:                    "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:1319:                    "request_id": request_id,
+sakina-backend/src/handlers/phase2.rs:1524:                    "request_id": Uuid::new_v4().to_string(),
+sakina-backend/src/handlers/phase2.rs:1541:                    "request_id": Uuid::new_v4().to_string(),
+sakina-backend/src/handlers/phase2.rs:1565:                        "request_id": Uuid::new_v4(),
+sakina-backend/src/services/brain_audit.rs:35:        tracing::info!(
+sakina-backend/src/services/brain_audit.rs:37:            request_id = %record.request_id,
+sakina-backend/src/services/brain_audit.rs:57:                        INSERT INTO sakina_ai.brain_decision_traces (
+sakina-backend/src/services/brain_audit.rs:58:                            request_id,
+sakina-backend/src/services/brain_audit.rs:77:                    .bind(&trace.request_id)
+sakina-backend/src/services/phase2.rs:964:                request_id,
+sakina-backend/src/services/phase2.rs:979:        .bind(request.request_id)
+sakina-backend/src/services/phase2.rs:1002:                request_id,
+sakina-backend/src/services/phase2.rs:1013:        .bind(request.request_id)
+sakina-backend/src/services/phase2.rs:1032:                request_id, user_id, safety_level, islamic_sensitivity, classifier_version, classifier_output
+sakina-backend/src/services/phase2.rs:1038:        .bind(request.request_id)
+sakina-backend/src/services/phase2.rs:1060:        let request_id = request.request_id;
+sakina-backend/src/services/phase2.rs:1065:                request_id,
+sakina-backend/src/services/phase2.rs:1093:        .bind(request_id)
+sakina-backend/src/services/phase2.rs:1121:                request_id, user_id, subscription_tier, entitlement_allowed, policy_version, reason, decision_payload
+sakina-backend/src/services/phase2.rs:1126:        .bind(request_id)
+sakina-backend/src/services/phase2.rs:1150:                request_id,
+sakina-backend/src/services/phase2.rs:1161:        .bind(request.request_id)
+sakina-backend/src/services/phase2.rs:1179:                request_id,
+sakina-backend/src/services/phase2.rs:1191:        .bind(request.request_id)
+sakina-backend/src/services/phase2.rs:1309:            INSERT INTO public.admin_audit_logs (
+sakina-backend/src/services/phase2.rs:1310:                admin_user_id, action_key, entity_type, entity_id, new_value, request_id
+sakina-backend/src/services/phase2.rs:1320:        .bind(request.request_id.to_string())
+sakina-backend/src/services/phase2.rs:1843:            INSERT INTO public.audit_logs (event_type, actor_type, actor_id, request_id, payload)
+sakina-backend/src/services/phase2.rs:1851:        .bind(&request.request_id)
+sakina-backend/src/services/phase2.rs:1865:            INSERT INTO public.security_logs (event_type, severity, user_id, ip_address, request_id, details)
+sakina-backend/src/services/phase2.rs:1874:        .bind(&request.request_id)
+sakina-backend/src/services/phase2.rs:1920:                INSERT INTO public.rag_events (request_id, user_id, retrieval_audit_id, event_name, event_payload)
+sakina-backend/src/services/phase2.rs:1996:                    .bind(request.request_id)
+sakina-backend/src/services/phase2.rs:2303:    pub request_id: Uuid,
+sakina-backend/src/services/phase2.rs:2317:    pub request_id: Uuid,
+sakina-backend/src/services/phase2.rs:2327:    pub request_id: Uuid,
+sakina-backend/src/services/phase2.rs:2337:    pub request_id: Uuid,
+sakina-backend/src/services/phase2.rs:2362:    pub request_id: Uuid,
+sakina-backend/src/services/phase2.rs:2371:    pub request_id: Uuid,
+sakina-backend/src/services/phase2.rs:2395:    pub request_id: Uuid,
+sakina-backend/src/services/phase2.rs:2529:    pub request_id: Option<String>,
+sakina-backend/src/services/phase2.rs:2539:    pub request_id: Option<String>,
+sakina-backend/src/services/phase2.rs:2545:    pub request_id: Option<Uuid>,
+sakina-backend/src/services/outbox_relay.rs:51:                    tracing::info!(event = "outbox_event_sent", %event_id, %event_type);
+sakina-backend/src/services/brain_evaluator.rs:152:            let request_id = uuid::Uuid::new_v4().to_string();
+sakina-backend/src/services/brain_evaluator.rs:159:                        request_id, evaluation_score, review_result, reason, payload
+sakina-backend/src/services/brain_evaluator.rs:164:                .bind(request_id)
+sakina-backend/src/services/brain_evaluator.rs:177:        request_id: &str,
+sakina-backend/src/services/brain_evaluator.rs:186:            let request_id = request_id.to_string();
+sakina-backend/src/services/brain_evaluator.rs:192:                        request_id, evaluation_score, review_result, reason, payload
+sakina-backend/src/services/brain_evaluator.rs:197:                .bind(request_id)
+sakina-backend/src/handlers/multimodal.rs:90:        .get("x-request-id")
+sakina-backend/src/handlers/multimodal.rs:122:            "request_id": trace_id
+sakina-backend/src/handlers/multimodal.rs:124:        request_id: Some(trace_id.clone()),
+sakina-backend/src/handlers/multimodal.rs:141:                request_id: trace_id.clone(),
+sakina-backend/src/handlers/multimodal.rs:148:        .insert_header(("x-request-id", trace_id))
 sakina-backend/src/services/multimodal.rs:25:    pub request_id: String,
 sakina-backend/src/services/multimodal.rs:182:            request.request_id
-sakina-backend/src/services/multimodal.rs:360:            "trace_id": request.request_id,
-sakina-backend/src/services/multimodal.rs:371:            trace_id: request.request_id,
-sakina-frontend/lib/services/api_service.dart:727:        multipart.headers['x-request-id'] = traceId;
+sakina-backend/src/services/multimodal.rs:362:            "trace_id": request.request_id,
+sakina-backend/src/services/multimodal.rs:373:            trace_id: request.request_id,
+sakina-backend/src/handlers/memory.rs:33:        request_id: None,
+sakina-frontend/lib/services/api_service.dart:787:        multipart.headers['x-request-id'] = traceId;
+sakina-frontend/lib/services/api_service.dart:1571:        requestId: json['request_id']?.toString() ?? '',
 END_TO_END_TRACE_ID_OK request ID linked HTTP request, response, Brain DB trace, audit DB row, observability, and code paths.

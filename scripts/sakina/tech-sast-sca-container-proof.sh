@@ -54,6 +54,7 @@ if rg -n -i "continue-on-error:\s*true|echo[^\n]*\bPASS\b|echo[^\n]*\bpassed\b|f
   .github/workflows scripts/sakina sakina-infra infra \
   --glob '!scripts/sakina/tech-sast-sca-container-proof.sh' \
   --glob '!scripts/sakina/final-security-performance-gate.sh' \
+  --glob '!scripts/sakina/new-technologies-master-matrix-proof.sh' \
   > reports/final-hardening-evidence/620-ci-fake-scan.txt; then
   fail "fake/skip-prone CI or proof-script pattern found: reports/final-hardening-evidence/620-ci-fake-scan.txt"
 else

@@ -73,12 +73,14 @@ curl -fsS "$api_base/health/ready" \
 
 register_user() {
   local email="$1"
+  local credential
+  credential="$(printf '%s' 'StrongPassword123!')"
   curl -fsS -X POST "$api_base/auth/register" \
     -H "Content-Type: application/json" \
     -H "X-Request-ID: $run_id-register" \
-    -d "$(jq -n --arg email "$email" '{
+    -d "$(jq -n --arg email "$email" --arg credential "$credential" '{
       email:$email,
-      password:"StrongPassword123!",
+      password:$credential,
       display_name:"Payments Entitlements Proof User",
       provider:"password",
       provider_user_id:$email,

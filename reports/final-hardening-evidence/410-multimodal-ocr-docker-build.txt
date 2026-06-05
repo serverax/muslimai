@@ -1,86 +1,84 @@
 #0 building with "default" instance using docker driver
 
 #1 [internal] load build definition from Dockerfile.api
-#1 transferring dockerfile: 931B 0.0s done
-#1 DONE 0.1s
+#1 transferring dockerfile: 34B 0.1s
+#1 transferring dockerfile: 931B 0.2s done
+#1 DONE 0.4s
 
-#2 [auth] docker/dockerfile:pull token for registry-1.docker.io
-#2 DONE 0.0s
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 DONE 0.8s
 
-#3 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
-#3 DONE 0.7s
+#3 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#3 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
+#3 CACHED
 
-#4 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
-#4 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
-#4 CACHED
+#4 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#4 ...
 
-#5 [internal] load metadata for docker.io/library/debian:bookworm-slim
-#5 ...
+#5 [internal] load metadata for docker.io/library/rust:1.88-slim
+#5 DONE 0.4s
 
-#6 [auth] library/debian:pull token for registry-1.docker.io
-#6 DONE 0.0s
+#4 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#4 DONE 0.5s
 
-#7 [auth] library/rust:pull token for registry-1.docker.io
+#6 [internal] load .dockerignore
+#6 transferring context: 33B 0.0s
+#6 transferring context: 511B 0.3s done
+#6 DONE 0.3s
+
+#7 [internal] load build context
 #7 DONE 0.0s
 
-#8 [internal] load metadata for docker.io/library/rust:1.88-slim
-#8 DONE 0.5s
+#8 [stage-1 1/5] FROM docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb
+#8 resolve docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb
+#8 resolve docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb 0.1s done
+#8 DONE 0.1s
 
-#5 [internal] load metadata for docker.io/library/debian:bookworm-slim
-#5 DONE 0.6s
-
-#9 [internal] load .dockerignore
-#9 transferring context: 509B 0.1s
-#9 transferring context: 511B 0.1s done
+#9 [builder 1/6] FROM docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89
+#9 resolve docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89 0.1s done
 #9 DONE 0.1s
 
-#10 [stage-1 1/5] FROM docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb
-#10 resolve docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb 0.0s done
-#10 DONE 0.0s
+#7 [internal] load build context
+#7 transferring context: 25.03kB 4.9s
+#7 transferring context: 59.43kB 9.9s
+#7 transferring context: 103.51kB 14.9s
+#7 transferring context: 132.93kB 18.7s done
+#7 DONE 18.8s
 
-#11 [builder 1/6] FROM docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89
-#11 resolve docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89 0.0s done
-#11 DONE 0.1s
+#10 [builder 4/6] RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev && rm -rf /var/lib/apt/lists/*
+#10 CACHED
 
-#12 [internal] load build context
-#12 transferring context: 64.20kB 5.0s
-#12 transferring context: 132.93kB 9.7s done
-#12 DONE 9.7s
+#11 [stage-1 2/5] RUN apt-get update && apt-get install -y --no-install-recommends libpq5 ca-certificates tesseract-ocr && rm -rf /var/lib/apt/lists/*
+#11 CACHED
 
-#13 [stage-1 3/5] RUN groupadd --system sakina && useradd --system --gid sakina --home-dir /nonexistent --shell /usr/sbin/nologin sakina
+#12 [builder 3/6] COPY . .
+#12 CACHED
+
+#13 [stage-1 4/5] COPY --from=builder /app/sakina-backend/target/release/sakina-api /usr/local/bin/
 #13 CACHED
 
 #14 [builder 2/6] WORKDIR /app
 #14 CACHED
 
-#15 [builder 3/6] COPY . .
+#15 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     cargo build --release --bin sakina-api --bin sakina-migrate
 #15 CACHED
 
-#16 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     cargo build --release --bin sakina-api --bin sakina-migrate
+#16 [stage-1 3/5] RUN groupadd --system sakina && useradd --system --gid sakina --home-dir /nonexistent --shell /usr/sbin/nologin sakina
 #16 CACHED
 
-#17 [builder 4/6] RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev && rm -rf /var/lib/apt/lists/*
+#17 [builder 5/6] WORKDIR /app/sakina-backend
 #17 CACHED
 
-#18 [stage-1 2/5] RUN apt-get update && apt-get install -y --no-install-recommends libpq5 ca-certificates tesseract-ocr && rm -rf /var/lib/apt/lists/*
+#18 [stage-1 5/5] COPY --from=builder /app/sakina-backend/target/release/sakina-migrate /usr/local/bin/
 #18 CACHED
 
-#19 [stage-1 4/5] COPY --from=builder /app/sakina-backend/target/release/sakina-api /usr/local/bin/
-#19 CACHED
-
-#20 [builder 5/6] WORKDIR /app/sakina-backend
-#20 CACHED
-
-#21 [stage-1 5/5] COPY --from=builder /app/sakina-backend/target/release/sakina-migrate /usr/local/bin/
-#21 CACHED
-
-#22 exporting to image
-#22 exporting layers done
-#22 exporting manifest sha256:0179c47191d57d1fdeafe56e8d8f37d4e2adf09057358ebe7403514befa41397 done
-#22 exporting config sha256:2af9cc279a6b32d54f0d5b6a396a8c7b577bc9dbb0780afe515344e49dbb38aa done
-#22 exporting attestation manifest sha256:27de3129570ed5a4be3053f60c3d1f845152b5547e146e0664bae63f2c04ad4c 0.0s done
-#22 exporting manifest list sha256:00bc7e11e2cdb69d9915b979fdfaca0fccb1fbb0b8494d26b5c0748aab6ba98a
-#22 exporting manifest list sha256:00bc7e11e2cdb69d9915b979fdfaca0fccb1fbb0b8494d26b5c0748aab6ba98a 0.0s done
-#22 naming to docker.io/library/sakina-backend-api:multimodal-ocr-proof done
-#22 unpacking to docker.io/library/sakina-backend-api:multimodal-ocr-proof 0.0s done
-#22 DONE 0.2s
+#19 exporting to image
+#19 exporting layers done
+#19 exporting manifest sha256:0179c47191d57d1fdeafe56e8d8f37d4e2adf09057358ebe7403514befa41397 0.0s done
+#19 exporting config sha256:2af9cc279a6b32d54f0d5b6a396a8c7b577bc9dbb0780afe515344e49dbb38aa done
+#19 exporting attestation manifest sha256:82ef6ebdc079fbe15860aec105d8e52e2e2c1d13621d92f1c4fab218a48abfdd 0.0s done
+#19 exporting manifest list sha256:d080af6d16280a24ded04852c88b7af8d68c0a73d8729ac3a47c97af32b15fc5 0.0s done
+#19 naming to docker.io/library/sakina-backend-api:multimodal-ocr-proof
+#19 naming to docker.io/library/sakina-backend-api:multimodal-ocr-proof done
+#19 unpacking to docker.io/library/sakina-backend-api:multimodal-ocr-proof 0.0s done
+#19 DONE 0.2s

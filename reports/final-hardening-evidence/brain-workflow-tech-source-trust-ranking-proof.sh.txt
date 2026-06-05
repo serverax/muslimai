@@ -1,5 +1,5 @@
-{"indexed_chunks": 15, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.54s
+{"indexed_chunks": 35, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
 {
   "citations": [
     {
@@ -140,52 +140,52 @@ INSERT 0 1
     {
       "authenticity_grade": "verified",
       "author": "quran",
-      "chapter": "Quran 112:1-4",
-      "id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
-      "title": "Quran Reference Guidance"
-    },
-    {
-      "authenticity_grade": "verified",
-      "author": "quran",
-      "chapter": "Quran 2:286",
-      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "title": "Quran Reference Guidance"
-    },
-    {
-      "authenticity_grade": "verified",
-      "author": "quran",
-      "chapter": "Quran 2:183",
-      "id": "54502981-a35a-4628-b2c5-244e9effd35c",
-      "title": "Quran Reference Guidance"
-    },
-    {
-      "authenticity_grade": "verified",
-      "author": "quran",
       "chapter": "verified citation",
-      "id": "8a19fa91-e90f-4cf3-bcfb-3f3778eadf2e",
+      "id": "3b4677f4-da61-4c57-bb3b-b367e2b417c9",
       "title": "Verified Source"
     },
     {
       "authenticity_grade": "verified",
       "author": "quran",
-      "chapter": "Quran 103:1-3",
-      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
-      "title": "Quran Reference Guidance"
+      "chapter": "verified citation",
+      "id": "818ee0c7-375a-4def-9dac-71cf35d1ea66",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "99cc5de3-51a7-49de-a944-9f9aa8a83ab8",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "9daafa69-2ce0-46b6-9f80-c404baad587a",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "bb3fa3ae-ff9d-42ee-9124-0720a292a7f3",
+      "title": "Verified Source"
     }
   ],
-  "compressed_tokens_after": 590,
-  "compressed_tokens_before": 674,
-  "compression_ratio": 0.8753709197044373,
+  "compressed_tokens_after": 255,
+  "compressed_tokens_before": 255,
+  "compression_ratio": 1.0,
   "graph_path": [
     "patience"
   ],
   "retrieval_strategy": "keyword+vector+graph",
   "retrieved_chunks": [
     {
-      "chunk_id": "8a19fa91-e90f-4cf3-bcfb-3f3778eadf2e",
+      "chunk_id": "99cc5de3-51a7-49de-a944-9f9aa8a83ab8",
       "chunk_text": "verified chunk text",
       "citation": "verified citation",
-      "document_id": "72ac19d8-bb3c-4e40-b2de-ada24cde3e8c",
+      "document_id": "a226803f-f0a7-4829-a9a5-d857e5c7ac1e",
       "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
@@ -197,64 +197,64 @@ INSERT 0 1
       "vector_score": 0.28037407994270325
     },
     {
-      "chunk_id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
-      "chunk_text": "Surah Al-Ikhlas summarizes tawhid by affirming Allah as One, the Eternal Refuge, unlike creation, and without equal.",
-      "citation": "Quran 112:1-4",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.25141263008117676,
+      "chunk_id": "3b4677f4-da61-4c57-bb3b-b367e2b417c9",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "253fb94e-1e53-40df-b445-95fe1b8f895d",
+      "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
       "language": "en",
       "review_status": "verified",
       "source_trust_score": 1.0,
       "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.22316445410251617
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
     },
     {
-      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
-      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
-      "citation": "Quran 103:1-3",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.24543476104736328,
-      "graph_score": 0.4000000059604645,
-      "keyword_score": 0.0,
-      "language": "en",
-      "review_status": "verified",
-      "source_trust_score": 1.0,
-      "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.054483577609062195
-    },
-    {
-      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
-      "citation": "Quran 2:286",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.21582505106925964,
+      "chunk_id": "818ee0c7-375a-4def-9dac-71cf35d1ea66",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "610b8830-a6fa-424e-b7e8-975b8b4d122f",
+      "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
       "language": "en",
       "review_status": "verified",
       "source_trust_score": 1.0,
       "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.1119532585144043
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
     },
     {
-      "chunk_id": "54502981-a35a-4628-b2c5-244e9effd35c",
-      "chunk_text": "Quran 2:183 establishes fasting as an obligation for believers and connects fasting with taqwa.",
-      "citation": "Quran 2:183",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.19416333734989166,
+      "chunk_id": "bb3fa3ae-ff9d-42ee-9124-0720a292a7f3",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "2d2be823-6d7c-4945-92e3-96831289cbe8",
+      "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
       "language": "en",
       "review_status": "verified",
       "source_trust_score": 1.0,
       "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.044260408729314804
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
+    },
+    {
+      "chunk_id": "9daafa69-2ce0-46b6-9f80-c404baad587a",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "6e5be3f8-0853-4c9b-8c08-0d52ca824c23",
+      "final_score": 0.2697197198867798,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
     }
   ],
   "selected_agent": "General Chat Agent",
@@ -262,10 +262,10 @@ INSERT 0 1
   "selected_pipeline": "mother_brain>cached_or_cached_rag>evaluation",
   "source_ranking": [
     "Verified Source:quran:verified:trust=1.00:score=0.27",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.25",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.25",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.22",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.19"
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27"
   ],
   "weak_evidence_blocked": false
 }

@@ -1,0 +1,9 @@
+Running 190-backend-tests-with-db
+Running 190-auth-live-proof
+Running 190-auth-refresh-proof
+Running 190-db-user-isolation
+Running 190-local-runtime
+Running 190-final-wiring
+Running 190-final-new-technologies
+Running 190-store-readiness
+CLOSED_BETA_GATE_OK all closed-beta subchecks exited successfully.

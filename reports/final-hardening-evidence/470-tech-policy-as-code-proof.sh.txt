@@ -1,6 +1,6 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.64s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.74s
 {
-  "request_id": "a934fcf5-a7ee-478b-bab0-9a91b41efcae",
+  "request_id": "9dbacc19-c36c-4f36-a043-f26c586fe47e",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -88,7 +88,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "ea157b10-310c-489b-a69c-60908cb0b31f"
+      "outcome": "68a91e67-ad60-44dd-8301-2f8cf8b93dde"
     },
     {
       "step": "final_response_returned",
@@ -97,7 +97,7 @@
   ]
 }
 {
-  "request_id": "dd653606-389e-4743-9a89-792417fcf75c",
+  "request_id": "8796236f-a214-40d0-8012-be27f933876f",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -185,7 +185,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "3ecb2941-d4f9-4c1b-a082-e34894cdce8a"
+      "outcome": "aa1647ac-cc8a-41a8-b9b5-bb25468d2531"
     },
     {
       "step": "final_response_returned",
@@ -194,7 +194,7 @@
   ]
 }
 {
-  "request_id": "616943c5-5978-44d3-94aa-14f58b25aace",
+  "request_id": "6224f8de-da69-468c-89cb-9b1ef0ae9aee",
   "selected_agent": "Family/Marriage Advice Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>hybrid_rag>evaluation",
@@ -282,7 +282,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "fdeca94e-e1f3-4fc1-8cab-76c1b9e5f2ac"
+      "outcome": "3423b855-b823-44f9-a89f-a16e4012aea4"
     },
     {
       "step": "final_response_returned",
@@ -290,11 +290,11 @@
     }
   ]
 }
+sakina-backend/src/services/islamic_knowledge.rs:11:use sakina_fatwa_policy_gate::{evaluate as evaluate_fatwa_policy, AnswerInput};
+sakina-backend/src/services/islamic_knowledge.rs:357:        let policy = evaluate_fatwa_policy(&AnswerInput {
 sakina-backend/src/services/brain_policy.rs:13:pub struct BrainSafetyPolicy;
 sakina-backend/src/services/brain_policy.rs:15:impl BrainSafetyPolicy {
 sakina-backend/src/services/brain_policy.rs:42:                reason: "subscription tier does not allow this routed capability".to_string(),
 sakina-backend/src/services/brain_policy.rs:52:                reason: "safety policy requires escalation".to_string(),
 sakina-backend/src/services/brain_policy.rs:62:                "policy allows generation".to_string()
-sakina-backend/src/services/islamic_knowledge.rs:11:use sakina_fatwa_policy_gate::{evaluate as evaluate_fatwa_policy, AnswerInput};
-sakina-backend/src/services/islamic_knowledge.rs:357:        let policy = evaluate_fatwa_policy(&AnswerInput {
 POLICY_AS_CODE_OK Brain policy allows safe guidance and blocks high-risk/restricted paths.

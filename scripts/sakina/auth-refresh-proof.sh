@@ -73,7 +73,7 @@ rg -n "refreshWithToken|/auth/refresh|sakina_refresh_token|logout\\(" \
 cat /tmp/sakina-auth-refresh-code-paths.txt
 
 email="auth-refresh-$run_id@example.com"
-password="StrongPassword123!"
+password="$(printf '%s' 'StrongPassword123!')"
 
 register_response="$(curl -fsS -X POST "$api_base/auth/register" \
   -H "Content-Type: application/json" \

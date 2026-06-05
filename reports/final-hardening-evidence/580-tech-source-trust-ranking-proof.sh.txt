@@ -1,5 +1,5 @@
-{"indexed_chunks": 15, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.85s
+{"indexed_chunks": 35, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.99s
 {
   "citations": [
     {
@@ -140,29 +140,22 @@ INSERT 0 1
     {
       "authenticity_grade": "verified",
       "author": "quran",
-      "chapter": "Quran 94:5-6",
-      "id": "0ba71119-a9c1-4adc-a002-2e3372ae39be",
-      "title": "Quran Reference Guidance"
-    },
-    {
-      "authenticity_grade": "verified",
-      "author": "quran",
-      "chapter": "Quran 112:1-4",
-      "id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
-      "title": "Quran Reference Guidance"
-    },
-    {
-      "authenticity_grade": "verified",
-      "author": "quran",
-      "chapter": "Quran 2:286",
-      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "title": "Quran Reference Guidance"
+      "chapter": "verified citation",
+      "id": "014312e5-3da1-4096-b9b4-0013223c793c",
+      "title": "Verified Source"
     },
     {
       "authenticity_grade": "verified",
       "author": "quran",
       "chapter": "verified citation",
-      "id": "8a19fa91-e90f-4cf3-bcfb-3f3778eadf2e",
+      "id": "818ee0c7-375a-4def-9dac-71cf35d1ea66",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "99cc5de3-51a7-49de-a944-9f9aa8a83ab8",
       "title": "Verified Source"
     },
     {
@@ -171,21 +164,43 @@ INSERT 0 1
       "chapter": "Quran 103:1-3",
       "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
       "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "f07dbe9c-bb84-4960-9b62-4b462e7eb8e5",
+      "title": "Verified Source"
     }
   ],
-  "compressed_tokens_after": 559,
-  "compressed_tokens_before": 643,
-  "compression_ratio": 0.8693623542785645,
+  "compressed_tokens_after": 341,
+  "compressed_tokens_before": 370,
+  "compression_ratio": 0.9216216206550598,
   "graph_path": [
     "patience"
   ],
   "retrieval_strategy": "keyword+vector+graph",
   "retrieved_chunks": [
     {
-      "chunk_id": "8a19fa91-e90f-4cf3-bcfb-3f3778eadf2e",
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.30064475536346436,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.22701489925384521
+    },
+    {
+      "chunk_id": "f07dbe9c-bb84-4960-9b62-4b462e7eb8e5",
       "chunk_text": "verified chunk text",
       "citation": "verified citation",
-      "document_id": "72ac19d8-bb3c-4e40-b2de-ada24cde3e8c",
+      "document_id": "78939145-6e70-41c7-89c7-16b36909ad40",
       "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
@@ -197,75 +212,60 @@ INSERT 0 1
       "vector_score": 0.28037407994270325
     },
     {
-      "chunk_id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
-      "chunk_text": "Surah Al-Ikhlas summarizes tawhid by affirming Allah as One, the Eternal Refuge, unlike creation, and without equal.",
-      "citation": "Quran 112:1-4",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.25141263008117676,
+      "chunk_id": "99cc5de3-51a7-49de-a944-9f9aa8a83ab8",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "a226803f-f0a7-4829-a9a5-d857e5c7ac1e",
+      "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
       "language": "en",
       "review_status": "verified",
       "source_trust_score": 1.0,
       "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.22316445410251617
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
     },
     {
-      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
-      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
-      "citation": "Quran 103:1-3",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.24543476104736328,
-      "graph_score": 0.4000000059604645,
-      "keyword_score": 0.0,
-      "language": "en",
-      "review_status": "verified",
-      "source_trust_score": 1.0,
-      "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.054483577609062195
-    },
-    {
-      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
-      "citation": "Quran 2:286",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.22570782899856567,
+      "chunk_id": "818ee0c7-375a-4def-9dac-71cf35d1ea66",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "610b8830-a6fa-424e-b7e8-975b8b4d122f",
+      "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
       "language": "en",
       "review_status": "verified",
       "source_trust_score": 1.0,
       "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.14283692836761475
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
     },
     {
-      "chunk_id": "0ba71119-a9c1-4adc-a002-2e3372ae39be",
-      "chunk_text": "Quran 94:5-6 reassures believers that with hardship comes ease.",
-      "citation": "Quran 94:5-6",
-      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
-      "final_score": 0.217143714427948,
+      "chunk_id": "014312e5-3da1-4096-b9b4-0013223c793c",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "3fa374c4-5a51-4ac4-b52c-22b99f1f67e6",
+      "final_score": 0.2697197198867798,
       "graph_score": 0.0,
       "keyword_score": 0.0,
       "language": "en",
       "review_status": "verified",
       "source_trust_score": 1.0,
       "source_type": "quran",
-      "title": "Quran Reference Guidance",
-      "vector_score": 0.1160740852355957
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
     }
   ],
   "selected_agent": "General Chat Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>cached_or_cached_rag>evaluation",
   "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30",
     "Verified Source:quran:verified:trust=1.00:score=0.27",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.25",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.25",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.23",
-    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.22"
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27"
   ],
   "weak_evidence_blocked": false
 }

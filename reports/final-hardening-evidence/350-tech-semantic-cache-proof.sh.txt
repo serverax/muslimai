@@ -1,5 +1,5 @@
-{"indexed_chunks": 34, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.51s
+{"indexed_chunks": 36, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.69s
 DELETE 3
 {
   "answer": "The Quran points to fasting in Al-Baqarah 2:183.",
@@ -77,7 +77,7 @@ DELETE 3
       "step": "memory_action"
     },
     {
-      "outcome": "32e08c6a-41a9-4d53-aed0-7762a09a4d57",
+      "outcome": "246523b5-173d-4211-8272-7df52f85a2c5",
       "step": "decision_logged"
     },
     {
@@ -224,8 +224,8 @@ DELETE 3
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:34:49993c5fb83b5963793dc5d8109bedeb",
-  "trace_id": "3a55a311-2d3a-4202-97d7-1d386a4fc457",
+  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
+  "trace_id": "412fae97-686d-4a53-8b1c-ae5fdf8406f7",
   "weak_evidence_blocked": false
 }
 {
@@ -304,7 +304,7 @@ DELETE 3
       "step": "memory_action"
     },
     {
-      "outcome": "36d90e13-e8cd-4d07-95b4-9fb5ea0343db",
+      "outcome": "1771725b-9478-4d02-9229-8b8efae4ed9a",
       "step": "decision_logged"
     },
     {
@@ -452,8 +452,8 @@ DELETE 3
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:34:49993c5fb83b5963793dc5d8109bedeb",
-  "trace_id": "1beaa00b-c1e7-4266-84bf-3996dacaf3ac",
+  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
+  "trace_id": "3ad77259-8a19-4355-9111-1a3b5740282a",
   "weak_evidence_blocked": false
 }
 {
@@ -532,7 +532,7 @@ DELETE 3
       "step": "memory_action"
     },
     {
-      "outcome": "dc902fa3-8994-4fd3-af25-e8ce5046d3eb",
+      "outcome": "5f798069-7a60-4dfe-85a7-fe8937b26d5b",
       "step": "decision_logged"
     },
     {
@@ -679,8 +679,8 @@ DELETE 3
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:34:49993c5fb83b5963793dc5d8109bedeb",
-  "trace_id": "55b72fe4-7508-4d4e-bcd0-2e0089cdb12d",
+  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
+  "trace_id": "070ea2ea-866e-4e9a-a32c-859287539584",
   "weak_evidence_blocked": false
 }
 Semantic cache row proof: 2|2|2
@@ -760,7 +760,7 @@ Semantic cache row proof: 2|2|2
       "step": "memory_action"
     },
     {
-      "outcome": "9ce4c768-df86-4033-b8f3-6ef784ae6894",
+      "outcome": "01af6228-547f-45f4-8f9f-4fa9fbcaa7a4",
       "step": "decision_logged"
     },
     {
@@ -907,8 +907,8 @@ Semantic cache row proof: 2|2|2
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.27",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.26"
   ],
-  "source_version": "hybrid-v1:34:49993c5fb83b5963793dc5d8109bedeb",
-  "trace_id": "3d940b7a-3216-42d5-9752-e9a08f4d14b2",
+  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
+  "trace_id": "471faef0-2504-4442-87b5-2f15f8efaa5f",
   "weak_evidence_blocked": false
 }
 Sensitive request HTTP status: 200 rows before=1 after=1
@@ -989,7 +989,7 @@ UPDATE 1
       "step": "memory_action"
     },
     {
-      "outcome": "4960d95e-e877-485a-9dd4-a613473dce06",
+      "outcome": "f845c5a1-0123-4682-8f83-9e9ffccf1afb",
       "step": "decision_logged"
     },
     {
@@ -1055,7 +1055,7 @@ UPDATE 1
   "retrieved_chunks": [
     {
       "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
-      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days. semantic-cache-source-version-1780674802-17107",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days. semantic-cache-source-version-1780688425-23637",
       "citation": "Quran 2:184",
       "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
       "final_score": 0.8799999952316284,
@@ -1136,13 +1136,13 @@ UPDATE 1
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:34:1bb280f52123b9a17afbe9e5ecbbd56d",
-  "trace_id": "ac87890f-2584-4f6b-a3c1-a13ea9ccf208",
+  "source_version": "hybrid-v1:36:16a9910e167ef4d77b5a954cb27cd6d2",
+  "trace_id": "733f291e-3551-4c18-b706-52107afe875d",
   "weak_evidence_blocked": false
 }
 {
   "enabled": true,
-  "entries": 164,
+  "entries": 205,
   "hits": 2,
   "status": "ok"
 }

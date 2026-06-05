@@ -1,5 +1,3 @@
-sakina-frontend/lib/screens/chat_screen.dart:109:    final response = await widget.api.createConversation(
-sakina-frontend/lib/screens/chat_screen.dart:131:      final stored = await widget.api.addConversationMessage(
 sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/services/auth_service.dart:45:      final current = await _api.currentUser();
 sakina-frontend/lib/services/auth_service.dart:55:          final refreshed = await _api.refreshWithToken(
@@ -19,18 +17,20 @@ sakina-frontend/lib/services/api_service.dart:718:  Future<MemoryWriteResponse> 
 sakina-frontend/lib/services/api_service.dart:734:  Future<MemoryEntryResponse> readMemory({
 sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/services/api_service.dart:814:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/screens/chat_screen.dart:109:    final response = await widget.api.createConversation(
+sakina-frontend/lib/screens/chat_screen.dart:131:      final stored = await widget.api.addConversationMessage(
 Unauthenticated auth/me status=401
 {
-  "profile_id": "f30b674d-7367-4c9f-bf5d-062cc3aad7fd",
-  "user_id": "8b07e07f-6967-4c31-bfc9-6df8e90ce523"
+  "profile_id": "c55ed6c5-823f-402c-8f95-0e2c90cf8155",
+  "user_id": "57b6f0cc-d2b0-4d8a-a285-42a2b917af86"
 }
 Cross-user profile update status=401
 {
-  "conversation_id": "5e5bb41a-0897-4232-8705-e232a4252871",
-  "user_message_id": "6f928cf6-2da3-4621-b2a9-06d64cec40f8",
-  "assistant_message_id": "81c81755-5ef9-4d97-9efc-60d0e71f7ee2",
+  "conversation_id": "efb41437-8b61-463d-8303-24080e5873a3",
+  "user_message_id": "7a7ed517-f4ab-4266-a7d3-15e94621dddd",
+  "assistant_message_id": "e5f7b154-606b-47c9-8b67-087ce35fce8c",
   "response": "I found verified sources related to Quran 2:153.",
-  "trace_id": "7c9a6d9f-c4b3-4a94-b77c-7d22f8669380"
+  "trace_id": "8f3df3dc-c93e-44f6-831f-ce89b19d9539"
 }
 Cross-user conversation read status=404
 {
@@ -38,7 +38,7 @@ Cross-user conversation read status=404
   "allowed": true,
   "sensitivity_level": "safe",
   "reason": "memory write allowed",
-  "memory_id": "a16e56a5-b706-4396-9190-e4133271ee73"
+  "memory_id": "4d2a3f96-50e5-4b20-92b7-56c3e508ddec"
 }
 Cross-user memory read status=401
 DB profile=1 conversations=1 messages=2 memories=1 brain_traces=1 memory_audits=2

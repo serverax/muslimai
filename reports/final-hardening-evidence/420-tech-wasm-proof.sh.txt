@@ -1,5 +1,5 @@
 WASM artifact bytes: 110079
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
      Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_fatwa_policy_gate-fdcd929661a41652)
 
 running 5 tests
@@ -9,7 +9,7 @@ test tests::public_with_both_passes ... ok
 test tests::public_without_approval_blocked ... ok
 test tests::public_without_citation_blocked ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
    Doc-tests sakina_fatwa_policy_gate
 
@@ -17,9 +17,9 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.47s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.85s
 {
-  "request_id": "4a1b49e8-8f48-4f51-8ea3-1c6d7ced59e8",
+  "request_id": "94ab897d-d88d-410b-8ab6-e84fa8db03b4",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -107,7 +107,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
     },
     {
       "step": "decision_logged",
-      "outcome": "ba2e447e-3ab5-4aa5-9447-b479afbc8c68"
+      "outcome": "86a0b918-9dc8-4a77-bbe2-ed09aaf53cca"
     },
     {
       "step": "final_response_returned",
@@ -116,16 +116,16 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
   ]
 }
 {
-  "id": "734acad3-6f25-49f2-b739-3374e4771b56"
+  "id": "ec1dc792-90d1-4017-a588-800e48154d33"
 }
 WASM DB event rows: 1
 sakina-backend/src/models/mod.rs:158:    pub wasm_required: bool,
-sakina-backend/src/services/aia_orchestrator.rs:139:            "mother_brain>hybrid_rag>wasm_policy>evaluation"
+sakina-backend/src/services/phase2.rs:1178:            INSERT INTO sakina_ai.wasm_verification_events (
+sakina-backend/src/services/brain_controller.rs:72:            wasm_required: base_route.wasm_required,
 sakina-backend/src/services/ai_router.rs:78:                    pipeline: "mother_brain>hybrid_rag>wasm_policy>evaluation",
 sakina-backend/src/services/ai_router.rs:348:            wasm_required: use_wasm,
 sakina-backend/src/services/ai_router.rs:550:        assert!(route.wasm_required);
-sakina-backend/src/services/brain_controller.rs:72:            wasm_required: base_route.wasm_required,
-sakina-backend/src/services/phase2.rs:1178:            INSERT INTO sakina_ai.wasm_verification_events (
+sakina-backend/src/services/aia_orchestrator.rs:139:            "mother_brain>hybrid_rag>wasm_policy>evaluation"
 sakina-backend/src/services/islamic_knowledge.rs:11:use sakina_fatwa_policy_gate::{evaluate as evaluate_fatwa_policy, AnswerInput};
 sakina-backend/src/services/islamic_knowledge.rs:357:        let policy = evaluate_fatwa_policy(&AnswerInput {
 WASM_OK artifact, crate tests, Brain WASM stage, and DB event proof completed.

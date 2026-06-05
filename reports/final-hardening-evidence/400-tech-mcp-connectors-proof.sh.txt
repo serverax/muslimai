@@ -1,4 +1,4 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.06s
      Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_backend-5bd443900cff2969)
 
 running 1 test

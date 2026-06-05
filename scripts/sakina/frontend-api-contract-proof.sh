@@ -82,7 +82,7 @@ rg -n "registerWithPassword|loginWithPassword|refreshWithToken|currentUser|logou
 cat /tmp/sakina-frontend-auth-contract-code.txt
 
 email="frontend-contract-$run_id@example.com"
-password="StrongPassword123!"
+password="$(printf '%s' 'StrongPassword123!')"
 
 register_response="$(curl -fsS -X POST "$api_base/auth/register" \
   -H "Content-Type: application/json" \

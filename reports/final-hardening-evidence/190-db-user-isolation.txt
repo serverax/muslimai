@@ -28,13 +28,13 @@ SET
 
               set_config              
 --------------------------------------
- 090f77de-8b5c-4c84-85fe-563f88a66a66
+ e1a2d1e5-9a87-4a9b-8d17-044cd5123eed
 (1 row)
 
 DO
               set_config              
 --------------------------------------
- 766f5a7c-68ae-4afc-b8ac-6299afd255a6
+ b4abfb1f-62dd-4601-958d-fdb3f244aa62
 (1 row)
 
 DO
@@ -59,6 +59,6 @@ DO
 INSERT 0 1
                 user_a                |                user_b                |         result         
 --------------------------------------+--------------------------------------+------------------------
- 090f77de-8b5c-4c84-85fe-563f88a66a66 | 766f5a7c-68ae-4afc-b8ac-6299afd255a6 | DB USER ISOLATION PASS
+ e1a2d1e5-9a87-4a9b-8d17-044cd5123eed | b4abfb1f-62dd-4601-958d-fdb3f244aa62 | DB USER ISOLATION PASS
 (1 row)
 

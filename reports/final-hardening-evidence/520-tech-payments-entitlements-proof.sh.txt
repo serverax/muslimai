@@ -1,4 +1,4 @@
-Payments entitlement proof users: A=05e46fd0-7bda-4ad3-8c55-fdd2fdaa56c6 B=5853f669-8f95-43eb-b03d-bdfeecd02cff
+Payments entitlement proof users: A=00bddc77-6959-4365-a4a5-1544a8ccfd52 B=0c133a69-34e9-4eec-a7cc-b402be8b25d1
 {"error":{"code":"unauthorized","message":"manual entitlement grant credential is invalid"}}
 Missing grant secret status: 401
 {"error":{"code":"unauthorized","message":"manual entitlement grant credential is invalid"}}
@@ -6,38 +6,38 @@ Wrong grant secret status: 401
 {"error":{"code":"unauthorized","message":"requested user_id does not match authenticated user"}}
 Cross-user activation status: 401
 {
-  "user_id": "05e46fd0-7bda-4ad3-8c55-fdd2fdaa56c6",
-  "subscription_id": "88fe4e88-3847-4283-96b9-2f799d39e1de",
-  "payment_customer_id": "29d5168f-3280-4f38-9808-f88c39ba29da",
-  "plan_id": "ef8fbafb-4347-4c68-80ef-93fc750cc4fd",
-  "invoice_id": "cac89e08-be64-48a0-a587-6d69cbbd6326"
+  "user_id": "00bddc77-6959-4365-a4a5-1544a8ccfd52",
+  "subscription_id": "5d07342c-ac95-46c4-ab8e-a1940b6926b2",
+  "payment_customer_id": "cf293b89-84c4-4d00-af46-294f758b4b8f",
+  "plan_id": "fbb5c45c-7211-4a14-b96c-f4d36e933bf2",
+  "invoice_id": "b22a4886-a14a-4728-8bae-d0615305e7fb"
 }
 {
-  "user_id": "05e46fd0-7bda-4ad3-8c55-fdd2fdaa56c6",
-  "subscription_id": "88fe4e88-3847-4283-96b9-2f799d39e1de",
-  "payment_customer_id": "29d5168f-3280-4f38-9808-f88c39ba29da",
-  "plan_id": "ef8fbafb-4347-4c68-80ef-93fc750cc4fd",
-  "invoice_id": "cac89e08-be64-48a0-a587-6d69cbbd6326"
+  "user_id": "00bddc77-6959-4365-a4a5-1544a8ccfd52",
+  "subscription_id": "5d07342c-ac95-46c4-ab8e-a1940b6926b2",
+  "payment_customer_id": "cf293b89-84c4-4d00-af46-294f758b4b8f",
+  "plan_id": "fbb5c45c-7211-4a14-b96c-f4d36e933bf2",
+  "invoice_id": "b22a4886-a14a-4728-8bae-d0615305e7fb"
 }
 {
   "entitlements": [
     {
       "entitlement_key": "quran_access",
       "expires_at": null,
-      "granted_at": "2026-06-05 15:55:18.057073+00",
-      "id": "15eba9e2-6bea-4e2a-8af6-9dbb06d71880"
+      "granted_at": "2026-06-05 19:43:19.640921+00",
+      "id": "2c3b5704-839f-47d8-ba65-79141aa215df"
     },
     {
       "entitlement_key": "chat_premium",
       "expires_at": null,
-      "granted_at": "2026-06-05 15:55:18.057073+00",
-      "id": "fe349e0f-55d2-4e43-9ebb-7568713b6674"
+      "granted_at": "2026-06-05 19:43:19.640921+00",
+      "id": "9757928d-4f61-407e-95c0-d75cbd7ed938"
     },
     {
       "entitlement_key": "rag_verified",
       "expires_at": null,
-      "granted_at": "2026-06-05 15:55:18.057073+00",
-      "id": "efc96ec1-e5b6-43fa-8521-c64385f84472"
+      "granted_at": "2026-06-05 19:43:19.640921+00",
+      "id": "7a2407d4-cdda-44d8-9f8e-bce752eabafb"
     }
   ]
 }

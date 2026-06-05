@@ -1,5 +1,5 @@
-Inserted outbox event: c726bb78-e38f-4bb0-856f-63844a98151a
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.56s
+Inserted outbox event: 266e12da-e53e-4872-9d3c-2fdf205a71cf
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.85s
 Outbox event final status: Sent
 sakina-backend/db/init.sql:42:CREATE TABLE outbox.events (
 sakina-backend/db/init.sql:55:    event_id UUID REFERENCES outbox.events(id),

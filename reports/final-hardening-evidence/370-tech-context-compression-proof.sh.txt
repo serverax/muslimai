@@ -1,4 +1,4 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.79s
      Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_backend-5bd443900cff2969)
 
 running 1 test
@@ -42,8 +42,8 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
 
-{"indexed_chunks": 34, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.49s
+{"indexed_chunks": 36, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.72s
 {
   "citations": [
     {
@@ -178,19 +178,6 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; fini
   ],
   "weak_evidence_blocked": false
 }
-sakina-backend/src/services/hybrid_rag.rs:40:    pub compressed_tokens_before: usize,
-sakina-backend/src/services/hybrid_rag.rs:41:    pub compressed_tokens_after: usize,
-sakina-backend/src/services/hybrid_rag.rs:42:    pub compression_ratio: f32,
-sakina-backend/src/services/hybrid_rag.rs:43:    pub weak_evidence_blocked: bool,
-sakina-backend/src/services/hybrid_rag.rs:376:        let weak_evidence_blocked = chunks.is_empty()
-sakina-backend/src/services/hybrid_rag.rs:390:            compressed_tokens_before: compression_report.tokens_before,
-sakina-backend/src/services/hybrid_rag.rs:391:            compressed_tokens_after: compression_report.tokens_after,
-sakina-backend/src/services/hybrid_rag.rs:392:            compression_ratio: compression_report.compression_ratio,
-sakina-backend/src/services/hybrid_rag.rs:393:            weak_evidence_blocked,
-sakina-backend/src/services/hybrid_rag.rs:412:            compressed_tokens_before: 0,
-sakina-backend/src/services/hybrid_rag.rs:413:            compressed_tokens_after: 0,
-sakina-backend/src/services/hybrid_rag.rs:414:            compression_ratio: 1.0,
-sakina-backend/src/services/hybrid_rag.rs:415:            weak_evidence_blocked: true,
 sakina-backend/src/services/context_compression.rs:19:    pub compression_ratio: f32,
 sakina-backend/src/services/context_compression.rs:20:    pub preserved_citations: Vec<String>,
 sakina-backend/src/services/context_compression.rs:50:        let mut preserved_citations = Vec::new();
@@ -205,4 +192,17 @@ sakina-backend/src/handlers/rag.rs:145:        "compressed_tokens_before": resul
 sakina-backend/src/handlers/rag.rs:146:        "compressed_tokens_after": result.compressed_tokens_after,
 sakina-backend/src/handlers/rag.rs:147:        "compression_ratio": result.compression_ratio,
 sakina-backend/src/handlers/rag.rs:148:        "weak_evidence_blocked": result.weak_evidence_blocked,
+sakina-backend/src/services/hybrid_rag.rs:40:    pub compressed_tokens_before: usize,
+sakina-backend/src/services/hybrid_rag.rs:41:    pub compressed_tokens_after: usize,
+sakina-backend/src/services/hybrid_rag.rs:42:    pub compression_ratio: f32,
+sakina-backend/src/services/hybrid_rag.rs:43:    pub weak_evidence_blocked: bool,
+sakina-backend/src/services/hybrid_rag.rs:376:        let weak_evidence_blocked = chunks.is_empty()
+sakina-backend/src/services/hybrid_rag.rs:390:            compressed_tokens_before: compression_report.tokens_before,
+sakina-backend/src/services/hybrid_rag.rs:391:            compressed_tokens_after: compression_report.tokens_after,
+sakina-backend/src/services/hybrid_rag.rs:392:            compression_ratio: compression_report.compression_ratio,
+sakina-backend/src/services/hybrid_rag.rs:393:            weak_evidence_blocked,
+sakina-backend/src/services/hybrid_rag.rs:412:            compressed_tokens_before: 0,
+sakina-backend/src/services/hybrid_rag.rs:413:            compressed_tokens_after: 0,
+sakina-backend/src/services/hybrid_rag.rs:414:            compression_ratio: 1.0,
+sakina-backend/src/services/hybrid_rag.rs:415:            weak_evidence_blocked: true,
 CONTEXT_COMPRESSION_OK mandatory context compression proof checks completed.

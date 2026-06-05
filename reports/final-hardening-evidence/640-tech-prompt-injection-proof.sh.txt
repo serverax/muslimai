@@ -1,6 +1,6 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.62s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.58s
 {
-  "request_id": "8aa015c6-5c39-4180-975a-75a5ac8334e8",
+  "request_id": "3e23dd90-6c4f-4129-b270-bbe116a3803c",
   "selected_agent": "General Chat Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>cached_or_cached_rag>evaluation",
@@ -88,7 +88,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "cc611189-d054-4dc8-8070-f806906f7f20"
+      "outcome": "f5dfaf83-16b9-4df6-99de-348fe9358d8c"
     },
     {
       "step": "final_response_returned",
@@ -97,7 +97,7 @@
   ]
 }
 {
-  "request_id": "150f5988-b1a8-44d0-a522-d0265ad63d2c",
+  "request_id": "5c91cb50-121c-427e-a33f-38a25ac572f3",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -185,7 +185,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "86d42d3b-aa2e-4ce6-86c3-572c45865513"
+      "outcome": "2db24f79-3b50-4f22-9173-f27ce4e29f8d"
     },
     {
       "step": "final_response_returned",
@@ -194,7 +194,7 @@
   ]
 }
 {
-  "request_id": "3e0eb114-2f8b-400d-96f2-b8532ad837ed",
+  "request_id": "e849bb52-f3a3-4be5-ac37-62ad75517ae8",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -282,7 +282,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "54523dcf-30e1-4d49-92d1-ff08f18232f3"
+      "outcome": "93cc5f67-7ebb-434a-a12c-63c3802ab923"
     },
     {
       "step": "final_response_returned",

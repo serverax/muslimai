@@ -1,7 +1,7 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.49s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.58s
 === english-quran ===
 {
-  "request_id": "ai-router-english-quran-1780674813-20868",
+  "request_id": "ai-router-english-quran-1780688438-14059",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -89,7 +89,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "e13ccbb4-548b-4a12-811f-1279b89c9be6"
+      "outcome": "5d94e0f6-6ae0-4c51-acc1-0d835c1bb352"
     },
     {
       "step": "final_response_returned",
@@ -99,7 +99,7 @@
 }
 === english-fiqh ===
 {
-  "request_id": "ai-router-english-fiqh-1780674813-15807",
+  "request_id": "ai-router-english-fiqh-1780688438-12799",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -187,7 +187,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "891cd5bc-a6b8-4848-a1f0-15d0819a6351"
+      "outcome": "e5da6faa-57cc-470b-a886-2ec76c811794"
     },
     {
       "step": "final_response_returned",
@@ -197,7 +197,7 @@
 }
 === free-family-denied ===
 {
-  "request_id": "ai-router-free-family-denied-1780674813-8121",
+  "request_id": "ai-router-free-family-denied-1780688438-28985",
   "selected_agent": "Family/Marriage Advice Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>hybrid_rag>evaluation",
@@ -285,7 +285,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "2f5b33c4-6548-4e1d-9a71-669fba1ee8db"
+      "outcome": "f5e17eb3-5d40-4c40-938e-7c2a48238843"
     },
     {
       "step": "final_response_returned",
@@ -295,7 +295,7 @@
 }
 === unsafe-safety ===
 {
-  "request_id": "ai-router-unsafe-safety-1780674814-14382",
+  "request_id": "ai-router-unsafe-safety-1780688439-31463",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -383,7 +383,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "cae28da7-ddd9-4905-aa8d-71638fb53e6a"
+      "outcome": "eb362a7e-3b9a-4e5d-a22d-d271dd2237bd"
     },
     {
       "step": "final_response_returned",
@@ -393,7 +393,7 @@
 }
 === arabic-quran ===
 {
-  "request_id": "ai-router-arabic-quran-1780674814-16943",
+  "request_id": "ai-router-arabic-quran-1780688439-19487",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -481,7 +481,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "4783cb78-4a9a-4ee0-9de0-740e49914898"
+      "outcome": "2571f2d4-3854-4ba6-919a-539ff5f8cb71"
     },
     {
       "step": "final_response_returned",
@@ -491,7 +491,7 @@
 }
 === simple-lite ===
 {
-  "request_id": "ai-router-simple-lite-1780674814-16044",
+  "request_id": "ai-router-simple-lite-1780688439-29486",
   "selected_agent": "Dua/Azkar Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>verified_dua_rag>evaluation",
@@ -579,7 +579,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "81c77e14-9719-4049-8669-70d16bb23232"
+      "outcome": "cf2955b6-c417-4c6a-a262-2de231507bdf"
     },
     {
       "step": "final_response_returned",
@@ -587,37 +587,7 @@
     }
   ]
 }
-AI router trace count before=2513 after=2519
-sakina-backend/src/services/ai_router.rs:13:    SafetyEscalation,
-sakina-backend/src/services/ai_router.rs:134:                    kind: AgentKind::SafetyEscalation,
-sakina-backend/src/services/ai_router.rs:174:        let language = detect_language(message, request.language.as_deref());
-sakina-backend/src/services/ai_router.rs:178:        let subscription = request.user_subscription_tier.trim().to_ascii_lowercase();
-sakina-backend/src/services/ai_router.rs:192:            AgentKind::SafetyEscalation
-sakina-backend/src/services/ai_router.rs:290:                AgentKind::SafetyEscalation
-sakina-backend/src/services/ai_router.rs:295:        let source_strategy = if matches!(agent, AgentKind::SafetyEscalation) {
-sakina-backend/src/services/ai_router.rs:314:        let can_generate = !matches!(agent, AgentKind::SafetyEscalation)
-sakina-backend/src/services/ai_router.rs:321:                | AgentKind::SafetyEscalation
-sakina-backend/src/services/ai_router.rs:337:            selected_model: if !can_generate {
-sakina-backend/src/services/ai_router.rs:342:            selected_pipeline: profile.pipeline.to_string(),
-sakina-backend/src/services/ai_router.rs:343:            source_strategy: source_strategy.to_string(),
-sakina-backend/src/services/ai_router.rs:351:            can_generate,
-sakina-backend/src/services/ai_router.rs:359:                    outcome: detect_language(message, request.language.as_deref()),
-sakina-backend/src/services/ai_router.rs:378:                    step: "source_strategy".to_string(),
-sakina-backend/src/services/ai_router.rs:379:                    outcome: source_strategy.to_string(),
-sakina-backend/src/services/ai_router.rs:383:                    outcome: if !can_generate {
-sakina-backend/src/services/ai_router.rs:402:fn detect_language(message: &str, preferred: Option<&str>) -> String {
-sakina-backend/src/services/ai_router.rs:520:            user_subscription_tier: "premium".to_string(),
-sakina-backend/src/services/ai_router.rs:525:        assert_eq!(route.selected_model, "lite_llm");
-sakina-backend/src/services/ai_router.rs:526:        assert_eq!(route.source_strategy, "verified_content");
-sakina-backend/src/services/ai_router.rs:539:            user_subscription_tier: "premium".to_string(),
-sakina-backend/src/services/ai_router.rs:545:            route.selected_pipeline,
-sakina-backend/src/services/ai_router.rs:559:            user_subscription_tier: "premium".to_string(),
-sakina-backend/src/services/ai_router.rs:564:        assert_eq!(route.selected_model, "safety_agent");
-sakina-backend/src/services/ai_router.rs:565:        assert!(!route.can_generate);
-sakina-backend/src/services/ai_router.rs:575:            user_subscription_tier: "premium".to_string(),
-sakina-backend/src/services/ai_router.rs:581:        assert_eq!(route.selected_model, "safety_agent");
-sakina-backend/src/services/ai_router.rs:582:        assert!(!route.can_generate);
-sakina-backend/src/services/ai_router.rs:592:            user_subscription_tier: "premium".to_string(),
+AI router trace count before=3381 after=3387
 sakina-backend/src/services/brain_controller.rs:56:        let selected_model = if policy.allowed && cost_decision.allowed {
 sakina-backend/src/services/brain_controller.rs:57:            base_route.selected_model.clone()
 sakina-backend/src/services/brain_controller.rs:61:        let can_generate = base_route.can_generate && policy.allowed && cost_decision.allowed;
@@ -651,4 +621,34 @@ sakina-backend/src/services/brain_controller.rs:455:            user_subscriptio
 sakina-backend/src/services/brain_controller.rs:467:        assert!(response.can_generate);
 sakina-backend/src/services/brain_controller.rs:475:            user_subscription_tier: "free".to_string(),
 sakina-backend/src/services/brain_controller.rs:487:        assert!(!response.can_generate);
+sakina-backend/src/services/ai_router.rs:13:    SafetyEscalation,
+sakina-backend/src/services/ai_router.rs:134:                    kind: AgentKind::SafetyEscalation,
+sakina-backend/src/services/ai_router.rs:174:        let language = detect_language(message, request.language.as_deref());
+sakina-backend/src/services/ai_router.rs:178:        let subscription = request.user_subscription_tier.trim().to_ascii_lowercase();
+sakina-backend/src/services/ai_router.rs:192:            AgentKind::SafetyEscalation
+sakina-backend/src/services/ai_router.rs:290:                AgentKind::SafetyEscalation
+sakina-backend/src/services/ai_router.rs:295:        let source_strategy = if matches!(agent, AgentKind::SafetyEscalation) {
+sakina-backend/src/services/ai_router.rs:314:        let can_generate = !matches!(agent, AgentKind::SafetyEscalation)
+sakina-backend/src/services/ai_router.rs:321:                | AgentKind::SafetyEscalation
+sakina-backend/src/services/ai_router.rs:337:            selected_model: if !can_generate {
+sakina-backend/src/services/ai_router.rs:342:            selected_pipeline: profile.pipeline.to_string(),
+sakina-backend/src/services/ai_router.rs:343:            source_strategy: source_strategy.to_string(),
+sakina-backend/src/services/ai_router.rs:351:            can_generate,
+sakina-backend/src/services/ai_router.rs:359:                    outcome: detect_language(message, request.language.as_deref()),
+sakina-backend/src/services/ai_router.rs:378:                    step: "source_strategy".to_string(),
+sakina-backend/src/services/ai_router.rs:379:                    outcome: source_strategy.to_string(),
+sakina-backend/src/services/ai_router.rs:383:                    outcome: if !can_generate {
+sakina-backend/src/services/ai_router.rs:402:fn detect_language(message: &str, preferred: Option<&str>) -> String {
+sakina-backend/src/services/ai_router.rs:520:            user_subscription_tier: "premium".to_string(),
+sakina-backend/src/services/ai_router.rs:525:        assert_eq!(route.selected_model, "lite_llm");
+sakina-backend/src/services/ai_router.rs:526:        assert_eq!(route.source_strategy, "verified_content");
+sakina-backend/src/services/ai_router.rs:539:            user_subscription_tier: "premium".to_string(),
+sakina-backend/src/services/ai_router.rs:545:            route.selected_pipeline,
+sakina-backend/src/services/ai_router.rs:559:            user_subscription_tier: "premium".to_string(),
+sakina-backend/src/services/ai_router.rs:564:        assert_eq!(route.selected_model, "safety_agent");
+sakina-backend/src/services/ai_router.rs:565:        assert!(!route.can_generate);
+sakina-backend/src/services/ai_router.rs:575:            user_subscription_tier: "premium".to_string(),
+sakina-backend/src/services/ai_router.rs:581:        assert_eq!(route.selected_model, "safety_agent");
+sakina-backend/src/services/ai_router.rs:582:        assert!(!route.can_generate);
+sakina-backend/src/services/ai_router.rs:592:            user_subscription_tier: "premium".to_string(),
 AI_ROUTER_OK mandatory AI router proof checks completed.

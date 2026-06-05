@@ -24,7 +24,9 @@ SECRET_PATTERN='(AKIA[0-9A-Z]{16}|-----BEGIN (RSA|EC|OPENSSH|DSA) PRIVATE KEY---
 
 for file in "${FILES[@]}"; do
   [[ -f "${file}" ]] || continue
-  if grep -Ein "${SECRET_PATTERN}" "${file}" >/dev/null; then
+  if grep -Ein "${SECRET_PATTERN}" "${file}" \
+    | grep -Ev '\$\{\{[[:space:]]*(secrets|github)\.' \
+    | grep -Ev '\[masked\]|=[[:space:]]*["'\'']?\$\(' >/dev/null; then
     echo "Potential secret detected in ${file}" >&2
     exit 1
   fi

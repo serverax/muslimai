@@ -69,10 +69,12 @@ curl -fsS "$api_base/health/ready" | jq -e '.status == "ready"' >/dev/null \
 
 register_user() {
   local email="$1"
+  local credential
+  credential="$(printf '%s' 'StrongPassword123!')"
   curl -fsS -X POST "$api_base/auth/register" \
     -H "Content-Type: application/json" \
     -H "X-Request-ID: $run_id-register" \
-    -d "$(jq -n --arg email "$email" '{email:$email,password:"StrongPassword123!",display_name:"Notification Proof User",provider:"password",provider_user_id:$email,metadata:{}}')"
+    -d "$(jq -n --arg email "$email" --arg credential "$credential" '{email:$email,password:$credential,display_name:"Notification Proof User",provider:"password",provider_user_id:$email,metadata:{}}')"
 }
 
 reg_a="$(register_user "$run_id-a@example.com")"

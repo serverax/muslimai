@@ -1,4 +1,4 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.54s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
 Evaluation dataset cases=25
 === prayer-travel-grounded expected=PASS ===
 {
@@ -250,7 +250,7 @@ Evaluation dataset cases=25
   "language_match": false,
   "escalation_needed": false
 }
-Evaluation DB rows before=1689 after=1714
+Evaluation DB rows before=2295 after=2320
 scripts/sakina/final-new-technologies-gate.sh:9:required=(
 scripts/sakina/final-new-technologies-gate.sh:19:  "390:tech-evaluation-ai-proof.sh"
 scripts/sakina/final-new-technologies-gate.sh:39:for item in "${required[@]}"; do

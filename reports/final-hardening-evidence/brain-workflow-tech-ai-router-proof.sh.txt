@@ -1,7 +1,7 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.52s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.57s
 === english-quran ===
 {
-  "request_id": "ai-router-english-quran-1780631858-21441",
+  "request_id": "ai-router-english-quran-1780687701-27301",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -89,7 +89,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "bc2bb775-b482-4577-9da9-4f1f13adad25"
+      "outcome": "64c100b9-f83b-4de1-8c71-c22c5f7bea66"
     },
     {
       "step": "final_response_returned",
@@ -99,7 +99,7 @@
 }
 === english-fiqh ===
 {
-  "request_id": "ai-router-english-fiqh-1780631859-19759",
+  "request_id": "ai-router-english-fiqh-1780687701-7792",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -187,7 +187,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "bad2ede5-6b0e-4175-be36-245abc057c01"
+      "outcome": "552130f7-9224-421f-a358-316fe2bfab56"
     },
     {
       "step": "final_response_returned",
@@ -197,7 +197,7 @@
 }
 === free-family-denied ===
 {
-  "request_id": "ai-router-free-family-denied-1780631859-10473",
+  "request_id": "ai-router-free-family-denied-1780687701-21761",
   "selected_agent": "Family/Marriage Advice Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>hybrid_rag>evaluation",
@@ -285,7 +285,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "eb4b02a9-8158-4886-bac8-275f738d0535"
+      "outcome": "69d5a5e4-4bc0-48d5-93b1-c489cc55a272"
     },
     {
       "step": "final_response_returned",
@@ -295,7 +295,7 @@
 }
 === unsafe-safety ===
 {
-  "request_id": "ai-router-unsafe-safety-1780631859-732",
+  "request_id": "ai-router-unsafe-safety-1780687701-19835",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -383,7 +383,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "8ad995f4-ab1f-4dae-82b5-d7f396f9c29a"
+      "outcome": "b264f6bf-7663-421c-9819-2fcaad85ea21"
     },
     {
       "step": "final_response_returned",
@@ -393,7 +393,7 @@
 }
 === arabic-quran ===
 {
-  "request_id": "ai-router-arabic-quran-1780631859-24710",
+  "request_id": "ai-router-arabic-quran-1780687701-25590",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -481,7 +481,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "d62d89f2-3dfd-4fbf-8263-e302fd6f0aa9"
+      "outcome": "592606e1-a367-4934-95af-1dcdec650534"
     },
     {
       "step": "final_response_returned",
@@ -491,7 +491,7 @@
 }
 === simple-lite ===
 {
-  "request_id": "ai-router-simple-lite-1780631859-13780",
+  "request_id": "ai-router-simple-lite-1780687702-32637",
   "selected_agent": "Dua/Azkar Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>verified_dua_rag>evaluation",
@@ -579,7 +579,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "7a036a12-5e21-4f84-8245-3ef2725e13dd"
+      "outcome": "5942b3e4-a0a5-400e-844e-391251939204"
     },
     {
       "step": "final_response_returned",
@@ -587,7 +587,7 @@
     }
   ]
 }
-AI router trace count before=1287 after=1293
+AI router trace count before=3321 after=3327
 sakina-backend/src/services/ai_router.rs:13:    SafetyEscalation,
 sakina-backend/src/services/ai_router.rs:134:                    kind: AgentKind::SafetyEscalation,
 sakina-backend/src/services/ai_router.rs:174:        let language = detect_language(message, request.language.as_deref());
@@ -639,14 +639,16 @@ sakina-backend/src/services/brain_controller.rs:255:            user_subscriptio
 sakina-backend/src/services/brain_controller.rs:260:        if !route.can_generate {
 sakina-backend/src/services/brain_controller.rs:283:                selected_model: route.selected_model.clone(),
 sakina-backend/src/services/brain_controller.rs:301:            selected_model: trace.selected_model.clone(),
-sakina-backend/src/services/brain_controller.rs:324:    let tier_budget = match request.user_subscription_tier.as_str() {
-sakina-backend/src/services/brain_controller.rs:397:            evaluation_score: if route.can_generate { 0.91 } else { 0.12 },
-sakina-backend/src/services/brain_controller.rs:398:            review_result: if route.can_generate {
-sakina-backend/src/services/brain_controller.rs:403:            reason: if route.can_generate {
-sakina-backend/src/services/brain_controller.rs:410:            escalation_needed: !route.can_generate,
-sakina-backend/src/services/brain_controller.rs:411:            tone_ok: route.can_generate,
-sakina-backend/src/services/brain_controller.rs:438:            user_subscription_tier: "free".to_string(),
-sakina-backend/src/services/brain_controller.rs:450:        assert!(response.can_generate);
-sakina-backend/src/services/brain_controller.rs:458:            user_subscription_tier: "free".to_string(),
-sakina-backend/src/services/brain_controller.rs:470:        assert!(!response.can_generate);
+sakina-backend/src/services/brain_controller.rs:313:                "brain_selected_pipeline".to_string(),
+sakina-backend/src/services/brain_controller.rs:314:                serde_json::json!(trace.selected_pipeline),
+sakina-backend/src/services/brain_controller.rs:341:    let tier_budget = match request.user_subscription_tier.as_str() {
+sakina-backend/src/services/brain_controller.rs:414:            evaluation_score: if route.can_generate { 0.91 } else { 0.12 },
+sakina-backend/src/services/brain_controller.rs:415:            review_result: if route.can_generate {
+sakina-backend/src/services/brain_controller.rs:420:            reason: if route.can_generate {
+sakina-backend/src/services/brain_controller.rs:427:            escalation_needed: !route.can_generate,
+sakina-backend/src/services/brain_controller.rs:428:            tone_ok: route.can_generate,
+sakina-backend/src/services/brain_controller.rs:455:            user_subscription_tier: "free".to_string(),
+sakina-backend/src/services/brain_controller.rs:467:        assert!(response.can_generate);
+sakina-backend/src/services/brain_controller.rs:475:            user_subscription_tier: "free".to_string(),
+sakina-backend/src/services/brain_controller.rs:487:        assert!(!response.can_generate);
 AI_ROUTER_OK mandatory AI router proof checks completed.

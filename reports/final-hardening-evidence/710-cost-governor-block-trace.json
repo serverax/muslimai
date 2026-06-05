@@ -1,5 +1,5 @@
 {
-  "request_id": "e84ba1e4-08c9-460f-82cc-3864a1e99ef2",
+  "request_id": "3a582c33-3f18-4485-981c-edf4808f9047",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -87,7 +87,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "5feeca09-7184-479d-8ebb-9456c8f4e4e7"
+      "outcome": "cbc6abcf-f18b-4492-bece-2b6d698091e5"
     },
     {
       "step": "final_response_returned",

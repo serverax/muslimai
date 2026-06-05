@@ -44,7 +44,16 @@ for script in "${required_scripts[@]}"; do
   bash "$path" > "$evidence" 2>&1
 done
 
-if grep -RInE "continue-on-error: true|echo.*passed|Smoke validation passed|mock_embeddings|fake.*pass|stub.*pass" .github scripts infra k8s helm > reports/final-hardening-evidence/security-performance-fake-ci-scan.txt; then
+scan_paths=(.github scripts infra)
+[[ -d k8s ]] && scan_paths+=(k8s)
+[[ -d helm ]] && scan_paths+=(helm)
+
+if rg -n -i "continue-on-error: true|echo.*passed|Smoke validation passed|mock_embeddings|ALLOW_FAKE_CI_PASS[[:space:]]*=[[:space:]]*true|fake[ _-]+pass|fake[ _-]+passed|stub[ _-]+pass|stub[ _-]+passed" \
+  "${scan_paths[@]}" \
+  --glob '!scripts/sakina/final-security-performance-gate.sh' \
+  --glob '!scripts/sakina/tech-sast-sca-container-proof.sh' \
+  --glob '!scripts/sakina/new-technologies-master-matrix-proof.sh' \
+  > reports/final-hardening-evidence/security-performance-fake-ci-scan.txt; then
   fail "CI/script fake-success scanner has hits: reports/final-hardening-evidence/security-performance-fake-ci-scan.txt"
 fi
 

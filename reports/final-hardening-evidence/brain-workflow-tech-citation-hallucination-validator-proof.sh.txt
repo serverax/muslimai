@@ -1,5 +1,5 @@
-{"indexed_chunks": 15, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.74s
+{"indexed_chunks": 35, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.55s
 {
   "citations": [
     {

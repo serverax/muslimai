@@ -1,14 +1,14 @@
 === register ===
 {
-  "user_id": "9958e7f8-395d-44be-990b-2f107ebb68a6",
-  "email": "sakina-proof-1780674734-12536@example.com",
+  "user_id": "18b01edd-c7c2-442e-a414-dd7d11831b5f",
+  "email": "sakina-proof-1780688338-20948@example.com",
   "has_access_token": true,
   "has_refresh_token": true
 }
 === login ===
 {
-  "user_id": "9958e7f8-395d-44be-990b-2f107ebb68a6",
-  "email": "sakina-proof-1780674734-12536@example.com",
+  "user_id": "18b01edd-c7c2-442e-a414-dd7d11831b5f",
+  "email": "sakina-proof-1780688338-20948@example.com",
   "access_token_format": true,
   "has_refresh_token": true
 }
@@ -22,8 +22,8 @@ status=401
 }
 === auth me ===
 {
-  "user_id": "9958e7f8-395d-44be-990b-2f107ebb68a6",
-  "email": "sakina-proof-1780674734-12536@example.com"
+  "user_id": "18b01edd-c7c2-442e-a414-dd7d11831b5f",
+  "email": "sakina-proof-1780688338-20948@example.com"
 }
 === protected route without token ===
 status=401
@@ -49,6 +49,6 @@ status=401
 === password hash proof ===
                    email                   | hash_prefix | password_version | not_plaintext 
 -------------------------------------------+-------------+------------------+---------------
- sakina-proof-1780674734-12536@example.com | $argon2id$  | argon2id-v1      | t
+ sakina-proof-1780688338-20948@example.com | $argon2id$  | argon2id-v1      | t
 (1 row)
 

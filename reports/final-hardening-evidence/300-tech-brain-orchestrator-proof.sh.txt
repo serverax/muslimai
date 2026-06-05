@@ -1,12 +1,4 @@
 Checked backend readiness at http://localhost:8080/health/ready
-sakina-backend/src/handlers/islamic.rs:3:    AiaOrchestrator, AskIslamicRequest, IslamicAnswerService, IslamicKnowledgeRepository,
-sakina-backend/src/handlers/islamic.rs:91:    aia: web::Data<AiaOrchestrator>,
-sakina-backend/src/handlers/chat.rs:11:    authenticated_user_id, AiaOrchestrator, AskIslamicRequest, IslamicAnswerService,
-sakina-backend/src/handlers/chat.rs:16:    aia: web::Data<AiaOrchestrator>,
-sakina-backend/src/handlers/chat.rs:47:    let brain = aia.route(&BrainRouteRequest {
-sakina-backend/src/handlers/chat.rs:178:    aia: web::Data<AiaOrchestrator>,
-sakina-backend/src/handlers/chat.rs:475:    fn aia_data() -> web::Data<AiaOrchestrator> {
-sakina-backend/src/handlers/chat.rs:476:        web::Data::new(AiaOrchestrator::new(std::sync::Arc::new(
 sakina-backend/src/handlers/rag.rs:13:    AiaOrchestrator, EmbeddingsService, Guardrails, HybridRagService, QdrantVectorDB,
 sakina-backend/src/handlers/rag.rs:56:    aia: web::Data<AiaOrchestrator>,
 sakina-backend/src/handlers/rag.rs:65:    let _trace = aia.route(&BrainRouteRequest {
@@ -15,8 +7,16 @@ sakina-backend/src/handlers/rag.rs:126:    let route = aia.route(&BrainRouteRequ
 sakina-backend/src/handlers/rag.rs:259:    aia: web::Data<AiaOrchestrator>,
 sakina-backend/src/handlers/rag.rs:384:    fn aia_data() -> web::Data<AiaOrchestrator> {
 sakina-backend/src/handlers/rag.rs:385:        web::Data::new(AiaOrchestrator::new(Arc::new(
+sakina-backend/src/handlers/islamic.rs:3:    AiaOrchestrator, AskIslamicRequest, IslamicAnswerService, IslamicKnowledgeRepository,
+sakina-backend/src/handlers/islamic.rs:91:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/chat.rs:11:    authenticated_user_id, AiaOrchestrator, AskIslamicRequest, IslamicAnswerService,
+sakina-backend/src/handlers/chat.rs:16:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/chat.rs:47:    let brain = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/chat.rs:178:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src/handlers/chat.rs:475:    fn aia_data() -> web::Data<AiaOrchestrator> {
+sakina-backend/src/handlers/chat.rs:476:        web::Data::new(AiaOrchestrator::new(std::sync::Arc::new(
 {
-  "request_id": "brain-proof-1780674778-8026",
+  "request_id": "brain-proof-1780688397-3719",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -104,7 +104,7 @@ sakina-backend/src/handlers/rag.rs:385:        web::Data::new(AiaOrchestrator::n
     },
     {
       "step": "decision_logged",
-      "outcome": "b66dfa96-6ccd-4447-91b7-59ad60c18ef6"
+      "outcome": "091aebaf-1cbb-4a77-a5cb-97df202d977f"
     },
     {
       "step": "final_response_returned",
@@ -112,9 +112,9 @@ sakina-backend/src/handlers/rag.rs:385:        web::Data::new(AiaOrchestrator::n
     }
   ]
 }
-Brain trace count before=2488 after=2489
+Brain trace count before=3356 after=3357
 {
-  "request_id": "664b7c4e-3f93-4259-85a5-02c8bf31ae61",
+  "request_id": "62dda0cd-2ceb-46ca-ba3c-f4375c22bf47",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -202,7 +202,7 @@ Brain trace count before=2488 after=2489
     },
     {
       "step": "decision_logged",
-      "outcome": "faa5a105-b627-47fe-ae32-f5f2c2381553"
+      "outcome": "413635cd-f5fe-42ab-8205-4d06db09aa2c"
     },
     {
       "step": "final_response_returned",

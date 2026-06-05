@@ -1,2 +1,2 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.76s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.52s
 LOAD_PERFORMANCE_OK runtime health/Brain/readiness endpoints and DB/Qdrant checks met the configured local performance budgets.

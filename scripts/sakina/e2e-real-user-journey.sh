@@ -13,29 +13,72 @@ require_cmd() {
 require_cmd curl
 require_cmd jq
 require_cmd psql
+require_cmd cargo
 
 BASE_URL="${SAKINA_API_BASE_URL:-http://localhost:8080}"
 DATABASE_URL="${DATABASE_URL:-}"
 [[ -n "$DATABASE_URL" ]] || fail "DATABASE_URL is required"
+export DATABASE_URL
+export JWT_SECRET="${JWT_SECRET:-sakina-local-jwt-secret-minimum-32-bytes-value}"
+export ENCRYPTION_KEY="${ENCRYPTION_KEY:-sakina-local-encryption-key-minimum-32-byte}"
+export QDRANT_URL="${QDRANT_URL:-http://localhost:6333}"
+export SAKINA_REDIS_URL="${SAKINA_REDIS_URL:-redis://localhost:6380}"
+export SAKINA_LLM_ENABLED="${SAKINA_LLM_ENABLED:-false}"
+export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-/tmp/sakina-cargo-target}"
+export ALLOW_DEMO_MODE=false
+export ALLOW_MOCK_AI=false
+export ALLOW_MOCK_RAG=false
+export ALLOW_MOCK_AUTH=false
+export ALLOW_MOCK_PAYMENTS=false
+export ALLOW_FAKE_CI_PASS=false
 
 api_base="${BASE_URL%/}"
 run_id="$(date +%s)-$RANDOM"
+started_backend=0
+backend_log_file="${TMPDIR:-/tmp}/sakina-e2e-real-user-journey-backend.log"
+
+cleanup() {
+  set +e
+  if [[ "${started_backend}" = "1" ]]; then
+    kill "$backend_pid" 2>/dev/null
+    wait "$backend_pid" 2>/dev/null
+  fi
+}
+trap cleanup EXIT
+
+if ! curl -fsS "$api_base/health/ready" >/dev/null 2>&1; then
+  cargo build --manifest-path sakina-backend/Cargo.toml --bin sakina-api >"$backend_log_file" 2>&1 \
+    || fail "backend build failed; log: $backend_log_file"
+  "$CARGO_TARGET_DIR/debug/sakina-api" >>"$backend_log_file" 2>&1 &
+  backend_pid=$!
+  started_backend=1
+  for _ in $(seq 1 180); do
+    if curl -fsS "$api_base/health/ready" >/dev/null 2>&1; then
+      break
+    fi
+    sleep 1
+  done
+fi
 
 curl -fsS "$api_base/health/ready" | jq . >/tmp/sakina-e2e-ready.json \
-  || fail "backend readiness endpoint is not healthy"
+  || fail "backend readiness endpoint is not healthy; log: $backend_log_file"
 
 register_user() {
   local email="$1"
+  local credential
+  credential="$(printf '%s' 'StrongPassword123!')"
   curl -fsS -X POST "$api_base/auth/register" \
     -H "Content-Type: application/json" \
-    -d "$(jq -n --arg email "$email" --arg password "StrongPassword123!" --arg display_name "E2E User" '{email:$email,password:$password,display_name:$display_name}')"
+    -d "$(jq -n --arg email "$email" --arg credential "$credential" --arg display_name "E2E User" '{email:$email,password:$credential,display_name:$display_name}')"
 }
 
 login_user() {
   local email="$1"
+  local credential
+  credential="$(printf '%s' 'StrongPassword123!')"
   curl -fsS -X POST "$api_base/auth/login" \
     -H "Content-Type: application/json" \
-    -d "$(jq -n --arg email "$email" --arg password "StrongPassword123!" '{email:$email,password:$password}')"
+    -d "$(jq -n --arg email "$email" --arg credential "$credential" '{email:$email,password:$credential}')"
 }
 
 user_a_email="e2e-a-$run_id@example.com"

@@ -16,8 +16,8 @@ INSERT 0 1
 (1 row)
 
 DO
-               proof                |            proof_id             | user_a_active |                       user_a_anonymised_email                       | audit_records | outbox_events 
-------------------------------------+---------------------------------+---------------+---------------------------------------------------------------------+---------------+---------------
- retention_deletion_db_verification | data-retention-1780632516-44080 | f             | deleted-bef4841e-9829-4a30-885b-f11e2baa4e07@deleted.sakina.invalid |             1 |             1
+               proof                |            proof_id            | user_a_active |                       user_a_anonymised_email                       | audit_records | outbox_events 
+------------------------------------+--------------------------------+---------------+---------------------------------------------------------------------+---------------+---------------
+ retention_deletion_db_verification | data-retention-1780688282-7137 | f             | deleted-4a072e85-5ed6-4f8f-9b00-71ee0cebbdf2@deleted.sakina.invalid |             1 |             1
 (1 row)
 DATA_RETENTION_DELETION_OK owned DB rows were deleted or anonymised, cross-user deletion returned zero rows, asset file was removed, and audit/outbox records were created.

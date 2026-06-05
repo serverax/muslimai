@@ -21,6 +21,7 @@ export DATABASE_URL="${DATABASE_URL:-postgres://sakina_user:sakina_password@loca
 export JWT_SECRET="${JWT_SECRET:-sakina-local-jwt-secret-minimum-32-bytes-value}"
 export ENCRYPTION_KEY="${ENCRYPTION_KEY:-sakina-local-encryption-key-minimum-32-byte}"
 export QDRANT_URL="${QDRANT_URL:-http://localhost:6333}"
+export SAKINA_REDIS_URL="${SAKINA_REDIS_URL:-redis://localhost:6380}"
 export VLLM_URL="${VLLM_URL:-http://localhost:18080}"
 export SAKINA_LLM_ENABLED="${SAKINA_LLM_ENABLED:-false}"
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-/tmp/sakina-cargo-target}"

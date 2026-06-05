@@ -1,8 +1,8 @@
 === Kubernetes restricted manifest scan target: sakina-infra ===
-2026-06-05T05:08:12+01:00	INFO	[misconfig] Misconfiguration scanning is enabled
-2026-06-05T05:08:12+01:00	INFO	[checks-client] Using existing checks from cache	path="/home/kalshafee/.cache/trivy/policy/content"
-2026-06-05T05:08:17+01:00	INFO	Number of language-specific files	num=0
-2026-06-05T05:08:17+01:00	INFO	Detected config files	num=13
+2026-06-05T20:37:33+01:00	INFO	[misconfig] Misconfiguration scanning is enabled
+2026-06-05T20:37:33+01:00	INFO	[checks-client] Using existing checks from cache	path="/home/kalshafee/.cache/trivy/policy/content"
+2026-06-05T20:37:39+01:00	INFO	Number of language-specific files	num=0
+2026-06-05T20:37:39+01:00	INFO	Detected config files	num=13
 
 Report Summary
 
@@ -40,10 +40,10 @@ Legend:
 - '0': Clean (no security findings detected)
 
 === Kubernetes restricted manifest scan target: infra/k8s ===
-2026-06-05T05:08:18+01:00	INFO	[misconfig] Misconfiguration scanning is enabled
-2026-06-05T05:08:18+01:00	INFO	[checks-client] Using existing checks from cache	path="/home/kalshafee/.cache/trivy/policy/content"
-2026-06-05T05:08:21+01:00	INFO	Number of language-specific files	num=0
-2026-06-05T05:08:21+01:00	INFO	Detected config files	num=7
+2026-06-05T20:37:40+01:00	INFO	[misconfig] Misconfiguration scanning is enabled
+2026-06-05T20:37:40+01:00	INFO	[checks-client] Using existing checks from cache	path="/home/kalshafee/.cache/trivy/policy/content"
+2026-06-05T20:37:44+01:00	INFO	Number of language-specific files	num=0
+2026-06-05T20:37:44+01:00	INFO	Detected config files	num=9
 
 Report Summary
 
@@ -60,7 +60,11 @@ Report Summary
 ├──────────────────────────────────────────┼────────────┼───────────────────┤
 │ sakina-mobile-staging/postgres.yaml      │ kubernetes │         0         │
 ├──────────────────────────────────────────┼────────────┼───────────────────┤
+│ sakina-mobile-staging/qdrant.yaml        │ kubernetes │         0         │
+├──────────────────────────────────────────┼────────────┼───────────────────┤
 │ sakina-mobile-staging/rag.yaml           │ kubernetes │         0         │
+├──────────────────────────────────────────┼────────────┼───────────────────┤
+│ sakina-mobile-staging/redis.yaml         │ kubernetes │         0         │
 ├──────────────────────────────────────────┼────────────┼───────────────────┤
 │ sakina-mobile-staging/smoke-tests.yaml   │ kubernetes │         0         │
 └──────────────────────────────────────────┴────────────┴───────────────────┘
@@ -69,12 +73,12 @@ Legend:
 - '0': Clean (no security findings detected)
 
 === Kubernetes restricted manifest scan target: infra/sakina-mobile ===
-2026-06-05T05:08:22+01:00	INFO	[misconfig] Misconfiguration scanning is enabled
-2026-06-05T05:08:22+01:00	INFO	[checks-client] Using existing checks from cache	path="/home/kalshafee/.cache/trivy/policy/content"
-2026-06-05T05:08:24+01:00	INFO	[terraform scanner] Scanning root module	file_path="."
-2026-06-05T05:08:24+01:00	WARN	[terraform parser] Variable values were not found in the environment or variable files. Evaluating may not work correctly.	module="root" variables="aks_api_authorized_ip_ranges, postgres_admin_password"
-2026-06-05T05:08:27+01:00	INFO	Number of language-specific files	num=0
-2026-06-05T05:08:27+01:00	INFO	Detected config files	num=11
+2026-06-05T20:37:46+01:00	INFO	[misconfig] Misconfiguration scanning is enabled
+2026-06-05T20:37:46+01:00	INFO	[checks-client] Using existing checks from cache	path="/home/kalshafee/.cache/trivy/policy/content"
+2026-06-05T20:37:52+01:00	INFO	[terraform scanner] Scanning root module	file_path="."
+2026-06-05T20:37:52+01:00	WARN	[terraform parser] Variable values were not found in the environment or variable files. Evaluating may not work correctly.	module="root" variables="aks_api_authorized_ip_ranges, postgres_admin_password"
+2026-06-05T20:37:53+01:00	INFO	Number of language-specific files	num=0
+2026-06-05T20:37:53+01:00	INFO	Detected config files	num=11
 
 Report Summary
 

@@ -61,17 +61,14 @@
 1970:  final String traceId;
 1981:    required this.traceId,
 1999:      traceId: json['trace_id']?.toString() ?? '',
+sakina-backend/src/handlers/chat.rs:7:    AddMessageRequest, AddMessageResponse, BrainRouteRequest, ConversationMessageResponse,
+sakina-backend/src/handlers/chat.rs:8:    CreateConversationRequest, CreateConversationResponse, GetConversationResponse,
+sakina-backend/src/handlers/chat.rs:75:        Ok(row) => HttpResponse::Ok().json(CreateConversationResponse {
+sakina-backend/src/handlers/chat.rs:328:    HttpResponse::Ok().json(AddMessageResponse {
 sakina-backend/src/models/mod.rs:307:pub struct CreateConversationResponse {
 sakina-backend/src/models/mod.rs:339:pub struct AddMessageResponse {
-sakina-backend/src/services/mod.rs:59:pub use memory_engine::{MemoryEngine, MemoryEntry, MemoryWriteOutcome, MemoryWriteRequest};
-sakina-backend/src/services/memory_engine.rs:21:pub struct MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:30:pub struct MemoryEntry {
-sakina-backend/src/services/memory_engine.rs:97:    pub fn preview_write(payload: &Value, consent_granted: bool) -> MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:106:        MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:178:    pub async fn write(&self, request: MemoryWriteRequest) -> Result<MemoryWriteOutcome, ApiError> {
-sakina-backend/src/services/memory_engine.rs:228:        Ok(MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:241:    ) -> Result<Option<MemoryEntry>, ApiError> {
-sakina-backend/src/services/memory_engine.rs:289:        Ok(Some(MemoryEntry {
+sakina-backend/src/handlers/phase2.rs:15:    UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
+sakina-backend/src/handlers/phase2.rs:142:    body: web::Json<UpsertProfileRequest>,
 sakina-backend/src/services/phase2.rs:28:    ) -> Result<RegisterUserResponse, ApiError> {
 sakina-backend/src/services/phase2.rs:140:        let mut response = RegisterUserResponse {
 sakina-backend/src/services/phase2.rs:230:    pub async fn login_password(&self, request: LoginRequest) -> Result<LoginResponse, ApiError> {
@@ -82,58 +79,61 @@ sakina-backend/src/services/phase2.rs:398:        request: UpsertProfileRequest,
 sakina-backend/src/services/phase2.rs:2116:pub struct RegisterUserResponse {
 sakina-backend/src/services/phase2.rs:2144:pub struct LoginResponse {
 sakina-backend/src/services/phase2.rs:2180:pub struct UpsertProfileRequest {
-sakina-backend/src/handlers/phase2.rs:15:    UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
-sakina-backend/src/handlers/phase2.rs:142:    body: web::Json<UpsertProfileRequest>,
-sakina-backend/src/handlers/chat.rs:7:    AddMessageRequest, AddMessageResponse, BrainRouteRequest, ConversationMessageResponse,
-sakina-backend/src/handlers/chat.rs:8:    CreateConversationRequest, CreateConversationResponse, GetConversationResponse,
-sakina-backend/src/handlers/chat.rs:75:        Ok(row) => HttpResponse::Ok().json(CreateConversationResponse {
-sakina-backend/src/handlers/chat.rs:328:    HttpResponse::Ok().json(AddMessageResponse {
+sakina-backend/src/services/mod.rs:59:pub use memory_engine::{MemoryEngine, MemoryEntry, MemoryWriteOutcome, MemoryWriteRequest};
+sakina-backend/src/services/memory_engine.rs:21:pub struct MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:30:pub struct MemoryEntry {
+sakina-backend/src/services/memory_engine.rs:97:    pub fn preview_write(payload: &Value, consent_granted: bool) -> MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:106:        MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:178:    pub async fn write(&self, request: MemoryWriteRequest) -> Result<MemoryWriteOutcome, ApiError> {
+sakina-backend/src/services/memory_engine.rs:228:        Ok(MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:241:    ) -> Result<Option<MemoryEntry>, ApiError> {
+sakina-backend/src/services/memory_engine.rs:289:        Ok(Some(MemoryEntry {
 {
-  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
-  "identity_id": "b03b94c6-e9ec-42a7-b19f-bcd7c5c4dcde",
-  "email": "schema-contract-1780674771-13240@example.com",
+  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
+  "identity_id": "3bd25dd8-9a36-4897-957d-426872989e81",
+  "email": "schema-contract-1780688385-26098@example.com",
   "pub_key": null,
   "auth_provider": "password",
-  "created_at": "2026-06-05 15:52:53.783576+00",
-  "updated_at": "2026-06-05 15:52:53.783576+00",
+  "created_at": "2026-06-05 19:39:48.823564+00",
+  "updated_at": "2026-06-05 19:39:48.823564+00",
   "access_token": "[masked]",
   "refresh_token": "[masked]"
 }
 {
-  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
-  "email": "schema-contract-1780674771-13240@example.com",
+  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
+  "email": "schema-contract-1780688385-26098@example.com",
   "auth_provider": "password",
-  "created_at": "2026-06-05 15:52:53.783576+00"
+  "created_at": "2026-06-05 19:39:48.823564+00"
 }
 {
-  "profile_id": "cb064828-8fde-4649-9984-0782333eaedf",
-  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7"
+  "profile_id": "d567cb65-ab91-4a35-9a5f-b389ce00cbd6",
+  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74"
 }
 {
-  "id": "c646c7c5-e3e5-4b08-a615-13c21d6d220d",
-  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
+  "id": "4962b216-4c87-4f02-a475-475cc05d0a0d",
+  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
   "title": "Schema contract chat",
-  "created_at": "2026-06-05 15:52:54.645127+00",
-  "updated_at": "2026-06-05 15:52:54.645127+00"
+  "created_at": "2026-06-05 19:39:50.762733+00",
+  "updated_at": "2026-06-05 19:39:50.762733+00"
 }
 {
-  "conversation_id": "c646c7c5-e3e5-4b08-a615-13c21d6d220d",
-  "user_message_id": "2a2ee420-0311-45ea-a405-95b9c7985c94",
-  "assistant_message_id": "cc99d600-b67c-4761-abb2-289aa96ac9d5",
+  "conversation_id": "4962b216-4c87-4f02-a475-475cc05d0a0d",
+  "user_message_id": "a5398ac5-388b-4bcb-8c33-bf2dc9d05c82",
+  "assistant_message_id": "64022739-1c05-48c6-82d0-ec67ee810544",
   "response": "I found verified sources related to Quran 2:153.",
-  "trace_id": "62f89b01-e034-4db4-8f73-18a1377caff7"
+  "trace_id": "f99e6a61-622d-40e8-803a-0ba623ed8345"
 }
 {
   "stored": true,
   "allowed": true,
   "sensitivity_level": "safe",
   "reason": "memory write allowed",
-  "memory_id": "b23cbe3c-75c2-4a7a-a2d5-4d651acbbf09"
+  "memory_id": "53738427-0564-4697-8f5a-8f1aff1aa263"
 }
 {
-  "id": "b23cbe3c-75c2-4a7a-a2d5-4d651acbbf09",
-  "user_id": "d705b16a-1014-44ed-b087-29df5706b4c7",
-  "memory_key": "schema.contract.1780674771-13240",
+  "id": "53738427-0564-4697-8f5a-8f1aff1aa263",
+  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
+  "memory_key": "schema.contract.1780688385-26098",
   "memory_type": "preference",
   "sensitivity_level": "safe",
   "payload": {

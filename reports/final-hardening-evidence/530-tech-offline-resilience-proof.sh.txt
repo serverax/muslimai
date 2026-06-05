@@ -47,7 +47,6 @@ sakina-frontend/lib/services/local_db_service.dart:43:        "ALTER TABLE messa
 sakina-frontend/lib/services/local_db_service.dart:52:      conflictAlgorithm: ConflictAlgorithm.replace,
 sakina-frontend/lib/services/local_db_service.dart:95:        'sync_status': syncStatus,
 sakina-frontend/lib/services/local_db_service.dart:105:        syncStatus: map['sync_status'] as String? ?? 'synced',
-sakina-frontend/lib/app/app_strings.dart:91:          'Network unavailable. Please check your connection and try again.',
 sakina-frontend/lib/config/api_config.dart:14:  static const int retryAttempts = 3;
 sakina-frontend/lib/config/api_config.dart:15:  static const Duration retryDelay = Duration(seconds: 1);
 sakina-frontend/lib/chat/chat_controller.dart:21:  serviceUnavailable,
@@ -104,4 +103,5 @@ sakina-frontend/lib/services/api_service.dart:965:    return ApiException(
 sakina-frontend/lib/services/api_service.dart:1050:class ApiException implements Exception {
 sakina-frontend/lib/services/api_service.dart:1055:  ApiException(
 sakina-frontend/lib/services/api_service.dart:1063:  String toString() => 'ApiException: $message';
+sakina-frontend/lib/app/app_strings.dart:91:          'Network unavailable. Please check your connection and try again.',
 OFFLINE_RESILIENCE_OK frontend queues backend-unavailable chat messages as pending, does not fabricate assistant answers, persists pending state in encrypted local DB, retries pending messages when backend becomes available, maps network errors to user-visible state, and production code has no fake offline answer path.

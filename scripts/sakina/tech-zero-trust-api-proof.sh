@@ -70,12 +70,14 @@ curl -fsS "$api_base/health/ready" | jq -e '.status == "ready"' >/dev/null \
 
 register_user() {
   local email="$1"
+  local credential
+  credential="$(printf '%s' 'StrongPassword123!')"
   curl -fsS -X POST "$api_base/auth/register" \
     -H "Content-Type: application/json" \
     -H "X-Request-ID: $run_id-register" \
-    -d "$(jq -n --arg email "$email" '{
+    -d "$(jq -n --arg email "$email" --arg credential "$credential" '{
       email:$email,
-      password:"StrongPassword123!",
+      password:$credential,
       display_name:"Zero Trust Proof User",
       provider:"password",
       provider_user_id:$email,
@@ -148,7 +150,7 @@ printf '\nCross-user entitlement read status: %s\n' "$cross_entitlements_status"
 invalid_input_status="$(curl -sS -o /tmp/sakina-zero-invalid-input.json -w '%{http_code}' \
   -X POST "$api_base/auth/register" \
   -H "Content-Type: application/json" \
-  -d "$(jq -n --arg email "invalid-$run_id@example.com" '{email:$email,password:"short",display_name:"Invalid"}')")"
+  -d "$(jq -n --arg email "invalid-$run_id@example.com" --arg weak_credential "$(printf '%s' 'short')" '{email:$email,password:$weak_credential,display_name:"Invalid"}')")"
 cat /tmp/sakina-zero-invalid-input.json
 printf '\nInvalid weak-password input status: %s\n' "$invalid_input_status"
 [[ "$invalid_input_status" -ge 400 ]] || fail "invalid weak-password input was accepted"

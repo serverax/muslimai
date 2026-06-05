@@ -1,3 +1,0 @@
-scripts/sakina/final-security-performance-gate.sh:47:if grep -RInE "continue-on-error: true|echo.*passed|Smoke validation passed|mock_embeddings|fake.*pass|stub.*pass" .github scripts infra k8s helm > reports/final-hardening-evidence/security-performance-fake-ci-scan.txt; then
-scripts/sakina/tech-sast-sca-container-proof.sh:53:if rg -n -i "continue-on-error:\s*true|echo[^\n]*\bPASS\b|echo[^\n]*\bpassed\b|fake[ _-]+pass|fake[ _-]+passed|stub[ _-]+pass|stub[ _-]+passed|mock[ _-]+pass|mock[ _-]+passed|\|\| true" \
-scripts/sakina/tech-sast-sca-container-proof.sh:60:  printf 'No fake CI/proof-script pass patterns found in required scan scope.\n' \

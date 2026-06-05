@@ -7,16 +7,16 @@
     ]
   },
   "status": "ok",
-  "time": 0.000005603
+  "time": 0.000007211
 }
-{"indexed_chunks": 34, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-Approved Islamic chunks in DB: 34
+{"indexed_chunks": 36, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+Approved Islamic chunks in DB: 36
 {
   "result": {
     "status": "green",
     "optimizer_status": "ok",
     "indexed_vectors_count": 0,
-    "points_count": 34,
+    "points_count": 36,
     "segments_count": 8,
     "config": {
       "params": {
@@ -55,9 +55,9 @@ Approved Islamic chunks in DB: 34
     "payload_schema": {}
   },
   "status": "ok",
-  "time": 0.000038323
+  "time": 0.000059737
 }
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.47s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.87s
 {
   "citations": [
     {

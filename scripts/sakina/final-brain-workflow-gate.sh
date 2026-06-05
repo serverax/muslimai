@@ -17,6 +17,7 @@ cat tasks/sakina-ultimate-hard-execution-order.md >/dev/null
 cat tasks/sakina-restricted-advanced-technologies-order.md >/dev/null
 
 export SAKINA_REDIS_URL="${SAKINA_REDIS_URL:-redis://localhost:6380}"
+export DATABASE_URL="${DATABASE_URL:-postgres://sakina_user:sakina_password@localhost:5434/sakina}"
 
 required_scripts=(
   "tech-brain-orchestrator-proof.sh"

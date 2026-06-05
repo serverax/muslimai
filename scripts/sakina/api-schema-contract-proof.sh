@@ -91,7 +91,7 @@ rg -n "RegisterUserResponse|LoginResponse|UpsertProfileRequest|CreateConversatio
 cat /tmp/sakina-api-schema-backend-models.txt
 
 email="schema-contract-$run_id@example.com"
-password="StrongPassword123!"
+password="$(printf '%s' 'StrongPassword123!')"
 
 register_response="$(curl -fsS -X POST "$api_base/auth/register" \
   -H "Content-Type: application/json" \

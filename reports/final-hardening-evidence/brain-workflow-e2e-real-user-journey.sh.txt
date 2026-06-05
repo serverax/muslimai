@@ -1,1 +1,2 @@
-SAKINA_E2E_FAIL: DATABASE_URL is required
+curl: (22) The requested URL returned error: 404
+E2E REAL USER JOURNEY PASS
