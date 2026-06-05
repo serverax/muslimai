@@ -225,7 +225,16 @@ jobs:
           kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
-          bad_pods="$(kubectl -n "$namespace" get pods | awk '/ImagePullBackOff|CrashLoopBackOff|CreateContainerConfigError|Pending|Error/ { print }')"
+          bad_pods="$(kubectl -n "$namespace" get pods -o json | jq -r '
+            .items[]
+            | select((.metadata.ownerReferences // [] | any(.kind == "Job")) | not)
+            | select(
+                .status.phase == "Pending"
+                or .status.phase == "Failed"
+                or any((.status.containerStatuses // []); .state.waiting.reason as $r | $r == "ImagePullBackOff" or $r == "CrashLoopBackOff" or $r == "CreateContainerConfigError" or $r == "ErrImagePull")
+              )
+            | "\(.metadata.name)\t\(.status.phase)\t\([(.status.containerStatuses // [])[].state.waiting.reason // empty] | join(","))"
+          ')"
           if [ -n "$bad_pods" ]; then
             echo "$bad_pods"
             exit 1
