@@ -73,40 +73,19 @@ mapfile -t backend_pods < <(kubectl -n "$NS" get pods -l app=sakina-backend \
 if [[ "${#backend_pods[@]}" -lt 2 ]]; then
   fail "Redis session isolation proof requires two running sakina-backend pods; found ${#backend_pods[@]}"
 fi
+pod_a_ip="$(kubectl -n "$NS" get pod "${backend_pods[0]}" -o jsonpath='{.status.podIP}')"
+pod_b_ip="$(kubectl -n "$NS" get pod "${backend_pods[1]}" -o jsonpath='{.status.podIP}')"
+[[ -n "$pod_a_ip" && -n "$pod_b_ip" ]] || fail "failed to resolve backend pod IPs for runtime proof"
 
-printf 'Port-forwarding backend pods %s and %s...\n' "${backend_pods[0]}" "${backend_pods[1]}"
-kubectl -n "$NS" port-forward "pod/${backend_pods[0]}" 18081:8080 \
-  >"$EVIDENCE_DIR/957-port-forward-pod-a.log" 2>&1 &
-cleanup_pids+=("$!")
-kubectl -n "$NS" port-forward "pod/${backend_pods[1]}" 18082:8080 \
-  >"$EVIDENCE_DIR/958-port-forward-pod-b.log" 2>&1 &
-cleanup_pids+=("$!")
-
-for port in 18081 18082; do
-  for _ in $(seq 1 60); do
-    if python3 - "$port" <<'PY'
-import socket
-import sys
-sock = socket.socket()
-sock.settimeout(0.25)
-try:
-    sock.connect(("127.0.0.1", int(sys.argv[1])))
-except OSError:
-    sys.exit(1)
-finally:
-    sock.close()
-PY
-    then
-      break
-    fi
-    sleep 1
-  done
-done
-
-printf 'Running Redis cross-pod state, latency, and WASM rejection checks...\n'
-python3 - <<'PY' | tee "reports/final-hardening-evidence/959-staging-agent-runtime-proof.txt"
+printf 'Running in-cluster Redis cross-pod state, latency, and WASM rejection checks using %s and %s...\n' "$pod_a_ip" "$pod_b_ip"
+runtime_pod="sakina-agent-runtime-proof-${RANDOM}"
+kubectl -n "$NS" run "$runtime_pod" --rm -i --restart=Never --image=python:3.12-alpine \
+  --env="POD_A=http://${pod_a_ip}:8080" \
+  --env="POD_B=http://${pod_b_ip}:8080" \
+  -- python - <<'PY' | tee "reports/final-hardening-evidence/959-staging-agent-runtime-proof.txt"
 import concurrent.futures
 import json
+import os
 import statistics
 import time
 import urllib.error
@@ -117,8 +96,8 @@ HEADER = {
     "Content-Type": "application/json",
     "x-sakina-rollout-probe": "true",
 }
-POD_A = "http://127.0.0.1:18081"
-POD_B = "http://127.0.0.1:18082"
+POD_A = os.environ["POD_A"]
+POD_B = os.environ["POD_B"]
 
 def post_json(base, path, payload):
     data = json.dumps(payload).encode()
@@ -209,6 +188,28 @@ print(json.dumps({
     "rejections": rejections,
 }, indent=2))
 PY
+
+printf 'Port-forwarding backend service for authenticated export integrity proofs...\n'
+kubectl -n "$NS" port-forward svc/sakina-backend 18081:8080 \
+  >"$EVIDENCE_DIR/957-port-forward-backend-service.log" 2>&1 &
+cleanup_pids+=("$!")
+for _ in $(seq 1 60); do
+  if python3 - <<'PY'
+import socket
+sock = socket.socket()
+sock.settimeout(0.25)
+try:
+    sock.connect(("127.0.0.1", 18081))
+except OSError:
+    raise SystemExit(1)
+finally:
+    sock.close()
+PY
+  then
+    break
+  fi
+  sleep 1
+done
 
 printf 'Preparing staging DB tunnel for export integrity proofs...\n'
 kubectl -n "$NS" port-forward svc/sakina-postgres 15432:5432 \
