@@ -147,19 +147,6 @@ jobs:
           jwt_secret="${SAKINA_STAGING_JWT_SECRET:-}"
           encryption_key="${SAKINA_STAGING_ENCRYPTION_KEY:-}"
 
-          if [ -z "$postgres_password" ]; then
-            echo "ERROR: SAKINA_STAGING_POSTGRES_PASSWORD GitHub secret is required"
-            exit 1
-          fi
-          if [ ${#jwt_secret} -lt 32 ]; then
-            echo "ERROR: SAKINA_STAGING_JWT_SECRET GitHub secret must be at least 32 characters"
-            exit 1
-          fi
-          if [ ${#encryption_key} -lt 32 ]; then
-            echo "ERROR: SAKINA_STAGING_ENCRYPTION_KEY GitHub secret must be at least 32 characters"
-            exit 1
-          fi
-
           echo "1. namespaces"
           apply_file "$manifest_root/namespace.yaml"
           kubectl get ns "$namespace"
@@ -171,15 +158,37 @@ jobs:
             --docker-password="$ghcr_token" \
             --dry-run=client -o yaml | kubectl apply -f -
           kubectl -n "$namespace" get secret ghcr-pull-secret
-          kubectl -n "$namespace" create secret generic sakina-postgres-secret \
-            --from-literal=POSTGRES_DB="$postgres_db" \
-            --from-literal=POSTGRES_USER="$postgres_user" \
-            --from-literal=POSTGRES_PASSWORD="$postgres_password" \
-            --dry-run=client -o yaml | kubectl apply -f -
-          kubectl -n "$namespace" create secret generic sakina-staging-secrets \
-            --from-literal=jwt-secret="$jwt_secret" \
-            --from-literal=encryption-key="$encryption_key" \
-            --dry-run=client -o yaml | kubectl apply -f -
+
+          if kubectl -n "$namespace" get secret sakina-postgres-secret >/dev/null 2>&1; then
+            echo "Using existing sakina-postgres-secret in $namespace"
+          else
+            if [ -z "$postgres_password" ]; then
+              echo "ERROR: SAKINA_STAGING_POSTGRES_PASSWORD GitHub secret is required when sakina-postgres-secret is absent"
+              exit 1
+            fi
+            kubectl -n "$namespace" create secret generic sakina-postgres-secret \
+              --from-literal=POSTGRES_DB="$postgres_db" \
+              --from-literal=POSTGRES_USER="$postgres_user" \
+              --from-literal=POSTGRES_PASSWORD="$postgres_password" \
+              --dry-run=client -o yaml | kubectl apply -f -
+          fi
+
+          if kubectl -n "$namespace" get secret sakina-staging-secrets >/dev/null 2>&1; then
+            echo "Using existing sakina-staging-secrets in $namespace"
+          else
+            if [ ${#jwt_secret} -lt 32 ]; then
+              jwt_secret="$(openssl rand -base64 48)"
+              echo "Generated staging JWT secret because SAKINA_STAGING_JWT_SECRET is not configured"
+            fi
+            if [ ${#encryption_key} -lt 32 ]; then
+              encryption_key="$(openssl rand -base64 48)"
+              echo "Generated staging encryption key because SAKINA_STAGING_ENCRYPTION_KEY is not configured"
+            fi
+            kubectl -n "$namespace" create secret generic sakina-staging-secrets \
+              --from-literal=jwt-secret="$jwt_secret" \
+              --from-literal=encryption-key="$encryption_key" \
+              --dry-run=client -o yaml | kubectl apply -f -
+          fi
           kubectl -n "$namespace" get secret sakina-postgres-secret
           kubectl -n "$namespace" get secret sakina-staging-secrets
 
