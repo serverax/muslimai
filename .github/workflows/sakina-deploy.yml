@@ -231,9 +231,9 @@ jobs:
             | select(
                 .status.phase == "Pending"
                 or .status.phase == "Failed"
-                or any((.status.containerStatuses // []); .state.waiting.reason as $r | $r == "ImagePullBackOff" or $r == "CrashLoopBackOff" or $r == "CreateContainerConfigError" or $r == "ErrImagePull")
+                or any(.status.containerStatuses[]?; (.state.waiting.reason // "") == "ImagePullBackOff" or (.state.waiting.reason // "") == "CrashLoopBackOff" or (.state.waiting.reason // "") == "CreateContainerConfigError" or (.state.waiting.reason // "") == "ErrImagePull")
               )
-            | "\(.metadata.name)\t\(.status.phase)\t\([(.status.containerStatuses // [])[].state.waiting.reason // empty] | join(","))"
+            | "\(.metadata.name)\t\(.status.phase)\t\([.status.containerStatuses[]? | .state.waiting.reason // empty] | join(","))"
           ')"
           if [ -n "$bad_pods" ]; then
             echo "$bad_pods"
