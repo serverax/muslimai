@@ -102,6 +102,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "018_replace_fake_rag_seed_content.sql",
             include_str!("../../db/migrations/018_replace_fake_rag_seed_content.sql"),
         ),
+        (
+            "019_agent_feedback.sql",
+            include_str!("../../db/migrations/019_agent_feedback.sql"),
+        ),
     ];
 
     for (name, sql) in migrations {
