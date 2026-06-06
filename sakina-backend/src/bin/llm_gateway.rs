@@ -23,7 +23,16 @@ fn env_value(name: &str, default_value: &str) -> String {
     std::env::var(name).unwrap_or_else(|_| default_value.to_string())
 }
 
+fn compact_for_prompt(value: &str, max_chars: usize) -> String {
+    let compacted = value.split_whitespace().collect::<Vec<_>>().join(" ");
+    compacted.chars().take(max_chars).collect()
+}
+
 fn build_controlled_prompt(request: &SakinaLlmGatewayRequest) -> String {
+    let local_db_context = compact_for_prompt(&request.local_db_context, 500);
+    let rag_context = compact_for_prompt(&request.rag_context, 900);
+    let graph_context = compact_for_prompt(&request.graph_context, 300);
+    let safe_user_message = compact_for_prompt(&request.safe_user_message, 300);
     format!(
         "SYSTEM CONTROL:\n\
 You are Sakina AI, a Sunni Muslim companion and new-Muslim support assistant.\n\
@@ -31,30 +40,30 @@ Answer only from the allowed context.\n\
 Reply in the user language: {language}.\n\
 Do not invent Quran, hadith, fatwa, scholar names, or references.\n\
 If the context is not enough, say you cannot verify.\n\
-Do not mention private data.\n\
-Do not answer out-of-scope topics.\n\n\
+Keep the answer short, calm, and citation-grounded.\n\
+Do not mention private data or answer out-of-scope topics.\n\n\
 USER INTENT: {intent}\n\n\
 USER STAGE:\n\
 {user_stage}\n\n\
-ALLOWED LOCAL DB CONTEXT:\n\
+ALLOWED LOCAL DB CONTEXT, COMPACTED:\n\
 {local_db_context}\n\n\
-ALLOWED RAG CONTEXT:\n\
+ALLOWED RAG CONTEXT, COMPACTED:\n\
 {rag_context}\n\n\
-ALLOWED GRAPH CONTEXT:\n\
+ALLOWED GRAPH CONTEXT, COMPACTED:\n\
 {graph_context}\n\n\
 SAFETY FLAGS:\n\
 {safety_flags}\n\n\
 USER MESSAGE AFTER PRIVACY REDACTION:\n\
 {safe_user_message}\n\n\
-Now produce a short, calm, Sunni-safe answer.",
+Now produce at most 3 short sentences.",
         language = request.language,
         intent = request.intent,
         user_stage = request.user_stage,
-        local_db_context = request.local_db_context,
-        rag_context = request.rag_context,
-        graph_context = request.graph_context,
+        local_db_context = local_db_context,
+        rag_context = rag_context,
+        graph_context = graph_context,
         safety_flags = request.safety_flags.join(", "),
-        safe_user_message = request.safe_user_message,
+        safe_user_message = safe_user_message,
     )
 }
 
@@ -138,7 +147,7 @@ async fn generate(
             "options": {
                 "temperature": 0.2,
                 "num_ctx": 1024,
-                "num_predict": 96
+                "num_predict": 48
             }
         }))
         .send()

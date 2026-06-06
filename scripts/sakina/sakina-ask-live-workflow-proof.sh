@@ -40,15 +40,26 @@ ask_sakina() {
   local language="$3"
   local section="$4"
   local payload
+  local response_file
+  local status
   payload="$(jq -n \
     --arg message "$message" \
     --arg language "$language" \
     --arg section "$section" \
     '{message:$message,language:$language,section:$section}')"
-  curl --max-time 90 -fsS -X POST "$api_base/api/sakina/ask" \
+  response_file="$(mktemp)"
+  status="$(curl --max-time 90 -sS -o "$response_file" -w "%{http_code}" -X POST "$api_base/api/sakina/ask" \
     -H "Authorization: Bearer $bearer" \
     -H "Content-Type: application/json" \
-    -d "$payload"
+    -d "$payload")"
+  if [[ "$status" -lt 200 || "$status" -ge 300 ]]; then
+    printf 'Sakina ask request failed with HTTP %s\n' "$status" >&2
+    cat "$response_file" >&2
+    rm -f "$response_file"
+    exit 1
+  fi
+  cat "$response_file"
+  rm -f "$response_file"
 }
 
 printf 'REGISTER USER A\n' | tee -a "$out"
