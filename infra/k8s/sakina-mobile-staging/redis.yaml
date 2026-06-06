@@ -41,6 +41,10 @@ spec:
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
