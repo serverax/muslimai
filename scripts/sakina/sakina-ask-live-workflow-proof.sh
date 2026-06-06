@@ -45,7 +45,7 @@ ask_sakina() {
     --arg language "$language" \
     --arg section "$section" \
     '{message:$message,language:$language,section:$section}')"
-  curl --max-time 45 -fsS -X POST "$api_base/api/sakina/ask" \
+  curl --max-time 90 -fsS -X POST "$api_base/api/sakina/ask" \
     -H "Authorization: Bearer $bearer" \
     -H "Content-Type: application/json" \
     -d "$payload"

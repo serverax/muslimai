@@ -133,7 +133,13 @@ async fn generate(
         .json(&json!({
             "model": state.model,
             "prompt": prompt,
-            "stream": false
+            "stream": false,
+            "keep_alive": "10m",
+            "options": {
+                "temperature": 0.2,
+                "num_ctx": 1024,
+                "num_predict": 96
+            }
         }))
         .send()
         .await
