@@ -458,6 +458,8 @@ jobs:
           kubectl -n "$namespace" set image deployment/sakina-backend \
             backend="$backend_sha_image" \
             install-agent-validator-wasm="$backend_sha_image"
+          echo "Remove stale direct Ollama env from backend containers; backend must use only the LLM gateway"
+          kubectl -n "$namespace" set env deployment/sakina-backend --containers='*' OLLAMA_BASE_URL- OLLAMA_MODEL-
           kubectl -n "$namespace" set image deployment/sakina-rag-ingestion \
             ingestion="$backend_sha_image" \
             install-agent-validator-wasm="$backend_sha_image"
