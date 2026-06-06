@@ -232,7 +232,7 @@ async fn main() -> std::io::Result<()> {
     let state = web::Data::new(GatewayState {
         client: reqwest::Client::new(),
         ollama_base_url: env_value("OLLAMA_BASE_URL", "http://sakina-ollama:11434"),
-        model: env_value("SAKINA_LLM_MODEL", "tinyllama"),
+        model: env_value("SAKINA_LLM_MODEL", "qwen2.5:3b"),
         timeout_seconds: env_value("SAKINA_LLM_TIMEOUT_SECONDS", "60")
             .parse()
             .unwrap_or(60),

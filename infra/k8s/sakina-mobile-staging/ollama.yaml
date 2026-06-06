@@ -32,7 +32,7 @@ spec:
       targetPort: 11434
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: sakina-ollama
   namespace: sakina-mobile-staging
@@ -41,11 +41,9 @@ metadata:
     app.kubernetes.io/part-of: sakina-mobile
     app.kubernetes.io/environment: staging
 spec:
-  replicas: 1
-  strategy:
+  updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 0
       maxUnavailable: 1
   selector:
     matchLabels:
@@ -58,10 +56,6 @@ spec:
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
-      tolerations:
-        - key: node-role.kubernetes.io/control-plane
-          operator: Exists
-          effect: NoSchedule
       securityContext:
         seccompProfile:
           type: RuntimeDefault

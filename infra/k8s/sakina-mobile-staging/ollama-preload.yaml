@@ -38,7 +38,7 @@ spec:
             - -ec
             - |
               set -euo pipefail
-              model="tinyllama"
+              model="qwen2.5:3b"
               attempts=0
               until curl -fsS http://sakina-ollama:11434/api/tags >/tmp/ollama-tags.json; do
                 attempts=$((attempts + 1))
