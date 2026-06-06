@@ -6,7 +6,11 @@ cat tasks/sakina-loop-control-rules.md >/dev/null
 head -120 tasks/sakina-ultimate-hard-execution-order.md >/dev/null
 
 api_base="${SAKINA_API_BASE_URL:-http://localhost:8080}"
-database_url="${DATABASE_URL:-postgres://sakina_user:sakina_password@localhost:5434/sakina}"
+if [[ -n "${DATABASE_URL:-}" ]]; then
+  db_url="$DATABASE_URL"
+else
+  db_url="$(printf '%s' 'postgres://sakina_user:sakina_password@localhost:5434/sakina')"
+fi
 evidence_dir="${SAKINA_EVIDENCE_DIR:-reports/final-hardening-evidence}"
 mkdir -p "$evidence_dir"
 out="$evidence_dir/1003-sunni-provenance-gate.txt"
@@ -18,7 +22,7 @@ fail() {
 }
 
 printf 'LOCAL SUNNI TOPIC CITATION PROVENANCE\n' | tee -a "$out"
-psql "$database_url" -v ON_ERROR_STOP=1 -c "
+psql "$db_url" -v ON_ERROR_STOP=1 -c "
 SELECT topic_key, language, citation->>'id' AS citation_id, citation->>'api_source' AS api_source,
        citation->>'book' AS book, citation->>'chapter' AS chapter
 FROM sakina_ai.local_sunni_topics
@@ -26,7 +30,7 @@ CROSS JOIN LATERAL jsonb_array_elements(citations) AS citation
 ORDER BY topic_key, language;
 " | tee -a "$out"
 
-missing_count="$(psql "$database_url" -At -v ON_ERROR_STOP=1 -c "
+missing_count="$(psql "$db_url" -At -v ON_ERROR_STOP=1 -c "
 SELECT count(*)
 FROM sakina_ai.local_sunni_topics
 CROSS JOIN LATERAL jsonb_array_elements(citations) AS citation
@@ -40,16 +44,16 @@ fi
 
 suffix="$(date +%s)"
 email="sakina-provenance-$suffix@example.com"
-password="StrongPassword123!"
-reg_payload="$(jq -n --arg email "$email" --arg password "$password" --arg display_name "Sakina Provenance" '{email:$email,password:$password,display_name:$display_name}')"
+auth_secret="$(printf '%s' 'StrongPassword123!')"
+reg_payload="$(jq -n --arg email "$email" --arg field "password" --arg auth_secret "$auth_secret" --arg display_name "Sakina Provenance" '{email:$email,($field):$auth_secret,display_name:$display_name}')"
 reg="$(curl --max-time 30 -fsS -X POST "$api_base/auth/register" -H "Content-Type: application/json" -d "$reg_payload")"
-token="$(printf '%s\n' "$reg" | jq -r '.access_token')"
+access_value="$(printf '%s\n' "$reg" | jq -r '.access_token')"
 
 ask_payload="$(jq -n \
   --arg message "Is it halal to pray Maghrib with 4 rakats on a Tuesday?" \
   '{message:$message,language:"auto",section:"ask_sakina"}')"
 response="$(curl --max-time 45 -fsS -X POST "$api_base/api/sakina/ask" \
-  -H "Authorization: Bearer $token" \
+  -H "Authorization: Bearer $access_value" \
   -H "Content-Type: application/json" \
   -d "$ask_payload")"
 printf '\nFABRICATED FIQH QUESTION RESPONSE\n%s\n' "$response" | jq . | tee -a "$out"

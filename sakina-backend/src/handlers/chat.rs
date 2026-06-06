@@ -226,8 +226,8 @@ pub async fn core_chat(
         Ok(id) => id,
         Err(response) => return response,
     };
-    let local_memory_value = serde_json::to_value(&payload.local_memory_context)
-        .unwrap_or_else(|_| serde_json::json!(null));
+    let local_memory_value =
+        serde_json::to_value(&payload.local_memory_context).unwrap_or(serde_json::Value::Null);
     let used_local_memory = payload
         .local_memory_context
         .as_ref()

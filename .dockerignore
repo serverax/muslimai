@@ -1,6 +1,10 @@
 *
 !sakina-backend/
 !sakina-backend/**
+!sakina-dashboard/
+!sakina-dashboard/**
+!admin/
+!admin/**
 !sakina-wasm/
 !sakina-wasm/**
 !wasm/

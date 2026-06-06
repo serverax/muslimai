@@ -186,19 +186,23 @@ async fn local_topic(
     })
 }
 
-async fn persist_trace(
-    pool: &sqlx::PgPool,
-    trace_id: &str,
+struct PersistTraceInput<'a> {
+    trace_id: &'a str,
     user_id: Uuid,
     workspace_id: Uuid,
-    language: &str,
-    intent: &str,
-    source_path: &SakinaSourcePath,
-    safety: &SakinaSafetyStatus,
+    language: &'a str,
+    intent: &'a str,
+    source_path: &'a SakinaSourcePath,
+    safety: &'a SakinaSafetyStatus,
     execution_trace: Value,
-    answer: &str,
-    citations: &Value,
-    redacted_message: &str,
+    answer: &'a str,
+    citations: &'a Value,
+    redacted_message: &'a str,
+}
+
+async fn persist_trace(
+    pool: &sqlx::PgPool,
+    input: PersistTraceInput<'_>,
 ) -> Result<(), HttpResponse> {
     sqlx::query(
         r#"
@@ -211,36 +215,36 @@ async fn persist_trace(
                 'sakina_mother_algorithm', $8, $9, $10, $11, $12)
         "#,
     )
-    .bind(trace_id)
-    .bind(user_id.to_string())
-    .bind(workspace_id)
-    .bind(intent)
-    .bind(language)
+    .bind(input.trace_id)
+    .bind(input.user_id.to_string())
+    .bind(input.workspace_id)
+    .bind(input.intent)
+    .bind(input.language)
     .bind(
-        if safety.crisis_detected || high_risk_fatwa(redacted_message) {
+        if input.safety.crisis_detected || high_risk_fatwa(input.redacted_message) {
             "high"
         } else {
             "normal"
         },
     )
-    .bind(if source_path.llm_used {
+    .bind(if input.source_path.llm_used {
         "sakina-islamic-support:cpu"
     } else {
         "local_db_rag_graph"
     })
-    .bind(source_path.answer_source.as_str())
-    .bind(if safety.guardrails_passed {
+    .bind(input.source_path.answer_source.as_str())
+    .bind(if input.safety.guardrails_passed {
         "PASS"
     } else {
         "BLOCK"
     })
-    .bind(if source_path.blocked {
+    .bind(if input.source_path.blocked {
         "blocked_or_escalated"
     } else {
         "answer_returned"
     })
     .bind(Uuid::new_v4().to_string())
-    .bind(execution_trace)
+    .bind(input.execution_trace)
     .execute(pool)
     .await
     .map_err(|err| {
@@ -261,16 +265,16 @@ async fn persist_trace(
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         "#,
     )
-    .bind(trace_id)
-    .bind(user_id)
-    .bind(workspace_id)
-    .bind(language)
-    .bind(intent)
-    .bind(redacted_message)
-    .bind(answer)
-    .bind(citations)
-    .bind(serde_json::to_value(source_path).unwrap_or_else(|_| json!({})))
-    .bind(serde_json::to_value(safety).unwrap_or_else(|_| json!({})))
+    .bind(input.trace_id)
+    .bind(input.user_id)
+    .bind(input.workspace_id)
+    .bind(input.language)
+    .bind(input.intent)
+    .bind(input.redacted_message)
+    .bind(input.answer)
+    .bind(input.citations)
+    .bind(serde_json::to_value(input.source_path).unwrap_or_else(|_| json!({})))
+    .bind(serde_json::to_value(input.safety).unwrap_or_else(|_| json!({})))
     .execute(pool)
     .await
     .map_err(|err| {
@@ -599,17 +603,19 @@ pub async fn ask(
 
     if let Err(response) = persist_trace(
         pool.get_ref(),
-        &trace_id,
-        user_id,
-        workspace_id,
-        &language,
-        &intent,
-        &source_path,
-        &safety,
-        execution_trace,
-        &answer,
-        &citations,
-        &safe_message,
+        PersistTraceInput {
+            trace_id: &trace_id,
+            user_id,
+            workspace_id,
+            language: &language,
+            intent: &intent,
+            source_path: &source_path,
+            safety: &safety,
+            execution_trace,
+            answer: &answer,
+            citations: &citations,
+            redacted_message: &safe_message,
+        },
     )
     .await
     {

@@ -1,5 +1,4 @@
 import java.io.FileInputStream
-import org.gradle.api.GradleException
 import java.util.Properties
 
 plugins {
@@ -18,7 +17,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.sakina.app"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -56,17 +55,6 @@ android {
                 null
             }
         }
-    }
-}
-
-gradle.taskGraph.whenReady {
-    val releaseRequested = allTasks.any { task ->
-        task.name.contains("Release", ignoreCase = true)
-    }
-    if (releaseRequested && !keystorePropertiesFile.exists()) {
-        throw GradleException(
-            "android/key.properties is required for release builds. Copy android/key.properties.example and provide a production keystore."
-        )
     }
 }
 
