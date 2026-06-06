@@ -198,6 +198,25 @@ jobs:
                   else
                     echo "No logs were available for pod/$pod_name"
                   fi
+                  if [ "$deploy_name" = "sakina-backend" ]; then
+                    ready_pf_log="/tmp/sakina-backend-ready-${pod_name}.log"
+                    echo "Readiness body for pod/$pod_name"
+                    kubectl -n "$namespace" port-forward "pod/$pod_name" 18081:8080 >"$ready_pf_log" 2>&1 &
+                    ready_pf_pid="$!"
+                    ready_pf_started="false"
+                    for attempt in $(seq 1 30); do
+                      if curl -sS -i http://127.0.0.1:18081/health/ready; then
+                        ready_pf_started="true"
+                        break
+                      fi
+                      sleep 1
+                    done
+                    kill "$ready_pf_pid" >/dev/null 2>&1
+                    if [ "$ready_pf_started" != "true" ]; then
+                      echo "Could not fetch /health/ready body for pod/$pod_name"
+                      cat "$ready_pf_log"
+                    fi
+                  fi
                 fi
               done <<< "$pod_names"
             else
@@ -402,6 +421,28 @@ jobs:
           echo "Applying Kubernetes manifest: $manifest_root/db-migrations.yaml with image $backend_sha_image"
           kubectl apply -f "$migration_manifest"
           wait_job sakina-db-migrations
+          echo "Verifying migrated database RLS and Sakina Mother tables"
+          kubectl -n "$namespace" exec statefulset/sakina-postgres -- sh -lc '
+            set -eu
+            export PGPASSWORD="$POSTGRES_PASSWORD"
+            psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "
+              SELECT to_regclass('\''sakina_ai.local_sunni_topics'\'') AS local_sunni_topics,
+                     to_regclass('\''sakina_ai.ask_shaikh_answers'\'') AS ask_shaikh_answers,
+                     to_regclass('\''sakina_ai.scholar_review_queue'\'') AS scholar_review_queue;
+            "
+            psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "
+              SELECT schemaname, tablename
+              FROM pg_tables
+              WHERE schemaname IN ('\''public'\'','\''sakina_ai'\'','\''audit'\'','\''outbox'\'')
+                AND rowsecurity = false
+              ORDER BY schemaname, tablename;
+            " > /tmp/sakina-rls-disabled.txt
+            cat /tmp/sakina-rls-disabled.txt
+            if grep -E "^( public| sakina_ai| audit| outbox)[[:space:]]*\\|" /tmp/sakina-rls-disabled.txt; then
+              echo "ERROR: RLS disabled tables remain after migrations"
+              exit 1
+            fi
+          '
 
           echo "5. deployments"
           apply_file "$manifest_root/rag.yaml"

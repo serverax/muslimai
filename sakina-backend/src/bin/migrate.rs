@@ -121,6 +121,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         sqlx::raw_sql(sql).execute(&pool).await?;
     }
 
-    println!("Sakina migrations applied");
+    let unprotected_tables: Vec<(String, String)> = sqlx::query_as(
+        r#"
+        SELECT schemaname, tablename
+        FROM pg_tables
+        WHERE schemaname IN ('public','sakina_ai','audit','outbox')
+          AND rowsecurity = false
+        ORDER BY schemaname, tablename
+        "#,
+    )
+    .fetch_all(&pool)
+    .await?;
+
+    if !unprotected_tables.is_empty() {
+        eprintln!("Sakina migration RLS verification failed; unprotected tables remain:");
+        for (schema, table) in unprotected_tables {
+            eprintln!("{schema}.{table}");
+        }
+        return Err("Sakina migration RLS verification failed".into());
+    }
+
+    println!("Sakina migrations applied: {}", migrations.len());
     Ok(())
 }
