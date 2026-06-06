@@ -319,10 +319,41 @@ jobs:
           kubectl -n "$namespace" delete daemonset ollama-inference --ignore-not-found=true
           kubectl -n "$namespace" delete daemonset sakina-ollama --ignore-not-found=true
           kubectl -n "$namespace" delete deployment ollama --ignore-not-found=true
-          apply_file "$manifest_root/ollama.yaml"
-          echo "Deleting stale sakina-ollama pods so only the current PVC-backed Deployment spec remains"
+          kubectl -n "$namespace" delete deployment sakina-ollama --ignore-not-found=true
+          echo "Deleting stale Ollama pods so only the current PVC-backed Deployment spec remains"
           kubectl -n "$namespace" delete pod -l app=sakina-ollama --wait=false
+          kubectl -n "$namespace" delete pod -l app=ollama-inference --wait=false
+          for attempt in $(seq 1 90); do
+            ollama_pods="$(kubectl -n "$namespace" get pods -l app=sakina-ollama --no-headers 2>/dev/null | wc -l | tr -d ' ')"
+            inference_pods="$(kubectl -n "$namespace" get pods -l app=ollama-inference --no-headers 2>/dev/null | wc -l | tr -d ' ')"
+            if [ "$ollama_pods" = "0" ] && [ "$inference_pods" = "0" ]; then
+              break
+            fi
+            if [ "$attempt" -eq 90 ]; then
+              echo "ERROR: stale Ollama pods did not terminate before PVC rebind"
+              kubectl -n "$namespace" get pods -l app=sakina-ollama -o wide
+              kubectl -n "$namespace" get pods -l app=ollama-inference -o wide
+              exit 1
+            fi
+            sleep 2
+          done
+          echo "Recreating staging Ollama model PVC to clear stale local-path node affinity; model preload repopulates qwen2.5:3b"
+          kubectl -n "$namespace" delete pvc sakina-ollama-models --ignore-not-found=true
+          for attempt in $(seq 1 90); do
+            if ! kubectl -n "$namespace" get pvc sakina-ollama-models >/dev/null 2>&1; then
+              break
+            fi
+            if [ "$attempt" -eq 90 ]; then
+              echo "ERROR: sakina-ollama-models PVC did not delete"
+              kubectl -n "$namespace" get pvc sakina-ollama-models -o wide
+              kubectl -n "$namespace" describe pvc sakina-ollama-models
+              exit 1
+            fi
+            sleep 2
+          done
+          apply_file "$manifest_root/ollama.yaml"
           kubectl -n "$namespace" get pods -l app=sakina-ollama -o wide
+          kubectl -n "$namespace" get pvc sakina-ollama-models -o wide
           if ! kubectl -n "$namespace" rollout status deployment/sakina-ollama --timeout=600s; then
             echo "ERROR: deployment/sakina-ollama did not roll out"
             diagnose_deployment sakina-ollama
