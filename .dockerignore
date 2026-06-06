@@ -5,6 +5,8 @@
 !sakina-dashboard/**
 !admin/
 !admin/**
+!sakina-rag/
+!sakina-rag/**
 !sakina-wasm/
 !sakina-wasm/**
 !wasm/
