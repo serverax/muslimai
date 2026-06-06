@@ -207,6 +207,37 @@ jobs:
             kubectl -n "$namespace" get events --sort-by=.lastTimestamp | tail -120
           }
 
+          diagnose_daemonset() {
+            ds_name="$1"
+            echo "DaemonSet diagnostics for daemonset/$ds_name"
+            kubectl -n "$namespace" get daemonset "$ds_name" -o wide
+            kubectl -n "$namespace" describe daemonset "$ds_name"
+            kubectl -n "$namespace" get pods -l "app=$ds_name" -o wide
+            pod_names="$(kubectl -n "$namespace" get pods -l "app=$ds_name" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}')"
+            if [ -n "$pod_names" ]; then
+              while IFS= read -r pod_name; do
+                if [ -n "$pod_name" ]; then
+                  echo "Describing pod/$pod_name for daemonset/$ds_name"
+                  kubectl -n "$namespace" describe pod "$pod_name"
+                  echo "Logs for pod/$pod_name"
+                  if kubectl -n "$namespace" logs "$pod_name" --all-containers --tail=200; then
+                    echo "Collected logs for pod/$pod_name"
+                  else
+                    echo "No logs were available for pod/$pod_name"
+                  fi
+                fi
+              done <<< "$pod_names"
+            else
+              echo "No pods found for daemonset/$ds_name"
+            fi
+            if kubectl -n "$namespace" get pvc sakina-ollama-models >/dev/null 2>&1; then
+              kubectl -n "$namespace" get pvc sakina-ollama-models -o wide
+              kubectl -n "$namespace" describe pvc sakina-ollama-models
+            fi
+            echo "Recent namespace events for $namespace"
+            kubectl -n "$namespace" get events --sort-by=.lastTimestamp | tail -120
+          }
+
           rollout_deployment() {
             deploy_name="$1"
             replicas="${2:-1}"
@@ -284,7 +315,11 @@ jobs:
           kubectl -n "$namespace" delete daemonset ollama-inference --ignore-not-found=true
           kubectl -n "$namespace" delete deployment sakina-ollama --ignore-not-found=true
           apply_file "$manifest_root/ollama.yaml"
-          kubectl -n "$namespace" rollout status daemonset/sakina-ollama --timeout=300s
+          if ! kubectl -n "$namespace" rollout status daemonset/sakina-ollama --timeout=600s; then
+            echo "ERROR: daemonset/sakina-ollama did not roll out"
+            diagnose_daemonset sakina-ollama
+            exit 1
+          fi
           kubectl -n "$namespace" get daemonset sakina-ollama -o wide
           kubectl -n "$namespace" get pods -l app=sakina-ollama -o wide
           kubectl -n "$namespace" get pvc sakina-ollama-models -o wide

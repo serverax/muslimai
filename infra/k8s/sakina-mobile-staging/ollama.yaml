@@ -57,6 +57,10 @@ spec:
         app.kubernetes.io/environment: staging
     spec:
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -69,6 +73,10 @@ spec:
           env:
             - name: OLLAMA_HOST
               value: 0.0.0.0:11434
+            - name: HOME
+              value: /ollama
+            - name: OLLAMA_MODELS
+              value: /ollama/models
           readinessProbe:
             httpGet:
               path: /api/tags
@@ -76,13 +84,13 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 12
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /api/tags
               port: http
             initialDelaySeconds: 60
-            periodSeconds: 20
+            periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 6
           resources:
@@ -94,6 +102,9 @@ spec:
               memory: "6Gi"
           securityContext:
             allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
             seccompProfile:
               type: RuntimeDefault
             capabilities:
@@ -101,7 +112,7 @@ spec:
                 - ALL
           volumeMounts:
             - name: ollama-models
-              mountPath: /root/.ollama
+              mountPath: /ollama
       volumes:
         - name: ollama-models
           persistentVolumeClaim:
