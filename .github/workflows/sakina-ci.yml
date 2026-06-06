@@ -52,6 +52,20 @@ jobs:
 
   backend-ci:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: sakina
+          POSTGRES_USER: sakina_user
+          POSTGRES_PASSWORD: sakina_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5434:5432
     defaults:
       run:
         shell: bash
@@ -61,6 +75,14 @@ jobs:
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Bootstrap Sakina test database
+        env:
+          DATABASE_URL: postgres://sakina_user:sakina_password@localhost:5434/sakina
+        run: bash scripts/sakina/bootstrap-test-db.sh
 
       - name: Check formatting
         run: |
@@ -73,9 +95,11 @@ jobs:
           cargo clippy --locked --all-targets --all-features -- -D warnings
 
       - name: Run backend tests
+        env:
+          DATABASE_URL: postgres://sakina_user:sakina_password@localhost:5434/sakina
         run: |
           cd sakina-backend
-          cargo test --locked --all-targets --all-features
+          cargo test --locked --all-targets --all-features -- --test-threads=1
 
   security-scan:
     runs-on: ubuntu-latest

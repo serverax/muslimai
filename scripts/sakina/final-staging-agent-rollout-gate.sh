@@ -236,7 +236,7 @@ done
 postgres_user="$(kubectl -n "$NS" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_USER}' | base64 -d)"
 postgres_password="$(kubectl -n "$NS" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_PASSWORD}' | base64 -d)"
 postgres_db="$(kubectl -n "$NS" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_DB}' | base64 -d)"
-export DATABASE_URL="postgres://${postgres_user}:${postgres_password}@127.0.0.1:15432/${postgres_db}"
+export DATABASE_URL="$(printf 'postgres://%s:%s@127.0.0.1:15432/%s' "$postgres_user" "$postgres_password" "$postgres_db")"
 export SAKINA_API_BASE_URL="http://127.0.0.1:18081"
 export SAKINA_REDIS_URL="redis://sakina-redis:6379"
 
