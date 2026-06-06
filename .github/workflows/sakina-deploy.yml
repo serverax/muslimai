@@ -336,10 +336,10 @@ jobs:
             install-agent-validator-wasm="$backend_sha_image"
           kubectl -n "$namespace" set image deployment/sakina-llm-gateway \
             llm-gateway="$backend_sha_image"
-          rollout_deployment sakina-backend
-          rollout_deployment sakina-rag-ingestion
-          rollout_deployment sakina-rag-retrieval
           rollout_deployment sakina-llm-gateway
+          rollout_deployment sakina-rag-retrieval
+          rollout_deployment sakina-rag-ingestion
+          rollout_deployment sakina-backend
           rollout_deployment sakina-admin
 
           echo "6. services"
