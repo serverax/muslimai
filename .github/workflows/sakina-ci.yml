@@ -66,6 +66,15 @@ jobs:
           --health-retries 5
         ports:
           - 5434:5432
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6380:6379
     defaults:
       run:
         shell: bash
@@ -97,6 +106,7 @@ jobs:
       - name: Run backend tests
         env:
           DATABASE_URL: postgres://sakina_user:sakina_password@localhost:5434/sakina
+          SAKINA_REDIS_URL: redis://localhost:6380
         run: |
           cd sakina-backend
           cargo test --locked --all-targets --all-features -- --test-threads=1
