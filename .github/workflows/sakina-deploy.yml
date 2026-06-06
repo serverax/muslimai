@@ -101,6 +101,7 @@ jobs:
         run: |
           set -euo pipefail
           kubectl get nodes -o wide
+          kubectl describe nodes | grep -E "Name:|Taints:|Allocatable:|pods:"
           kubectl get ns
 
       - name: Confirm GHCR images and credentials
@@ -177,6 +178,46 @@ jobs:
             kubectl -n "$namespace" logs "job/$job_name" --all-containers --tail=200
           }
 
+          diagnose_deployment() {
+            deploy_name="$1"
+            echo "Deployment diagnostics for deployment/$deploy_name"
+            kubectl -n "$namespace" get deployment "$deploy_name" -o wide
+            kubectl -n "$namespace" describe deployment "$deploy_name"
+            kubectl -n "$namespace" get replicaset -l "app=$deploy_name" -o wide
+            kubectl -n "$namespace" get pods -l "app=$deploy_name" -o wide
+            pod_names="$(kubectl -n "$namespace" get pods -l "app=$deploy_name" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}')"
+            if [ -n "$pod_names" ]; then
+              while IFS= read -r pod_name; do
+                if [ -n "$pod_name" ]; then
+                  echo "Describing pod/$pod_name for deployment/$deploy_name"
+                  kubectl -n "$namespace" describe pod "$pod_name"
+                  echo "Logs for pod/$pod_name"
+                  if kubectl -n "$namespace" logs "$pod_name" --all-containers --tail=120; then
+                    echo "Collected logs for pod/$pod_name"
+                  else
+                    echo "No logs were available for pod/$pod_name"
+                  fi
+                fi
+              done <<< "$pod_names"
+            else
+              echo "No pods found for deployment/$deploy_name"
+            fi
+            echo "Recent namespace events for $namespace"
+            kubectl -n "$namespace" get events --sort-by=.lastTimestamp | tail -120
+          }
+
+          rollout_deployment() {
+            deploy_name="$1"
+            echo "Rolling out deployment/$deploy_name"
+            kubectl -n "$namespace" scale deployment "$deploy_name" --replicas=1
+            if ! kubectl -n "$namespace" rollout status "deployment/$deploy_name" --timeout=240s; then
+              echo "ERROR: deployment/$deploy_name did not roll out"
+              diagnose_deployment "$deploy_name"
+              exit 1
+            fi
+            kubectl -n "$namespace" get endpoints "$deploy_name" -o wide
+          }
+
           jwt_secret="${SAKINA_STAGING_JWT_SECRET:-}"
           encryption_key="${SAKINA_STAGING_ENCRYPTION_KEY:-}"
 
@@ -246,12 +287,18 @@ jobs:
           echo "Applying Kubernetes manifest: $manifest_root/db-migrations.yaml with image $backend_sha_image"
           kubectl apply -f "$migration_manifest"
           wait_job sakina-db-migrations
+          kubectl -n "$namespace" delete job sakina-db-migrations
 
           echo "5. deployments"
           apply_file "$manifest_root/rag.yaml"
           apply_file "$manifest_root/llm-gateway.yaml"
           apply_file "$manifest_root/backend.yaml"
           apply_file "$manifest_root/admin.yaml"
+          echo "Scale runtime deployments to zero before pinning images, then roll them out in dependency order"
+          for deploy in sakina-backend sakina-admin sakina-rag-ingestion sakina-rag-retrieval sakina-llm-gateway; do
+            kubectl -n "$namespace" scale deployment "$deploy" --replicas=0
+            kubectl -n "$namespace" rollout status "deployment/$deploy" --timeout=120s
+          done
           echo "Pin runtime deployments to this commit's backend image so Kubernetes pulls the image built by this run"
           kubectl -n "$namespace" set image deployment/sakina-backend \
             backend="$backend_sha_image" \
@@ -264,11 +311,11 @@ jobs:
             install-agent-validator-wasm="$backend_sha_image"
           kubectl -n "$namespace" set image deployment/sakina-llm-gateway \
             llm-gateway="$backend_sha_image"
-          kubectl -n "$namespace" rollout status deployment/sakina-backend --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-llm-gateway --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
+          rollout_deployment sakina-llm-gateway
+          rollout_deployment sakina-rag-retrieval
+          rollout_deployment sakina-rag-ingestion
+          rollout_deployment sakina-backend
+          rollout_deployment sakina-admin
 
           echo "6. services"
           kubectl -n "$namespace" get svc -o wide
@@ -287,12 +334,24 @@ jobs:
         run: |
           set -euo pipefail
           namespace="${{ steps.ns.outputs.namespace }}"
+          rollout_deployment() {
+            deploy_name="$1"
+            if ! kubectl -n "$namespace" rollout status "deployment/$deploy_name" --timeout=180s; then
+              echo "ERROR: deployment/$deploy_name did not roll out during final health confirmation"
+              kubectl -n "$namespace" get deployment "$deploy_name" -o wide
+              kubectl -n "$namespace" describe deployment "$deploy_name"
+              kubectl -n "$namespace" get pods -l "app=$deploy_name" -o wide
+              kubectl -n "$namespace" describe pods -l "app=$deploy_name"
+              kubectl -n "$namespace" get events --sort-by=.lastTimestamp | tail -120
+              exit 1
+            fi
+          }
           kubectl -n "$namespace" get deploy,statefulset,pods,svc -o wide
-          kubectl -n "$namespace" rollout status deployment/sakina-backend --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-llm-gateway --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
-          kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
+          rollout_deployment sakina-llm-gateway
+          rollout_deployment sakina-rag-retrieval
+          rollout_deployment sakina-rag-ingestion
+          rollout_deployment sakina-backend
+          rollout_deployment sakina-admin
           bad_pods="$(kubectl -n "$namespace" get pods -o json | jq -r '
             .items[]
             | select((.metadata.ownerReferences // [] | any(.kind == "Job")) | not)
