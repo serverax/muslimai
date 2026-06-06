@@ -12,6 +12,8 @@ resources:
   - postgres.yaml
   - qdrant.yaml
   - redis.yaml
+  - ollama.yaml
+  - ollama-preload.yaml
   - llm-gateway.yaml
   - db-migrations.yaml
   - rag.yaml

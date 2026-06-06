@@ -64,9 +64,9 @@ spec:
             - name: SAKINA_ENV
               value: staging
             - name: OLLAMA_BASE_URL
-              value: http://ollama:11434
+              value: http://sakina-ollama:11434
             - name: SAKINA_LLM_MODEL
-              value: sakina-islamic-support:cpu
+              value: tinyllama
             - name: SAKINA_LLM_TIMEOUT_SECONDS
               value: "60"
             - name: SAKINA_LLM_GATEWAY_BIND

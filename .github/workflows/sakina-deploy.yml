@@ -31,6 +31,7 @@ jobs:
       SAKINA_STAGING_ENCRYPTION_KEY: ${{ secrets.SAKINA_STAGING_ENCRYPTION_KEY }}
       BACKEND_IMAGE: ghcr.io/serverax/sakina-backend:qa-security-hardening
       FRONTEND_IMAGE: ghcr.io/serverax/sakina-frontend:qa-security-hardening
+      SAKINA_OLLAMA_MODEL: tinyllama
 
     steps:
       - name: Checkout repo
@@ -267,16 +268,41 @@ jobs:
           apply_file "$manifest_root/redis.yaml"
           kubectl -n "$namespace" rollout status deployment/sakina-redis --timeout=180s
 
-          echo "3b. free staging pod capacity before migration job"
+          echo "3b. free staging pod capacity before Ollama preload and migration jobs"
           for deploy in sakina-backend sakina-admin sakina-rag-ingestion sakina-rag-retrieval sakina-llm-gateway; do
             if kubectl -n "$namespace" get deployment "$deploy" >/dev/null 2>&1; then
-              echo "Scaling deployment/$deploy to zero before migrations to avoid surge pods on the constrained staging cluster"
+              echo "Scaling deployment/$deploy to zero before Ollama preload and migrations to avoid surge pods on the constrained staging cluster"
               kubectl -n "$namespace" scale deployment "$deploy" --replicas=0
               kubectl -n "$namespace" rollout status "deployment/$deploy" --timeout=120s
             else
-              echo "deployment/$deploy does not exist yet; no pre-migration scale-down needed"
+              echo "deployment/$deploy does not exist yet; no pre-job scale-down needed"
             fi
           done
+
+          echo "3c. Ollama CPU-only Kubernetes service"
+          kubectl -n "$namespace" delete daemonset ollama-inference --ignore-not-found=true
+          apply_file "$manifest_root/ollama.yaml"
+          kubectl -n "$namespace" rollout status deployment/sakina-ollama --timeout=300s
+          kubectl -n "$namespace" get pvc sakina-ollama-models -o wide
+          kubectl -n "$namespace" get svc sakina-ollama -o wide
+          kubectl -n "$namespace" get endpoints sakina-ollama -o wide
+
+          echo "3d. Ollama model preload"
+          kubectl -n "$namespace" delete job sakina-ollama-preload --ignore-not-found=true
+          apply_file "$manifest_root/ollama-preload.yaml"
+          wait_job sakina-ollama-preload
+
+          echo "3e. Ollama hard smoke tests"
+          kubectl -n "$namespace" run "ollama-tags-smoke-$(date +%s)" \
+            --rm -i --restart=Never \
+            --image=curlimages/curl:8.8.0 \
+            -- curl -fsS http://sakina-ollama:11434/api/tags
+          kubectl -n "$namespace" run "ollama-generate-smoke-$(date +%s)" \
+            --rm -i --restart=Never \
+            --image=curlimages/curl:8.8.0 \
+            -- sh -c "curl -fsS http://sakina-ollama:11434/api/generate \
+              -H 'Content-Type: application/json' \
+              -d '{\"model\":\"${SAKINA_OLLAMA_MODEL}\",\"prompt\":\"Say ready in one word\",\"stream\":false}' | grep -i ready"
 
           echo "4. database jobs"
           kubectl -n "$namespace" delete job sakina-db-migrations --ignore-not-found=true
@@ -287,7 +313,6 @@ jobs:
           echo "Applying Kubernetes manifest: $manifest_root/db-migrations.yaml with image $backend_sha_image"
           kubectl apply -f "$migration_manifest"
           wait_job sakina-db-migrations
-          kubectl -n "$namespace" delete job sakina-db-migrations
 
           echo "5. deployments"
           apply_file "$manifest_root/rag.yaml"
@@ -311,10 +336,10 @@ jobs:
             install-agent-validator-wasm="$backend_sha_image"
           kubectl -n "$namespace" set image deployment/sakina-llm-gateway \
             llm-gateway="$backend_sha_image"
-          rollout_deployment sakina-llm-gateway
-          rollout_deployment sakina-rag-retrieval
-          rollout_deployment sakina-rag-ingestion
           rollout_deployment sakina-backend
+          rollout_deployment sakina-rag-ingestion
+          rollout_deployment sakina-rag-retrieval
+          rollout_deployment sakina-llm-gateway
           rollout_deployment sakina-admin
 
           echo "6. services"
@@ -347,6 +372,8 @@ jobs:
             fi
           }
           kubectl -n "$namespace" get deploy,statefulset,pods,svc -o wide
+          rollout_deployment sakina-ollama
+          kubectl -n "$namespace" get endpoints sakina-ollama -o wide
           rollout_deployment sakina-llm-gateway
           rollout_deployment sakina-rag-retrieval
           rollout_deployment sakina-rag-ingestion

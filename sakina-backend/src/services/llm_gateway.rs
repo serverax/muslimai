@@ -54,8 +54,7 @@ impl SakinaLlmGateway {
             client: reqwest::Client::new(),
             base_url: std::env::var("SAKINA_LLM_GATEWAY_URL")
                 .unwrap_or_else(|_| "http://sakina-llm-gateway:8087".to_string()),
-            model: std::env::var("SAKINA_LLM_MODEL")
-                .unwrap_or_else(|_| "sakina-islamic-support:cpu".to_string()),
+            model: std::env::var("SAKINA_LLM_MODEL").unwrap_or_else(|_| "tinyllama".to_string()),
             enabled,
             timeout_seconds,
         }

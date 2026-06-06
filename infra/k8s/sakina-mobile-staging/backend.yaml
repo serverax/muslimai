@@ -85,7 +85,13 @@ spec:
             - name: SAKINA_LLM_GATEWAY_URL
               value: http://sakina-llm-gateway:8087
             - name: SAKINA_LLM_MODEL
-              value: sakina-islamic-support:cpu
+              value: tinyllama
+            - name: OLLAMA_CPU_MODE
+              value: "true"
+            - name: OLLAMA_DEFAULT_MODEL
+              value: tinyllama
+            - name: OLLAMA_TIMEOUT_SECONDS
+              value: "60"
             - name: SAKINA_LLM_TIMEOUT_SECONDS
               value: "60"
             - name: SAKINA_MODEL_LEARNING
