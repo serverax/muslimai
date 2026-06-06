@@ -26,6 +26,18 @@ ALTER TABLE public.users
     ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true,
     ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
 
+CREATE TABLE IF NOT EXISTS sakina_ai.workspaces (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL DEFAULT 'Personal workspace',
+    is_default BOOLEAN NOT NULL DEFAULT TRUE,
+    encryption_status TEXT NOT NULL DEFAULT 'server_managed',
+    deleted_at TIMESTAMPTZ NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (user_id, is_default)
+);
+
 CREATE TABLE IF NOT EXISTS public.auth_identities (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,

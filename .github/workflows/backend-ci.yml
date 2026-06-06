@@ -80,5 +80,4 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd sakina-backend
-          docker build -f Dockerfile.api -t sakina-backend-api:${{ github.sha }} .
+          docker build -f sakina-backend/Dockerfile.api -t sakina-backend-api:${{ github.sha }} .
