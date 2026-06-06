@@ -12,6 +12,7 @@ resources:
   - postgres.yaml
   - qdrant.yaml
   - redis.yaml
+  - llm-gateway.yaml
   - db-migrations.yaml
   - rag.yaml
   - backend.yaml

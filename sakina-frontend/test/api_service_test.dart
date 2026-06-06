@@ -6,11 +6,30 @@ import 'package:http/testing.dart';
 import 'package:sakina_frontend/services/api_service.dart';
 
 void main() {
-  test('query() parses RagResponse (answer + sources + confidence)', () async {
+  test('askSakina() parses SakinaAskResponse with citations and source path',
+      () async {
     final mock = MockClient((req) async => http.Response(
           jsonEncode({
             'answer': 'Response to: x',
-            'sources': [
+            'language': 'en',
+            'intent': 'wudu',
+            'trace_id': 'trace-1',
+            'safety_state': 'ALLOWED_WITH_GUARDRAILS',
+            'source_path': {
+              'local_db_checked': true,
+              'rag_checked': true,
+              'graph_rag_checked': true,
+              'llm_used': false,
+              'answer_source': 'local_db',
+              'blocked': false,
+            },
+            'safety': {
+              'pii_removed': false,
+              'guardrails_passed': true,
+              'crisis_detected': false,
+              'out_of_scope_blocked': false,
+            },
+            'citations': [
               {
                 'id': 'chunk-1',
                 'title': 'Sahih al-Bukhari',
@@ -19,39 +38,59 @@ void main() {
                 'authenticity_grade': 'Sahih',
               }
             ],
-            'confidence': 0.92,
-            'guardrail_triggered': false,
-            'processing_time_ms': 450,
+            'graph_path': ['wudu'],
+            'rag_context': {'status': 'checked'},
+            'model_provider': 'local_db_rag_graph',
+            'llm_model': null,
           }),
           200,
           headers: {'content-type': 'application/json'},
         ));
     final api = ApiService(baseUrl: 'http://test', client: mock);
 
-    final r = await api.query('q');
+    final r = await api.askSakina(message: 'q');
     expect(r.answer, 'Response to: x');
-    expect(r.sources.single.title, 'Sahih al-Bukhari');
-    expect(r.sources.single.authenticityGrade, 'Sahih');
-    expect(r.confidence, 0.92);
-    expect(r.guardrailTriggered, isFalse);
+    expect(r.traceId, 'trace-1');
+    expect(r.safetyState, 'ALLOWED_WITH_GUARDRAILS');
+    expect(r.sourcePath['answer_source'], 'local_db');
+    expect(r.citations.single.title, 'Sahih al-Bukhari');
+    expect(r.citations.single.authenticityGrade, 'Sahih');
   });
 
-  test('query() safely handles empty verified-evidence payload', () async {
+  test('askSakina() safely handles blocked payload', () async {
     final mock = MockClient((_) async => http.Response(
           jsonEncode({
-            'answer': '',
-            'sources': [],
-            'confidence': 0.0,
-            'guardrail_triggered': true,
-            'processing_time_ms': 21,
+            'answer': 'I cannot help with out-of-scope requests.',
+            'language': 'en',
+            'intent': 'islamic_guidance',
+            'trace_id': 'trace-blocked',
+            'safety_state': 'CAVEATED_SHORT_CIRCUIT',
+            'source_path': {
+              'local_db_checked': true,
+              'rag_checked': false,
+              'graph_rag_checked': false,
+              'llm_used': false,
+              'answer_source': 'guardrail_block',
+              'blocked': true,
+            },
+            'safety': {
+              'pii_removed': false,
+              'guardrails_passed': false,
+              'crisis_detected': false,
+              'out_of_scope_blocked': true,
+            },
+            'citations': [],
+            'graph_path': [],
+            'rag_context': {},
+            'model_provider': 'local_db_rag_graph',
           }),
           200,
         ));
     final api = ApiService(baseUrl: 'http://test', client: mock);
-    final response = await api.query('any question');
-    expect(response.answer, isEmpty);
-    expect(response.sources, isEmpty);
-    expect(response.guardrailTriggered, isTrue);
+    final response = await api.askSakina(message: 'any question');
+    expect(response.citations, isEmpty);
+    expect(response.sourcePath['blocked'], isTrue);
+    expect(response.safety['out_of_scope_blocked'], isTrue);
   });
 
   test('classify() parses ClassifyResponse', () async {
@@ -89,7 +128,7 @@ void main() {
         ));
     final api = ApiService(baseUrl: 'http://test', client: mock);
     try {
-      await api.query('q');
+      await api.askSakina(message: 'q');
       fail('expected ApiException');
     } on ApiException catch (e) {
       expect(e.statusCode, 402);

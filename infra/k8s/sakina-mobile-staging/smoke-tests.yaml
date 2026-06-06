@@ -37,6 +37,8 @@ spec:
               curl -fsS http://sakina-backend:8080/health/ready
               echo "Checking sakina-rag-retrieval readiness"
               curl -fsS http://sakina-rag-retrieval:8080/health/ready
+              echo "Checking sakina-llm-gateway readiness"
+              curl -fsS http://sakina-llm-gateway:8087/ready
               echo "Checking sakina-admin root"
               curl -fsS http://sakina-admin:80/
           resources:

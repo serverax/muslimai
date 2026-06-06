@@ -37,6 +37,8 @@ spec:
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -74,7 +76,19 @@ spec:
             - name: SAKINA_ENV
               value: staging
             - name: SAKINA_LLM_ENABLED
+              value: "true"
+            - name: SAKINA_LLM_GATEWAY_URL
+              value: http://sakina-llm-gateway:8087
+            - name: SAKINA_LLM_MODEL
+              value: sakina-islamic-support:cpu
+            - name: SAKINA_LLM_TIMEOUT_SECONDS
+              value: "60"
+            - name: SAKINA_MODEL_LEARNING
               value: "false"
+            - name: SAKINA_PRIVATE_MEMORY
+              value: "false"
+            - name: SAKINA_ANONYMOUS_LEARNING
+              value: "true"
             - name: POSTGRES_HOST
               value: sakina-postgres
             - name: POSTGRES_PORT

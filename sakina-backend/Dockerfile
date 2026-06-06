@@ -6,13 +6,14 @@ COPY sakina-backend/src ./src
 COPY sakina-backend/db ./db
 
 RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev pkg-config && rm -rf /var/lib/apt/lists/*
-RUN cargo build --release --bin sakina-api
+RUN cargo build --release --bin sakina-api --bin sakina-llm-gateway
 
 FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends libpq5 ca-certificates && rm -rf /var/lib/apt/lists/*
 RUN groupadd --system sakina && useradd --system --gid sakina --home-dir /nonexistent --shell /usr/sbin/nologin sakina
 COPY --from=builder /app/target/release/sakina-api /usr/local/bin/sakina-api
+COPY --from=builder /app/target/release/sakina-llm-gateway /usr/local/bin/sakina-llm-gateway
 
 EXPOSE 8080
 USER sakina

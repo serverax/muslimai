@@ -344,6 +344,94 @@ pub struct AddMessageResponse {
     pub trace_id: Option<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct LocalMemoryContext {
+    pub preferred_language: Option<String>,
+    pub answer_style: Option<String>,
+    pub consent: Option<bool>,
+    pub last_sync_at: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CoreChatRequest {
+    pub message: String,
+    pub local_memory_context: Option<LocalMemoryContext>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct MemoryUpdateSuggestion {
+    pub r#type: String,
+    pub value: String,
+    pub requires_user_consent: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CoreChatResponse {
+    pub workspace_id: Uuid,
+    pub brain_trace_id: String,
+    pub workflow: String,
+    pub language_detected: String,
+    pub used_local_memory: bool,
+    pub memory_write_status: serde_json::Value,
+    pub learned_preference: Option<String>,
+    pub memory_update_suggestion: Option<MemoryUpdateSuggestion>,
+    pub agents_executed: Vec<String>,
+    pub rag_results: serde_json::Value,
+    pub graph_path: Vec<String>,
+    pub citations: serde_json::Value,
+    pub compression_status: serde_json::Value,
+    pub router_decision: serde_json::Value,
+    pub ollama_status: serde_json::Value,
+    pub model_provider: String,
+    pub cache_decision: serde_json::Value,
+    pub evaluation_result: serde_json::Value,
+    pub final_answer: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SakinaAskRequest {
+    pub message: String,
+    pub language: Option<String>,
+    pub section: Option<String>,
+    pub local_memory_context: Option<LocalMemoryContext>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct SakinaSourcePath {
+    pub local_db_checked: bool,
+    pub rag_checked: bool,
+    pub graph_rag_checked: bool,
+    pub llm_used: bool,
+    pub answer_source: String,
+    pub blocked: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct SakinaSafetyStatus {
+    pub pii_removed: bool,
+    pub guardrails_passed: bool,
+    pub crisis_detected: bool,
+    pub out_of_scope_blocked: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SakinaAskResponse {
+    pub answer: String,
+    pub language: String,
+    pub intent: String,
+    pub trace_id: String,
+    pub safety_state: String,
+    pub source_path: SakinaSourcePath,
+    pub safety: SakinaSafetyStatus,
+    pub citations: serde_json::Value,
+    pub graph_path: Vec<String>,
+    pub local_db_context: serde_json::Value,
+    pub rag_context: serde_json::Value,
+    pub graph_context: serde_json::Value,
+    pub model_provider: String,
+    pub llm_model: Option<String>,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct RagStatusResponse {
     pub status: String,

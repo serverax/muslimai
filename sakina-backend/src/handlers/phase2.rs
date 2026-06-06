@@ -684,7 +684,7 @@ mod tests {
         let repo = crate::services::IslamicKnowledgeRepository::new(pool.clone());
         let embeddings = crate::services::EmbeddingsService::new(
             &std::env::var("SAKINA_EMBEDDING_BASE_URL")
-                .unwrap_or_else(|_| "http://localhost:11434".to_string()),
+                .unwrap_or_else(|_| "http://sakina-embedding:8080".to_string()),
         );
         let collection = std::env::var("ISLAMIC_QDRANT_COLLECTION")
             .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());

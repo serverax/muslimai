@@ -5,7 +5,6 @@ class ApiConfig {
   );
 
   static const String healthEndpoint = '/health';
-  static const String ragQueryEndpoint = '/rag/query';
   static const String classifyEndpoint = '/classify';
   static const String usersEndpoint = '/users';
   static const String syncBackupEndpoint = '/sync/backup';

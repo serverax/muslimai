@@ -98,29 +98,63 @@ class ApiService {
     throw _apiException('logout failed', res);
   }
 
-  Future<RagResponse> query(
-    String message, {
-    String? madhhab,
-    String? userId,
+  Future<SakinaAskResponse> askSakina({
+    required String message,
+    String language = 'auto',
+    String section = 'ask_sakina',
+    LocalMemoryContext? localMemoryContext,
   }) async {
-    final requestUserId = userId ?? '00000000-0000-0000-0000-000000000000';
-    final res = await _withRetry(
-      () => _client
-          .post(
-            Uri.parse(_endpoint('/rag/query')),
-            headers: _headers(userId: requestUserId),
-            body: jsonEncode({
-              'query': message,
-              'user_id': requestUserId,
-              'madhhab_filter': madhhab ?? '',
-            }),
-          )
-          .timeout(const Duration(seconds: 30)),
-    );
+    final body = <String, dynamic>{
+      'message': message,
+      'language': language,
+      'section': section,
+      if (localMemoryContext != null)
+        'local_memory_context': localMemoryContext.toJson(),
+    };
+    final res = await _post('/api/sakina/ask', body);
     if (res.statusCode == 200) {
-      return RagResponse.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      return SakinaAskResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
     }
-    throw _apiException('rag/query failed', res);
+    throw _apiException('ask Sakina failed', res);
+  }
+
+  Future<BrainChatResponse> sendBrainChat({
+    required String message,
+    LocalMemoryContext? localMemoryContext,
+  }) async {
+    final response = await askSakina(
+      message: message,
+      localMemoryContext: localMemoryContext,
+    );
+    return BrainChatResponse.fromSakinaAsk(response);
+  }
+
+  Future<UserLearningProfileResponse> getUserLearningProfile() async {
+    final res = await _get('/api/user-learning/profile');
+    if (res.statusCode == 200) {
+      return UserLearningProfileResponse.fromJson(
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
+    }
+    throw _apiException('user learning profile failed', res);
+  }
+
+  Future<void> updateUserLearningConsent({
+    required bool learningEnabled,
+    required bool localMemoryEnabled,
+    required bool serverMemoryEnabled,
+  }) async {
+    final res = await _post('/api/user-learning/consent', {
+      'learning_enabled': learningEnabled,
+      'local_memory_enabled': localMemoryEnabled,
+      'server_memory_enabled': serverMemoryEnabled,
+    });
+    if (res.statusCode == 200) {
+      return;
+    }
+    throw _apiException('user learning consent failed', res);
   }
 
   Future<ClassifyResponse> classify(String text, {String? userId}) async {
@@ -1005,6 +1039,216 @@ class RagResponse {
         confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
         guardrailTriggered: json['guardrail_triggered'] as bool? ?? false,
         processingTimeMs: (json['processing_time_ms'] as num?)?.toInt() ?? 0,
+      );
+}
+
+class LocalMemoryContext {
+  final String? preferredLanguage;
+  final String? answerStyle;
+  final bool consent;
+  final String? lastSyncAt;
+
+  const LocalMemoryContext({
+    this.preferredLanguage,
+    this.answerStyle,
+    required this.consent,
+    this.lastSyncAt,
+  });
+
+  Map<String, dynamic> toJson() => {
+        if (preferredLanguage != null) 'preferred_language': preferredLanguage,
+        if (answerStyle != null) 'answer_style': answerStyle,
+        'consent': consent,
+        if (lastSyncAt != null) 'last_sync_at': lastSyncAt,
+      };
+}
+
+class SakinaAskResponse {
+  final String answer;
+  final String language;
+  final String intent;
+  final String traceId;
+  final String safetyState;
+  final Map<String, dynamic> sourcePath;
+  final Map<String, dynamic> safety;
+  final List<Citation> citations;
+  final List<dynamic> graphPath;
+  final Map<String, dynamic> ragContext;
+  final String modelProvider;
+  final String? llmModel;
+
+  const SakinaAskResponse({
+    required this.answer,
+    required this.language,
+    required this.intent,
+    required this.traceId,
+    required this.safetyState,
+    required this.sourcePath,
+    required this.safety,
+    required this.citations,
+    required this.graphPath,
+    required this.ragContext,
+    required this.modelProvider,
+    required this.llmModel,
+  });
+
+  factory SakinaAskResponse.fromJson(Map<String, dynamic> json) {
+    return SakinaAskResponse(
+      answer: json['answer']?.toString() ?? '',
+      language: json['language']?.toString() ?? '',
+      intent: json['intent']?.toString() ?? '',
+      traceId: json['trace_id']?.toString() ?? '',
+      safetyState: json['safety_state']?.toString() ?? '',
+      sourcePath: json['source_path'] is Map<String, dynamic>
+          ? json['source_path'] as Map<String, dynamic>
+          : const {},
+      safety: json['safety'] is Map<String, dynamic>
+          ? json['safety'] as Map<String, dynamic>
+          : const {},
+      citations: (json['citations'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(Citation.fromJson)
+          .toList(),
+      graphPath: json['graph_path'] as List<dynamic>? ?? const [],
+      ragContext: json['rag_context'] is Map<String, dynamic>
+          ? json['rag_context'] as Map<String, dynamic>
+          : const {},
+      modelProvider: json['model_provider']?.toString() ?? '',
+      llmModel: json['llm_model']?.toString(),
+    );
+  }
+}
+
+class BrainChatResponse {
+  final String workspaceId;
+  final String brainTraceId;
+  final String workflow;
+  final String languageDetected;
+  final bool usedLocalMemory;
+  final String memoryWriteStatus;
+  final String? learnedPreference;
+  final Map<String, dynamic> memoryUpdateSuggestion;
+  final List<String> agentsExecuted;
+  final List<dynamic> ragResults;
+  final List<dynamic> graphPath;
+  final List<Citation> citations;
+  final Map<String, dynamic> evaluationResult;
+  final Map<String, dynamic> cacheDecision;
+  final Map<String, dynamic> routerDecision;
+  final String modelProvider;
+  final Map<String, dynamic> ollamaStatus;
+  final String finalAnswer;
+
+  const BrainChatResponse({
+    required this.workspaceId,
+    required this.brainTraceId,
+    required this.workflow,
+    required this.languageDetected,
+    required this.usedLocalMemory,
+    required this.memoryWriteStatus,
+    required this.learnedPreference,
+    required this.memoryUpdateSuggestion,
+    required this.agentsExecuted,
+    required this.ragResults,
+    required this.graphPath,
+    required this.citations,
+    required this.evaluationResult,
+    required this.cacheDecision,
+    required this.routerDecision,
+    required this.modelProvider,
+    required this.ollamaStatus,
+    required this.finalAnswer,
+  });
+
+  factory BrainChatResponse.fromSakinaAsk(SakinaAskResponse response) =>
+      BrainChatResponse(
+        workspaceId: '',
+        brainTraceId: response.traceId,
+        workflow: response.sourcePath['answer_source']?.toString() ?? '',
+        languageDetected: response.language,
+        usedLocalMemory: false,
+        memoryWriteStatus: '',
+        learnedPreference: null,
+        memoryUpdateSuggestion: const {},
+        agentsExecuted: const ['sakina_mother_algorithm'],
+        ragResults:
+            response.ragContext.isEmpty ? const [] : [response.ragContext],
+        graphPath: response.graphPath,
+        citations: response.citations,
+        evaluationResult: {
+          'guardrails_passed': response.safety['guardrails_passed'] == true,
+          'safety_state': response.safetyState,
+          'source_path': response.sourcePath,
+        },
+        cacheDecision: const {},
+        routerDecision: response.sourcePath,
+        modelProvider: response.modelProvider,
+        ollamaStatus: {
+          'model': response.llmModel,
+          'llm_used': response.sourcePath['llm_used'] == true,
+        },
+        finalAnswer: response.answer,
+      );
+
+  factory BrainChatResponse.fromJson(Map<String, dynamic> json) =>
+      BrainChatResponse(
+        workspaceId: json['workspace_id']?.toString() ?? '',
+        brainTraceId: json['brain_trace_id']?.toString() ?? '',
+        workflow: json['workflow']?.toString() ?? '',
+        languageDetected: json['language_detected']?.toString() ?? '',
+        usedLocalMemory: json['used_local_memory'] as bool? ?? false,
+        memoryWriteStatus: json['memory_write_status']?.toString() ?? '',
+        learnedPreference: json['learned_preference']?.toString(),
+        memoryUpdateSuggestion:
+            json['memory_update_suggestion'] is Map<String, dynamic>
+                ? json['memory_update_suggestion'] as Map<String, dynamic>
+                : const {},
+        agentsExecuted: (json['agents_executed'] as List<dynamic>? ?? const [])
+            .map((item) => item.toString())
+            .toList(),
+        ragResults: json['rag_results'] as List<dynamic>? ?? const [],
+        graphPath: json['graph_path'] as List<dynamic>? ?? const [],
+        citations: (json['citations'] as List<dynamic>? ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .map(Citation.fromJson)
+            .toList(),
+        evaluationResult: json['evaluation_result'] is Map<String, dynamic>
+            ? json['evaluation_result'] as Map<String, dynamic>
+            : const {},
+        cacheDecision: json['cache_decision'] is Map<String, dynamic>
+            ? json['cache_decision'] as Map<String, dynamic>
+            : const {},
+        routerDecision: json['router_decision'] is Map<String, dynamic>
+            ? json['router_decision'] as Map<String, dynamic>
+            : const {},
+        modelProvider: json['model_provider']?.toString() ?? '',
+        ollamaStatus: json['ollama_status'] is Map<String, dynamic>
+            ? json['ollama_status'] as Map<String, dynamic>
+            : const {},
+        finalAnswer: json['final_answer']?.toString() ?? '',
+      );
+}
+
+class UserLearningProfileResponse {
+  final String workspaceId;
+  final Map<String, dynamic> permissions;
+  final List<Map<String, dynamic>> preferences;
+
+  const UserLearningProfileResponse({
+    required this.workspaceId,
+    required this.permissions,
+    required this.preferences,
+  });
+
+  factory UserLearningProfileResponse.fromJson(Map<String, dynamic> json) =>
+      UserLearningProfileResponse(
+        workspaceId: json['workspace_id']?.toString() ?? '',
+        permissions: json['permissions'] is Map<String, dynamic>
+            ? json['permissions'] as Map<String, dynamic>
+            : const {},
+        preferences: (json['preferences'] as List<dynamic>? ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .toList(),
       );
 }
 

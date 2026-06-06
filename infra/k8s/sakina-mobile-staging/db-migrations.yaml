@@ -18,6 +18,8 @@ spec:
         app.kubernetes.io/environment: staging
     spec:
       restartPolicy: Never
+      imagePullSecrets:
+        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000

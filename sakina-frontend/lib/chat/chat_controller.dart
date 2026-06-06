@@ -94,7 +94,7 @@ class ChatMessage {
 }
 
 abstract interface class ChatBackend {
-  Future<RagResponse> query(String message);
+  Future<SakinaAskResponse> ask(String message);
 }
 
 class ApiChatBackend implements ChatBackend {
@@ -105,8 +105,8 @@ class ApiChatBackend implements ChatBackend {
   final ApiService _api;
 
   @override
-  Future<RagResponse> query(String message) async {
-    return _api.query(message);
+  Future<SakinaAskResponse> ask(String message) async {
+    return _api.askSakina(message: message);
   }
 
   void close() => _api.close();
@@ -226,11 +226,11 @@ class ChatController {
     await _saveBestEffort(userMessage);
 
     try {
-      final response = await _backend.query(message);
+      final response = await _backend.ask(message);
       final assistantMessage = _newMessage(
         ChatRole.assistant,
         response.answer,
-        sources: response.sources,
+        sources: response.citations,
       );
       _messages.add(assistantMessage);
       await _saveBestEffort(assistantMessage);
@@ -255,12 +255,12 @@ class ChatController {
     _isSending = true;
     try {
       for (final message in pending) {
-        final response = await _backend.query(message.content);
+        final response = await _backend.ask(message.content);
         await _replaceMessage(message.withSyncStatus(ChatSyncStatus.synced));
         final assistantMessage = _newMessage(
           ChatRole.assistant,
           response.answer,
-          sources: response.sources,
+          sources: response.citations,
         );
         _messages.add(assistantMessage);
         await _saveBestEffort(assistantMessage);

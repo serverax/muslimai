@@ -8,6 +8,7 @@ use uuid::Uuid;
 pub struct SemanticCacheEntry {
     pub cache_key: String,
     pub user_id: Option<Uuid>,
+    pub workspace_id: Option<Uuid>,
     pub language: String,
     pub intent: String,
     pub safety_level: String,
@@ -103,7 +104,7 @@ impl SemanticCacheService {
     ) -> Result<Option<SemanticCacheEntry>, sqlx::Error> {
         let row = sqlx::query(
             r#"
-            SELECT cache_key, user_id, language, intent, safety_level, source_version,
+            SELECT cache_key, user_id, workspace_id, language, intent, safety_level, source_version,
                    hit_count, payload
             FROM sakina_ai.brain_cache_metadata
             WHERE cache_key = $1
@@ -134,6 +135,7 @@ impl SemanticCacheService {
             return Ok(Some(SemanticCacheEntry {
                 cache_key: cache_key_value,
                 user_id: row.get("user_id"),
+                workspace_id: row.get("workspace_id"),
                 language: row.get("language"),
                 intent: row.get("intent"),
                 safety_level: row.get("safety_level"),
@@ -150,12 +152,13 @@ impl SemanticCacheService {
         sqlx::query(
             r#"
             INSERT INTO sakina_ai.brain_cache_metadata (
-                cache_key, user_id, language, intent, safety_level, source_version, hit_count, payload, updated_at
+                cache_key, user_id, workspace_id, language, intent, safety_level, source_version, hit_count, payload, updated_at
             )
-            VALUES ($1, $2, $3, $4, $5, $6, COALESCE($7, 0), $8, now())
+            VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8, 0), $9, now())
             ON CONFLICT (cache_key)
             DO UPDATE SET
                 user_id = EXCLUDED.user_id,
+                workspace_id = EXCLUDED.workspace_id,
                 language = EXCLUDED.language,
                 intent = EXCLUDED.intent,
                 safety_level = EXCLUDED.safety_level,
@@ -167,6 +170,7 @@ impl SemanticCacheService {
         )
         .bind(&entry.cache_key)
         .bind(entry.user_id)
+        .bind(entry.workspace_id)
         .bind(&entry.language)
         .bind(&entry.intent)
         .bind(&entry.safety_level)

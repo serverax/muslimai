@@ -4,7 +4,7 @@ import 'package:sakina_frontend/services/api_service.dart';
 
 class FailingBackend implements ChatBackend {
   @override
-  Future<RagResponse> query(String message) {
+  Future<SakinaAskResponse> ask(String message) {
     throw ApiException('503 service unavailable');
   }
 }
@@ -13,14 +13,27 @@ class RecordingBackend implements ChatBackend {
   final List<String> requests = [];
 
   @override
-  Future<RagResponse> query(String message) async {
+  Future<SakinaAskResponse> ask(String message) async {
     requests.add(message);
-    return RagResponse(
+    return SakinaAskResponse(
       answer: 'Source-backed answer for: $message',
-      sources: const [],
-      confidence: 0.9,
-      guardrailTriggered: false,
-      processingTimeMs: 10,
+      language: 'en',
+      intent: 'islamic_guidance',
+      traceId: 'trace-recording',
+      safetyState: 'ALLOWED_WITH_GUARDRAILS',
+      sourcePath: const {
+        'answer_source': 'rag',
+        'llm_used': false,
+        'blocked': false,
+      },
+      safety: const {
+        'guardrails_passed': true,
+      },
+      citations: const [],
+      graphPath: const [],
+      ragContext: const {},
+      modelProvider: 'local_db_rag_graph',
+      llmModel: null,
     );
   }
 }

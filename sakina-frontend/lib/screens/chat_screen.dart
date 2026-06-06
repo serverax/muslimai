@@ -13,10 +13,7 @@ class ChatScreen extends StatefulWidget {
   })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
         userId = session?.userId ??
             userId ??
-            const String.fromEnvironment(
-              'SAKINA_USER_ID',
-              defaultValue: '00000000-0000-0000-0000-000000000000',
-            ) {
+            const String.fromEnvironment('SAKINA_USER_ID') {
     if (session != null && api == null) {
       this.api.setAuthToken(session.accessToken);
     }
@@ -36,7 +33,6 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _sending = false;
   bool _notificationBusy = false;
   bool _supportBusy = false;
-  String? _conversationId;
   String? _lastMessageId;
   String _status = '';
   bool _contractWarning = false;
@@ -102,18 +98,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Future<String> _ensureConversation() async {
-    if (_conversationId != null) {
-      return _conversationId!;
-    }
-    final response = await widget.api.createConversation(
-      userId: widget.userId,
-      title: 'Mobile conversation',
-    );
-    _conversationId = response.id;
-    return response.id;
-  }
-
   Future<void> _sendMessage() async {
     final text = _controller.text.trim();
     if (text.isEmpty || _sending) return;
@@ -127,35 +111,30 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     try {
-      final conversationId = await _ensureConversation();
-      final stored = await widget.api.addConversationMessage(
-        userId: widget.userId,
-        conversationId: conversationId,
-        content: text,
+      final response = await widget.api.askSakina(
+        message: text,
+        section: 'ask_sakina',
+        localMemoryContext: const LocalMemoryContext(
+          consent: true,
+          preferredLanguage: 'auto',
+        ),
       );
-      _lastMessageId = stored.userMessageId;
-      final rag = await widget.api.query(text, userId: widget.userId);
+      _lastMessageId = null;
       final verifiedSources =
-          rag.sources.where((source) => source.isVerifiedShape).toList();
-      final malformedDetected = rag.sources.isNotEmpty &&
-          verifiedSources.length != rag.sources.length;
+          response.citations.where((source) => source.isVerifiedShape).toList();
+      final malformedDetected = response.citations.isNotEmpty &&
+          verifiedSources.length != response.citations.length;
       if (!mounted) return;
       setState(() {
         _contractWarning = malformedDetected;
-        if (verifiedSources.isEmpty) {
-          _messages.add(
-            ChatItem.system(
-              'No verified evidence is available yet. I cannot provide a religious answer without verified sources.',
-            ),
-          );
-          return;
-        }
         _messages.add(
           ChatItem.evidence(
-            'Verified evidence retrieved.',
+            response.answer,
             verifiedSources,
           ),
         );
+        _status =
+            'Trace ${response.traceId} | ${response.sourcePath['answer_source'] ?? 'unknown'} | ${response.modelProvider}';
       });
     } catch (error) {
       if (!mounted) return;

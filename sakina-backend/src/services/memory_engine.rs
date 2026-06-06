@@ -9,6 +9,8 @@ use crate::error::ApiError;
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MemoryWriteRequest {
     pub user_id: Uuid,
+    #[serde(default)]
+    pub workspace_id: Option<Uuid>,
     pub memory_key: String,
     pub memory_type: String,
     pub payload: Value,
@@ -200,14 +202,15 @@ impl MemoryEngine {
         let row = sqlx::query(
             r#"
             INSERT INTO sakina_ai.user_memory_entries (
-                user_id, memory_key, memory_type, sensitivity_level, encrypted_payload,
+                user_id, workspace_id, memory_key, memory_type, sensitivity_level, encrypted_payload,
                 nonce, consent_required, consent_granted, allowed, source_language, metadata
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
             RETURNING id
             "#,
         )
         .bind(request.user_id)
+        .bind(request.workspace_id)
         .bind(&request.memory_key)
         .bind(&request.memory_type)
         .bind(&sensitivity_level)

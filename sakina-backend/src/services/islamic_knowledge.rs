@@ -405,6 +405,7 @@ impl IslamicAnswerService {
             let cache_entry = SemanticCacheEntry {
                 cache_key,
                 user_id: request.user_id,
+                workspace_id: None,
                 language,
                 intent: "islamic_answer".to_string(),
                 safety_level: safety_level.to_string(),

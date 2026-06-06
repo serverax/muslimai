@@ -15,6 +15,7 @@ pub mod iman_journey;
 pub mod ingestion_producer;
 pub mod islamic_knowledge;
 pub mod knowledge_graph_service;
+pub mod llm_gateway;
 pub mod mcp_registry;
 pub mod memory_engine;
 pub mod multimodal;
@@ -55,6 +56,7 @@ pub use islamic_knowledge::QdrantCollectionPlan;
 pub use knowledge_graph_service::{
     KnowledgeGraphEntityView, KnowledgeGraphLookupResult, KnowledgeGraphService,
 };
+pub use llm_gateway::{SakinaLlmGateway, SakinaLlmGatewayRequest, SakinaLlmGatewayResult};
 pub use mcp_registry::{McpConnectorRegistry, McpConnectorSpec};
 pub use memory_engine::{MemoryEngine, MemoryEntry, MemoryWriteOutcome, MemoryWriteRequest};
 pub use multimodal::{MultimodalAnalysisRequest, MultimodalAnalysisResult, MultimodalService};

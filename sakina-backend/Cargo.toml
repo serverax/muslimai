@@ -46,6 +46,10 @@ path = "src/bin/ingest.rs"
 name = "sakina-migrate"
 path = "src/bin/migrate.rs"
 
+[[bin]]
+name = "sakina-llm-gateway"
+path = "src/bin/llm_gateway.rs"
+
 [profile.release]
 opt-level = 3
 lto = true

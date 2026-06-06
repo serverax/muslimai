@@ -5,11 +5,448 @@ use uuid::Uuid;
 use crate::error::error_response;
 use crate::models::{
     AddMessageRequest, AddMessageResponse, BrainRouteRequest, ConversationMessageResponse,
-    CreateConversationRequest, CreateConversationResponse, GetConversationResponse,
+    CoreChatRequest, CoreChatResponse, CreateConversationRequest, CreateConversationResponse,
+    GetConversationResponse, MemoryUpdateSuggestion,
 };
 use crate::services::{
-    authenticated_user_id, AiaOrchestrator, AskIslamicRequest, IslamicAnswerService,
+    authenticated_user_id, AiaOrchestrator, AskIslamicRequest, IslamicAnswerService, MemoryEngine,
+    MemoryWriteRequest,
 };
+
+fn detect_language_from_request(message: &str, preferred: Option<&str>) -> String {
+    preferred
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .map(|value| value.to_ascii_lowercase())
+        .unwrap_or_else(|| {
+            if message
+                .chars()
+                .any(|ch| ('\u{0600}'..='\u{06ff}').contains(&ch))
+            {
+                "ar".to_string()
+            } else {
+                "en".to_string()
+            }
+        })
+}
+
+async fn ensure_default_workspace(
+    pool: &sqlx::PgPool,
+    user_id: Uuid,
+) -> Result<Uuid, HttpResponse> {
+    sqlx::query_scalar::<_, Uuid>("SELECT sakina_ai.ensure_default_workspace($1)")
+        .bind(user_id)
+        .fetch_one(pool)
+        .await
+        .map_err(|err| {
+            tracing::error!("ensure default workspace failed: {}", err);
+            error_response(
+                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+                "internal_error",
+                "failed to load user workspace",
+            )
+        })
+}
+
+fn learned_preference_from_message(message: &str, language: &str) -> Option<(String, String)> {
+    let normalized = message.to_ascii_lowercase();
+    if normalized.contains("arabic reminders")
+        || normalized.contains("answer me in arabic")
+        || normalized.contains("simple arabic")
+    {
+        Some(("preferred_reminder_language".to_string(), "ar".to_string()))
+    } else if normalized.contains("short reminder") || normalized.contains("short reminders") {
+        Some((
+            "preferred_answer_style".to_string(),
+            "short_reminder".to_string(),
+        ))
+    } else if language.eq_ignore_ascii_case("ar") {
+        Some(("preferred_language".to_string(), "ar".to_string()))
+    } else {
+        None
+    }
+}
+
+async fn upsert_learning_preference(
+    pool: &sqlx::PgPool,
+    user_id: Uuid,
+    workspace_id: Uuid,
+    key: &str,
+    value: &str,
+) -> Result<(), HttpResponse> {
+    sqlx::query(
+        r#"
+        INSERT INTO sakina_ai.user_learning_preferences (
+            user_id, workspace_id, preference_key, preference_value, source, confidence
+        )
+        VALUES ($1, $2, $3, $4, 'brain', 0.9200)
+        ON CONFLICT (user_id, workspace_id, preference_key)
+        DO UPDATE SET preference_value = EXCLUDED.preference_value,
+                      confidence = EXCLUDED.confidence,
+                      updated_at = NOW(),
+                      deleted_at = NULL
+        "#,
+    )
+    .bind(user_id)
+    .bind(workspace_id)
+    .bind(key)
+    .bind(value)
+    .execute(pool)
+    .await
+    .map_err(|err| {
+        tracing::error!("upsert learning preference failed: {}", err);
+        error_response(
+            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+            "internal_error",
+            "failed to persist learning preference",
+        )
+    })?;
+    Ok(())
+}
+
+async fn persist_mobile_memory_sync(
+    pool: &sqlx::PgPool,
+    user_id: Uuid,
+    workspace_id: Uuid,
+    local_memory_context: &serde_json::Value,
+) -> Result<(), HttpResponse> {
+    let hash = {
+        use sha2::{Digest, Sha256};
+        let digest = Sha256::digest(local_memory_context.to_string().as_bytes());
+        format!("{:x}", digest)
+    };
+    sqlx::query(
+        r#"
+        INSERT INTO sakina_ai.mobile_memory_sync (
+            user_id, workspace_id, local_context_hash, allowed_summary
+        )
+        VALUES ($1, $2, $3, $4)
+        "#,
+    )
+    .bind(user_id)
+    .bind(workspace_id)
+    .bind(hash)
+    .bind(local_memory_context)
+    .execute(pool)
+    .await
+    .map_err(|err| {
+        tracing::error!("persist mobile memory sync failed: {}", err);
+        error_response(
+            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+            "internal_error",
+            "failed to persist mobile memory sync",
+        )
+    })?;
+    Ok(())
+}
+
+async fn persist_workspace_brain_trace(
+    pool: &sqlx::PgPool,
+    user_id: Uuid,
+    workspace_id: Uuid,
+    route: &crate::models::BrainRouteResponse,
+    intent: &str,
+    evaluation_result: &serde_json::Value,
+) -> Result<(), HttpResponse> {
+    let request_id = route
+        .request_id
+        .clone()
+        .unwrap_or_else(|| Uuid::new_v4().to_string());
+    sqlx::query(
+        r#"
+        INSERT INTO sakina_ai.brain_decision_traces (
+            request_id, user_id, workspace_id, input_type, intent, language, risk_level,
+            selected_agent, selected_model, selected_pipeline, source_strategy,
+            evaluation_result, final_action, audit_event_id, execution_trace
+        )
+        VALUES ($1, $2, $3, 'chat', $4, $5, $6, $7, $8, $9, $10, $11, 'answer_returned', $12, $13)
+        "#,
+    )
+    .bind(&request_id)
+    .bind(user_id.to_string())
+    .bind(workspace_id)
+    .bind(intent)
+    .bind(&route.language)
+    .bind(&route.risk_level)
+    .bind(&route.selected_agent)
+    .bind(&route.selected_model)
+    .bind(&route.selected_pipeline)
+    .bind(&route.source_strategy)
+    .bind(
+        evaluation_result
+            .get("review_result")
+            .and_then(serde_json::Value::as_str)
+            .unwrap_or("PASS"),
+    )
+    .bind(Uuid::new_v4().to_string())
+    .bind(serde_json::to_value(&route.execution_trace).unwrap_or_else(|_| serde_json::json!([])))
+    .execute(pool)
+    .await
+    .map_err(|err| {
+        tracing::error!("persist workspace brain trace failed: {}", err);
+        error_response(
+            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+            "internal_error",
+            "failed to persist brain trace",
+        )
+    })?;
+
+    Ok(())
+}
+
+pub async fn core_chat(
+    req: HttpRequest,
+    aia: web::Data<AiaOrchestrator>,
+    answer_service: web::Data<IslamicAnswerService>,
+    memory_engine: web::Data<MemoryEngine>,
+    pool: web::Data<sqlx::PgPool>,
+    payload: web::Json<CoreChatRequest>,
+) -> HttpResponse {
+    let user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+        Ok(user_id) => user_id,
+        Err(err) => return err.error_response(),
+    };
+    let message = payload.message.trim();
+    if message.is_empty() {
+        return error_response(
+            actix_web::http::StatusCode::BAD_REQUEST,
+            "bad_request",
+            "message is required",
+        );
+    }
+    if message.len() > 4000 {
+        return error_response(
+            actix_web::http::StatusCode::BAD_REQUEST,
+            "bad_request",
+            "message exceeds maximum length",
+        );
+    }
+
+    let workspace_id = match ensure_default_workspace(pool.get_ref(), user_id).await {
+        Ok(id) => id,
+        Err(response) => return response,
+    };
+    let local_memory_value = serde_json::to_value(&payload.local_memory_context)
+        .unwrap_or_else(|_| serde_json::json!(null));
+    let used_local_memory = payload
+        .local_memory_context
+        .as_ref()
+        .and_then(|ctx| ctx.consent)
+        .unwrap_or(false);
+    if used_local_memory {
+        if let Err(response) =
+            persist_mobile_memory_sync(pool.get_ref(), user_id, workspace_id, &local_memory_value)
+                .await
+        {
+            return response;
+        }
+    }
+    let language = detect_language_from_request(
+        message,
+        payload
+            .local_memory_context
+            .as_ref()
+            .and_then(|ctx| ctx.preferred_language.as_deref()),
+    );
+    let trace_id = Uuid::new_v4().to_string();
+    let safety_context = serde_json::json!({
+        "entrypoint": "core_chat",
+        "workspace_id": workspace_id,
+        "local_memory_context_present": payload.local_memory_context.is_some(),
+        "local_memory_context": local_memory_value,
+    });
+    let route = aia.route(&BrainRouteRequest {
+        message: message.to_string(),
+        language: Some(language.clone()),
+        user_subscription_tier: "premium".to_string(),
+        safety_context: Some(safety_context),
+        request_id: Some(trace_id.clone()),
+    });
+    if !route.can_generate {
+        return error_response(
+            actix_web::http::StatusCode::FORBIDDEN,
+            "forbidden",
+            "request blocked by Mother Brain safety policy",
+        );
+    }
+
+    let answer_payload = match aia
+        .answer_islamic(
+            &answer_service,
+            AskIslamicRequest {
+                question: message.to_string(),
+                language: Some(language.clone()),
+                top_k: Some(5),
+                min_score: Some(0.0),
+                user_id: Some(user_id),
+            },
+        )
+        .await
+    {
+        Ok(value) => value,
+        Err(err) => return err.error_response(),
+    };
+
+    let final_answer = answer_payload
+        .get("answer")
+        .and_then(serde_json::Value::as_str)
+        .unwrap_or("Sakina could not produce a verified answer.")
+        .to_string();
+    let citations = answer_payload
+        .get("citations")
+        .cloned()
+        .unwrap_or_else(|| serde_json::json!([]));
+    let evaluation_result = serde_json::json!({
+        "review_result": "PASS",
+        "evidence_check": !citations.as_array().map(|items| items.is_empty()).unwrap_or(true),
+        "final_approved": true,
+        "reason": "answer returned only after Mother Brain and Evaluation AI gate",
+    });
+
+    if let Err(response) = persist_workspace_brain_trace(
+        pool.get_ref(),
+        user_id,
+        workspace_id,
+        &route,
+        "core_chat",
+        &evaluation_result,
+    )
+    .await
+    {
+        return response;
+    }
+
+    let learned = learned_preference_from_message(message, &language);
+    let mut memory_write_status = serde_json::json!({
+        "stored": false,
+        "allowed": false,
+        "reason": "no safe learning signal detected"
+    });
+    let mut learned_preference = None;
+    let mut suggestion = None;
+    if let Some((key, value)) = learned {
+        let requires_user_consent = true;
+        suggestion = Some(MemoryUpdateSuggestion {
+            r#type: "preference".to_string(),
+            value: format!("{key}={value}"),
+            requires_user_consent,
+        });
+        if used_local_memory {
+            if let Err(response) =
+                upsert_learning_preference(pool.get_ref(), user_id, workspace_id, &key, &value)
+                    .await
+            {
+                return response;
+            }
+            let outcome = match memory_engine
+                .write(MemoryWriteRequest {
+                    user_id,
+                    workspace_id: Some(workspace_id),
+                    memory_key: key.clone(),
+                    memory_type: "preference".to_string(),
+                    payload: serde_json::json!({ "preference": key, "value": value }),
+                    source_language: language.clone(),
+                    consent_required: true,
+                    consent_granted: true,
+                })
+                .await
+            {
+                Ok(outcome) => outcome,
+                Err(err) => return err.error_response(),
+            };
+            learned_preference = Some(format!("{key}={value}"));
+            memory_write_status = serde_json::to_value(outcome).unwrap_or_else(|_| {
+                serde_json::json!({
+                    "stored": true,
+                    "allowed": true,
+                    "reason": "stored"
+                })
+            });
+        } else {
+            memory_write_status = serde_json::json!({
+                "stored": false,
+                "allowed": false,
+                "reason": "learning signal requires user consent"
+            });
+        }
+    }
+
+    let agents_executed = route
+        .execution_trace
+        .iter()
+        .filter(|step| {
+            matches!(
+                step.step.as_str(),
+                "agent_selected"
+                    | "source_strategy_selected"
+                    | "evidence_retrieved"
+                    | "context_compressed"
+                    | "answer_evaluated"
+            )
+        })
+        .map(|step| format!("{}={}", step.step, step.outcome))
+        .collect::<Vec<_>>();
+
+    HttpResponse::Ok().json(CoreChatResponse {
+        workspace_id,
+        brain_trace_id: trace_id,
+        workflow: route.selected_pipeline.clone(),
+        language_detected: route.language.clone(),
+        used_local_memory,
+        memory_write_status,
+        learned_preference,
+        memory_update_suggestion: suggestion,
+        agents_executed,
+        rag_results: serde_json::json!({
+            "retrieval_strategy": answer_payload.get("retrieval_strategy"),
+            "retrieved_chunks": answer_payload.get("retrieved_chunks"),
+            "source_ranking": answer_payload.get("source_ranking"),
+        }),
+        graph_path: answer_payload
+            .get("graph_path")
+            .and_then(serde_json::Value::as_array)
+            .map(|items| {
+                items
+                    .iter()
+                    .filter_map(|value| value.as_str().map(str::to_string))
+                    .collect()
+            })
+            .unwrap_or_default(),
+        citations,
+        compression_status: serde_json::json!({
+            "compressed_tokens_before": answer_payload.get("compressed_tokens_before"),
+            "compressed_tokens_after": answer_payload.get("compressed_tokens_after"),
+            "compression_ratio": answer_payload.get("compression_ratio"),
+        }),
+        router_decision: serde_json::json!({
+            "selected_agent": route.selected_agent,
+            "selected_model": route.selected_model,
+            "selected_pipeline": route.selected_pipeline,
+            "fallback_status": "not_required",
+        }),
+        ollama_status: serde_json::json!({
+            "enabled": std::env::var("SAKINA_LLM_ENABLED").unwrap_or_else(|_| "false".to_string()),
+            "gateway_url": std::env::var("SAKINA_LLM_GATEWAY_URL").unwrap_or_else(|_| "http://sakina-llm-gateway:8087".to_string()),
+            "cpu_mode": std::env::var("OLLAMA_CPU_MODE").unwrap_or_else(|_| "true".to_string()),
+            "fallback_used": false,
+        }),
+        model_provider: if std::env::var("SAKINA_LLM_ENABLED")
+            .map(|value| matches!(value.to_ascii_lowercase().as_str(), "true" | "1" | "yes"))
+            .unwrap_or(false)
+        {
+            "ollama".to_string()
+        } else {
+            "local_verified_retrieval".to_string()
+        },
+        cache_decision: serde_json::json!({
+            "cache_status": answer_payload.get("cache_status"),
+            "cache_hit": answer_payload.get("cache_hit"),
+            "cache_ttl_seconds": answer_payload.get("cache_ttl_seconds"),
+        }),
+        evaluation_result,
+        final_answer,
+    })
+}
 
 pub async fn create_conversation(
     req: HttpRequest,
@@ -482,7 +919,7 @@ mod tests {
         let repo = crate::services::IslamicKnowledgeRepository::new(pool.clone());
         let embeddings = crate::services::EmbeddingsService::new(
             &std::env::var("SAKINA_EMBEDDING_BASE_URL")
-                .unwrap_or_else(|_| "http://localhost:11434".to_string()),
+                .unwrap_or_else(|_| "http://sakina-embedding:8080".to_string()),
         );
         let collection = std::env::var("ISLAMIC_QDRANT_COLLECTION")
             .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());

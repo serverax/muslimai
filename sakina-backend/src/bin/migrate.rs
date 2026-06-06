@@ -106,6 +106,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "019_agent_feedback.sql",
             include_str!("../../db/migrations/019_agent_feedback.sql"),
         ),
+        (
+            "020_workspace_learning_core.sql",
+            include_str!("../../db/migrations/020_workspace_learning_core.sql"),
+        ),
+        (
+            "021_sakina_mother_local_topics.sql",
+            include_str!("../../db/migrations/021_sakina_mother_local_topics.sql"),
+        ),
     ];
 
     for (name, sql) in migrations {

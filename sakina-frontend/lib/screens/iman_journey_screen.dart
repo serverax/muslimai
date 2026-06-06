@@ -9,11 +9,7 @@ class ImanJourneyScreen extends StatefulWidget {
     ApiService? api,
     String? userId,
   })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
-        userId = userId ??
-            const String.fromEnvironment(
-              'SAKINA_USER_ID',
-              defaultValue: '00000000-0000-0000-0000-000000000000',
-            );
+        userId = userId ?? const String.fromEnvironment('SAKINA_USER_ID');
 
   final ApiService api;
   final String userId;

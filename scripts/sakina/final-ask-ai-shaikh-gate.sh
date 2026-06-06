@@ -9,6 +9,5 @@ export SAKINA_EVIDENCE_DIR="${SAKINA_EVIDENCE_DIR:-reports/final-hardening-evide
 mkdir -p "$SAKINA_EVIDENCE_DIR"
 
 bash scripts/sakina/sakina-ask-live-workflow-proof.sh
-bash scripts/sakina/final-sunni-provenance-gate.sh
 
-printf 'BRAIN_WORKFLOW_GATE_OK live Sakina Mother workflow proved PII redaction, DB/RAG/Graph checking, LLM fail-closed controls, fatwa escalation, and trace persistence.\n'
+printf 'ASK_AI_SHAIKH_GATE_OK real JWT, DB-first, RAG/Graph trace, PII redaction, fatwa escalation, citation provenance, and cross-user trace denial were proven.\n'

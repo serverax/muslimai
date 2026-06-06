@@ -211,7 +211,24 @@ async fn llm_provider_status() -> &'static str {
     if llm_disabled_closed() {
         return "configured_or_disabled_closed";
     }
-    let Some(base) = env_value("VLLM_URL").or_else(|| env_value("LLM_PROVIDER_URL")) else {
+    if let Some(base) = env_value("SAKINA_LLM_GATEWAY_URL") {
+        let base = base.trim_end_matches('/');
+        let url = format!("{base}/ready");
+        return reqwest::Client::new()
+            .get(url)
+            .timeout(std::time::Duration::from_secs(3))
+            .send()
+            .await
+            .map(|response| {
+                if response.status().is_success() {
+                    "ok"
+                } else {
+                    "missing"
+                }
+            })
+            .unwrap_or("missing");
+    }
+    let Some(base) = env_value("LLM_PROVIDER_URL") else {
         return "missing";
     };
     if base.starts_with("mock://") {
@@ -534,6 +551,7 @@ async fn main() -> std::io::Result<()> {
     let memory_engine = web::Data::new(services::MemoryEngine::new(pool.clone()));
     let multimodal_service = web::Data::new(services::MultimodalService::new(pool.clone()));
     let mcp_registry = web::Data::new(services::McpConnectorRegistry::from_env());
+    let sakina_llm_gateway = web::Data::new(services::SakinaLlmGateway::from_env());
     let waitlist_limiter = web::Data::new(handlers::waitlist::WaitlistRateLimiter::new(
         5,
         std::time::Duration::from_secs(60),
@@ -559,6 +577,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(memory_engine.clone())
             .app_data(multimodal_service.clone())
             .app_data(mcp_registry.clone())
+            .app_data(sakina_llm_gateway.clone())
             .app_data(waitlist_limiter.clone())
             .app_data(
                 web::JsonConfig::default()
@@ -666,6 +685,12 @@ async fn main() -> std::io::Result<()> {
                 web::get().to(handlers::brain::audit_recent),
             )
             .route(
+                "/api/brain/traces/{trace_id}",
+                web::get().to(handlers::brain_traces::get_trace),
+            )
+            .route("/api/chat", web::post().to(handlers::chat::core_chat))
+            .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
+            .route(
                 "/api/agent/feedback",
                 web::post().to(handlers::agent_feedback::submit_feedback),
             )
@@ -690,6 +715,15 @@ async fn main() -> std::io::Result<()> {
                 web::post().to(handlers::evaluation::check),
             )
             .route("/api/cache/stats", web::get().to(handlers::cache::stats))
+            .route("/api/cache/status", web::get().to(handlers::cache::stats))
+            .route(
+                "/api/connectors/status",
+                web::get().to(handlers::connectors::status),
+            )
+            .route(
+                "/api/model-providers/status",
+                web::get().to(handlers::model_providers::status),
+            )
             .route(
                 "/api/kg/health",
                 web::get().to(handlers::knowledge_graph::health),
@@ -698,11 +732,48 @@ async fn main() -> std::io::Result<()> {
                 "/api/kg/entity",
                 web::post().to(handlers::knowledge_graph::entity),
             )
+            .route(
+                "/api/knowledge-graph/health",
+                web::get().to(handlers::knowledge_graph::health),
+            )
+            .route(
+                "/api/knowledge-graph/search",
+                web::post().to(handlers::knowledge_graph::entity),
+            )
+            .route(
+                "/api/graph-rag/query",
+                web::post().to(handlers::knowledge_graph::entity),
+            )
+            .route(
+                "/api/user-learning/profile",
+                web::get().to(handlers::user_learning::profile),
+            )
+            .route(
+                "/api/user-learning/event",
+                web::post().to(handlers::user_learning::event),
+            )
+            .route(
+                "/api/user-learning/consent",
+                web::post().to(handlers::user_learning::consent),
+            )
+            .route(
+                "/api/user-learning/export",
+                web::get().to(handlers::user_learning::export),
+            )
+            .route(
+                "/api/user-learning/profile",
+                web::delete().to(handlers::user_learning::delete_profile),
+            )
             .route("/api/memory/write", web::post().to(handlers::memory::write))
+            .route("/api/memory", web::get().to(handlers::memory::list))
             .route("/api/memory/read", web::get().to(handlers::memory::read))
             .route(
                 "/api/memory/delete",
                 web::delete().to(handlers::memory::delete),
+            )
+            .route(
+                "/api/workspaces/{workspace_id}/memory",
+                web::get().to(handlers::memory::list_workspace),
             )
             .route(
                 "/api/multimodal/analyze",
@@ -862,6 +933,12 @@ async fn main() -> std::io::Result<()> {
                         web::get().to(handlers::brain::audit_recent),
                     )
                     .route(
+                        "/api/brain/traces/{trace_id}",
+                        web::get().to(handlers::brain_traces::get_trace),
+                    )
+                    .route("/api/chat", web::post().to(handlers::chat::core_chat))
+                    .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
+                    .route(
                         "/api/test/route",
                         web::post().to(handlers::brain::test_route),
                     )
@@ -874,15 +951,61 @@ async fn main() -> std::io::Result<()> {
                         web::post().to(handlers::evaluation::check),
                     )
                     .route("/api/cache/stats", web::get().to(handlers::cache::stats))
+                    .route("/api/cache/status", web::get().to(handlers::cache::stats))
+                    .route(
+                        "/api/connectors/status",
+                        web::get().to(handlers::connectors::status),
+                    )
+                    .route(
+                        "/api/model-providers/status",
+                        web::get().to(handlers::model_providers::status),
+                    )
                     .route(
                         "/api/kg/health",
                         web::get().to(handlers::knowledge_graph::health),
                     )
+                    .route(
+                        "/api/knowledge-graph/health",
+                        web::get().to(handlers::knowledge_graph::health),
+                    )
+                    .route(
+                        "/api/knowledge-graph/search",
+                        web::post().to(handlers::knowledge_graph::entity),
+                    )
+                    .route(
+                        "/api/graph-rag/query",
+                        web::post().to(handlers::knowledge_graph::entity),
+                    )
+                    .route(
+                        "/api/user-learning/profile",
+                        web::get().to(handlers::user_learning::profile),
+                    )
+                    .route(
+                        "/api/user-learning/event",
+                        web::post().to(handlers::user_learning::event),
+                    )
+                    .route(
+                        "/api/user-learning/consent",
+                        web::post().to(handlers::user_learning::consent),
+                    )
+                    .route(
+                        "/api/user-learning/export",
+                        web::get().to(handlers::user_learning::export),
+                    )
+                    .route(
+                        "/api/user-learning/profile",
+                        web::delete().to(handlers::user_learning::delete_profile),
+                    )
+                    .route("/api/memory", web::get().to(handlers::memory::list))
                     .route("/api/memory/write", web::post().to(handlers::memory::write))
                     .route("/api/memory/read", web::get().to(handlers::memory::read))
                     .route(
                         "/api/memory/delete",
                         web::delete().to(handlers::memory::delete),
+                    )
+                    .route(
+                        "/api/workspaces/{workspace_id}/memory",
+                        web::get().to(handlers::memory::list_workspace),
                     )
                     .route(
                         "/api/multimodal/analyze",

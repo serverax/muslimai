@@ -71,6 +71,8 @@ spec:
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -211,6 +213,8 @@ spec:
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000

@@ -186,6 +186,13 @@ jobs:
           fi
           kubectl -n "$namespace" get secret sakina-postgres-secret
           kubectl -n "$namespace" get secret sakina-staging-secrets
+          kubectl -n "$namespace" delete secret ghcr-creds --ignore-not-found=true
+          kubectl -n "$namespace" create secret docker-registry ghcr-pull-secret \
+            --docker-server=ghcr.io \
+            --docker-username="${{ github.actor }}" \
+            --docker-password="${{ github.token }}" \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$namespace" get secret ghcr-pull-secret
 
           echo "3. storage/PVC/PV and statefulsets"
           ensure_statefulset sakina-postgres "$manifest_root/postgres.yaml"
@@ -202,6 +209,7 @@ jobs:
 
           echo "5. deployments"
           apply_file "$manifest_root/rag.yaml"
+          apply_file "$manifest_root/llm-gateway.yaml"
           apply_file "$manifest_root/backend.yaml"
           apply_file "$manifest_root/admin.yaml"
           echo "Pin runtime deployments to this commit's backend image so Kubernetes pulls the image built by this run"
@@ -215,7 +223,10 @@ jobs:
           kubectl -n "$namespace" set image deployment/sakina-rag-retrieval \
             retrieval="$backend_sha_image" \
             install-agent-validator-wasm="$backend_sha_image"
+          kubectl -n "$namespace" set image deployment/sakina-llm-gateway \
+            llm-gateway="$backend_sha_image"
           kubectl -n "$namespace" rollout status deployment/sakina-backend --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-llm-gateway --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
@@ -239,6 +250,7 @@ jobs:
           namespace="${{ steps.ns.outputs.namespace }}"
           kubectl -n "$namespace" get deploy,statefulset,pods,svc -o wide
           kubectl -n "$namespace" rollout status deployment/sakina-backend --timeout=180s
+          kubectl -n "$namespace" rollout status deployment/sakina-llm-gateway --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-admin --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-ingestion --timeout=180s
           kubectl -n "$namespace" rollout status deployment/sakina-rag-retrieval --timeout=180s
