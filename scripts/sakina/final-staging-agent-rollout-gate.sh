@@ -79,7 +79,34 @@ pod_b_ip="$(kubectl -n "$NS" get pod "${backend_pods[1]}" -o jsonpath='{.status.
 
 printf 'Running in-cluster Redis cross-pod state, latency, and WASM rejection checks using %s and %s...\n' "$pod_a_ip" "$pod_b_ip"
 runtime_pod="sakina-agent-runtime-proof-${RANDOM}"
-kubectl -n "$NS" run "$runtime_pod" --rm -i --restart=Never --image=python:3.12-alpine \
+runtime_pod_overrides="$(jq -nc --arg name "$runtime_pod" '{
+  spec: {
+    securityContext: {
+      runAsNonRoot: true,
+      runAsUser: 1000,
+      runAsGroup: 1000,
+      seccompProfile: {type: "RuntimeDefault"}
+    },
+    tolerations: [
+      {key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule"}
+    ],
+    containers: [
+      {
+        name: $name,
+        securityContext: {
+          allowPrivilegeEscalation: false,
+          capabilities: {drop: ["ALL"]},
+          runAsNonRoot: true,
+          runAsUser: 1000,
+          runAsGroup: 1000,
+          seccompProfile: {type: "RuntimeDefault"}
+        }
+      }
+    ]
+  }
+}')"
+kubectl -n "$NS" run "$runtime_pod" --pod-running-timeout=240s --rm -i --restart=Never --image=python:3.12-alpine \
+  --overrides="$runtime_pod_overrides" \
   --env="POD_A=http://${pod_a_ip}:8080" \
   --env="POD_B=http://${pod_b_ip}:8080" \
   -- python - <<'PY' | tee "reports/final-hardening-evidence/959-staging-agent-runtime-proof.txt"
