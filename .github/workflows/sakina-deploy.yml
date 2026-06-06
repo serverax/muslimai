@@ -307,7 +307,10 @@ jobs:
             --overrides='{"spec":{"tolerations":[{"key":"node-role.kubernetes.io/control-plane","operator":"Exists","effect":"NoSchedule"}]}}' \
             -- sh -c "curl -fsS http://sakina-ollama:11434/api/generate \
               -H 'Content-Type: application/json' \
-              -d '{\"model\":\"${SAKINA_OLLAMA_MODEL}\",\"prompt\":\"Say ready in one word\",\"stream\":false}' | grep -i ready"
+              -d '{\"model\":\"${SAKINA_OLLAMA_MODEL}\",\"prompt\":\"Respond with one short word to prove inference is running.\",\"stream\":false}' \
+              | tee /tmp/ollama-generate.json \
+              && grep -E '\"response\":\"[^\"]+' /tmp/ollama-generate.json \
+              && grep -E '\"done\":true' /tmp/ollama-generate.json"
 
           echo "4. database jobs"
           kubectl -n "$namespace" delete job sakina-db-migrations --ignore-not-found=true
