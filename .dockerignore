@@ -33,6 +33,12 @@ sakina-frontend/build/**
 .local-quarantine/**
 **/.pytest_cache
 **/.pytest_cache/**
+sakina-wasm/**/target
+sakina-wasm/**/target/**
+sakina-wasm/**/pkg
+sakina-wasm/**/pkg/**
+wasm/target
+wasm/target/**
 **/.dart_tool
 **/.dart_tool/**
 **/node_modules

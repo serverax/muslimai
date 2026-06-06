@@ -4,6 +4,9 @@ WORKDIR /app
 COPY sakina-backend/Cargo.toml sakina-backend/Cargo.lock ./
 COPY sakina-backend/src ./src
 COPY sakina-backend/db ./db
+COPY sakina-backend/data ./data
+COPY sakina-wasm /sakina-wasm
+COPY wasm /wasm
 
 RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev pkg-config && rm -rf /var/lib/apt/lists/*
 RUN cargo build --release --bin sakina-api --bin sakina-llm-gateway
