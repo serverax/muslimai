@@ -25,7 +25,7 @@ metadata:
     app.kubernetes.io/part-of: sakina-mobile
     app.kubernetes.io/environment: staging
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
