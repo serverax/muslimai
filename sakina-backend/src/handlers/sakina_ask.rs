@@ -542,13 +542,15 @@ pub async fn ask(
             && !source_path.blocked;
 
         if should_compose_with_llm || (answer.is_empty() && llm_gateway.enabled()) {
-            println!(
+            let gateway_call_log = format!(
                 "trace_id={} workspace_id={} intent={} rag_has_verified_context={} Mother Algorithm calling Sakina LLM gateway with controlled context",
                 trace_id,
                 workspace_id,
                 intent,
                 rag_has_verified_context
             );
+            println!("{gateway_call_log}");
+            eprintln!("{gateway_call_log}");
             tracing::info!(
                 trace_id = %trace_id,
                 workspace_id = %workspace_id,
@@ -589,13 +591,15 @@ pub async fn ask(
                 source_path.answer_source = "llm_generation_with_controlled_context".to_string();
                 model_provider = llm_result.provider;
                 llm_model = Some(llm_result.model);
-                println!(
+                let gateway_received_log = format!(
                     "trace_id={} workspace_id={} model_provider={} llm_model={} Mother Algorithm received controlled LLM answer",
                     trace_id,
                     workspace_id,
                     model_provider,
                     llm_model.as_deref().unwrap_or("unknown")
                 );
+                println!("{gateway_received_log}");
+                eprintln!("{gateway_received_log}");
                 tracing::info!(
                     trace_id = %trace_id,
                     workspace_id = %workspace_id,
