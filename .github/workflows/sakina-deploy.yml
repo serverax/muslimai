@@ -149,7 +149,18 @@ jobs:
 
           wait_job() {
             job_name="$1"
-            kubectl -n "$namespace" wait --for=condition=complete "job/$job_name" --timeout=180s
+            if ! kubectl -n "$namespace" wait --for=condition=complete "job/$job_name" --timeout=600s; then
+              echo "ERROR: job/$job_name did not complete; collecting diagnostics before failing"
+              kubectl -n "$namespace" get job "$job_name" -o wide
+              kubectl -n "$namespace" describe job "$job_name"
+              kubectl -n "$namespace" get pods -l "job-name=$job_name" -o wide
+              if kubectl -n "$namespace" logs "job/$job_name" --all-containers --tail=200; then
+                echo "Collected logs for job/$job_name"
+              else
+                echo "No logs were available for job/$job_name"
+              fi
+              exit 1
+            fi
             kubectl -n "$namespace" logs "job/$job_name" --all-containers --tail=200
           }
 
@@ -204,7 +215,12 @@ jobs:
 
           echo "4. database jobs"
           kubectl -n "$namespace" delete job sakina-db-migrations --ignore-not-found=true
-          apply_file "$manifest_root/db-migrations.yaml"
+          backend_sha_image="ghcr.io/serverax/sakina-backend:${{ github.sha }}"
+          migration_manifest="$(mktemp)"
+          sed "s#ghcr.io/serverax/sakina-backend:qa-security-hardening#$backend_sha_image#g" \
+            "$manifest_root/db-migrations.yaml" > "$migration_manifest"
+          echo "Applying Kubernetes manifest: $manifest_root/db-migrations.yaml with image $backend_sha_image"
+          kubectl apply -f "$migration_manifest"
           wait_job sakina-db-migrations
 
           echo "5. deployments"
@@ -213,7 +229,6 @@ jobs:
           apply_file "$manifest_root/backend.yaml"
           apply_file "$manifest_root/admin.yaml"
           echo "Pin runtime deployments to this commit's backend image so Kubernetes pulls the image built by this run"
-          backend_sha_image="ghcr.io/serverax/sakina-backend:${{ github.sha }}"
           kubectl -n "$namespace" set image deployment/sakina-backend \
             backend="$backend_sha_image" \
             install-agent-validator-wasm="$backend_sha_image"
