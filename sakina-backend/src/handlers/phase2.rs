@@ -667,8 +667,77 @@ mod tests {
             migration_result.is_ok(),
             "required phase2 schema migration failed"
         );
+        seed_phase2_verified_chat_corpus(&pool).await;
         let repo = Phase2Repository::new(pool.clone());
         (repo, pool)
+    }
+
+    async fn seed_phase2_verified_chat_corpus(pool: &PgPool) {
+        sqlx::query(
+            r#"
+            WITH source_row AS (
+                INSERT INTO sakina_ai.islamic_sources (
+                    source_key, source_type, source_status, language, title, review_status
+                )
+                VALUES (
+                    'phase2-chat-quran-source',
+                    'quran',
+                    'approved',
+                    'en',
+                    'Phase2 Verified Quran Source',
+                    'verified'
+                )
+                ON CONFLICT (source_key) DO UPDATE
+                    SET source_status = 'approved',
+                        review_status = 'verified',
+                        updated_at = now()
+                RETURNING id
+            ),
+            document_row AS (
+                INSERT INTO sakina_ai.islamic_documents (
+                    source_id, document_key, title, language, source_status, source_type, review_status
+                )
+                SELECT
+                    id,
+                    'phase2-chat-quran-document',
+                    'Phase2 Verified Quran Guidance',
+                    'en',
+                    'approved',
+                    'quran',
+                    'verified'
+                FROM source_row
+                ON CONFLICT (document_key) DO UPDATE
+                    SET source_status = 'approved',
+                        review_status = 'verified',
+                        updated_at = now()
+                RETURNING id
+            )
+            INSERT INTO sakina_ai.islamic_chunks (
+                document_id, chunk_key, chunk_index, chunk_text, citation_text,
+                language, source_type, source_status, review_status
+            )
+            SELECT
+                id,
+                'phase2-chat-quran-patience-prayer-chunk',
+                0,
+                'What does Islam teach about patience and prayer? The Quran teaches believers to seek help through patience and prayer, and Sakina must cite verified local corpus evidence before returning guidance.',
+                'Quran 2:45',
+                'en',
+                'quran',
+                'approved',
+                'verified'
+            FROM document_row
+            ON CONFLICT (chunk_key) DO UPDATE
+                SET chunk_text = EXCLUDED.chunk_text,
+                    citation_text = EXCLUDED.citation_text,
+                    source_status = 'approved',
+                    review_status = 'verified',
+                    updated_at = now()
+            "#,
+        )
+        .execute(pool)
+        .await
+        .expect("seed phase2 verified chat corpus");
     }
 
     async fn required_repo() -> Phase2Repository {
@@ -1085,7 +1154,7 @@ mod tests {
                 .uri(&format!("/chat/conversations/{conversation_id}/messages"))
                 .insert_header(("x-sakina-user-id", user_id.to_string()))
                 .set_json(serde_json::json!({
-                    "content": "phase2 conversation message"
+                    "content": "What does Islam teach about patience and prayer?"
                 }))
                 .to_request(),
         )
