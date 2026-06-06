@@ -516,6 +516,20 @@ CREATE TABLE IF NOT EXISTS sakina_ai.wasm_verification_events (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS sakina_ai.brain_cache_metadata (
+    cache_key TEXT PRIMARY KEY,
+    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+    workspace_id UUID REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+    language VARCHAR(16) NOT NULL DEFAULT 'en',
+    intent TEXT NOT NULL,
+    safety_level TEXT NOT NULL DEFAULT 'safe',
+    source_version TEXT NOT NULL,
+    hit_count INTEGER NOT NULL DEFAULT 0,
+    payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 DO $$
 BEGIN
     IF NOT EXISTS (
@@ -677,6 +691,10 @@ CREATE INDEX IF NOT EXISTS idx_scholar_review_queue_status
     ON sakina_ai.scholar_review_queue (review_status, priority, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_wasm_verification_events_request
     ON sakina_ai.wasm_verification_events (request_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_brain_cache_metadata_user_updated
+    ON sakina_ai.brain_cache_metadata (user_id, updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_brain_cache_metadata_workspace_updated
+    ON sakina_ai.brain_cache_metadata (workspace_id, updated_at DESC);
 
 -- ---------------------------------------------------------------------------
 -- Domain 10/11: payments + subscriptions

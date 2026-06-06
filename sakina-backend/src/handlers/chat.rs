@@ -797,6 +797,11 @@ mod tests {
             .await
             .expect("create sakina_ai schema");
 
+        sqlx::query("CREATE EXTENSION IF NOT EXISTS pgcrypto")
+            .execute(pool)
+            .await
+            .expect("create pgcrypto extension");
+
         sqlx::query(
             r#"
             CREATE TABLE IF NOT EXISTS sakina_ai.conversations (
@@ -858,6 +863,135 @@ mod tests {
         .execute(pool)
         .await
         .expect("ensure auth session revocation columns");
+
+        sqlx::query(
+            r#"
+            CREATE TABLE IF NOT EXISTS sakina_ai.islamic_sources (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                source_key TEXT NOT NULL UNIQUE,
+                source_type TEXT NOT NULL,
+                source_status TEXT NOT NULL DEFAULT 'approved',
+                language VARCHAR(8) NOT NULL DEFAULT 'en',
+                title TEXT NOT NULL,
+                review_status TEXT NOT NULL DEFAULT 'verified',
+                created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+            )
+            "#,
+        )
+        .execute(pool)
+        .await
+        .expect("create islamic sources table");
+
+        sqlx::query(
+            r#"
+            CREATE TABLE IF NOT EXISTS sakina_ai.islamic_documents (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                source_id UUID NOT NULL REFERENCES sakina_ai.islamic_sources(id) ON DELETE RESTRICT,
+                document_key TEXT NOT NULL UNIQUE,
+                title TEXT NOT NULL,
+                language VARCHAR(8) NOT NULL DEFAULT 'en',
+                source_status TEXT NOT NULL DEFAULT 'approved',
+                source_type TEXT NOT NULL DEFAULT 'quran',
+                review_status TEXT NOT NULL DEFAULT 'verified',
+                created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+            )
+            "#,
+        )
+        .execute(pool)
+        .await
+        .expect("create islamic documents table");
+
+        sqlx::query(
+            r#"
+            CREATE TABLE IF NOT EXISTS sakina_ai.islamic_chunks (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                document_id UUID NOT NULL REFERENCES sakina_ai.islamic_documents(id) ON DELETE CASCADE,
+                chunk_key TEXT NOT NULL UNIQUE,
+                chunk_index INTEGER NOT NULL,
+                chunk_text TEXT NOT NULL,
+                citation_text TEXT NOT NULL DEFAULT '',
+                language VARCHAR(8) NOT NULL DEFAULT 'en',
+                source_type TEXT NOT NULL DEFAULT 'quran',
+                source_status TEXT NOT NULL DEFAULT 'approved',
+                review_status TEXT NOT NULL DEFAULT 'verified',
+                created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                UNIQUE (document_id, chunk_index)
+            )
+            "#,
+        )
+        .execute(pool)
+        .await
+        .expect("create islamic chunks table");
+
+        sqlx::query(
+            r#"
+            CREATE TABLE IF NOT EXISTS sakina_ai.brain_cache_metadata (
+                cache_key TEXT PRIMARY KEY,
+                user_id UUID NULL,
+                workspace_id UUID NULL,
+                language VARCHAR(16) NOT NULL DEFAULT 'en',
+                intent TEXT NOT NULL,
+                safety_level TEXT NOT NULL DEFAULT 'safe',
+                source_version TEXT NOT NULL,
+                hit_count INTEGER NOT NULL DEFAULT 0,
+                payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+            )
+            "#,
+        )
+        .execute(pool)
+        .await
+        .expect("create semantic cache table");
+
+        sqlx::query(
+            r#"
+            WITH source_row AS (
+                INSERT INTO sakina_ai.islamic_sources (
+                    source_key, source_type, source_status, language, title, review_status
+                )
+                VALUES ('chat-test-quran-source', 'quran', 'approved', 'en', 'Chat Test Quran Source', 'verified')
+                ON CONFLICT (source_key) DO UPDATE
+                    SET source_status = 'approved',
+                        review_status = 'verified',
+                        updated_at = now()
+                RETURNING id
+            ),
+            document_row AS (
+                INSERT INTO sakina_ai.islamic_documents (
+                    source_id, document_key, title, language, source_status, source_type, review_status
+                )
+                SELECT id, 'chat-test-quran-document', 'Chat Test Quran Document', 'en', 'approved', 'quran', 'verified'
+                FROM source_row
+                ON CONFLICT (document_key) DO UPDATE
+                    SET source_status = 'approved',
+                        review_status = 'verified',
+                        updated_at = now()
+                RETURNING id
+            )
+            INSERT INTO sakina_ai.islamic_chunks (
+                document_id, chunk_key, chunk_index, chunk_text, citation_text,
+                language, source_type, source_status, review_status
+            )
+            SELECT id, 'chat-test-quran-chunk', 0,
+                   'As-salaam and verified Islamic support test evidence.',
+                   'Chat Test Quran Source 1:1',
+                   'en', 'quran', 'approved', 'verified'
+            FROM document_row
+            ON CONFLICT (chunk_key) DO UPDATE
+                SET chunk_text = EXCLUDED.chunk_text,
+                    citation_text = EXCLUDED.citation_text,
+                    source_status = 'approved',
+                    review_status = 'verified',
+                    updated_at = now()
+            "#,
+        )
+        .execute(pool)
+        .await
+        .expect("seed approved chat test corpus");
 
         sqlx::query("SELECT pg_advisory_unlock(7242001)")
             .execute(pool)
