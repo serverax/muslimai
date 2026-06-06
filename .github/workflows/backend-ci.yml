@@ -37,7 +37,7 @@ jobs:
       - name: Run tests
         run: |
           cd sakina-backend
-          cargo test --verbose
+          cargo test --verbose -- --test-threads=1
 
       - name: Assert module contract schema surface
         run: |

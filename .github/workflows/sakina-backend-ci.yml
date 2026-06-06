@@ -57,7 +57,7 @@ jobs:
       - name: Run backend tests
         run: |
           cd sakina-backend
-          cargo test --locked --all-targets --all-features
+          cargo test --locked --all-targets --all-features -- --test-threads=1
 
       - name: Build backend image
         run: |

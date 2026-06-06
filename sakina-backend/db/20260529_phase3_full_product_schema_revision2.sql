@@ -530,6 +530,41 @@ CREATE TABLE IF NOT EXISTS sakina_ai.brain_cache_metadata (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS sakina_ai.knowledge_graph_entities (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    entity_type TEXT NOT NULL,
+    entity_name TEXT NOT NULL,
+    source_type TEXT NOT NULL DEFAULT 'quran',
+    citation TEXT NOT NULL,
+    reliability_level TEXT NOT NULL DEFAULT 'verified',
+    language VARCHAR(8) NOT NULL DEFAULT 'en',
+    domain TEXT NOT NULL DEFAULT 'islamic_guidance',
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS sakina_ai.knowledge_graph_edges (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    from_entity_id UUID NOT NULL REFERENCES sakina_ai.knowledge_graph_entities(id) ON DELETE CASCADE,
+    to_entity_id UUID NOT NULL REFERENCES sakina_ai.knowledge_graph_entities(id) ON DELETE CASCADE,
+    relation_type TEXT NOT NULL,
+    confidence REAL NOT NULL DEFAULT 0.8,
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (from_entity_id, to_entity_id, relation_type)
+);
+
+CREATE INDEX IF NOT EXISTS idx_knowledge_graph_entities_name
+    ON sakina_ai.knowledge_graph_entities (entity_name);
+CREATE INDEX IF NOT EXISTS idx_knowledge_graph_entities_type_language
+    ON sakina_ai.knowledge_graph_entities (entity_type, language);
+CREATE INDEX IF NOT EXISTS idx_knowledge_graph_edges_from
+    ON sakina_ai.knowledge_graph_edges (from_entity_id);
+CREATE INDEX IF NOT EXISTS idx_knowledge_graph_edges_to
+    ON sakina_ai.knowledge_graph_edges (to_entity_id);
+
 DO $$
 BEGIN
     IF NOT EXISTS (
