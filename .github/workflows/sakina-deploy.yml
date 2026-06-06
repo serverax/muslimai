@@ -317,17 +317,22 @@ jobs:
 
           echo "3c. Ollama CPU-only Kubernetes service"
           kubectl -n "$namespace" delete daemonset ollama-inference --ignore-not-found=true
-          kubectl -n "$namespace" delete deployment sakina-ollama --ignore-not-found=true
+          kubectl -n "$namespace" delete daemonset sakina-ollama --ignore-not-found=true
+          kubectl -n "$namespace" delete deployment ollama --ignore-not-found=true
           apply_file "$manifest_root/ollama.yaml"
-          echo "Deleting stale sakina-ollama pods so only the current PVC-backed DaemonSet spec remains"
+          echo "Deleting stale sakina-ollama pods so only the current PVC-backed Deployment spec remains"
           kubectl -n "$namespace" delete pod -l app=sakina-ollama --wait=false
           kubectl -n "$namespace" get pods -l app=sakina-ollama -o wide
-          if ! kubectl -n "$namespace" rollout status daemonset/sakina-ollama --timeout=600s; then
-            echo "ERROR: daemonset/sakina-ollama did not roll out"
-            diagnose_daemonset sakina-ollama
+          if ! kubectl -n "$namespace" rollout status deployment/sakina-ollama --timeout=600s; then
+            echo "ERROR: deployment/sakina-ollama did not roll out"
+            diagnose_deployment sakina-ollama
+            if kubectl -n "$namespace" get pvc sakina-ollama-models >/dev/null 2>&1; then
+              kubectl -n "$namespace" get pvc sakina-ollama-models -o wide
+              kubectl -n "$namespace" describe pvc sakina-ollama-models
+            fi
             exit 1
           fi
-          kubectl -n "$namespace" get daemonset sakina-ollama -o wide
+          kubectl -n "$namespace" get deployment sakina-ollama -o wide
           kubectl -n "$namespace" get pods -l app=sakina-ollama -o wide
           kubectl -n "$namespace" get pvc sakina-ollama-models -o wide
           kubectl -n "$namespace" get svc sakina-ollama -o wide
@@ -425,8 +430,8 @@ jobs:
             fi
           }
           kubectl -n "$namespace" get deploy,ds,sts,svc,pods -o wide
-          kubectl -n "$namespace" rollout status daemonset/sakina-ollama --timeout=300s
-          kubectl -n "$namespace" get daemonset sakina-ollama -o wide
+          kubectl -n "$namespace" rollout status deployment/sakina-ollama --timeout=300s
+          kubectl -n "$namespace" get deployment sakina-ollama -o wide
           kubectl -n "$namespace" get pods -l app=sakina-ollama -o wide
           kubectl -n "$namespace" get svc sakina-ollama -o wide
           kubectl -n "$namespace" get endpoints sakina-ollama -o wide
