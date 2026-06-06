@@ -93,6 +93,7 @@ runtime_pod_overrides="$(jq -nc --arg name "$runtime_pod" '{
     containers: [
       {
         name: $name,
+        image: "python:3.12-alpine",
         securityContext: {
           allowPrivilegeEscalation: false,
           capabilities: {drop: ["ALL"]},
