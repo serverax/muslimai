@@ -19,6 +19,7 @@ resources:
   - rag.yaml
   - backend.yaml
   - admin.yaml
+  - ingress.yaml
 
 patches:
   - target:

@@ -1,4 +1,4 @@
-package com.example.sakina_frontend
+package com.sakina.app
 
 import io.flutter.embedding.android.FlutterActivity
 

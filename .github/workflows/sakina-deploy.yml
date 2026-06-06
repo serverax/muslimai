@@ -506,6 +506,7 @@ jobs:
           kubectl -n "$namespace" get svc -o wide
 
           echo "7. ingress/network policies"
+          apply_file "$manifest_root/ingress.yaml"
           kubectl -n "$namespace" get ingress -o wide
 
           echo "8. smoke jobs"
