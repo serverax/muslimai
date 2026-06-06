@@ -23,6 +23,7 @@ export ENCRYPTION_KEY="${ENCRYPTION_KEY:-sakina-local-encryption-key-minimum-32-
 export QDRANT_URL="${QDRANT_URL:-http://localhost:6333}"
 export QDRANT_COLLECTION="${QDRANT_COLLECTION:-sakina_islamic_chunks_en}"
 export VLLM_URL="${VLLM_URL:-http://localhost:18080}"
+export REDIS_URL="${REDIS_URL:-redis://localhost:6380}"
 export SAKINA_FEATURE_QURAN=true
 export SAKINA_RAG_QURAN_ENABLED=true
 export SAKINA_LLM_ENABLED="${SAKINA_LLM_ENABLED:-false}"
