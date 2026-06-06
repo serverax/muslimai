@@ -270,12 +270,40 @@ jobs:
             kubectl -n "$namespace" get endpoints "$deploy_name" -o wide
           }
 
+          delete_stale_placeholder_workloads() {
+            echo "Deleting stale placeholder distributed services that are not part of the accepted staging kustomization"
+            stale_workloads=(
+              sakina-api-gateway
+              sakina-auth-service
+              sakina-user-workspace-service
+              sakina-ask-shaikh-service
+              sakina-mother-algorithm-service
+              sakina-aia-orchestrator-service
+              sakina-audit-service
+              sakina-citation-guard-service
+              sakina-document-service
+              sakina-islamic-knowledge-service
+              sakina-notification-service
+              sakina-psychology-support-service
+              sakina-rag-ingestion-service
+              sakina-rag-retrieval-service
+              sakina-safety-policy-service
+              ollama-inference
+            )
+            for workload in "${stale_workloads[@]}"; do
+              kubectl -n "$namespace" delete deployment "$workload" --ignore-not-found=true
+              kubectl -n "$namespace" delete service "$workload" --ignore-not-found=true
+              kubectl -n "$namespace" delete daemonset "$workload" --ignore-not-found=true
+            done
+          }
+
           jwt_secret="${SAKINA_STAGING_JWT_SECRET:-}"
           encryption_key="${SAKINA_STAGING_ENCRYPTION_KEY:-}"
 
           echo "1. namespaces"
           apply_file "$manifest_root/namespace.yaml"
           kubectl get ns "$namespace"
+          delete_stale_placeholder_workloads
 
           echo "2. secrets/configmaps"
           if kubectl -n "$namespace" get secret sakina-postgres-secret >/dev/null 2>&1; then
