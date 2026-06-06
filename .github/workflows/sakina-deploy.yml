@@ -154,6 +154,19 @@ jobs:
               kubectl -n "$namespace" get job "$job_name" -o wide
               kubectl -n "$namespace" describe job "$job_name"
               kubectl -n "$namespace" get pods -l "job-name=$job_name" -o wide
+              pod_names="$(kubectl -n "$namespace" get pods -l "job-name=$job_name" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}')"
+              if [ -n "$pod_names" ]; then
+                while IFS= read -r pod_name; do
+                  if [ -n "$pod_name" ]; then
+                    echo "Describing pod/$pod_name for job/$job_name"
+                    kubectl -n "$namespace" describe pod "$pod_name"
+                  fi
+                done <<< "$pod_names"
+              else
+                echo "No pods found for job/$job_name"
+              fi
+              echo "Recent namespace events for $namespace"
+              kubectl -n "$namespace" get events --sort-by=.lastTimestamp | tail -80
               if kubectl -n "$namespace" logs "job/$job_name" --all-containers --tail=200; then
                 echo "Collected logs for job/$job_name"
               else
