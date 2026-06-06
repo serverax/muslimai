@@ -17,6 +17,23 @@ permissions:
 jobs:
   backend-ci:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://sakina_user:sakina_password@localhost:5432/sakina_test
+      RUST_TEST_THREADS: 1
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: sakina_test
+          POSTGRES_USER: sakina_user
+          POSTGRES_PASSWORD: sakina_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     defaults:
       run:
         shell: bash

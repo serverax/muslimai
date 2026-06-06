@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: postgres://sakina_user:sakina_password@localhost:5432/sakina_test
+      RUST_TEST_THREADS: 1
     services:
       postgres:
         image: postgres:15-alpine
