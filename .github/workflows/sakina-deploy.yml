@@ -610,9 +610,28 @@ jobs:
           echo "Backend Brain path log proof for $trace_llm"
           kubectl -n "$namespace" logs -l app=sakina-backend --all-containers --since=20m \
             | tee /tmp/sakina-backend-ask-logs.txt
-          grep -F "$trace_llm" /tmp/sakina-backend-ask-logs.txt
-          grep -F "Mother Algorithm calling Sakina LLM gateway with controlled context" /tmp/sakina-backend-ask-logs.txt
-          grep -F "Mother Algorithm received controlled LLM answer" /tmp/sakina-backend-ask-logs.txt
+          grep -F "POST /api/sakina/ask" /tmp/sakina-backend-ask-logs.txt
+          echo "Backend Brain DB trace proof for $trace_llm"
+          brain_trace_count="$(psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -At -c "
+            SELECT COUNT(*)
+            FROM sakina_ai.brain_decision_traces
+            WHERE request_id = '$trace_llm'
+              AND selected_agent = 'Mother Algorithm'
+              AND selected_model = 'sakina-islamic-support:cpu'
+              AND selected_pipeline = 'sakina_mother_algorithm'
+              AND source_strategy = 'llm_generation_with_controlled_context'
+              AND evaluation_result = 'PASS'
+              AND execution_trace @> '[{\"step\":\"rag_checked\",\"outcome\":true},{\"step\":\"graph_rag_checked\",\"outcome\":true},{\"step\":\"llm_used\",\"outcome\":true}]'::jsonb;
+          ")"
+          echo "Brain trace matching rows=$brain_trace_count"
+          test "$brain_trace_count" = "1"
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "
+            SELECT request_id, workspace_id, selected_agent, selected_model,
+                   selected_pipeline, source_strategy, evaluation_result,
+                   execution_trace
+            FROM sakina_ai.brain_decision_traces
+            WHERE request_id = '$trace_llm';
+          "
 
           echo "Gateway-to-Ollama log proof for $trace_llm"
           kubectl -n "$namespace" logs deployment/sakina-llm-gateway --since=20m \
