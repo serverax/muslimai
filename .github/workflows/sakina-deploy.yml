@@ -74,7 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y postgresql-client
+          sudo apt-get install -y postgresql-client jq
 
       - name: Configure kubeconfig
         run: |
@@ -439,6 +439,80 @@ jobs:
           set -euo pipefail
           chmod +x scripts/sakina/final-staging-agent-rollout-gate.sh
           SAKINA_NS="${{ steps.ns.outputs.namespace }}" bash scripts/sakina/final-staging-agent-rollout-gate.sh
+
+      - name: Run Ask AI Shaikh end-to-end product workflow proof
+        run: |
+          set -euo pipefail
+          namespace="${{ steps.ns.outputs.namespace }}"
+
+          backend_pf_log="/tmp/sakina-backend-port-forward.log"
+          postgres_pf_log="/tmp/sakina-postgres-port-forward.log"
+          kubectl -n "$namespace" port-forward svc/sakina-backend 18080:8080 >"$backend_pf_log" 2>&1 &
+          backend_pf_pid="$!"
+          kubectl -n "$namespace" port-forward svc/sakina-postgres 15432:5432 >"$postgres_pf_log" 2>&1 &
+          postgres_pf_pid="$!"
+          cleanup() {
+            set +e
+            kill "$backend_pf_pid" "$postgres_pf_pid" >/dev/null 2>&1
+            set -e
+          }
+          trap cleanup EXIT
+
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:18080/health/ready >/dev/null 2>&1; then
+              break
+            fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:18080/health/ready
+
+          pg_db="$(kubectl -n "$namespace" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_DB}' | base64 -d)"
+          pg_user="$(kubectl -n "$namespace" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_USER}' | base64 -d)"
+          export PGPASSWORD="$(kubectl -n "$namespace" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_PASSWORD}' | base64 -d)"
+          for attempt in $(seq 1 60); do
+            if pg_isready -h 127.0.0.1 -p 15432 -U "$pg_user" -d "$pg_db" >/dev/null 2>&1; then
+              break
+            fi
+            sleep 2
+          done
+          pg_isready -h 127.0.0.1 -p 15432 -U "$pg_user" -d "$pg_db"
+
+          export SAKINA_API_BASE_URL="http://127.0.0.1:18080"
+          export DATABASE_URL="postgresql://${pg_user}@127.0.0.1:15432/${pg_db}"
+          export SAKINA_EVIDENCE_DIR="reports/final-hardening-evidence"
+          bash scripts/sakina/final-ask-ai-shaikh-gate.sh
+
+          trace_llm="$(cat reports/final-hardening-evidence/1001-trace-llm.txt)"
+          trace_wudu="$(cat reports/final-hardening-evidence/1001-trace-wudu.txt)"
+          trace_fatwa="$(cat reports/final-hardening-evidence/1001-trace-fatwa.txt)"
+
+          echo "Backend Brain path log proof for $trace_llm"
+          kubectl -n "$namespace" logs -l app=sakina-backend --all-containers --since=20m \
+            | tee /tmp/sakina-backend-ask-logs.txt
+          grep -F "$trace_llm" /tmp/sakina-backend-ask-logs.txt
+          grep -F "Mother Algorithm calling Sakina LLM gateway with controlled context" /tmp/sakina-backend-ask-logs.txt
+          grep -F "Mother Algorithm received controlled LLM answer" /tmp/sakina-backend-ask-logs.txt
+
+          echo "Gateway-to-Ollama log proof for $trace_llm"
+          kubectl -n "$namespace" logs deployment/sakina-llm-gateway --since=20m \
+            | tee /tmp/sakina-gateway-ask-logs.txt
+          grep -F "$trace_llm" /tmp/sakina-gateway-ask-logs.txt
+          grep -F "sakina llm gateway completed" /tmp/sakina-gateway-ask-logs.txt
+
+          echo "DB trace proof summary"
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "
+          SELECT request_id, workspace_id, intent, language, selected_agent,
+                 selected_model, selected_pipeline, source_strategy,
+                 evaluation_result, final_action
+          FROM sakina_ai.brain_decision_traces
+          WHERE request_id IN ('$trace_wudu', '$trace_llm', '$trace_fatwa')
+          ORDER BY created_at;
+          "
+
+          echo "Frontend parser and display wiring proof"
+          grep -RIn "Future<SakinaAskResponse> askSakina\|SakinaAskResponse.fromJson\|safetyState\|sourcePath\|citations\|modelProvider\|llmModel" \
+            sakina-frontend/lib sakina-frontend/test
+          grep -RIn "response.citations\|CitationWidget\|safetyState\|sourcePath" sakina-frontend/lib sakina-frontend/test
 
       - name: Show recent events
         if: always()

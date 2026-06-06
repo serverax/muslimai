@@ -85,6 +85,36 @@ printf '\nARABIC NEW MUSLIM\n' | tee -a "$out"
 arabic="$(ask_sakina "$access_a" "أنا مسلم جديد ولا أعرف من أين أبدأ" "auto" "new_muslim_journey")"
 printf '%s\n' "$arabic" | jq '{trace_id,language,intent,answer,source_path,safety,citations}' | tee -a "$out"
 
+printf '\nRAG TO CONTROLLED LLM THROUGH GATEWAY\n' | tee -a "$out"
+llm_grounded="$(ask_sakina "$access_a" "What does the Quran say about patience during hardship? Give a calm short reminder with evidence." "auto" "ask_sakina")"
+printf '%s\n' "$llm_grounded" | tee "$evidence_dir/1001-sakina-ask-llm-raw-response.json" >/dev/null
+printf '%s\n' "$llm_grounded" | jq '{trace_id,language,intent,answer,source_path,safety_state,safety,citations,graph_path,model_provider,llm_model}' | tee -a "$out"
+trace_llm="$(printf '%s\n' "$llm_grounded" | jq -r '.trace_id')"
+if [[ "$(printf '%s\n' "$llm_grounded" | jq -r '.source_path.rag_checked')" != "true" ]]; then
+  printf 'Grounded LLM proof did not check RAG before generation\n' >&2
+  exit 1
+fi
+if [[ "$(printf '%s\n' "$llm_grounded" | jq -r '.source_path.graph_rag_checked')" != "true" ]]; then
+  printf 'Grounded LLM proof did not check GraphRAG before generation\n' >&2
+  exit 1
+fi
+if [[ "$(printf '%s\n' "$llm_grounded" | jq -r '.source_path.llm_used')" != "true" ]]; then
+  printf 'Grounded LLM proof did not use LLM through Brain-controlled path\n' >&2
+  exit 1
+fi
+if [[ "$(printf '%s\n' "$llm_grounded" | jq -r '.model_provider')" != "ollama" ]]; then
+  printf 'Grounded LLM proof did not return model_provider=ollama\n' >&2
+  exit 1
+fi
+if [[ "$(printf '%s\n' "$llm_grounded" | jq -r '.llm_model')" != "qwen2.5:3b" ]]; then
+  printf 'Grounded LLM proof did not use qwen2.5:3b\n' >&2
+  exit 1
+fi
+if [[ "$(printf '%s\n' "$llm_grounded" | jq -r '.citations | length')" -lt 1 ]]; then
+  printf 'Grounded LLM proof returned no citations\n' >&2
+  exit 1
+fi
+
 printf '\nOUT OF SCOPE BLOCK\n' | tee -a "$out"
 hack="$(ask_sakina "$access_a" "Write Python hacking code" "auto" "ask_sakina")"
 printf '%s\n' "$hack" | jq '{trace_id,source_path,safety,answer}' | tee -a "$out"
@@ -140,6 +170,7 @@ if [[ "$status" != "403" && "$status" != "404" ]]; then
 fi
 
 printf '%s\n' "$trace_wudu" > "$evidence_dir/1001-trace-wudu.txt"
+printf '%s\n' "$trace_llm" > "$evidence_dir/1001-trace-llm.txt"
 printf '%s\n' "$trace_pii" > "$evidence_dir/1001-trace-pii.txt"
 printf '%s\n' "$trace_fatwa" > "$evidence_dir/1001-trace-fatwa.txt"
 printf '%s\n' "$user_a" > "$evidence_dir/1001-user-a.txt"
@@ -152,8 +183,23 @@ SELECT trace_id, user_id, workspace_id, language, intent,
        safety->>'pii_removed' AS pii_removed,
        jsonb_array_length(citations) AS citations
 FROM sakina_ai.ask_shaikh_answers
-WHERE trace_id IN ('$trace_wudu', '$trace_pii', '$trace_fatwa')
+WHERE trace_id IN ('$trace_wudu', '$trace_llm', '$trace_pii', '$trace_fatwa')
 ORDER BY created_at;
+" | tee -a "$db_out"
+
+psql "$db_url" -v ON_ERROR_STOP=1 -c "
+SELECT trace_id, source_path->>'answer_source' AS answer_source,
+       source_path->>'rag_checked' AS rag_checked,
+       source_path->>'graph_rag_checked' AS graph_rag_checked,
+       source_path->>'llm_used' AS llm_used,
+       jsonb_array_length(citations) AS citations
+FROM sakina_ai.ask_shaikh_answers
+WHERE trace_id = '$trace_llm'
+  AND source_path->>'answer_source' = 'llm_generation_with_controlled_context'
+  AND source_path->>'rag_checked' = 'true'
+  AND source_path->>'graph_rag_checked' = 'true'
+  AND source_path->>'llm_used' = 'true'
+  AND jsonb_array_length(citations) > 0;
 " | tee -a "$db_out"
 
 psql "$db_url" -v ON_ERROR_STOP=1 -c "

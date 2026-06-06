@@ -532,7 +532,23 @@ pub async fn ask(
             }
         }
 
-        if answer.is_empty() && llm_gateway.enabled() {
+        let rag_has_verified_context = citations
+            .as_array()
+            .map(|items| !items.is_empty())
+            .unwrap_or(false);
+        let should_compose_with_llm = llm_gateway.enabled()
+            && rag_has_verified_context
+            && source_path.answer_source == "rag"
+            && !source_path.blocked;
+
+        if should_compose_with_llm || (answer.is_empty() && llm_gateway.enabled()) {
+            tracing::info!(
+                trace_id = %trace_id,
+                workspace_id = %workspace_id,
+                intent = %intent,
+                rag_has_verified_context,
+                "Mother Algorithm calling Sakina LLM gateway with controlled context"
+            );
             let llm_result = match llm_gateway
                 .generate_sakina_answer(SakinaLlmGatewayRequest {
                     trace_id: trace_id.clone(),
@@ -566,6 +582,13 @@ pub async fn ask(
                 source_path.answer_source = "llm_generation_with_controlled_context".to_string();
                 model_provider = llm_result.provider;
                 llm_model = Some(llm_result.model);
+                tracing::info!(
+                    trace_id = %trace_id,
+                    workspace_id = %workspace_id,
+                    model_provider = %model_provider,
+                    llm_model = ?llm_model,
+                    "Mother Algorithm received controlled LLM answer"
+                );
             }
         }
     }
