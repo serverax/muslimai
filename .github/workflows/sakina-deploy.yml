@@ -226,6 +226,17 @@ jobs:
           apply_file "$manifest_root/redis.yaml"
           kubectl -n "$namespace" rollout status deployment/sakina-redis --timeout=180s
 
+          echo "3b. free staging pod capacity before migration job"
+          for deploy in sakina-backend sakina-admin sakina-rag-ingestion sakina-rag-retrieval sakina-llm-gateway; do
+            if kubectl -n "$namespace" get deployment "$deploy" >/dev/null 2>&1; then
+              echo "Scaling deployment/$deploy to zero before migrations to avoid surge pods on the constrained staging cluster"
+              kubectl -n "$namespace" scale deployment "$deploy" --replicas=0
+              kubectl -n "$namespace" rollout status "deployment/$deploy" --timeout=120s
+            else
+              echo "deployment/$deploy does not exist yet; no pre-migration scale-down needed"
+            fi
+          done
+
           echo "4. database jobs"
           kubectl -n "$namespace" delete job sakina-db-migrations --ignore-not-found=true
           backend_sha_image="ghcr.io/serverax/sakina-backend:${{ github.sha }}"
