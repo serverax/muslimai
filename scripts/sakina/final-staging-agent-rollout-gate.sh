@@ -39,6 +39,67 @@ cleanup() {
 }
 trap cleanup EXIT
 
+wait_for_tcp() {
+  local host="$1"
+  local port="$2"
+  local attempts="$3"
+  for _ in $(seq 1 "$attempts"); do
+    if python3 - "$host" "$port" <<'PY'
+import socket
+import sys
+
+host = sys.argv[1]
+port = int(sys.argv[2])
+sock = socket.socket()
+sock.settimeout(0.25)
+try:
+    sock.connect((host, port))
+except OSError:
+    raise SystemExit(1)
+finally:
+    sock.close()
+PY
+    then
+      return 0
+    fi
+    sleep 1
+  done
+  return 1
+}
+
+start_backend_port_forward() {
+  local port="$1"
+  local log_file="$2"
+  kubectl -n "$NS" port-forward svc/sakina-backend "${port}:8080" >"$log_file" 2>&1 &
+  local pf_pid="$!"
+  cleanup_pids+=("$pf_pid")
+  if ! wait_for_tcp "127.0.0.1" "$port" 90; then
+    if [[ -f "$log_file" ]]; then
+      cat "$log_file" >&2
+    fi
+    fail "backend port-forward did not open on 127.0.0.1:$port"
+  fi
+  for _ in $(seq 1 90); do
+    if curl -fsS "http://127.0.0.1:${port}/health/ready" >/dev/null 2>&1; then
+      printf '%s\n' "$pf_pid"
+      return 0
+    fi
+    sleep 1
+  done
+  if [[ -f "$log_file" ]]; then
+    cat "$log_file" >&2
+  fi
+  fail "backend readiness endpoint did not answer through port-forward on 127.0.0.1:$port"
+}
+
+stop_port_forward() {
+  local pf_pid="$1"
+  set +e
+  kill "$pf_pid" 2>/dev/null
+  wait "$pf_pid" 2>/dev/null
+  set -e
+}
+
 printf '=== STARTING AGENTIC ROLLOUT VERIFICATION ===\n'
 
 printf 'Checking Kubernetes RBAC for deployment creation in %s...\n' "$NS"
@@ -217,63 +278,37 @@ print(json.dumps({
 }, indent=2))
 PY
 
-printf 'Port-forwarding backend service for authenticated export integrity proofs...\n'
-kubectl -n "$NS" port-forward svc/sakina-backend 18081:8080 \
-  >"$EVIDENCE_DIR/957-port-forward-backend-service.log" 2>&1 &
-cleanup_pids+=("$!")
-for _ in $(seq 1 60); do
-  if python3 - <<'PY'
-import socket
-sock = socket.socket()
-sock.settimeout(0.25)
-try:
-    sock.connect(("127.0.0.1", 18081))
-except OSError:
-    raise SystemExit(1)
-finally:
-    sock.close()
-PY
-  then
-    break
-  fi
-  sleep 1
-done
-
 printf 'Preparing staging DB tunnel for export integrity proofs...\n'
 kubectl -n "$NS" port-forward svc/sakina-postgres 15432:5432 \
   >"$EVIDENCE_DIR/960-port-forward-postgres.log" 2>&1 &
 cleanup_pids+=("$!")
-for _ in $(seq 1 60); do
-  if python3 - <<'PY'
-import socket
-sock = socket.socket()
-sock.settimeout(0.25)
-try:
-    sock.connect(("127.0.0.1", 15432))
-except OSError:
-    raise SystemExit(1)
-finally:
-    sock.close()
-PY
-  then
-    break
+if ! wait_for_tcp "127.0.0.1" 15432 90; then
+  if [[ -f "$EVIDENCE_DIR/960-port-forward-postgres.log" ]]; then
+    cat "$EVIDENCE_DIR/960-port-forward-postgres.log" >&2
   fi
-  sleep 1
-done
+  fail "postgres port-forward did not open on 127.0.0.1:15432"
+fi
 
 postgres_user="$(kubectl -n "$NS" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_USER}' | base64 -d)"
 postgres_password="$(kubectl -n "$NS" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_PASSWORD}' | base64 -d)"
 postgres_db="$(kubectl -n "$NS" get secret sakina-postgres-secret -o jsonpath='{.data.POSTGRES_DB}' | base64 -d)"
 export DATABASE_URL="$(printf 'postgres://%s:%s@127.0.0.1:15432/%s' "$postgres_user" "$postgres_password" "$postgres_db")"
-export SAKINA_API_BASE_URL="http://127.0.0.1:18081"
 export SAKINA_REDIS_URL="redis://sakina-redis:6379"
 
+printf 'Port-forwarding backend service for authenticated data export proof...\n'
+product_backend_pf="$(start_backend_port_forward 18081 "$EVIDENCE_DIR/957-port-forward-backend-service.log")"
+export SAKINA_API_BASE_URL="http://127.0.0.1:18081"
 printf 'Running data export integrity proof against staging backend and staging DB...\n'
 bash scripts/sakina/product-data-export-proof.sh \
   | tee "$EVIDENCE_DIR/961-staging-product-data-export-proof.txt"
+stop_port_forward "$product_backend_pf"
 
+printf 'Port-forwarding backend service for authenticated agent feedback proof...\n'
+agent_backend_pf="$(start_backend_port_forward 18082 "$EVIDENCE_DIR/958-port-forward-backend-agent-feedback.log")"
+export SAKINA_API_BASE_URL="http://127.0.0.1:18082"
 printf 'Running agent feedback export proof against staging backend and staging DB...\n'
 bash scripts/sakina/agent-feedback-export-proof.sh \
   | tee "$EVIDENCE_DIR/962-staging-agent-feedback-export-proof.txt"
+stop_port_forward "$agent_backend_pf"
 
 printf 'STAGING_AGENT_ROLLOUT_GATE_OK\n'
