@@ -110,7 +110,27 @@ spec:
               value: "false"
             - name: SAKINA_PRIVATE_MEMORY
               value: "false"
-            - name: SAKINA_ANONYMOUS_LEARNING
+            - name: SAKINA_REVALUATION_INTERVAL_SECONDS
+              value: "3600"
+            - name: SAKINA_FEATURE_QURAN
+              value: "true"
+            - name: SAKINA_FEATURE_PRAYER
+              value: "true"
+            - name: SAKINA_FEATURE_KNOWLEDGE
+              value: "true"
+            - name: SAKINA_FEATURE_COMMUNITY
+              value: "true"
+            - name: SAKINA_RAG_QURAN_ENABLED
+              value: "true"
+            - name: SAKINA_RAG_PRAYER_ENABLED
+              value: "true"
+            - name: SAKINA_RAG_KNOWLEDGE_ENABLED
+              value: "true"
+            - name: SAKINA_FATWA_INGESTION_ENABLED
+              value: "true"
+            - name: SAKINA_CITATION_GUARD_ENABLED
+              value: "true"
+            - name: SAKINA_ANSWER_TRACE_ENABLED
               value: "true"
             - name: POSTGRES_HOST
               value: sakina-postgres
