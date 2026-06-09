@@ -98,12 +98,6 @@ spec:
               value: http://sakina-document-service:8080
             - name: SAKINA_LLM_MODEL
               value: qwen2.5:3b
-            - name: OLLAMA_CPU_MODE
-              value: "true"
-            - name: OLLAMA_DEFAULT_MODEL
-              value: qwen2.5:3b
-            - name: OLLAMA_TIMEOUT_SECONDS
-              value: "60"
             - name: SAKINA_LLM_TIMEOUT_SECONDS
               value: "60"
             - name: SAKINA_MODEL_LEARNING
