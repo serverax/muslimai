@@ -7,8 +7,11 @@ import 'chat_screen.dart';
 import 'compliance_screen.dart';
 import 'iman_journey_screen.dart';
 import 'islamic_library_screen.dart';
+import 'kids_quran_screen.dart';
+import 'mental_wellness_screen.dart';
 import 'module_read_only_state_screen.dart';
 import 'multimodal_analysis_screen.dart';
+import 'tajweed_coach_screen.dart';
 
 class HomeShellScreen extends StatefulWidget {
   const HomeShellScreen({super.key, required this.appState, this.session});
@@ -46,11 +49,10 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
         title: app.t('prayer'),
         load: _moduleService.prayer,
       ),
-      ModuleReadOnlyStateScreen(
-        title: app.t('community'),
-        load: _moduleService.community,
-      ),
       const IslamicLibraryScreen(),
+      MentalWellnessScreen(session: widget.session),
+      KidsQuranScreen(session: widget.session),
+      TajweedCoachScreen(session: widget.session),
       ImanJourneyScreen(),
       MultimodalAnalysisScreen(session: widget.session),
       ComplianceScreen(session: widget.session),
@@ -81,19 +83,29 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
             label: app.t('prayer'),
           ),
           NavigationDestination(
-            icon: const Icon(Icons.groups_outlined),
-            selectedIcon: const Icon(Icons.groups),
-            label: app.t('community'),
-          ),
-          NavigationDestination(
             icon: const Icon(Icons.school_outlined),
             selectedIcon: const Icon(Icons.school),
             label: app.t('knowledge'),
           ),
           const NavigationDestination(
+            icon: Icon(Icons.favorite_outline),
+            selectedIcon: Icon(Icons.favorite),
+            label: 'Support',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.child_care),
+            selectedIcon: Icon(Icons.child_care),
+            label: 'Kids',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.record_voice_over),
+            selectedIcon: Icon(Icons.record_voice_over),
+            label: 'Tajweed',
+          ),
+          const NavigationDestination(
             icon: Icon(Icons.auto_graph_outlined),
             selectedIcon: Icon(Icons.auto_graph),
-            label: 'Iman Journey',
+            label: 'Journey',
           ),
           const NavigationDestination(
             icon: Icon(Icons.document_scanner_outlined),

@@ -11,7 +11,24 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-api-gateway-to-internal-services
+  name: allow-ingress-to-backend
+  namespace: sakina-mobile-staging
+spec:
+  podSelector:
+    matchLabels:
+      app: sakina-backend
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-backend-to-internal-services
   namespace: sakina-mobile-staging
 spec:
   podSelector:
@@ -19,15 +36,72 @@ spec:
       - key: app
         operator: In
         values:
-          - sakina-auth-service
-          - sakina-user-workspace-service
-          - sakina-ask-shaikh-service
-          - sakina-audit-service
+          - sakina-brain
+          - sakina-rules-engine
+          - sakina-citation-guard
+          - sakina-document-service
+          - sakina-rag-retrieval
+          - sakina-llm-gateway
   ingress:
     - from:
         - podSelector:
             matchLabels:
-              app: sakina-api-gateway
+              app: sakina-backend
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-brain-to-internal-services
+  namespace: sakina-mobile-staging
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - sakina-rules-engine
+          - sakina-citation-guard
+          - sakina-rag-retrieval
+          - sakina-llm-gateway
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: sakina-brain
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-internal-to-persistence
+  namespace: sakina-mobile-staging
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - sakina-postgres
+          - sakina-qdrant
+          - sakina-redis
+  ingress:
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - sakina-backend
+                  - sakina-brain
+                  - sakina-rag-retrieval
+                  - sakina-rag-ingestion
+                  - sakina-worker
+                  - sakina-rules-engine
+                  - sakina-citation-guard
+                  - sakina-document-service
   policyTypes:
     - Ingress
 ---
@@ -45,35 +119,5 @@ spec:
         - podSelector:
             matchLabels:
               app: sakina-llm-gateway
-  policyTypes:
-    - Ingress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-rag-to-qdrant-postgres
-  namespace: sakina-mobile-staging
-spec:
-  podSelector:
-    matchExpressions:
-      - key: app
-        operator: In
-        values:
-          - sakina-postgres
-          - sakina-qdrant
-  ingress:
-    - from:
-        - podSelector:
-            matchExpressions:
-              - key: app
-                operator: In
-                values:
-                  - sakina-rag-retrieval-service
-                  - sakina-rag-ingestion-service
-                  - sakina-islamic-knowledge-service
-                  - sakina-auth-service
-                  - sakina-user-workspace-service
-                  - sakina-audit-service
-                  - sakina-document-service
   policyTypes:
     - Ingress
