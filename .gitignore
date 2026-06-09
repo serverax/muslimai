@@ -52,3 +52,16 @@ sakina-secure-handoff/
 target/
 trivy
 yarn.lock
+node_modules/
+build/
+dist/
+.dart_tool/
+.gradle/
+*.pem
+*.p8
+*.key
+.env
+.env.*
+models/
+*.gguf
+*.safetensors
