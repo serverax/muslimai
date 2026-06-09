@@ -1,0 +1,79 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sakina-default-deny-ingress
+  namespace: sakina-mobile-staging
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api-gateway-to-internal-services
+  namespace: sakina-mobile-staging
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - sakina-auth-service
+          - sakina-user-workspace-service
+          - sakina-ask-shaikh-service
+          - sakina-audit-service
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: sakina-api-gateway
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-llm-gateway-to-ollama
+  namespace: sakina-mobile-staging
+spec:
+  podSelector:
+    matchLabels:
+      app: ollama-inference
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: sakina-llm-gateway
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-rag-to-qdrant-postgres
+  namespace: sakina-mobile-staging
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - sakina-postgres
+          - sakina-qdrant
+  ingress:
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - sakina-rag-retrieval-service
+                  - sakina-rag-ingestion-service
+                  - sakina-islamic-knowledge-service
+                  - sakina-auth-service
+                  - sakina-user-workspace-service
+                  - sakina-audit-service
+                  - sakina-document-service
+  policyTypes:
+    - Ingress

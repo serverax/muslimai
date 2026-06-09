@@ -24,3 +24,5 @@ pub mod sync;
 pub mod user;
 pub mod user_learning;
 pub mod waitlist;
+pub mod tafsir;
+pub mod fatwa;

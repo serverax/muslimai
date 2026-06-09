@@ -83,7 +83,7 @@ spec:
               name: http
           env:
             - name: SAKINA_ENV
-              value: staging
+              value: production
             - name: SAKINA_LLM_ENABLED
               value: "true"
             - name: SAKINA_LLM_GATEWAY_URL
@@ -134,12 +134,12 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: jwt-secret
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: encryption-key
             - name: QDRANT_URL
               value: http://sakina-qdrant:6333

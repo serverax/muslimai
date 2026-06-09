@@ -1,0 +1,90 @@
+# Defense-in-depth network isolation for the local LLM runtime.
+#
+# IMPORTANT (honesty note for the audit): this cluster's CNI is Flannel, which
+# ships NO NetworkPolicy controller, so these policies are DECLARED but NOT
+# ENFORCED at runtime today. They become effective only if a policy engine
+# (Cilium / Calico policy / kube-router) is added. Until then, the real,
+# enforced isolation guarantees are:
+#   (1) sakina-ollama is a ClusterIP Service with no Ingress / no externalIP;
+#   (2) the backend Deployment has NO OLLAMA_BASE_URL and can only reach the
+#       gateway via SAKINA_LLM_GATEWAY_URL (verified in backend.yaml).
+# These manifests encode the intended contract so it is enforced the moment the
+# cluster gains policy support.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sakina-ollama-allow-gateway-only
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  podSelector:
+    matchLabels:
+      app: sakina-ollama
+  policyTypes:
+    - Ingress
+  ingress:
+    # Only the LLM gateway may reach Ollama on 11434.
+    - from:
+        - podSelector:
+            matchLabels:
+              app: sakina-llm-gateway
+      ports:
+        - protocol: TCP
+          port: 11434
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sakina-backend-deny-ollama
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  # Backend egress: explicitly does NOT include Ollama (11434). Backend may
+  # reach the gateway (8087), postgres (5432), qdrant (6333), redis (6379),
+  # and DNS. The absence of an 11434 allow rule is the point.
+  podSelector:
+    matchLabels:
+      app: sakina-backend
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: sakina-llm-gateway
+      ports:
+        - protocol: TCP
+          port: 8087
+    - to:
+        - podSelector:
+            matchLabels:
+              app: sakina-postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - podSelector:
+            matchLabels:
+              app: sakina-qdrant
+      ports:
+        - protocol: TCP
+          port: 6333
+    - to:
+        - podSelector:
+            matchLabels:
+              app: sakina-redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    # DNS resolution.
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53

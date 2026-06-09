@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-admin
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: admin
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  selector:
+    app: sakina-admin
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-admin
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: admin
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: sakina-admin
+  template:
+    metadata:
+      labels:
+        app: sakina-admin
+        app.kubernetes.io/name: admin
+        app.kubernetes.io/part-of: sakina-mobile
+        app.kubernetes.io/environment: staging
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: admin
+          image: ghcr.io/serverax/sakina-frontend:qa-security-hardening
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}

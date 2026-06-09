@@ -12,8 +12,11 @@ pub struct User {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RagQuery {
     pub query: String,
-    pub user_id: Uuid,
-    pub madhhab_filter: String,
+    pub user_id: Option<Uuid>,
+    pub madhhab_filter: Option<String>,
+    pub top_k: Option<usize>,
+    pub min_score: Option<f32>,
+    pub language: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

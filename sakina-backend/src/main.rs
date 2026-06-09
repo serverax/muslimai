@@ -552,7 +552,11 @@ async fn main() -> std::io::Result<()> {
     let multimodal_service = web::Data::new(services::MultimodalService::new(pool.clone()));
     let mcp_registry = web::Data::new(services::McpConnectorRegistry::from_env());
     let sakina_llm_gateway = web::Data::new(services::SakinaLlmGateway::from_env());
+    let distributed_client = web::Data::new(services::distributed::DistributedClient::new());
+    let tafsir_service = web::Data::new(services::tafsir_ingestion::TafsirIngestionService::new(pool.clone()));
+    let fatwa_service = web::Data::new(services::fatwa_verifier::FatwaVerifierService::new(pool.clone()));
     let waitlist_limiter = web::Data::new(handlers::waitlist::WaitlistRateLimiter::new(
+
         5,
         std::time::Duration::from_secs(60),
     ));
@@ -578,6 +582,9 @@ async fn main() -> std::io::Result<()> {
             .app_data(multimodal_service.clone())
             .app_data(mcp_registry.clone())
             .app_data(sakina_llm_gateway.clone())
+            .app_data(distributed_client.clone())
+            .app_data(tafsir_service.clone())
+            .app_data(fatwa_service.clone())
             .app_data(waitlist_limiter.clone())
             .app_data(
                 web::JsonConfig::default()
@@ -711,8 +718,28 @@ async fn main() -> std::io::Result<()> {
                 web::post().to(handlers::rag::api_rag_search),
             )
             .route(
+                "/api/rag/query",
+                web::post().to(handlers::rag::query_rag),
+            )
+            .route(
+                "/api/brain/route",
+                web::post().to(handlers::brain::test_route),
+            )
+            .route(
                 "/api/evaluation/check",
                 web::post().to(handlers::evaluation::check),
+            )
+            .route(
+                "/api/quran/tafsir/{source_id}/job",
+                web::post().to(handlers::tafsir::start_tafsir_job),
+            )
+            .route(
+                "/api/quran/tafsir/{source_id}/ingest",
+                web::post().to(handlers::tafsir::ingest_tafsir_entry),
+            )
+            .route(
+                "/api/fatwa/verify",
+                web::post().to(handlers::fatwa::verify_fatwa),
             )
             .route("/api/cache/stats", web::get().to(handlers::cache::stats))
             .route("/api/cache/status", web::get().to(handlers::cache::stats))

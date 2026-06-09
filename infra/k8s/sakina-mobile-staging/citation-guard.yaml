@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: sakina-backend
+  name: sakina-citation-guard
   namespace: sakina-mobile-staging
   labels:
-    app.kubernetes.io/name: backend
+    app.kubernetes.io/name: citation-guard
     app.kubernetes.io/part-of: sakina-mobile
     app.kubernetes.io/environment: staging
 spec:
   selector:
-    app: sakina-backend
+    app: sakina-citation-guard
   ports:
     - name: http
       port: 8080
@@ -18,27 +18,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sakina-backend
+  name: sakina-citation-guard
   namespace: sakina-mobile-staging
   labels:
-    app.kubernetes.io/name: backend
+    app.kubernetes.io/name: citation-guard
     app.kubernetes.io/part-of: sakina-mobile
     app.kubernetes.io/environment: staging
 spec:
-  replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
+  replicas: 1
   selector:
     matchLabels:
-      app: sakina-backend
+      app: sakina-citation-guard
   template:
     metadata:
       labels:
-        app: sakina-backend
-        app.kubernetes.io/name: backend
+        app: sakina-citation-guard
+        app.kubernetes.io/name: citation-guard
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
@@ -55,27 +50,8 @@ spec:
         fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        - name: install-agent-validator-wasm
-          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
-          imagePullPolicy: Always
-          command:
-            - /bin/sh
-            - -c
-            - cp /usr/local/share/sakina/wasm/sakina_validator.wasm /agent-wasm/sakina_validator.wasm && test -s /agent-wasm/sakina_validator.wasm
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
-          volumeMounts:
-            - name: agent-validator-wasm
-              mountPath: /agent-wasm
       containers:
-        - name: backend
+        - name: citation-guard
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
           imagePullPolicy: Always
           ports:
@@ -84,34 +60,10 @@ spec:
           env:
             - name: SAKINA_ENV
               value: staging
+            - name: SERVICE_NAME
+              value: "sakina-citation-guard"
             - name: SAKINA_LLM_ENABLED
-              value: "true"
-            - name: SAKINA_LLM_GATEWAY_URL
-              value: http://sakina-llm-gateway:8087
-            - name: SAKINA_BRAIN_URL
-              value: http://sakina-brain:8080
-            - name: SAKINA_RAG_URL
-              value: http://sakina-rag-retrieval:8080
-            - name: SAKINA_CITATION_GUARD_URL
-              value: http://sakina-citation-guard:8080
-            - name: SAKINA_DOCUMENT_SERVICE_URL
-              value: http://sakina-document-service:8080
-            - name: SAKINA_LLM_MODEL
-              value: qwen2.5:3b
-            - name: OLLAMA_CPU_MODE
-              value: "true"
-            - name: OLLAMA_DEFAULT_MODEL
-              value: qwen2.5:3b
-            - name: OLLAMA_TIMEOUT_SECONDS
-              value: "60"
-            - name: SAKINA_LLM_TIMEOUT_SECONDS
-              value: "60"
-            - name: SAKINA_MODEL_LEARNING
               value: "false"
-            - name: SAKINA_PRIVATE_MEMORY
-              value: "false"
-            - name: SAKINA_ANONYMOUS_LEARNING
-              value: "true"
             - name: POSTGRES_HOST
               value: sakina-postgres
             - name: POSTGRES_PORT
@@ -141,18 +93,6 @@ spec:
                 secretKeyRef:
                   name: sakina-staging-secrets
                   key: encryption-key
-            - name: QDRANT_URL
-              value: http://sakina-qdrant:6333
-            - name: QDRANT_COLLECTION
-              value: sakina_islamic_chunks_en
-            - name: ISLAMIC_QDRANT_COLLECTION
-              value: sakina_islamic_chunks_en
-            - name: SAKINA_REDIS_URL
-              value: redis://sakina-redis:6379
-            - name: SAKINA_AGENT_ROLLOUT_PROBE_ENABLED
-              value: "true"
-            - name: SAKINA_VALIDATOR_WASM_PATH
-              value: /opt/sakina/wasm/sakina_validator.wasm
           readinessProbe:
             httpGet:
               path: /health/ready
@@ -167,11 +107,11 @@ spec:
             periodSeconds: 15
           resources:
             requests:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "100m"
+              memory: "128Mi"
             limits:
-              cpu: "1"
-              memory: "1Gi"
+              cpu: "500m"
+              memory: "512Mi"
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -183,11 +123,6 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
-            - name: agent-validator-wasm
-              mountPath: /opt/sakina/wasm
-              readOnly: true
       volumes:
         - name: tmp
-          emptyDir: {}
-        - name: agent-validator-wasm
           emptyDir: {}
