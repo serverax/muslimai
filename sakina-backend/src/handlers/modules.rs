@@ -272,7 +272,7 @@ pub async fn quran_overview(
         module: "quran".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
-        message: "coming soon / under review".to_string(),
+        message: "Active / Under expert verification".to_string(),
         rag: rag_readiness("SAKINA_RAG_QURAN_ENABLED"),
         entries,
     }))
@@ -310,7 +310,7 @@ pub async fn prayer_overview(
         module: "prayer".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
-        message: "coming soon / under review".to_string(),
+        message: "Active / Under expert verification".to_string(),
         rag: rag_readiness("SAKINA_RAG_PRAYER_ENABLED"),
         windows,
     }))
@@ -348,7 +348,7 @@ pub async fn knowledge_overview(
         module: "knowledge".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
-        message: "coming soon / under review".to_string(),
+        message: "Active / Under expert verification".to_string(),
         rag: rag_readiness("SAKINA_RAG_KNOWLEDGE_ENABLED"),
         topics,
     }))
@@ -386,7 +386,7 @@ pub async fn community_overview(
         module: "community".to_string(),
         safety_status: ModuleSafetyStatus::RequiresReview,
         review_status: ReviewStatus::ScholarReviewRequired,
-        message: "coming soon / under review".to_string(),
+        message: "Active / Under expert verification".to_string(),
         rag: rag_readiness("SAKINA_RAG_COMMUNITY_ENABLED"),
         channels,
     }))

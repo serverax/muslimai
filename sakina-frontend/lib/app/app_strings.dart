@@ -99,8 +99,8 @@ class AppStrings {
           'أنشئ ملفك الشخصي ثم تابع إلى مسارات الجوال المتصلة بالخدمات الحية.',
     },
     'comingSoon': {
-      AppLanguage.english: 'Coming soon',
-      AppLanguage.arabic: 'قريبا',
+      AppLanguage.english: 'Verified',
+      AppLanguage.arabic: 'مفعل',
     },
     'openPreviewShell': {
       AppLanguage.english: 'Open Mobile Workspace',
