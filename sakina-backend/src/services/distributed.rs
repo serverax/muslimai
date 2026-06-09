@@ -2,13 +2,17 @@ use crate::error::ApiError;
 use crate::models::{
     BrainRouteRequest, BrainRouteResponse, RagQuery, RagResponse, SakinaAskRequest,
 };
-use crate::services::islamic_knowledge::AskIslamicRequest;
-use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 #[derive(Clone)]
 pub struct DistributedClient {
     client: reqwest::Client,
+}
+
+impl Default for DistributedClient {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl DistributedClient {
