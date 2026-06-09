@@ -82,6 +82,32 @@ jobs:
     name: Backend Rust checks
     runs-on: ubuntu-latest
     needs: guardrails
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: sakina_test
+          POSTGRES_PASSWORD: sakina_password
+          POSTGRES_USER: sakina_user
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://sakina_user:sakina_password@localhost:5432/sakina_test
+      SAKINA_REDIS_URL: redis://localhost:6379
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable

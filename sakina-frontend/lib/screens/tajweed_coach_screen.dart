@@ -45,7 +45,7 @@ class _TajweedCoachScreenState extends State<TajweedCoachScreen> {
                 border: Border.all(color: Colors.indigo.shade100),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                   ),
                 ],
@@ -157,7 +157,11 @@ class _RuleTile extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        leading: CircleAvatar(backgroundColor: color.withOpacity(0.2), child: Text(title[0], style: TextStyle(color: color, fontWeight: FontWeight.bold))),
+        leading: CircleAvatar(
+            backgroundColor: color.withValues(alpha: 0.2),
+            child: Text(title[0],
+                style: TextStyle(
+                    color: color, fontWeight: FontWeight.bold))),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(description),
         trailing: const Icon(Icons.chevron_right),
