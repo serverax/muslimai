@@ -648,7 +648,7 @@ pub async fn ask(
                 .unwrap_or_default();
 
             match distributed_client
-                .check_evaluation(&guard_url, &answer, citations_list, message)
+                .check_evaluation(&guard_url, &answer, citations_list, message, &language)
                 .await
             {
                 Ok(eval) => {

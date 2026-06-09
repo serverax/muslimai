@@ -107,6 +107,7 @@ impl DistributedClient {
         answer: &str,
         citations: Vec<String>,
         message: &str,
+        language: &str,
     ) -> Result<Value, ApiError> {
         let res = self
             .client
@@ -115,6 +116,7 @@ impl DistributedClient {
                 "message": message,
                 "answer": answer,
                 "citations": citations,
+                "language": language,
             }))
             .send()
             .await
