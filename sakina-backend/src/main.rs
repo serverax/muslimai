@@ -553,10 +553,13 @@ async fn main() -> std::io::Result<()> {
     let mcp_registry = web::Data::new(services::McpConnectorRegistry::from_env());
     let sakina_llm_gateway = web::Data::new(services::SakinaLlmGateway::from_env());
     let distributed_client = web::Data::new(services::distributed::DistributedClient::new());
-    let tafsir_service = web::Data::new(services::tafsir_ingestion::TafsirIngestionService::new(pool.clone()));
-    let fatwa_service = web::Data::new(services::fatwa_verifier::FatwaVerifierService::new(pool.clone()));
+    let tafsir_service = web::Data::new(services::tafsir_ingestion::TafsirIngestionService::new(
+        pool.clone(),
+    ));
+    let fatwa_service = web::Data::new(services::fatwa_verifier::FatwaVerifierService::new(
+        pool.clone(),
+    ));
     let waitlist_limiter = web::Data::new(handlers::waitlist::WaitlistRateLimiter::new(
-
         5,
         std::time::Duration::from_secs(60),
     ));
@@ -717,10 +720,7 @@ async fn main() -> std::io::Result<()> {
                 "/api/rag/search",
                 web::post().to(handlers::rag::api_rag_search),
             )
-            .route(
-                "/api/rag/query",
-                web::post().to(handlers::rag::query_rag),
-            )
+            .route("/api/rag/query", web::post().to(handlers::rag::query_rag))
             .route(
                 "/api/brain/route",
                 web::post().to(handlers::brain::test_route),

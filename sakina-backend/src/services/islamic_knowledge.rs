@@ -241,6 +241,7 @@ pub struct IslamicAnswerService {
     _repository: IslamicKnowledgeRepository,
     hybrid_rag: HybridRagService,
     cache: SemanticCacheService,
+    distributed_client: crate::services::distributed::DistributedClient,
 }
 
 impl IslamicAnswerService {
@@ -253,6 +254,7 @@ impl IslamicAnswerService {
             _repository: repository,
             hybrid_rag,
             cache,
+            distributed_client: crate::services::distributed::DistributedClient::new(),
         }
     }
 
@@ -317,16 +319,61 @@ impl IslamicAnswerService {
             return Ok(payload);
         }
 
-        let hybrid = self
-            .hybrid_rag
-            .search(question, Some(&language), top_k)
-            .await?;
+        // Distributed architecture: if SAKINA_RAG_URL is set, we call the RAG service.
+        let hybrid = if let Ok(rag_url) = std::env::var("SAKINA_RAG_URL") {
+            if !rag_url.trim().is_empty() {
+                let rag_res = self
+                    .distributed_client
+                    .query_rag(
+                        &rag_url,
+                        &crate::models::RagQuery {
+                            query: question.to_string(),
+                            user_id: request.user_id,
+                            madhhab_filter: None,
+                            top_k: Some(top_k),
+                            min_score: Some(min_score),
+                            language: Some(language.clone()),
+                        },
+                    )
+                    .await?;
+                crate::services::HybridRagResult {
+                    query: question.to_string(),
+                    language: language.clone(),
+                    retrieval_strategy: "remote_rag_service".to_string(),
+                    retrieved_chunks: vec![], // Only used for confidence which we override
+                    source_ranking: vec![],
+                    citations: rag_res.sources,
+                    graph_path: vec![],
+                    compressed_tokens_before: 0,
+                    compressed_tokens_after: 0,
+                    compression_ratio: 1.0,
+                    weak_evidence_blocked: rag_res.guardrail_triggered,
+                }
+            } else {
+                self.hybrid_rag
+                    .search(question, Some(&language), top_k)
+                    .await?
+            }
+        } else {
+            self.hybrid_rag
+                .search(question, Some(&language), top_k)
+                .await?
+        };
+
         let mut citations = hybrid.citations.clone();
         let mut confidence = hybrid
             .retrieved_chunks
             .first()
             .map(|chunk| chunk.final_score)
             .unwrap_or(0.0);
+
+        // If it was a remote call, we might already have a confidence in the response
+        // but HybridRagResult doesn't store it directly outside of chunks.
+        // For simplicity, we'll just use 0.9 if it passed the remote guardrail.
+        if hybrid.retrieval_strategy == "remote_rag_service" && !hybrid.weak_evidence_blocked {
+            confidence = 0.9;
+        }
+
         let mut fallback_used = hybrid.weak_evidence_blocked;
         let mut answer_text = crate::services::offline_lookup(question, &language)
             .map(|offline| {
@@ -351,7 +398,7 @@ impl IslamicAnswerService {
                 }
             });
 
-        if !hybrid.citations.is_empty() && confidence < min_score {
+        if !citations.is_empty() && confidence < min_score {
             fallback_used = true;
         }
         let policy = evaluate_fatwa_policy(&AnswerInput {

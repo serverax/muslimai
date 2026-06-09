@@ -182,17 +182,51 @@ fn env_flag_enabled(key: &str) -> bool {
         .unwrap_or(false)
 }
 
-fn has_entitlement(req: &HttpRequest) -> bool {
-    req.headers()
-        .get("x-sakina-subscription-tier")
-        .and_then(|v| v.to_str().ok())
-        .map(|v| {
-            matches!(
-                v.trim().to_ascii_lowercase().as_str(),
-                "premium" | "pro" | "founding"
-            )
-        })
-        .unwrap_or(false)
+fn module_entitlement_key(module: &str) -> Option<&'static str> {
+    match module {
+        "quran" => Some("quran_access"),
+        "prayer" => Some("prayer_access"),
+        "knowledge" => Some("knowledge_access"),
+        "community" => Some("community_access"),
+        _ => None,
+    }
+}
+
+/// Authenticated DB entitlement check (matches handlers/modules.rs).
+///
+/// Never trusts a client-supplied tier header: it authenticates the user via
+/// their JWT/session and verifies an active, non-revoked, non-expired
+/// entitlement row in the database. Fails closed (returns false / propagates
+/// auth errors) so unauthenticated or non-entitled callers get no premium data.
+async fn has_entitlement(
+    req: &HttpRequest,
+    pool: &sqlx::PgPool,
+    module: &str,
+) -> Result<bool, ApiError> {
+    let Some(entitlement_key) = module_entitlement_key(module) else {
+        return Ok(false);
+    };
+    let user_id = crate::services::auth::authenticated_user_id(req, pool).await?;
+    let row = sqlx::query(
+        r#"
+        SELECT 1
+        FROM public.user_entitlements ue
+        JOIN public.entitlements e ON e.id = ue.entitlement_id
+        WHERE ue.user_id = $1
+          AND e.entitlement_key = $2
+          AND e.is_active = true
+          AND ue.revoked_at IS NULL
+          AND (ue.expires_at IS NULL OR ue.expires_at > now())
+        LIMIT 1
+        "#,
+    )
+    .bind(user_id)
+    .bind(entitlement_key)
+    .fetch_optional(pool)
+    .await
+    .map_err(|_| ApiError::internal("failed to verify rag entitlement"))?;
+
+    Ok(row.is_some())
 }
 
 async fn approved_sources_from_db(
@@ -294,12 +328,16 @@ pub async fn rag_sources(pool: web::Data<sqlx::PgPool>, req: HttpRequest) -> Htt
             "rag is disabled for this module",
         );
     }
-    if !has_entitlement(&req) {
-        return crate::error::error_response(
-            actix_web::http::StatusCode::PAYMENT_REQUIRED,
-            "subscription_required",
-            "rag requires premium entitlement",
-        );
+    match has_entitlement(&req, pool.get_ref(), &module).await {
+        Ok(true) => {}
+        Ok(false) => {
+            return crate::error::error_response(
+                actix_web::http::StatusCode::PAYMENT_REQUIRED,
+                "subscription_required",
+                "rag requires premium entitlement",
+            );
+        }
+        Err(err) => return crate::error::error_response(err.status, err.code, err.message),
     }
 
     match approved_sources_from_db(pool.get_ref(), &module).await {
@@ -339,12 +377,16 @@ pub async fn rag_search(
             "rag is disabled for this module",
         );
     }
-    if !has_entitlement(&req) {
-        return crate::error::error_response(
-            actix_web::http::StatusCode::PAYMENT_REQUIRED,
-            "subscription_required",
-            "rag requires premium entitlement",
-        );
+    match has_entitlement(&req, pool.get_ref(), &module).await {
+        Ok(true) => {}
+        Ok(false) => {
+            return crate::error::error_response(
+                actix_web::http::StatusCode::PAYMENT_REQUIRED,
+                "subscription_required",
+                "rag requires premium entitlement",
+            );
+        }
+        Err(err) => return crate::error::error_response(err.status, err.code, err.message),
     }
 
     let now = chrono::Utc::now().to_rfc3339();
@@ -418,7 +460,9 @@ mod contract_tests {
     }
 
     #[actix_rt::test]
-    async fn missing_entitlement_blocks_rag() {
+    async fn missing_jwt_blocks_rag() {
+        // Fail closed: with the feature enabled but no authenticated user, the
+        // DB-entitlement check must reject before any premium data is returned.
         let _guard = crate::TEST_ENV_LOCK.lock().expect("env lock");
         std::env::set_var("SAKINA_FEATURE_QURAN", "true");
         std::env::set_var("SAKINA_RAG_QURAN_ENABLED", "true");
@@ -434,7 +478,33 @@ mod contract_tests {
             }),
         )
         .await;
-        assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+        std::env::remove_var("SAKINA_FEATURE_QURAN");
+        std::env::remove_var("SAKINA_RAG_QURAN_ENABLED");
+    }
+
+    #[actix_rt::test]
+    async fn forged_tier_header_does_not_bypass_rag_paywall() {
+        // A client-supplied premium tier header must NOT grant access; the
+        // handler now ignores it entirely and requires authenticated entitlement.
+        let _guard = crate::TEST_ENV_LOCK.lock().expect("env lock");
+        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+        std::env::set_var("SAKINA_RAG_QURAN_ENABLED", "true");
+        let pool = sqlx::PgPool::connect_lazy("postgres://invalid:invalid@localhost/invalid")
+            .expect("lazy pool");
+        let req = TestRequest::default()
+            .insert_header(("x-sakina-subscription-tier", "premium"))
+            .to_http_request();
+        let response = rag_search(
+            web::Data::new(pool),
+            req,
+            web::Query(RagSearchQuery {
+                module: "quran".to_string(),
+                q: "test".to_string(),
+            }),
+        )
+        .await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
         std::env::remove_var("SAKINA_FEATURE_QURAN");
         std::env::remove_var("SAKINA_RAG_QURAN_ENABLED");
     }

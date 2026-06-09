@@ -1,6 +1,6 @@
-use actix_web::{web, HttpResponse};
 use crate::error::ApiError;
-use crate::services::tafsir_ingestion::{TafsirIngestionService, TafsirIngestionRequest};
+use crate::services::tafsir_ingestion::{TafsirIngestionRequest, TafsirIngestionService};
+use actix_web::{web, HttpResponse};
 use uuid::Uuid;
 
 pub async fn start_tafsir_job(
@@ -19,7 +19,9 @@ pub async fn ingest_tafsir_entry(
     source_id: web::Path<Uuid>,
     payload: web::Json<TafsirIngestionRequest>,
 ) -> Result<HttpResponse, ApiError> {
-    let entry_id = service.ingest_entry(payload.into_inner(), source_id.into_inner()).await?;
+    let entry_id = service
+        .ingest_entry(payload.into_inner(), source_id.into_inner())
+        .await?;
     Ok(HttpResponse::Ok().json(serde_json::json!({
         "entry_id": entry_id,
         "status": "ingested"

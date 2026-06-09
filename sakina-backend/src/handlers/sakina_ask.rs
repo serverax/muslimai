@@ -342,9 +342,28 @@ pub async fn ask(
     aia: web::Data<AiaOrchestrator>,
     answer_service: web::Data<IslamicAnswerService>,
     llm_gateway: web::Data<SakinaLlmGateway>,
+    distributed_client: web::Data<crate::services::distributed::DistributedClient>,
     pool: web::Data<sqlx::PgPool>,
     payload: web::Json<SakinaAskRequest>,
 ) -> HttpResponse {
+    // Distributed architecture: if SAKINA_BRAIN_URL is set, we are the API gateway,
+    // so we call the Brain service (which then executes locally).
+    if let Ok(brain_url) = std::env::var("SAKINA_BRAIN_URL") {
+        if !brain_url.trim().is_empty() {
+            let auth_header = req
+                .headers()
+                .get("Authorization")
+                .and_then(|h| h.to_str().ok());
+            match distributed_client
+                .answer_sakina(&brain_url, &payload, auth_header)
+                .await
+            {
+                Ok(response) => return HttpResponse::Ok().json(response),
+                Err(err) => return err.error_response(),
+            }
+        }
+    }
+
     let user_id = match authenticated_user_id(&req, pool.get_ref()).await {
         Ok(user_id) => user_id,
         Err(err) => return err.error_response(),
@@ -607,6 +626,52 @@ pub async fn ask(
                     llm_model = ?llm_model,
                     "Mother Algorithm received controlled LLM answer"
                 );
+            }
+        }
+    }
+
+    // Distributed architecture: if SAKINA_CITATION_GUARD_URL is set, we call the Citation Guard.
+    if let Ok(guard_url) = std::env::var("SAKINA_CITATION_GUARD_URL") {
+        if !guard_url.trim().is_empty() && !answer.is_empty() {
+            let citations_list: Vec<String> = citations
+                .as_array()
+                .map(|arr| {
+                    arr.iter()
+                        .filter_map(|v| {
+                            v.get("chapter")
+                                .and_then(Value::as_str)
+                                .or_else(|| v.get("citation_text").and_then(Value::as_str))
+                                .map(String::from)
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
+
+            match distributed_client
+                .check_evaluation(&guard_url, &answer, citations_list, message)
+                .await
+            {
+                Ok(eval) => {
+                    if eval["review_result"] == "FAIL" {
+                        safety.guardrails_passed = false;
+                        source_path.blocked = true;
+                        answer = if language == "ar" {
+                            "عذراً، لم نتمكن من التحقق من دقة المصادر في هذا الرد. يرجى سؤال عالم موثوق.".to_string()
+                        } else {
+                            "Sorry, we could not verify the accuracy of the citations in this response. Please consult a trusted scholar.".to_string()
+                        };
+                    }
+                }
+                Err(err) => {
+                    tracing::error!("Citation guard failed: {:?}", err);
+                    // In fail-safe mode, we might want to block or allow.
+                    // Given the strict requirement for religious answers, we block if it's a fatwa.
+                    if intent == "islamic_guidance" || intent == "new_muslim" {
+                        source_path.blocked = true;
+                        answer =
+                            "Service temporarily unavailable. Please try again later.".to_string();
+                    }
+                }
             }
         }
     }

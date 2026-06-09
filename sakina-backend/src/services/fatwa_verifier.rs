@@ -1,7 +1,7 @@
+use crate::error::ApiError;
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 use uuid::Uuid;
-use crate::error::ApiError;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FatwaVerificationRequest {
@@ -28,21 +28,27 @@ impl FatwaVerifierService {
         Self { pool }
     }
 
-    pub async fn verify_fatwa(&self, req: FatwaVerificationRequest) -> Result<FatwaVerificationResult, ApiError> {
+    pub async fn verify_fatwa(
+        &self,
+        req: FatwaVerificationRequest,
+    ) -> Result<FatwaVerificationResult, ApiError> {
         // Core verification logic:
         // 1. Check if URL is in blocklist.
         // 2. Check if scholar/authority is on approved list.
         // 3. Verify duplication.
         // (Placeholder logic for scaffolding)
-        
+
         let mut status = "needs_review".to_string();
         let mut reason = None;
 
         if req.issuing_authority.to_lowercase().contains("unknown") {
             status = "rejected".to_string();
             reason = Some("Unknown authority".to_string());
-        } else if req.original_url.starts_with("https://trusted-fatwa-source.com") {
-             status = "verified".to_string();
+        } else if req
+            .original_url
+            .starts_with("https://trusted-fatwa-source.com")
+        {
+            status = "verified".to_string();
         }
 
         sqlx::query(
@@ -50,7 +56,7 @@ impl FatwaVerifierService {
             UPDATE sakina_ai.fatwa_documents
             SET verification_status = $1, updated_at = now()
             WHERE id = $2
-            "#
+            "#,
         )
         .bind(&status)
         .bind(req.fatwa_id)

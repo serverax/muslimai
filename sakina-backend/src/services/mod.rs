@@ -9,6 +9,7 @@ pub mod context_compression;
 pub mod decision_algorithm;
 pub mod distributed;
 pub mod embeddings;
+pub mod fatwa_verifier;
 pub mod graph_rag;
 pub mod guardrails;
 pub mod hybrid_rag;
@@ -28,7 +29,6 @@ pub mod qdrant_client;
 pub mod semantic_cache;
 pub mod semantic_router;
 pub mod tafsir_ingestion;
-pub mod fatwa_verifier;
 
 pub use ai_router::AiRouter;
 pub use aia_orchestrator::AiaOrchestrator;

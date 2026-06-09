@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
-use std::sync::Arc;
-use sqlx::PgPool;
-use uuid::Uuid;
 use crate::error::ApiError;
+use serde::{Deserialize, Serialize};
+use sqlx::PgPool;
+use std::sync::Arc;
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TafsirIngestionRequest {
@@ -32,7 +32,7 @@ impl TafsirIngestionService {
             INSERT INTO sakina_ai.quran_tafsir_ingestion_jobs (source_id, status, started_at)
             VALUES ($1, 'running', now())
             RETURNING id
-            "#
+            "#,
         )
         .bind(source_id)
         .fetch_one(&self.pool)
@@ -42,7 +42,11 @@ impl TafsirIngestionService {
         Ok(job_id)
     }
 
-    pub async fn ingest_entry(&self, req: TafsirIngestionRequest, source_id: Uuid) -> Result<Uuid, ApiError> {
+    pub async fn ingest_entry(
+        &self,
+        req: TafsirIngestionRequest,
+        source_id: Uuid,
+    ) -> Result<Uuid, ApiError> {
         let entry_id = sqlx::query_scalar::<_, Uuid>(
             r#"
             INSERT INTO sakina_ai.quran_tafsir_entries 
