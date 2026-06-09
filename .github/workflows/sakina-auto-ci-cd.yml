@@ -108,6 +108,7 @@ jobs:
     env:
       DATABASE_URL: postgres://sakina_user:sakina_password@localhost:5432/sakina_test
       SAKINA_REDIS_URL: redis://localhost:6379
+      RUST_TEST_THREADS: 1
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
