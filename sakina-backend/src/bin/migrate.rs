@@ -114,6 +114,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "021_sakina_mother_local_topics.sql",
             include_str!("../../db/migrations/021_sakina_mother_local_topics.sql"),
         ),
+        (
+            "022_sakina_phase4_quran_tafsir.sql",
+            include_str!("../../db/migrations/022_sakina_phase4_quran_tafsir.sql"),
+        ),
+        (
+            "023_sakina_phase5_hadith_fatwa_learning.sql",
+            include_str!("../../db/migrations/023_sakina_phase5_hadith_fatwa_learning.sql"),
+        ),
+        (
+            "024_sakina_phase6_safety_and_subscriptions.sql",
+            include_str!("../../db/migrations/024_sakina_phase6_safety_and_subscriptions.sql"),
+        ),
     ];
 
     for (name, sql) in migrations {

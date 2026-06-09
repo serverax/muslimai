@@ -488,10 +488,14 @@ pub async fn ask(
         )
         .await;
     } else {
+        let user_tier = crate::services::auth::get_user_tier(user_id, pool.get_ref())
+            .await
+            .unwrap_or_else(|_| "free".to_string());
+
         let route = aia.route(&BrainRouteRequest {
             message: safe_message.clone(),
             language: Some(language.clone()),
-            user_subscription_tier: "premium".to_string(),
+            user_subscription_tier: user_tier,
             safety_context: Some(json!({
                 "entrypoint": "sakina_ask",
                 "section": section,

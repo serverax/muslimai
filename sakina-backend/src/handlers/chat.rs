@@ -255,13 +255,18 @@ pub async fn core_chat(
         "local_memory_context_present": payload.local_memory_context.is_some(),
         "local_memory_context": local_memory_value,
     });
+    let user_tier = crate::services::auth::get_user_tier(user_id, pool.get_ref())
+        .await
+        .unwrap_or_else(|_| "free".to_string());
+
     let route = aia.route(&BrainRouteRequest {
-        message: message.to_string(),
+        message: message.clone(),
         language: Some(language.clone()),
-        user_subscription_tier: "premium".to_string(),
+        user_subscription_tier: user_tier,
         safety_context: Some(safety_context),
         request_id: Some(trace_id.clone()),
     });
+
     if !route.can_generate {
         return error_response(
             actix_web::http::StatusCode::FORBIDDEN,

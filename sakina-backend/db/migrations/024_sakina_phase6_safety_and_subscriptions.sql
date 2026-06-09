@@ -176,4 +176,60 @@ CREATE TABLE IF NOT EXISTS sakina_ai.workspace_members (
     UNIQUE (workspace_id, user_id)
 );
 
+-- ============================================================================
+-- 4. RLS POLICIES
+-- ============================================================================
+
+-- Safety Rules (Public Read for verification)
+ALTER TABLE sakina_ai.safety_rules ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_safety_rules ON sakina_ai.safety_rules FOR SELECT USING (true);
+
+-- Safety Events (Restricted to User and Admin)
+ALTER TABLE sakina_ai.out_of_scope_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_admin_out_of_scope ON sakina_ai.out_of_scope_events FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.medical_emergency_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_admin_medical ON sakina_ai.medical_emergency_events FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.self_harm_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_admin_self_harm ON sakina_ai.self_harm_events FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.high_risk_fatwa_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_admin_high_risk_fatwa ON sakina_ai.high_risk_fatwa_events FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.prompt_injection_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_admin_prompt_injection ON sakina_ai.prompt_injection_events FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.pii_redaction_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_admin_pii_redaction ON sakina_ai.pii_redaction_events FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.blocked_answer_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_admin_blocked_answers ON sakina_ai.blocked_answer_events FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+-- Feature Usage & Billing (User Isolated)
+ALTER TABLE public.feature_usage ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_feature_usage ON public.feature_usage FOR ALL USING (user_id = sakina_ai.current_user_id());
+
+ALTER TABLE public.usage_limits ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_usage_limits ON public.usage_limits FOR SELECT USING (true);
+
+ALTER TABLE public.premium_unlocks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_premium_unlocks ON public.premium_unlocks FOR ALL USING (user_id = sakina_ai.current_user_id());
+
+ALTER TABLE public.billing_audit_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_billing_logs ON public.billing_audit_logs FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
+-- User Preferences & Members (User Isolated)
+ALTER TABLE public.user_madhhab_preferences ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_madhhab_pref ON public.user_madhhab_preferences FOR ALL USING (user_id = sakina_ai.current_user_id());
+
+ALTER TABLE public.user_country_context ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_country_ctx ON public.user_country_context FOR ALL USING (user_id = sakina_ai.current_user_id());
+
+ALTER TABLE public.user_safety_flags ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_safety_flg ON public.user_safety_flags FOR ALL USING (user_id = sakina_ai.current_user_id());
+
+ALTER TABLE sakina_ai.workspace_members ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_workspace_membership ON sakina_ai.workspace_members FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+
 COMMIT;

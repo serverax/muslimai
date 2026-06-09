@@ -158,6 +158,43 @@ pub async fn authenticated_user_id(req: &HttpRequest, pool: &PgPool) -> Result<U
     Ok(session_user_id)
 }
 
+pub async fn get_user_tier(user_id: Uuid, pool: &PgPool) -> Result<String, ApiError> {
+    // 1. Check direct override in user_profiles
+    let profile_tier = sqlx::query_scalar!(
+        "SELECT subscription_tier FROM public.user_profiles WHERE user_id = $1",
+        user_id
+    )
+    .fetch_optional(pool)
+    .await
+    .map_err(|e| ApiError::internal(format!("failed to load user profile tier: {}", e)))?;
+
+    if let Some(tier) = profile_tier {
+        if tier != "free" {
+            return Ok(tier);
+        }
+    }
+
+    // 2. Check active subscription
+    let sub_tier = sqlx::query_scalar!(
+        r#"
+        SELECT p.plan_key
+        FROM public.user_subscriptions s
+        JOIN public.subscription_plans p ON p.id = s.plan_id
+        WHERE s.user_id = $1
+          AND s.subscription_status = 'active'
+          AND (s.current_period_end > now() OR s.current_period_end IS NULL)
+        ORDER BY s.created_at DESC
+        LIMIT 1
+        "#,
+        user_id
+    )
+    .fetch_optional(pool)
+    .await
+    .map_err(|e| ApiError::internal(format!("failed to load user subscription tier: {}", e)))?;
+
+    Ok(sub_tier.unwrap_or_else(|| "free".to_string()))
+}
+
 pub async fn ensure_user_scope(
     req: &HttpRequest,
     pool: &PgPool,

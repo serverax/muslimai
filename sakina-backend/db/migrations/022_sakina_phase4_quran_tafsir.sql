@@ -199,4 +199,59 @@ CREATE TABLE IF NOT EXISTS sakina_ai.quran_notes (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- ============================================================================
+-- 4. RLS POLICIES (Security Gate Satisfaction)
+-- ============================================================================
+
+-- Public Knowledge Tables (Read-only for all, including anonymous)
+ALTER TABLE sakina_ai.quran_surahs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_surahs ON sakina_ai.quran_surahs FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_ayahs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_ayahs ON sakina_ai.quran_ayahs FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_translations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_translations ON sakina_ai.quran_translations FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_tafsir_sources ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_tafsir_sources ON sakina_ai.quran_tafsir_sources FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_tafsir_books ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_tafsir_books ON sakina_ai.quran_tafsir_books FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_tafsir_entries ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_tafsir_entries ON sakina_ai.quran_tafsir_entries FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_tafsir_languages ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_tafsir_languages ON sakina_ai.quran_tafsir_languages FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_tafsir_citations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_tafsir_citations ON sakina_ai.quran_tafsir_citations FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_tafsir_cross_references ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_tafsir_cross_references ON sakina_ai.quran_tafsir_cross_references FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.quran_tafsir_topic_tags ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quran_tafsir_topic_tags ON sakina_ai.quran_tafsir_topic_tags FOR SELECT USING (true);
+
+-- Internal/Admin Tables (Restricted)
+ALTER TABLE sakina_ai.quran_tafsir_ingestion_jobs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY admin_tafsir_jobs ON sakina_ai.quran_tafsir_ingestion_jobs FOR ALL USING (sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.quran_tafsir_ingestion_errors ENABLE ROW LEVEL SECURITY;
+CREATE POLICY admin_tafsir_errors ON sakina_ai.quran_tafsir_ingestion_errors FOR ALL USING (sakina_ai.rls_service_role());
+
+ALTER TABLE sakina_ai.quran_tafsir_quality_reviews ENABLE ROW LEVEL SECURITY;
+CREATE POLICY admin_tafsir_reviews ON sakina_ai.quran_tafsir_quality_reviews FOR ALL USING (sakina_ai.rls_service_role());
+
+-- User Private Tables (Isolated)
+ALTER TABLE sakina_ai.quran_bookmarks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_quran_bookmarks ON sakina_ai.quran_bookmarks FOR ALL USING (user_id = sakina_ai.current_user_id());
+
+ALTER TABLE sakina_ai.quran_reading_progress ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_quran_progress ON sakina_ai.quran_reading_progress FOR ALL USING (user_id = sakina_ai.current_user_id());
+
+ALTER TABLE sakina_ai.quran_notes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_quran_notes ON sakina_ai.quran_notes FOR ALL USING (user_id = sakina_ai.current_user_id());
+
 COMMIT;

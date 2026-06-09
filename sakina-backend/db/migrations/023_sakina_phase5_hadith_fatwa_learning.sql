@@ -275,4 +275,69 @@ CREATE TABLE IF NOT EXISTS sakina_ai.user_goals (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- ============================================================================
+-- 4. RLS POLICIES
+-- ============================================================================
+
+-- Hadith (Public Read)
+ALTER TABLE sakina_ai.hadith_collections ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_collections ON sakina_ai.hadith_collections FOR SELECT USING (true);
+ALTER TABLE sakina_ai.hadith_books ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_books ON sakina_ai.hadith_books FOR SELECT USING (true);
+ALTER TABLE sakina_ai.hadith_narrations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_narrations ON sakina_ai.hadith_narrations FOR SELECT USING (true);
+ALTER TABLE sakina_ai.hadith_chains ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_chains ON sakina_ai.hadith_chains FOR SELECT USING (true);
+ALTER TABLE sakina_ai.hadith_grades ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_grades ON sakina_ai.hadith_grades FOR SELECT USING (true);
+ALTER TABLE sakina_ai.hadith_topics ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_topics ON sakina_ai.hadith_topics FOR SELECT USING (true);
+ALTER TABLE sakina_ai.hadith_topic_links ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_topic_links ON sakina_ai.hadith_topic_links FOR SELECT USING (true);
+ALTER TABLE sakina_ai.hadith_translations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_hadith_translations ON sakina_ai.hadith_translations FOR SELECT USING (true);
+
+-- Fatwa (Public Read)
+ALTER TABLE sakina_ai.fatwa_sources ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_fatwa_sources ON sakina_ai.fatwa_sources FOR SELECT USING (true);
+ALTER TABLE sakina_ai.fatwa_documents ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_fatwa_documents ON sakina_ai.fatwa_documents FOR SELECT USING (true);
+ALTER TABLE sakina_ai.fatwa_questions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_fatwa_questions ON sakina_ai.fatwa_questions FOR SELECT USING (true);
+ALTER TABLE sakina_ai.fatwa_answers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_fatwa_answers ON sakina_ai.fatwa_answers FOR SELECT USING (true);
+ALTER TABLE sakina_ai.fatwa_topics ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_fatwa_topics ON sakina_ai.fatwa_topics FOR SELECT USING (true);
+ALTER TABLE sakina_ai.fatwa_citations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_fatwa_citations ON sakina_ai.fatwa_citations FOR SELECT USING (true);
+
+-- Admin/Ingestion (Internal Restricted)
+ALTER TABLE sakina_ai.fatwa_scrape_jobs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY admin_fatwa_jobs ON sakina_ai.fatwa_scrape_jobs FOR ALL USING (sakina_ai.rls_service_role());
+ALTER TABLE sakina_ai.fatwa_scrape_errors ENABLE ROW LEVEL SECURITY;
+CREATE POLICY admin_fatwa_errors ON sakina_ai.fatwa_scrape_errors FOR ALL USING (sakina_ai.rls_service_role());
+
+-- Learning (Public Read for paths/lessons, Private for progress)
+ALTER TABLE sakina_ai.learning_paths ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_learning_paths ON sakina_ai.learning_paths FOR SELECT USING (true);
+ALTER TABLE sakina_ai.learning_modules ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_learning_modules ON sakina_ai.learning_modules FOR SELECT USING (true);
+ALTER TABLE sakina_ai.learning_lessons ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_learning_lessons ON sakina_ai.learning_lessons FOR SELECT USING (true);
+ALTER TABLE sakina_ai.quizzes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quizzes ON sakina_ai.quizzes FOR SELECT USING (true);
+ALTER TABLE sakina_ai.quiz_questions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quiz_questions ON sakina_ai.quiz_questions FOR SELECT USING (true);
+ALTER TABLE sakina_ai.quiz_answers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY select_quiz_answers ON sakina_ai.quiz_answers FOR SELECT USING (true);
+
+ALTER TABLE sakina_ai.user_learning_path_progress ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_path_progress ON sakina_ai.user_learning_path_progress FOR ALL USING (user_id = sakina_ai.current_user_id());
+ALTER TABLE sakina_ai.user_lesson_completions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_lesson_progress ON sakina_ai.user_lesson_completions FOR ALL USING (user_id = sakina_ai.current_user_id());
+ALTER TABLE sakina_ai.user_quiz_attempts ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_quiz_attempts ON sakina_ai.user_quiz_attempts FOR ALL USING (user_id = sakina_ai.current_user_id());
+ALTER TABLE sakina_ai.user_goals ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_goals ON sakina_ai.user_goals FOR ALL USING (user_id = sakina_ai.current_user_id());
+
 COMMIT;
