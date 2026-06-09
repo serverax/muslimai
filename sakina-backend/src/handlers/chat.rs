@@ -260,7 +260,7 @@ pub async fn core_chat(
         .unwrap_or_else(|_| "free".to_string());
 
     let route = aia.route(&BrainRouteRequest {
-        message: message.clone(),
+        message: message.to_string(),
         language: Some(language.clone()),
         user_subscription_tier: user_tier,
         safety_context: Some(safety_context),
