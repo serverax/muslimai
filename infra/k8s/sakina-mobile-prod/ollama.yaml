@@ -2,14 +2,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: sakina-ollama-models
-  namespace: sakina-mobile-staging
-  labels:
-    app.kubernetes.io/name: ollama
-    app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+  namespace: sakina-mobile-prod
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: ["ReadWriteOnce"]
   resources:
     requests:
       storage: 20Gi
@@ -18,11 +13,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sakina-ollama
-  namespace: sakina-mobile-staging
-  labels:
-    app.kubernetes.io/name: ollama
-    app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+  namespace: sakina-mobile-prod
 spec:
   selector:
     app: sakina-ollama
@@ -35,11 +26,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sakina-ollama
-  namespace: sakina-mobile-staging
-  labels:
-    app.kubernetes.io/name: ollama
-    app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+  namespace: sakina-mobile-prod
 spec:
   replicas: 1
   strategy:
@@ -51,85 +38,33 @@ spec:
     metadata:
       labels:
         app: sakina-ollama
-        app.kubernetes.io/name: ollama
-        app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
     spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        seccompProfile:
-          type: RuntimeDefault
-      containers:
-        - name: ollama
-          image: ollama/ollama
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 11434
-              name: http
-          env:
-            - name: OLLAMA_HOST
-              value: 0.0.0.0:11434
-            - name: HOME
-              value: /ollama
-            - name: OLLAMA_MODELS
-              value: /ollama/models
-          readinessProbe:
-            httpGet:
-              path: /api/tags
-              port: http
-            initialDelaySeconds: 20
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 30
-          livenessProbe:
-            httpGet:
-              path: /api/tags
-              port: http
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 6
-          resources:
-            requests:
-              cpu: "250m"
-              memory: "1Gi"
-            limits:
-              cpu: "2"
-              memory: "6Gi"
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
-          volumeMounts:
-            - name: ollama-models
-              mountPath: /ollama
-      volumes:
-        - name: ollama-models
-          persistentVolumeClaim:
-            claimName: sakina-ollama-models
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
           effect: NoSchedule
+      containers:
+        - name: ollama
+          image: ollama/ollama
+          ports:
+            - containerPort: 11434
+          env:
+            - name: OLLAMA_HOST
+              value: 0.0.0.0:11434
+          volumeMounts:
+            - name: ollama-models
+              mountPath: /root/.ollama
+      volumes:
+        - name: ollama-models
+          persistentVolumeClaim:
+            claimName: sakina-ollama-models
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: ollama-inference
-  namespace: sakina-mobile-staging
-  labels:
-    app: ollama-inference
-    part-of: sakina
+  namespace: sakina-mobile-prod
 spec:
-  type: ClusterIP
   selector:
     app: ollama-inference
   ports:
@@ -141,10 +76,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: ollama-inference
-  namespace: sakina-mobile-staging
-  labels:
-    app: ollama-inference
-    part-of: sakina
+  namespace: sakina-mobile-prod
 spec:
   selector:
     matchLabels:
@@ -153,273 +85,18 @@ spec:
     metadata:
       labels:
         app: ollama-inference
-        part-of: sakina
     spec:
       tolerations:
         - operator: Exists
-      securityContext:
-        seccompProfile:
-          type: RuntimeDefault
       containers:
         - name: ollama
           image: ollama/ollama:latest
-          imagePullPolicy: IfNotPresent
           ports:
-            - name: http
-              containerPort: 11434
+            - containerPort: 11434
           env:
             - name: OLLAMA_HOST
               value: "0.0.0.0:11434"
-            - name: OLLAMA_NUM_PARALLEL
-              value: "1"
-            - name: OLLAMA_MAX_LOADED_MODELS
-              value: "1"
-            - name: CUDA_VISIBLE_DEVICES
-              value: ""
-          resources:
-            requests:
-              cpu: "500m"
-              memory: "1Gi"
-            limits:
-              cpu: "2"
-              memory: "6Gi"
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-          volumeMounts:
-            - name: ollama-models
-              mountPath: /root/.ollama
           readinessProbe:
             httpGet:
               path: /api/tags
-              port: http
-            initialDelaySeconds: 20
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 30
-          livenessProbe:
-            httpGet:
-              path: /api/tags
-              port: http
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 6
-      volumes:
-        - name: ollama-models
-          emptyDir: {}
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: sakina-default-deny-ingress
-  namespace: sakina-mobile-prod
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-ingress-to-backend
-  namespace: sakina-mobile-prod
-spec:
-  podSelector:
-    matchLabels:
-      app: sakina-backend
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: traefik
-  policyTypes:
-    - Ingress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-backend-to-internal-services
-  namespace: sakina-mobile-prod
-spec:
-  podSelector:
-    matchExpressions:
-      - key: app
-        operator: In
-        values:
-          - sakina-brain
-          - sakina-rules-engine
-          - sakina-citation-guard
-          - sakina-document-service
-          - sakina-rag-retrieval
-          - sakina-llm-gateway
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app: sakina-backend
-  policyTypes:
-    - Ingress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-brain-to-internal-services
-  namespace: sakina-mobile-prod
-spec:
-  podSelector:
-    matchExpressions:
-      - key: app
-        operator: In
-        values:
-          - sakina-rules-engine
-          - sakina-citation-guard
-          - sakina-rag-retrieval
-          - sakina-llm-gateway
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app: sakina-brain
-  policyTypes:
-    - Ingress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-internal-to-persistence
-  namespace: sakina-mobile-prod
-spec:
-  podSelector:
-    matchExpressions:
-      - key: app
-        operator: In
-        values:
-          - sakina-postgres
-          - sakina-qdrant
-          - sakina-redis
-  ingress:
-    - from:
-        - podSelector:
-            matchExpressions:
-              - key: app
-                operator: In
-                values:
-                  - sakina-backend
-                  - sakina-brain
-                  - sakina-rag-retrieval
-                  - sakina-rag-ingestion
-                  - sakina-worker
-                  - sakina-rules-engine
-                  - sakina-citation-guard
-                  - sakina-document-service
-  policyTypes:
-    - Ingress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-llm-gateway-to-ollama
-  namespace: sakina-mobile-prod
-spec:
-  podSelector:
-    matchLabels:
-      app: ollama-inference
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app: sakina-llm-gateway
-  policyTypes:
-    - Ingress
-# Defense-in-depth network isolation for the local LLM runtime.
-#
-# IMPORTANT (honesty note for the audit): this cluster's CNI is Flannel, which
-# ships NO NetworkPolicy controller, so these policies are DECLARED but NOT
-# ENFORCED at runtime today. They become effective only if a policy engine
-# (Cilium / Calico policy / kube-router) is added. Until then, the real,
-# enforced isolation guarantees are:
-#   (1) sakina-ollama is a ClusterIP Service with no Ingress / no externalIP;
-#   (2) the backend Deployment has NO OLLAMA_BASE_URL and can only reach the
-#       gateway via SAKINA_LLM_GATEWAY_URL (verified in backend.yaml).
-# These manifests encode the intended contract so it is enforced the moment the
-# cluster gains policy support.
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: sakina-ollama-allow-gateway-only
-  namespace: sakina-mobile-staging
-  labels:
-    app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
-spec:
-  podSelector:
-    matchLabels:
-      app: sakina-ollama
-  policyTypes:
-    - Ingress
-  ingress:
-    # Only the LLM gateway may reach Ollama on 11434.
-    - from:
-        - podSelector:
-            matchLabels:
-              app: sakina-llm-gateway
-      ports:
-        - protocol: TCP
-          port: 11434
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: sakina-backend-deny-ollama
-  namespace: sakina-mobile-staging
-  labels:
-    app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
-spec:
-  # Backend egress: explicitly does NOT include Ollama (11434). Backend may
-  # reach the gateway (8087), postgres (5432), qdrant (6333), redis (6379),
-  # and DNS. The absence of an 11434 allow rule is the point.
-  podSelector:
-    matchLabels:
-      app: sakina-backend
-  policyTypes:
-    - Egress
-  egress:
-    - to:
-        - podSelector:
-            matchLabels:
-              app: sakina-llm-gateway
-      ports:
-        - protocol: TCP
-          port: 8087
-    - to:
-        - podSelector:
-            matchLabels:
-              app: sakina-postgres
-      ports:
-        - protocol: TCP
-          port: 5432
-    - to:
-        - podSelector:
-            matchLabels:
-              app: sakina-qdrant
-      ports:
-        - protocol: TCP
-          port: 6333
-    - to:
-        - podSelector:
-            matchLabels:
-              app: sakina-redis
-      ports:
-        - protocol: TCP
-          port: 6379
-    # DNS resolution.
-    - to:
-        - namespaceSelector: {}
-      ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
+              port: 11434
