@@ -169,7 +169,7 @@ jobs:
           echo "backend_image=${BACKEND_IMAGE}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
           echo "frontend_image=${FRONTEND_IMAGE}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
       - name: Build backend
-        run: docker build -f sakina-backend/Dockerfile -t "${BACKEND_IMAGE}:${GITHUB_SHA}" sakina-backend
+        run: docker build -f sakina-backend/Dockerfile -t "${BACKEND_IMAGE}:${GITHUB_SHA}" .
       - name: Push backend
         run: docker push "${BACKEND_IMAGE}:${GITHUB_SHA}"
       - name: Build frontend/admin image
