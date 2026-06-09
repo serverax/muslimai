@@ -126,6 +126,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "024_sakina_phase6_safety_and_subscriptions.sql",
             include_str!("../../db/migrations/024_sakina_phase6_safety_and_subscriptions.sql"),
         ),
+        (
+            "seed_knowledge.sql",
+            include_str!("../../db/seed_knowledge.sql"),
+        ),
     ];
 
     for (name, sql) in migrations {
