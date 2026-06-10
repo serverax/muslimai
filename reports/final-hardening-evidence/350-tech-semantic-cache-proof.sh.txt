@@ -1,5 +1,5 @@
-{"indexed_chunks": 36, "collection": "sakina_islamic_chunks_en", "dimension": 128}
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.69s
+{"indexed_chunks": 41, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.53s
 DELETE 3
 {
   "answer": "The Quran points to fasting in Al-Baqarah 2:183.",
@@ -77,7 +77,7 @@ DELETE 3
       "step": "memory_action"
     },
     {
-      "outcome": "246523b5-173d-4211-8272-7df52f85a2c5",
+      "outcome": "5c0cdc0e-cae9-4f83-93d2-1b067956d865",
       "step": "decision_logged"
     },
     {
@@ -224,8 +224,8 @@ DELETE 3
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
-  "trace_id": "412fae97-686d-4a53-8b1c-ae5fdf8406f7",
+  "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+  "trace_id": "b5cedccb-7a5b-4f52-83a4-8d97534d8e8c",
   "weak_evidence_blocked": false
 }
 {
@@ -304,7 +304,7 @@ DELETE 3
       "step": "memory_action"
     },
     {
-      "outcome": "1771725b-9478-4d02-9229-8b8efae4ed9a",
+      "outcome": "626682c1-5720-4d9f-a36f-1025275ab25f",
       "step": "decision_logged"
     },
     {
@@ -452,8 +452,8 @@ DELETE 3
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
-  "trace_id": "3ad77259-8a19-4355-9111-1a3b5740282a",
+  "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+  "trace_id": "0059aa1c-43c8-4b63-8f78-3832c8cd454c",
   "weak_evidence_blocked": false
 }
 {
@@ -532,7 +532,7 @@ DELETE 3
       "step": "memory_action"
     },
     {
-      "outcome": "5f798069-7a60-4dfe-85a7-fe8937b26d5b",
+      "outcome": "2126839f-ec96-40d8-b1cb-ae967dedd70c",
       "step": "decision_logged"
     },
     {
@@ -679,8 +679,8 @@ DELETE 3
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
-  "trace_id": "070ea2ea-866e-4e9a-a32c-859287539584",
+  "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+  "trace_id": "882cedfd-b465-4801-be68-ff036e5574ee",
   "weak_evidence_blocked": false
 }
 Semantic cache row proof: 2|2|2
@@ -760,7 +760,7 @@ Semantic cache row proof: 2|2|2
       "step": "memory_action"
     },
     {
-      "outcome": "01af6228-547f-45f4-8f9f-4fa9fbcaa7a4",
+      "outcome": "a0d5a114-caf0-4991-8743-d457638c80fe",
       "step": "decision_logged"
     },
     {
@@ -907,8 +907,8 @@ Semantic cache row proof: 2|2|2
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.27",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.26"
   ],
-  "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
-  "trace_id": "471faef0-2504-4442-87b5-2f15f8efaa5f",
+  "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+  "trace_id": "e9eb6260-cc33-42f9-bd69-dafb523c5e78",
   "weak_evidence_blocked": false
 }
 Sensitive request HTTP status: 200 rows before=1 after=1
@@ -989,7 +989,7 @@ UPDATE 1
       "step": "memory_action"
     },
     {
-      "outcome": "f845c5a1-0123-4682-8f83-9e9ffccf1afb",
+      "outcome": "0c898a01-83cc-468f-b22d-46e787d4a8c4",
       "step": "decision_logged"
     },
     {
@@ -1055,7 +1055,7 @@ UPDATE 1
   "retrieved_chunks": [
     {
       "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
-      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days. semantic-cache-source-version-1780688425-23637",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days. semantic-cache-source-version-1780710469-18086",
       "citation": "Quran 2:184",
       "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
       "final_score": 0.8799999952316284,
@@ -1136,29 +1136,16 @@ UPDATE 1
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
     "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
   ],
-  "source_version": "hybrid-v1:36:16a9910e167ef4d77b5a954cb27cd6d2",
-  "trace_id": "733f291e-3551-4c18-b706-52107afe875d",
+  "source_version": "hybrid-v1:41:58dbc48d58a5ae96932a5d14a9b4c241",
+  "trace_id": "b87af51c-b5e6-4cfe-b7e7-22b7106e4e25",
   "weak_evidence_blocked": false
 }
 {
   "enabled": true,
-  "entries": 205,
+  "entries": 249,
   "hits": 2,
   "status": "ok"
 }
-sakina-backend/src/services/islamic_knowledge.rs:287:        let source_version =
-sakina-backend/src/services/islamic_knowledge.rs:288:            self.cache.source_version().await.map_err(|_| {
-sakina-backend/src/services/islamic_knowledge.rs:299:            &source_version,
-sakina-backend/src/services/islamic_knowledge.rs:310:                object.insert("cache_status".to_string(), json!("hit"));
-sakina-backend/src/services/islamic_knowledge.rs:311:                object.insert("cache_hit".to_string(), json!(true));
-sakina-backend/src/services/islamic_knowledge.rs:313:                    "cache_hit_count".to_string(),
-sakina-backend/src/services/islamic_knowledge.rs:398:            "cache_status": "miss",
-sakina-backend/src/services/islamic_knowledge.rs:399:            "cache_hit": false,
-sakina-backend/src/services/islamic_knowledge.rs:400:            "cache_ttl_seconds": SemanticCacheService::TTL_SECONDS,
-sakina-backend/src/services/islamic_knowledge.rs:401:            "source_version": source_version,
-sakina-backend/src/services/islamic_knowledge.rs:404:        if SemanticCacheService::is_cacheable(safety_level, &payload) {
-sakina-backend/src/services/islamic_knowledge.rs:407:                user_id: request.user_id,
-sakina-backend/src/services/islamic_knowledge.rs:411:                source_version,
 sakina-backend/src/services/semantic_cache.rs:14:    pub source_version: String,
 sakina-backend/src/services/semantic_cache.rs:32:    pub const TTL_SECONDS: i64 = 86_400;
 sakina-backend/src/services/semantic_cache.rs:42:        source_version: &str,
@@ -1173,4 +1160,17 @@ sakina-backend/src/services/semantic_cache.rs:153:                cache_key, use
 sakina-backend/src/services/semantic_cache.rs:162:                source_version = EXCLUDED.source_version,
 sakina-backend/src/services/semantic_cache.rs:173:        .bind(&entry.source_version)
 sakina-backend/src/services/semantic_cache.rs:214:        assert!(!SemanticCacheService::is_cacheable("safe", &payload));
+sakina-backend/src/services/islamic_knowledge.rs:287:        let source_version =
+sakina-backend/src/services/islamic_knowledge.rs:288:            self.cache.source_version().await.map_err(|_| {
+sakina-backend/src/services/islamic_knowledge.rs:299:            &source_version,
+sakina-backend/src/services/islamic_knowledge.rs:310:                object.insert("cache_status".to_string(), json!("hit"));
+sakina-backend/src/services/islamic_knowledge.rs:311:                object.insert("cache_hit".to_string(), json!(true));
+sakina-backend/src/services/islamic_knowledge.rs:313:                    "cache_hit_count".to_string(),
+sakina-backend/src/services/islamic_knowledge.rs:398:            "cache_status": "miss",
+sakina-backend/src/services/islamic_knowledge.rs:399:            "cache_hit": false,
+sakina-backend/src/services/islamic_knowledge.rs:400:            "cache_ttl_seconds": SemanticCacheService::TTL_SECONDS,
+sakina-backend/src/services/islamic_knowledge.rs:401:            "source_version": source_version,
+sakina-backend/src/services/islamic_knowledge.rs:404:        if SemanticCacheService::is_cacheable(safety_level, &payload) {
+sakina-backend/src/services/islamic_knowledge.rs:407:                user_id: request.user_id,
+sakina-backend/src/services/islamic_knowledge.rs:411:                source_version,
 SEMANTIC_CACHE_OK mandatory semantic cache proof checks completed.

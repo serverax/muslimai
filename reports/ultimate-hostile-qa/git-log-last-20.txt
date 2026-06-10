@@ -1,0 +1,20 @@
+66de2e3 Roll out LLM gateway before backend
+682ccfd Add Kubernetes Ollama service for Sakina staging
+a8136e3 Fix Sakina staging service distribution and scheduling
+0a4517f Constrain staging rollout pod capacity
+2597fb2 Expose migration job pod diagnostics
+dcdd61e Pin migration job image and expose deploy diagnostics
+70e49d5 Fix backend CI Docker context and workspace schema
+c350393 Use portable grep in backend CI assertions
+26af252 Add Redis service to Sakina backend CI
+04b4444 Seed verified corpus for phase2 chat CI
+3a72d20 Add knowledge graph schema for backend tests
+8c5426d Serialize backend DB integration tests in CI
+87c712f Wire backend CI tests to Postgres
+34fc1c3 Fix Sakina backend image build context
+8831bab Wire semantic cache schema for Sakina chat tests
+07ecf05 Fix Sakina RAG image Docker context
+4ff84a0 Fix Sakina CI blockers after LLM gateway deploy
+ad59c41 Add Sakina LLM gateway and backend routing
+db781dc Add Redis service to Sakina backend CI
+11a1a5e Fix Sakina CI dependency and DB gates

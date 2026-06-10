@@ -62,8 +62,12 @@ spec:
               value: staging
             - name: SERVICE_NAME
               value: "sakina-brain"
+            - name: SAKINA_RULES_ENGINE_URL
+              value: "http://sakina-rules-engine:8080"
             - name: SAKINA_LLM_ENABLED
               value: "false"
+            - name: QDRANT_URL
+              value: "http://sakina-qdrant:6333"
             - name: POSTGRES_HOST
               value: sakina-postgres
             - name: POSTGRES_PORT

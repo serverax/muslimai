@@ -38,6 +38,8 @@ spec:
           command:
             - /usr/local/bin/sakina-migrate
           env:
+            - name: QDRANT_URL
+              value: "http://sakina-qdrant:6333"
             - name: POSTGRES_HOST
               value: sakina-postgres
             - name: POSTGRES_PORT
@@ -53,6 +55,18 @@ spec:
                   name: sakina-postgres-secret
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
+            - name: SAKINA_REDIS_URL
+              value: redis://sakina-redis:6379
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: jwt-secret
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: encryption-key
               valueFrom:
                 secretKeyRef:
                   name: sakina-postgres-secret

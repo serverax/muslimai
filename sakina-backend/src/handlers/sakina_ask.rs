@@ -109,6 +109,12 @@ fn high_risk_fatwa(message: &str) -> bool {
         || q.contains("binding fatwa")
         || q.contains("فتوى")
         || q.contains("طلاق")
+        || q.contains("divorce")
+        || q.contains("talaq")
+        || q.contains("inheritance")
+        || q.contains("marriage separation")
+        || q.contains("killing")
+        || q.contains("war")
 }
 
 fn fabricated_or_unsupported_ritual_claim(message: &str) -> bool {
@@ -438,7 +444,56 @@ pub async fn ask(
         source_path.answer_source = "local_db".to_string();
     }
 
-    if fabricated_or_unsupported_ritual_claim(&safe_message) {
+    // Distributed architecture: if SAKINA_RULES_ENGINE_URL is set, we call the Rules Engine service.
+    if let Ok(rules_url) = std::env::var("SAKINA_RULES_ENGINE_URL") {
+        if !rules_url.trim().is_empty() {
+            match distributed_client
+                .evaluate_rules(
+                    &rules_url,
+                    &crate::models::rules::RulesEvaluateRequest {
+                        message: safe_message.clone(),
+                        language: language.clone(),
+                        intent: Some(intent.clone()),
+                    },
+                )
+                .await
+            {
+                Ok(res) => {
+                    if !res.allowed {
+                        source_path.blocked = true;
+                        safety.guardrails_passed = false;
+                        safety_state = if res.action == "escalate" {
+                            if res.reason == "crisis_detected" {
+                                "CRISIS_ESCALATION".to_string()
+                            } else {
+                                "ESCALATED_TO_HUMAN".to_string()
+                            }
+                        } else {
+                            "CAVEATED_SHORT_CIRCUIT".to_string()
+                        };
+                        answer = res.fallback_answer.unwrap_or_default();
+                        source_path.answer_source = res.reason;
+                        if safety_state == "ESCALATED_TO_HUMAN" {
+                            enqueue_scholar_review(
+                                pool.get_ref(),
+                                trace_uuid,
+                                "Sakina distributed rules engine escalation",
+                            )
+                            .await;
+                        }
+                    }
+                }
+                Err(err) => {
+                    tracing::error!("Rules engine failed: {:?}", err);
+                    // Fail-safe: continue to local checks if remote fails
+                }
+            }
+        }
+    }
+
+    if source_path.blocked {
+        // Skip further checks if already blocked by rules engine
+    } else if fabricated_or_unsupported_ritual_claim(&safe_message) {
         source_path.blocked = true;
         safety.guardrails_passed = false;
         safety_state = "CAVEATED_SHORT_CIRCUIT".to_string();

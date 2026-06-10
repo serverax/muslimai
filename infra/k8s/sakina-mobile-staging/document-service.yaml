@@ -64,6 +64,8 @@ spec:
               value: "sakina-document-service"
             - name: SAKINA_LLM_ENABLED
               value: "false"
+            - name: QDRANT_URL
+              value: "http://sakina-qdrant:6333"
             - name: POSTGRES_HOST
               value: sakina-postgres
             - name: POSTGRES_PORT
@@ -79,6 +81,8 @@ spec:
                   name: sakina-postgres-secret
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
+            - name: SAKINA_REDIS_URL
+              value: redis://sakina-redis:6379
               valueFrom:
                 secretKeyRef:
                   name: sakina-postgres-secret

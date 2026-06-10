@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 use crate::error::ApiError;
 use crate::services::authenticated_user_id;
-use crate::services::phase2::{
+use crate::services::phase2::{ResolveScholarReviewRequest, 
     ActivateSubscriptionRequest, AppendSupportTicketMessageRequest, AssignScholarReviewRequest,
     CreateAuditLogRequest, CreateChatFeedbackRequest, CreateEventRequest,
     CreateNotificationTemplateRequest, CreateScholarAccountRequest, CreateSecurityLogRequest,
@@ -345,6 +345,14 @@ pub async fn assign_scholar_review(
 ) -> Result<HttpResponse, ApiError> {
     let id = repo.assign_scholar_review(body.into_inner()).await?;
     Ok(HttpResponse::Created().json(serde_json::json!({ "id": id })))
+}
+
+pub async fn resolve_scholar_review(
+    repo: web::Data<Phase2Repository>,
+    body: web::Json<ResolveScholarReviewRequest>,
+) -> Result<HttpResponse, ApiError> {
+    repo.resolve_scholar_review(body.into_inner()).await?;
+    Ok(HttpResponse::Ok().json(serde_json::json!({ "status": "resolved" })))
 }
 
 pub async fn source_approval_queue(

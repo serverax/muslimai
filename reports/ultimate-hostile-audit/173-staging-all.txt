@@ -1,0 +1,114 @@
+NAME                                        READY   STATUS      RESTARTS   AGE
+pod/ollama-786bcf99b5-74l7v                 1/1     Running     0          8h
+pod/sakina-admin-7fdcd8f65c-hk7d8           1/1     Running     0          20m
+pod/sakina-admin-smoke-4qfzh                0/1     Completed   0          4d6h
+pod/sakina-backend-77dfcf865b-dq2nn         1/1     Running     0          21m
+pod/sakina-backend-77dfcf865b-sqjwf         1/1     Running     0          21m
+pod/sakina-backend-smoke-kxkn6              0/1     Completed   0          4d6h
+pod/sakina-db-migrate-xz67b                 0/1     Completed   0          4d6h
+pod/sakina-db-verify-jrnk9                  0/1     Completed   0          4d6h
+pod/sakina-live-smoke-nhcff                 0/1     Completed   0          4d6h
+pod/sakina-llm-gateway-5bcffc5c9f-5lhtr     1/1     Running     0          22m
+pod/sakina-ollama-7b8cd944f-fd9gb           1/1     Running     0          49m
+pod/sakina-ollama-preload-pzwvn             0/1     Completed   0          22m
+pod/sakina-postgres-0                       1/1     Running     0          4d7h
+pod/sakina-qdrant-0                         1/1     Running     0          22h
+pod/sakina-rag-ingestion-8bc76dd5c-hw68p    1/1     Running     0          21m
+pod/sakina-rag-retrieval-559c6f695f-s69gk   1/1     Running     0          21m
+pod/sakina-rag-smoke-847cv                  0/1     Completed   0          4d6h
+pod/sakina-redis-586ccb78c6-576fx           1/1     Running     0          49m
+
+NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+service/ollama                 ClusterIP   10.109.193.54    <none>        11434/TCP   8h
+service/ollama-inference       ClusterIP   10.97.109.141    <none>        11434/TCP   7h28m
+service/sakina-admin           ClusterIP   10.109.99.158    <none>        80/TCP      4d6h
+service/sakina-backend         ClusterIP   10.111.116.117   <none>        8080/TCP    4d6h
+service/sakina-llm-gateway     ClusterIP   10.108.89.233    <none>        8087/TCP    5h58m
+service/sakina-ollama          ClusterIP   10.101.149.184   <none>        11434/TCP   81m
+service/sakina-postgres        ClusterIP   10.99.78.69      <none>        5432/TCP    4d7h
+service/sakina-qdrant          ClusterIP   10.98.109.218    <none>        6333/TCP    22h
+service/sakina-rag             ClusterIP   10.99.242.41     <none>        8080/TCP    22h
+service/sakina-rag-ingestion   ClusterIP   10.110.187.84    <none>        8080/TCP    4d7h
+service/sakina-rag-retrieval   ClusterIP   10.102.175.134   <none>        8080/TCP    4d7h
+service/sakina-redis           ClusterIP   10.104.66.235    <none>        6379/TCP    22h
+
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/ollama                 1/1     1            1           8h
+deployment.apps/sakina-admin           1/1     1            1           4d6h
+deployment.apps/sakina-backend         2/2     2            2           4d6h
+deployment.apps/sakina-llm-gateway     1/1     1            1           5h58m
+deployment.apps/sakina-ollama          1/1     1            1           81m
+deployment.apps/sakina-rag-ingestion   1/1     1            1           4d7h
+deployment.apps/sakina-rag-retrieval   1/1     1            1           4d7h
+deployment.apps/sakina-redis           1/1     1            1           22h
+
+NAME                                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/ollama-786bcf99b5                 1         1         1       8h
+replicaset.apps/sakina-admin-548fb8c75f           0         0         0       38h
+replicaset.apps/sakina-admin-6f468b94cc           0         0         0       23h
+replicaset.apps/sakina-admin-794ff69c5d           0         0         0       5h58m
+replicaset.apps/sakina-admin-7dc6cd7fb4           0         0         0       4d6h
+replicaset.apps/sakina-admin-7fdcd8f65c           1         1         1       39m
+replicaset.apps/sakina-admin-848f77fd9            0         0         0       22h
+replicaset.apps/sakina-backend-5455c47fcc         0         0         0       5h22m
+replicaset.apps/sakina-backend-6bdbb59788         0         0         0       39m
+replicaset.apps/sakina-backend-6c54487b77         0         0         0       5h25m
+replicaset.apps/sakina-backend-6fb4ccbd8f         0         0         0       125m
+replicaset.apps/sakina-backend-759dc8fcdf         0         0         0       4h33m
+replicaset.apps/sakina-backend-764d486f6f         0         0         0       5h58m
+replicaset.apps/sakina-backend-7668d7487          0         0         0       77m
+replicaset.apps/sakina-backend-77dfcf865b         2         2         2       22m
+replicaset.apps/sakina-backend-84bdfdbc6c         0         0         0       77m
+replicaset.apps/sakina-backend-895c4b8f5          0         0         0       63m
+replicaset.apps/sakina-backend-bcd4b845b          0         0         0       39m
+replicaset.apps/sakina-llm-gateway-54d944fd5d     0         0         0       5h25m
+replicaset.apps/sakina-llm-gateway-59c7b47788     0         0         0       39m
+replicaset.apps/sakina-llm-gateway-5bcffc5c9f     1         1         1       22m
+replicaset.apps/sakina-llm-gateway-66655dfb64     0         0         0       77m
+replicaset.apps/sakina-llm-gateway-67fdbc6457     0         0         0       5h58m
+replicaset.apps/sakina-llm-gateway-6bfc694977     0         0         0       4h33m
+replicaset.apps/sakina-llm-gateway-7744b6d599     0         0         0       5h22m
+replicaset.apps/sakina-llm-gateway-7c5bf6469      0         0         0       125m
+replicaset.apps/sakina-llm-gateway-8446dd95f      0         0         0       63m
+replicaset.apps/sakina-llm-gateway-954d8499       0         0         0       77m
+replicaset.apps/sakina-llm-gateway-cbd64b58c      0         0         0       39m
+replicaset.apps/sakina-ollama-5d4c49df8           0         0         0       81m
+replicaset.apps/sakina-ollama-7b8cd944f           1         1         1       49m
+replicaset.apps/sakina-rag-ingestion-59444d8fbb   0         0         0       125m
+replicaset.apps/sakina-rag-ingestion-5c8d4bfcc8   0         0         0       4h33m
+replicaset.apps/sakina-rag-ingestion-665db487fd   0         0         0       5h25m
+replicaset.apps/sakina-rag-ingestion-6b885cd758   0         0         0       77m
+replicaset.apps/sakina-rag-ingestion-6cf7bcd766   0         0         0       5h58m
+replicaset.apps/sakina-rag-ingestion-6d984d445c   0         0         0       39m
+replicaset.apps/sakina-rag-ingestion-6f97b5777c   0         0         0       39m
+replicaset.apps/sakina-rag-ingestion-758f9678bb   0         0         0       63m
+replicaset.apps/sakina-rag-ingestion-845684dd94   0         0         0       5h22m
+replicaset.apps/sakina-rag-ingestion-8bc76dd5c    1         1         1       22m
+replicaset.apps/sakina-rag-ingestion-b5b7f85d6    0         0         0       5h58m
+replicaset.apps/sakina-rag-retrieval-544bc79dd8   0         0         0       4h33m
+replicaset.apps/sakina-rag-retrieval-556f7c8c64   0         0         0       5h58m
+replicaset.apps/sakina-rag-retrieval-559c6f695f   1         1         1       22m
+replicaset.apps/sakina-rag-retrieval-568476dd75   0         0         0       40m
+replicaset.apps/sakina-rag-retrieval-59d48b88d8   0         0         0       5h58m
+replicaset.apps/sakina-rag-retrieval-5b56d8d944   0         0         0       5h22m
+replicaset.apps/sakina-rag-retrieval-64898b5c96   0         0         0       5h25m
+replicaset.apps/sakina-rag-retrieval-6695ddf944   0         0         0       77m
+replicaset.apps/sakina-rag-retrieval-7ddbf49b4    0         0         0       125m
+replicaset.apps/sakina-rag-retrieval-7df9644947   0         0         0       39m
+replicaset.apps/sakina-rag-retrieval-7f9d5946cb   0         0         0       63m
+replicaset.apps/sakina-redis-586ccb78c6           1         1         1       49m
+replicaset.apps/sakina-redis-69d57df987           0         0         0       22h
+replicaset.apps/sakina-redis-78fff9fddf           0         0         0       22h
+
+NAME                               READY   AGE
+statefulset.apps/sakina-postgres   1/1     4d7h
+statefulset.apps/sakina-qdrant     1/1     22h
+
+NAME                              STATUS     COMPLETIONS   DURATION   AGE
+job.batch/sakina-admin-smoke      Complete   1/1           3s         4d6h
+job.batch/sakina-backend-smoke    Complete   1/1           3s         4d6h
+job.batch/sakina-db-migrate       Complete   1/1           3s         4d6h
+job.batch/sakina-db-verify        Complete   1/1           3s         4d6h
+job.batch/sakina-live-smoke       Complete   1/1           3s         4d6h
+job.batch/sakina-ollama-preload   Complete   1/1           4s         22m
+job.batch/sakina-rag-smoke        Complete   1/1           3s         4d6h

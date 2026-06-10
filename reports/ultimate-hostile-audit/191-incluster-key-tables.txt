@@ -1,0 +1,17 @@
+# TASK 6: Key tables existence (to_regclass) in sakina_mobile_staging
+ public.audit_logs=audit_logs
+
+ sakina_ai.brain_decision_traces=sakina_ai.brain_decision_traces
+
+ sakina_ai.rag_retrieval_audit=MISSING
+
+ sakina_ai.safety_classifications=MISSING
+
+ sakina_ai.waitlist=sakina_ai.waitlist
+
+ public.users=users
+
+ public.auth_sessions=auth_sessions
+
+
+# NOTE: rag_retrieval_audit and safety_classifications are NOT defined in repo migrations 001-021 either (grep = no match). Expected-by-auditor names that the schema never created.

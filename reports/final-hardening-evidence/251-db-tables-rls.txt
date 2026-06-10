@@ -79,6 +79,7 @@
  public     | user_subscriptions             | t
  public     | users                          | t
  public     | waitlist_entries               | t
+ sakina_ai  | agent_feedback                 | t
  sakina_ai  | brain_cache_metadata           | t
  sakina_ai  | brain_decision_traces          | t
  sakina_ai  | brain_evaluation_results       | t
@@ -106,5 +107,5 @@
  sakina_ai  | user_memory_entries            | t
  sakina_ai  | waitlist                       | t
  sakina_ai  | wasm_verification_events       | t
-(106 rows)
+(107 rows)
 

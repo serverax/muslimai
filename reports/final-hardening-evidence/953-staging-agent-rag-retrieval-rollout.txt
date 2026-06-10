@@ -1,0 +1,1 @@
+deployment "sakina-rag-retrieval" successfully rolled out

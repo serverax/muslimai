@@ -1,0 +1,55 @@
+   Compiling sakina-validator v0.1.0 (/mnt/f/SakinaAL/wasm)
+   Compiling sakina-backend v1.0.0 (/mnt/f/SakinaAL/sakina-backend)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 19m 49s
+     Running unittests src/lib.rs (sakina-backend/target/debug/deps/sakina_backend-e9c5005c4f4b74ce)
+
+running 4 tests
+test agent::orchestrator::tests::blocks_prompt_injection_before_researcher ... ok
+test agent::orchestrator::tests::rejects_empty_query ... ok
+test agent::orchestrator::tests::routes_islamic_question_to_researcher_and_validator ... ok
+test agent::orchestrator::tests::p99_budget_is_enforced_for_local_router_path ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 94 filtered out; finished in 0.07s
+
+     Running unittests src/main.rs (sakina-backend/target/debug/deps/sakina_api-0c957a05109e7568)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running unittests src/bin/ingest.rs (sakina-backend/target/debug/deps/sakina_ingest-0b444f4b2677c2aa)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/migrate.rs (sakina-backend/target/debug/deps/sakina_migrate-8bcaf1eaf2f0d12d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/agent_integration_tests.rs (sakina-backend/target/debug/deps/agent_integration_tests-ebb898079c24ed12)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.02s
+
+     Running tests/islamic_source_registry.rs (sakina-backend/target/debug/deps/islamic_source_registry-2e29c3c7cb8c3466)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/offline_islamic_assets.rs (sakina-backend/target/debug/deps/offline_islamic_assets-2c6a5588cd0f92dc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase21_iman_journey_contract.rs (sakina-backend/target/debug/deps/phase21_iman_journey_contract-1787b9a320a946cc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+

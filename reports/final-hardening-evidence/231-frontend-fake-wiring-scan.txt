@@ -43,18 +43,18 @@ sakina-frontend/lib/config/staging_client_config.dart:3:  static const String ap
 sakina-frontend/lib/services/api_service.dart:152:      return decoded['pub_key'] as String? ?? '';
 sakina-frontend/lib/services/api_service.dart:213:      return (jsonDecode(res.body) as Map<String, dynamic>)['data'] as String;
 sakina-frontend/lib/services/api_service.dart:286:      return (json['entitlements'] as List<dynamic>? ?? const [])
-sakina-frontend/lib/services/api_service.dart:319:      return (decoded['sources'] as List<dynamic>? ?? const [])
-sakina-frontend/lib/services/api_service.dart:343:      return (decoded['documents'] as List<dynamic>? ?? const [])
-sakina-frontend/lib/services/api_service.dart:355:      return (decoded['chunks'] as List<dynamic>? ?? const [])
-sakina-frontend/lib/services/api_service.dart:381:      return (decoded['results'] as List<dynamic>? ?? const [])
-sakina-frontend/lib/services/api_service.dart:498:      return json['id']?.toString() ?? '';
-sakina-frontend/lib/services/api_service.dart:530:      return (json['notifications'] as List<dynamic>? ?? const [])
-sakina-frontend/lib/services/api_service.dart:697:      return (decoded['items'] as List<dynamic>? ?? const [])
-sakina-frontend/lib/services/api_service.dart:762:      return (decoded['deleted'] as num?)?.toInt() ?? 0;
-sakina-frontend/lib/services/api_service.dart:939:          return '$fallback [$code]: $message (HTTP ${response.statusCode})';
-sakina-frontend/lib/services/api_service.dart:942:          return '$fallback: $message (HTTP ${response.statusCode})';
-sakina-frontend/lib/services/api_service.dart:946:        return '$fallback: $error (HTTP ${response.statusCode})';
-sakina-frontend/lib/services/api_service.dart:949:    return '$fallback: HTTP ${response.statusCode}';
+sakina-frontend/lib/services/api_service.dart:329:      return (decoded['sources'] as List<dynamic>? ?? const [])
+sakina-frontend/lib/services/api_service.dart:353:      return (decoded['documents'] as List<dynamic>? ?? const [])
+sakina-frontend/lib/services/api_service.dart:365:      return (decoded['chunks'] as List<dynamic>? ?? const [])
+sakina-frontend/lib/services/api_service.dart:391:      return (decoded['results'] as List<dynamic>? ?? const [])
+sakina-frontend/lib/services/api_service.dart:508:      return json['id']?.toString() ?? '';
+sakina-frontend/lib/services/api_service.dart:540:      return (json['notifications'] as List<dynamic>? ?? const [])
+sakina-frontend/lib/services/api_service.dart:707:      return (decoded['items'] as List<dynamic>? ?? const [])
+sakina-frontend/lib/services/api_service.dart:772:      return (decoded['deleted'] as num?)?.toInt() ?? 0;
+sakina-frontend/lib/services/api_service.dart:949:          return '$fallback [$code]: $message (HTTP ${response.statusCode})';
+sakina-frontend/lib/services/api_service.dart:952:          return '$fallback: $message (HTTP ${response.statusCode})';
+sakina-frontend/lib/services/api_service.dart:956:        return '$fallback: $error (HTTP ${response.statusCode})';
+sakina-frontend/lib/services/api_service.dart:959:    return '$fallback: HTTP ${response.statusCode}';
 sakina-frontend/lib/services/auth_service.dart:26:  static const _userIdKey = 'sakina_user_id';
 sakina-frontend/lib/services/auth_service.dart:27:  static const _tokenKey = 'sakina_access_token';
 sakina-frontend/lib/services/auth_service.dart:28:  static const _refreshTokenKey = 'sakina_refresh_token';

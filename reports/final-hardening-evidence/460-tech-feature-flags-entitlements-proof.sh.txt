@@ -1,5 +1,5 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.64s
-Feature entitlement proof users: A=327315b6-cf3f-4de5-930d-4e9871483ebf B=09db4b6d-3698-4e0c-80b9-13c19dd71a70
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.59s
+Feature entitlement proof users: A=d579fa8b-b586-46de-8537-ce10a2607951 B=8df65198-d7fd-4c67-85bb-0f537cb36530
 {
   "module": "quran",
   "enabled": true,
@@ -12,25 +12,25 @@ Missing-auth quran overview status: 401
 {"error":{"code":"subscription_required","message":"module requires premium entitlement"}}
 Free-user quran overview status: 402
 {
-  "user_id": "327315b6-cf3f-4de5-930d-4e9871483ebf",
-  "subscription_id": "4909379f-e2c3-4e21-9376-de52ea36d284",
-  "payment_customer_id": "962aeeb9-6937-410d-a812-c948a56ff449",
-  "plan_id": "8b46bd3a-6f10-405e-9633-2c9e2062c969",
-  "invoice_id": "d9989c80-07b6-42da-9d9f-cbb1b7bb9680"
+  "user_id": "d579fa8b-b586-46de-8537-ce10a2607951",
+  "subscription_id": "2bb0bb69-ca8e-4541-95dc-0a39d97805f7",
+  "payment_customer_id": "bb566ea6-e06f-429e-8b03-0d01388ded16",
+  "plan_id": "350e5882-ecde-4e79-9747-e00e3ef57fa1",
+  "invoice_id": "0d1019ca-fd11-43fc-bd38-0d793a1a8556"
 }
 {
   "entitlements": [
     {
       "entitlement_key": "quran_access",
       "expires_at": null,
-      "granted_at": "2026-06-05 19:42:35.971791+00",
-      "id": "5631b490-477c-43a0-9619-584ed964dcb6"
+      "granted_at": "2026-06-06 01:49:23.787986+00",
+      "id": "0e826903-bf68-4846-bd39-78834ae6148f"
     },
     {
       "entitlement_key": "rag_verified",
       "expires_at": null,
-      "granted_at": "2026-06-05 19:42:35.971791+00",
-      "id": "e029c3f4-254c-4b9f-8e43-d78edcf121e3"
+      "granted_at": "2026-06-06 01:49:23.787986+00",
+      "id": "c863ae88-67ac-4e2e-8bea-1a347258041a"
     }
   ]
 }
@@ -43,6 +43,12 @@ Cross-user forged-tier overview status: 402
 Disabled prayer overview status: 403
 {"error":{"code":"unauthorized","message":"requested user_id does not match authenticated user"}}
 Cross-user entitlement list status: 401
+sakina-frontend/lib/services/api_service.dart:264:  Future<SubscriptionResponse> activateSubscription(
+sakina-frontend/lib/services/api_service.dart:281:  Future<List<String>> listEntitlements(String userId) async {
+sakina-frontend/lib/services/api_service.dart:795:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:824:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/screens/home_shell_screen.dart:31:      apiClient: ModuleApiClient(authToken: widget.session?.accessToken),
+sakina-frontend/lib/screens/home_shell_screen.dart:32:      entitlementGate: EntitlementGate(),
 sakina-frontend/lib/services/module_service.dart:254:  })  : quran = quran ?? FeatureFlags.quran,
 sakina-frontend/lib/services/module_service.dart:255:        prayer = prayer ?? FeatureFlags.prayer,
 sakina-frontend/lib/services/module_service.dart:256:        knowledge = knowledge ?? FeatureFlags.knowledge,
@@ -53,12 +59,6 @@ sakina-frontend/lib/services/module_service.dart:299:  ModuleApiClient({
 sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/services/module_service.dart:411:    required EntitlementGate entitlementGate,
 sakina-frontend/lib/services/module_service.dart:418:  final EntitlementGate _entitlementGate;
-sakina-frontend/lib/screens/home_shell_screen.dart:31:      apiClient: ModuleApiClient(authToken: widget.session?.accessToken),
-sakina-frontend/lib/screens/home_shell_screen.dart:32:      entitlementGate: EntitlementGate(),
-sakina-frontend/lib/services/api_service.dart:264:  Future<SubscriptionResponse> activateSubscription(
-sakina-frontend/lib/services/api_service.dart:281:  Future<List<String>> listEntitlements(String userId) async {
-sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';
-sakina-frontend/lib/services/api_service.dart:814:      headers['Authorization'] = 'Bearer $token';
 sakina-backend/src/handlers/modules.rs:42:            let enabled = env_flag_enabled("SAKINA_FEATURE_QURAN");
 sakina-backend/src/handlers/modules.rs:162:    entitlement_key: &str,
 sakina-backend/src/handlers/modules.rs:167:        FROM public.user_entitlements ue
@@ -78,18 +78,6 @@ sakina-backend/src/handlers/modules.rs:433:        std::env::remove_var("SAKINA_
 sakina-backend/src/handlers/modules.rs:455:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
 sakina-backend/src/handlers/modules.rs:465:        std::env::remove_var("SAKINA_FEATURE_QURAN");
 sakina-backend/src/handlers/modules.rs:538:        std::env::remove_var("SAKINA_FEATURE_QURAN");
-sakina-backend/src/services/phase2.rs:771:        for entitlement_key in request.entitlement_keys {
-sakina-backend/src/services/phase2.rs:775:                    entitlement_key, entitlement_name, entitlement_scope, is_active
-sakina-backend/src/services/phase2.rs:778:                ON CONFLICT (entitlement_key)
-sakina-backend/src/services/phase2.rs:786:            .bind(&entitlement_key)
-sakina-backend/src/services/phase2.rs:787:            .bind(format!("{} entitlement", entitlement_key))
-sakina-backend/src/services/phase2.rs:795:                INSERT INTO public.user_entitlements (
-sakina-backend/src/services/phase2.rs:827:    pub async fn list_user_entitlements(
-sakina-backend/src/services/phase2.rs:835:                e.entitlement_key,
-sakina-backend/src/services/phase2.rs:838:            FROM public.user_entitlements ue
-sakina-backend/src/services/phase2.rs:854:                entitlement_key: row.get("entitlement_key"),
-sakina-backend/src/services/phase2.rs:2250:    pub entitlement_keys: Vec<String>,
-sakina-backend/src/services/phase2.rs:2265:    pub entitlement_key: String,
 sakina-backend/src/handlers/phase2.rs:5:use crate::services::authenticated_user_id;
 sakina-backend/src/handlers/phase2.rs:82:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
 sakina-backend/src/handlers/phase2.rs:146:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
@@ -107,5 +95,18 @@ sakina-backend/src/handlers/phase2.rs:425:    request.user_id = Some(authenticat
 sakina-backend/src/handlers/phase2.rs:441:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
 sakina-backend/src/handlers/phase2.rs:463:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
 sakina-backend/src/handlers/phase2.rs:490:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
-sakina-backend/src/handlers/phase2.rs:916:                "entitlement_keys": ["chat_premium", "rag_verified"]
+sakina-backend/src/handlers/phase2.rs:546:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:981:                "entitlement_keys": ["chat_premium", "rag_verified"]
+sakina-backend/src/services/phase2.rs:771:        for entitlement_key in request.entitlement_keys {
+sakina-backend/src/services/phase2.rs:775:                    entitlement_key, entitlement_name, entitlement_scope, is_active
+sakina-backend/src/services/phase2.rs:778:                ON CONFLICT (entitlement_key)
+sakina-backend/src/services/phase2.rs:786:            .bind(&entitlement_key)
+sakina-backend/src/services/phase2.rs:787:            .bind(format!("{} entitlement", entitlement_key))
+sakina-backend/src/services/phase2.rs:795:                INSERT INTO public.user_entitlements (
+sakina-backend/src/services/phase2.rs:827:    pub async fn list_user_entitlements(
+sakina-backend/src/services/phase2.rs:835:                e.entitlement_key,
+sakina-backend/src/services/phase2.rs:838:            FROM public.user_entitlements ue
+sakina-backend/src/services/phase2.rs:854:                entitlement_key: row.get("entitlement_key"),
+sakina-backend/src/services/phase2.rs:2250:    pub entitlement_keys: Vec<String>,
+sakina-backend/src/services/phase2.rs:2265:    pub entitlement_key: String,
 FEATURE_FLAGS_ENTITLEMENTS_OK enabled feature required JWT and DB entitlement, forged headers were rejected, disabled feature failed closed, owner entitlement persisted in DB, cross-user access was blocked, and Flutter module service sends bearer auth.

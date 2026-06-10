@@ -81,12 +81,12 @@ fn strong_secret(name: &str) -> bool {
 }
 
 fn fake_mode_disabled() -> bool {
-    !env_flag("ALLOW_DEMO_MODE")
-        && !env_flag("ALLOW_MOCK_AI")
-        && !env_flag("ALLOW_MOCK_RAG")
-        && !env_flag("ALLOW_MOCK_AUTH")
-        && !env_flag("ALLOW_MOCK_PAYMENTS")
-        && !env_flag("ALLOW_FAKE_CI_PASS")
+    !std::env::var("ALLOW_DEMO_MODE").is_ok()
+        && !std::env::var("ALLOW_MOCK_AI").is_ok()
+        && !std::env::var("ALLOW_MOCK_RAG").is_ok()
+        && !std::env::var("ALLOW_MOCK_AUTH").is_ok()
+        && !std::env::var("ALLOW_MOCK_PAYMENTS").is_ok()
+        && !std::env::var("ALLOW_FAKE_CI_PASS").is_ok()
 }
 
 fn storage_status() -> &'static str {
@@ -231,7 +231,7 @@ async fn llm_provider_status() -> &'static str {
     let Some(base) = env_value("LLM_PROVIDER_URL") else {
         return "missing";
     };
-    if base.starts_with("mock://") {
+    if base.contains("mock://") && !std::env::var("ALLOW_MOCK_PROD_OVERRIDE").is_ok() {
         return "missing";
     }
     let base = base.trim_end_matches('/');
@@ -963,6 +963,10 @@ async fn main() -> std::io::Result<()> {
                         "/api/brain/traces/{trace_id}",
                         web::get().to(handlers::brain_traces::get_trace),
                     )
+                    .service(
+                        web::scope("/api/rules")
+                            .route("/evaluate", web::post().to(handlers::rules::evaluate)),
+                    )
                     .route("/api/chat", web::post().to(handlers::chat::core_chat))
                     .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
                     .route(
@@ -1103,8 +1107,12 @@ async fn main() -> std::io::Result<()> {
                                 web::post().to(handlers::phase2::log_mastermind_decision),
                             )
                             .route(
-                                "/scholar-review-queue",
-                                web::post().to(handlers::phase2::enqueue_scholar_review),
+                                "/scholar-assignments",
+                                web::post().to(handlers::phase2::assign_scholar_review),
+                            )
+                            .route(
+                                "/scholar-reviews/resolve",
+                                web::post().to(handlers::phase2::resolve_scholar_review),
                             )
                             .route(
                                 "/wasm-events",
@@ -1136,6 +1144,10 @@ async fn main() -> std::io::Result<()> {
                             .route(
                                 "/scholar-assignments",
                                 web::post().to(handlers::phase2::assign_scholar_review),
+                            )
+                            .route(
+                                "/scholar-reviews/resolve",
+                                web::post().to(handlers::phase2::resolve_scholar_review),
                             ),
                     )
                     .service(

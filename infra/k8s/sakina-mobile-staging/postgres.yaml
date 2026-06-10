@@ -38,6 +38,10 @@ spec:
         app.kubernetes.io/part-of: sakina-mobile
         app.kubernetes.io/environment: staging
     spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
@@ -53,15 +57,35 @@ spec:
             - containerPort: 5432
               name: postgres
           env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
             - name: POSTGRES_DB
-              value: sakina_mobile
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_DB
             - name: POSTGRES_USER
-              value: sakina
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
+            - name: SAKINA_REDIS_URL
+              value: redis://sakina-redis:6379
+            - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: sakina-staging-secrets
-                  key: postgres-password
+                  key: jwt-secret
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: encryption-key
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
           readinessProbe:
             exec:
               command:

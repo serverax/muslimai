@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: sakina
+      POSTGRES_USER: sakina_user
+      POSTGRES_PASSWORD: sakina_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../sakina-backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  qdrant:
+    image: qdrant/qdrant:v1.10.1
+    ports:
+      - "6333:6333"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+
+  llm-gateway:
+    image: sakina-backend-api:dev-local
+    command: ["/usr/local/bin/sakina-llm-gateway"]
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SAKINA_LLM_MODEL: qwen2.5:0.5b
+      SAKINA_LLM_GATEWAY_BIND: 0.0.0.0:8080
+    depends_on:
+      - ollama
+
+  rules-engine:
+    image: sakina-backend-api:dev-local
+    environment:
+      DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+    depends_on:
+      - postgres
+
+  citation-guard:
+    image: sakina-backend-api:dev-local
+    environment:
+      DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+    depends_on:
+      - postgres
+
+  rag-service:
+    image: sakina-backend-api:dev-local
+    environment:
+      DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      QDRANT_URL: http://qdrant:6333
+    depends_on:
+      - postgres
+      - qdrant
+
+  brain:
+    image: sakina-backend-api:dev-local
+    environment:
+      DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_RULES_ENGINE_URL: http://rules-engine:8080
+      SAKINA_RAG_URL: http://rag-service:8080
+      SAKINA_LLM_GATEWAY_URL: http://llm-gateway:8080
+      SAKINA_CITATION_GUARD_URL: http://citation-guard:8080
+      SAKINA_LLM_ENABLED: "true"
+    depends_on:
+      - rules-engine
+      - rag-service
+      - llm-gateway
+      - citation-guard
+
+  api-gateway:
+    image: sakina-backend-api:dev-local
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_BRAIN_URL: http://brain:8080
+      JWT_SECRET: sakina_test_secret_32_chars_long_!!
+      ENCRYPTION_KEY: sakina_test_encryption_key_32_ch
+    depends_on:
+      - brain

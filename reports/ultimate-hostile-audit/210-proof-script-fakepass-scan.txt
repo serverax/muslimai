@@ -1,0 +1,54 @@
+scripts/sakina\verify-no-secret-leak.sh:13:  exit 0
+scripts/sakina\end-to-end-trace-id-proof.sh:38:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-zero-trust-api-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\e2e-real-user-journey.sh:33:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-prompt-injection-proof.sh:43:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\security-regression.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-load-performance-proof.sh:43:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\local-runtime-proof.sh:16:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-wasm-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-owasp-api-security-proof.sh:30:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-store-compliance-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\run-regressions-with-local-backend.sh:16:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-i18n-arabic-english-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\llm-gateway-local-runtime-proof.sh:26:trap 'kill "$pid" >/dev/null 2>&1 || true' EXIT
+scripts/sakina\tech-policy-as-code-proof.sh:42:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-source-trust-ranking-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\product-failed-login-proof.sh:34:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-observability-stack-proof.sh:40:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-hybrid-search-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\multimodal-live-end-to-end-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-pii-redaction-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-payments-entitlements-proof.sh:39:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\product-data-export-proof.sh:34:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-semantic-cache-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-human-review-queue-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-memory-engine-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\auth-refresh-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\auth-live-proof.sh:17:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\auth-live-proof.sh:57:echo "=== wrong password ==="
+scripts/sakina\auth-live-proof.sh:83:echo "=== password hash proof ==="
+scripts/sakina\new-technologies-master-matrix-proof.sh:116:    grep -nE 'echo[[:space:]]+["'\'']?(PASS|passed)|Smoke validation passed|continue-on-error|ALLOW_FAKE_CI_PASS[[:space:]]*=[[:space:]]*true|mock_embeddings|mode.:.mock' "$script" \
+scripts/sakina\new-technologies-master-matrix-proof.sh:117:      | grep -vE 'rg .*echo|grep .*echo|Select-String .*echo|rg .*continue-on-error|grep .*continue-on-error|Select-String .*continue-on-error'
+scripts/sakina\multimodal-brain-rag-proof.sh:43:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-graph-rag-proof.sh:33:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-sast-sca-container-proof.sh:53:if rg -n -i "continue-on-error:\s*true|echo[^\n]*\bPASS\b|echo[^\n]*\bpassed\b|fake[ _-]+pass|fake[ _-]+passed|stub[ _-]+pass|stub[ _-]+passed|mock[ _-]+pass|mock[ _-]+passed|\|\| true" \
+scripts/sakina\api-schema-contract-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\multimodal-security-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\agent-feedback-export-proof.sh:35:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-realtime-notifications-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\final-llm-gateway-isolation-gate.sh:20:  sakina-backend/src infra/k8s/sakina-mobile-staging sakina-frontend/lib .github || true)"
+scripts/sakina\tech-citation-hallucination-validator-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\frontend-api-contract-proof.sh:45:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-feature-flags-entitlements-proof.sh:42:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\final-security-performance-gate.sh:51:if rg -n -i "continue-on-error: true|echo.*passed|Smoke validation passed|mock_embeddings|ALLOW_FAKE_CI_PASS[[:space:]]*=[[:space:]]*true|fake[ _-]+pass|fake[ _-]+passed|stub[ _-]+pass|stub[ _-]+passed" \
+scripts/sakina\mobile-to-backend-to-db-e2e-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-event-outbox-proof.sh:40:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-agentic-workflow-proof.sh:31:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-rag-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-evaluation-ai-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-brain-orchestrator-proof.sh:32:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-cost-governor-proof.sh:35:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-crash-reporting-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-ai-router-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-context-compression-proof.sh:39:export ALLOW_FAKE_CI_PASS=false

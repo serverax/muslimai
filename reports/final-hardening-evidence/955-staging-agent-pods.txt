@@ -1,0 +1,15 @@
+NAME                                    READY   STATUS      RESTARTS   AGE     IP             NODE                    NOMINATED NODE   READINESS GATES
+sakina-admin-848f77fd9-jtzqr            1/1     Running     0          7h58m   10.244.5.53    talos-138-201-202-174   <none>           <none>
+sakina-admin-smoke-4qfzh                0/1     Completed   0          3d16h   10.244.4.39    talos-5h3-83r           <none>           <none>
+sakina-backend-dbd78758f-5r99j          1/1     Running     0          7h58m   10.244.4.168   talos-5h3-83r           <none>           <none>
+sakina-backend-dbd78758f-hvmgn          1/1     Running     0          7h57m   10.244.5.54    talos-138-201-202-174   <none>           <none>
+sakina-backend-smoke-kxkn6              0/1     Completed   0          3d16h   10.244.4.38    talos-5h3-83r           <none>           <none>
+sakina-db-migrate-xz67b                 0/1     Completed   0          3d16h   10.244.4.36    talos-5h3-83r           <none>           <none>
+sakina-db-verify-jrnk9                  0/1     Completed   0          3d16h   10.244.5.17    talos-138-201-202-174   <none>           <none>
+sakina-live-smoke-nhcff                 0/1     Completed   0          3d16h   10.244.4.40    talos-5h3-83r           <none>           <none>
+sakina-postgres-0                       1/1     Running     0          3d16h   10.244.5.16    talos-138-201-202-174   <none>           <none>
+sakina-qdrant-0                         1/1     Running     0          7h58m   10.244.4.166   talos-5h3-83r           <none>           <none>
+sakina-rag-ingestion-5fb6db94ff-x7lgd   1/1     Running     0          7h58m   10.244.4.167   talos-5h3-83r           <none>           <none>
+sakina-rag-retrieval-5cff6cbd85-9jlfh   1/1     Running     0          7h58m   10.244.5.51    talos-138-201-202-174   <none>           <none>
+sakina-rag-smoke-847cv                  0/1     Completed   0          3d16h   10.244.4.37    talos-5h3-83r           <none>           <none>
+sakina-redis-69d57df987-7w7sh           1/1     Running     0          7h58m   10.244.5.50    talos-138-201-202-174   <none>           <none>

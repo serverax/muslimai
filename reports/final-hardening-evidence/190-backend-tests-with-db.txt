@@ -1,7 +1,11 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.06s
-     Running unittests src/lib.rs (sakina-backend/target/debug/deps/sakina_backend-5bd443900cff2969)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.87s
+     Running unittests src/lib.rs (sakina-backend/target/debug/deps/sakina_backend-e9c5005c4f4b74ce)
 
-running 94 tests
+running 98 tests
+test agent::orchestrator::tests::blocks_prompt_injection_before_researcher ... ok
+test agent::orchestrator::tests::p99_budget_is_enforced_for_local_router_path ... ok
+test agent::orchestrator::tests::rejects_empty_query ... ok
+test agent::orchestrator::tests::routes_islamic_question_to_researcher_and_validator ... ok
 test error::tests::error_response_uses_consistent_contract_shape ... ok
 test handlers::brain::tests::debug_agents_returns_registered_agent_list ... ok
 test handlers::brain::tests::test_route_returns_execution_trace ... ok
@@ -97,36 +101,43 @@ test services::semantic_router::tests::classify_detects_fiqh_query ... ok
 test services::semantic_router::tests::classify_detects_out_of_scope_query ... ok
 test tests::it_works ... ok
 
-test result: ok. 94 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.94s
+test result: ok. 98 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 63.48s
 
-     Running unittests src/main.rs (sakina-backend/target/debug/deps/sakina_api-a27d8b49d58acb93)
+     Running unittests src/main.rs (sakina-backend/target/debug/deps/sakina_api-0c957a05109e7568)
 
 running 1 test
 test tests::route_aliases_are_wired_for_root_and_v1 ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.17s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 300.11s
 
-     Running unittests src/bin/ingest.rs (sakina-backend/target/debug/deps/sakina_ingest-056c7981621b57db)
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-
-     Running unittests src/bin/migrate.rs (sakina-backend/target/debug/deps/sakina_migrate-746daa5894cd7913)
+     Running unittests src/bin/ingest.rs (sakina-backend/target/debug/deps/sakina_ingest-0b444f4b2677c2aa)
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running tests/islamic_source_registry.rs (sakina-backend/target/debug/deps/islamic_source_registry-b8975b8f710cfad8)
+     Running unittests src/bin/migrate.rs (sakina-backend/target/debug/deps/sakina_migrate-8bcaf1eaf2f0d12d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/agent_integration_tests.rs (sakina-backend/target/debug/deps/agent_integration_tests-ebb898079c24ed12)
+
+running 1 test
+test redis_persists_agent_state_and_researcher_returns_rag_context ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/islamic_source_registry.rs (sakina-backend/target/debug/deps/islamic_source_registry-2e29c3c7cb8c3466)
 
 running 2 tests
 test islamic_source_registry_contains_core_sources ... ok
 test islamic_source_registry_is_present_and_well_formed ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running tests/offline_islamic_assets.rs (sakina-backend/target/debug/deps/offline_islamic_assets-8c60021b6ca51e2f)
+     Running tests/offline_islamic_assets.rs (sakina-backend/target/debug/deps/offline_islamic_assets-2c6a5588cd0f92dc)
 
 running 4 tests
 test dua_adhkar_and_names_assets_are_loaded ... ok
@@ -134,14 +145,14 @@ test quran_asset_is_loaded_and_citable ... ok
 test source_registry_contains_approved_quran_source ... ok
 test starter_bundle_and_categories_exist_for_fallback_ui ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
 
-     Running tests/phase21_iman_journey_contract.rs (sakina-backend/target/debug/deps/phase21_iman_journey_contract-d21366dbd0816743)
+     Running tests/phase21_iman_journey_contract.rs (sakina-backend/target/debug/deps/phase21_iman_journey_contract-1787b9a320a946cc)
 
 running 1 test
 test phase21_core_flow_enforces_fallback_privacy_and_scope ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s
 
    Doc-tests sakina_backend
 

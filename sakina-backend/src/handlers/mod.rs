@@ -20,6 +20,7 @@ pub mod multimodal;
 pub mod ops;
 pub mod phase2;
 pub mod rag;
+pub mod rules;
 pub mod sakina_ask;
 pub mod sync;
 pub mod tafsir;

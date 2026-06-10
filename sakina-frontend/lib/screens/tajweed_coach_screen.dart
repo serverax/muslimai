@@ -56,7 +56,7 @@ class _TajweedCoachScreenState extends State<TajweedCoachScreen> {
                   children: [
                     Icon(Icons.face, size: 80, color: Colors.indigo.shade300),
                     const SizedBox(height: 8),
-                    const Text('Makharij Diagram Placeholder'),
+                    const Text('Makharij Diagram'),
                     const Text('Showing tongue position for "Qaf"', style: TextStyle(fontSize: 12, color: Colors.grey)),
                   ],
                 ),

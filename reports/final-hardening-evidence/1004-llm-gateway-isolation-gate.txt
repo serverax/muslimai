@@ -1,0 +1,28 @@
+DIRECT OLLAMA ACCESS SCAN
+sakina-backend/src/bin/llm_gateway.rs:69:    let url = format!("{}/api/tags", state.ollama_base_url.trim_end_matches('/'));
+sakina-backend/src/bin/llm_gateway.rs:126:        "{}/api/generate",
+sakina-backend/src/bin/llm_gateway.rs:234:        ollama_base_url: env_value("OLLAMA_BASE_URL", "http://ollama:11434"),
+infra/k8s/sakina-mobile-staging/llm-gateway.yaml:61:            - name: OLLAMA_BASE_URL
+infra/k8s/sakina-mobile-staging/llm-gateway.yaml:62:              value: http://ollama:11434
+
+KUBERNETES MANIFEST CHECK
+4:  name: sakina-llm-gateway
+12:    app: sakina-llm-gateway
+21:  name: sakina-llm-gateway
+31:      app: sakina-llm-gateway
+35:        app: sakina-llm-gateway
+53:          command:
+54:            - sakina-llm-gateway
+61:            - name: OLLAMA_BASE_URL
+73:              path: /ready
+79:              path: /health
+
+BACKEND GATEWAY CONFIG CHECK
+infra/k8s/sakina-mobile-staging/backend.yaml:80:            - name: SAKINA_LLM_GATEWAY_URL
+infra/k8s/sakina-mobile-staging/backend.yaml:81:              value: http://sakina-llm-gateway:8087
+sakina-backend/src/main.rs:214:    if let Some(base) = env_value("SAKINA_LLM_GATEWAY_URL") {
+sakina-backend/src/handlers/model_providers.rs:42:            "gateway_url": std::env::var("SAKINA_LLM_GATEWAY_URL").unwrap_or_else(|_| "http://sakina-llm-gateway:8087".to_string()),
+sakina-backend/src/handlers/chat.rs:429:            "gateway_url": std::env::var("SAKINA_LLM_GATEWAY_URL").unwrap_or_else(|_| "http://sakina-llm-gateway:8087".to_string()),
+sakina-backend/src/services/llm_gateway.rs:55:            base_url: std::env::var("SAKINA_LLM_GATEWAY_URL")
+sakina-backend/src/services/llm_gateway.rs:56:                .unwrap_or_else(|_| "http://sakina-llm-gateway:8087".to_string()),
+LLM_GATEWAY_ISOLATION_GATE_OK direct Ollama access is isolated to sakina-llm-gateway source and deployment manifest.

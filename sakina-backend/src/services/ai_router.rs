@@ -313,6 +313,7 @@ impl AiRouter {
             matches!(agent, AgentKind::FamilyMarriage | AgentKind::ContentReview);
         let can_generate = !matches!(agent, AgentKind::SafetyEscalation)
             && safety_risk != "critical"
+            && safety_risk != "high"
             && (!subscription_required || entitled);
         let scholar_review_required = matches!(
             agent,
@@ -444,10 +445,24 @@ fn detect_safety_risk(message: &str, safety_context: Option<&serde_json::Value>)
     ) {
         return "critical".to_string();
     }
-    if contains_any(&text, &["abuse", "violent", "assault", "harm"]) {
+    if contains_any(
+        &text,
+        &[
+            "abuse",
+            "violent",
+            "assault",
+            "harm",
+            "divorce",
+            "inheritance",
+            "killing",
+            "war",
+            "talaq",
+            "marriage separation",
+        ],
+    ) {
         return "high".to_string();
     }
-    if contains_any(&text, &["fatwa", "halal", "haram", "divorce", "marriage"]) {
+    if contains_any(&text, &["fatwa", "halal", "haram", "marriage"]) {
         return "medium".to_string();
     }
     "safe".to_string()

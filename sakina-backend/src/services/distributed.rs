@@ -2,6 +2,7 @@ use crate::error::ApiError;
 use crate::models::{
     BrainRouteRequest, BrainRouteResponse, RagQuery, RagResponse, SakinaAskRequest,
 };
+use crate::models::rules::{RulesEvaluateRequest, RulesEvaluateResponse};
 use serde_json::Value;
 
 #[derive(Clone)]
@@ -20,6 +21,31 @@ impl DistributedClient {
         Self {
             client: reqwest::Client::new(),
         }
+    }
+
+    pub async fn evaluate_rules(
+        &self,
+        url: &str,
+        request: &RulesEvaluateRequest,
+    ) -> Result<RulesEvaluateResponse, ApiError> {
+        let res = self
+            .client
+            .post(format!("{}/api/rules/evaluate", url))
+            .json(request)
+            .send()
+            .await
+            .map_err(|e| ApiError::internal(format!("failed to call rules engine service: {}", e)))?;
+
+        if !res.status().is_success() {
+            return Err(ApiError::internal(format!(
+                "rules engine service returned error: {}",
+                res.status()
+            )));
+        }
+
+        res.json()
+            .await
+            .map_err(|e| ApiError::internal(format!("failed to parse rules response: {}", e)))
     }
 
     pub async fn route_brain(

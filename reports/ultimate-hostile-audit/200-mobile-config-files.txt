@@ -1,0 +1,8 @@
+sakina-frontend/android/.gradle
+sakina-frontend/android/app/build.gradle.kts
+sakina-frontend/android/app/src/debug/AndroidManifest.xml
+sakina-frontend/android/app/src/main/AndroidManifest.xml
+sakina-frontend/android/app/src/profile/AndroidManifest.xml
+sakina-frontend/android/build.gradle.kts
+sakina-frontend/android/settings.gradle.kts
+sakina-frontend/ios/Runner/Info.plist

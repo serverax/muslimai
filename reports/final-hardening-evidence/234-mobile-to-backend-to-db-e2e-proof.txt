@@ -1,4 +1,3 @@
-sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/services/auth_service.dart:45:      final current = await _api.currentUser();
 sakina-frontend/lib/services/auth_service.dart:55:          final refreshed = await _api.refreshWithToken(
 sakina-frontend/lib/services/auth_service.dart:73:    final response = await _api.registerWithPassword(
@@ -11,26 +10,27 @@ sakina-frontend/lib/services/api_service.dart:66:  Future<PasswordAuthResponse> 
 sakina-frontend/lib/services/api_service.dart:82:  Future<UserSummaryResponse> currentUser() async {
 sakina-frontend/lib/services/api_service.dart:92:  Future<void> logout() async {
 sakina-frontend/lib/services/api_service.dart:237:  Future<ProfileResponse> upsertProfile(
-sakina-frontend/lib/services/api_service.dart:407:  Future<CreateConversationResponse> createConversation({
-sakina-frontend/lib/services/api_service.dart:427:  Future<AddMessageResponse> addConversationMessage({
-sakina-frontend/lib/services/api_service.dart:718:  Future<MemoryWriteResponse> writeMemory(
-sakina-frontend/lib/services/api_service.dart:734:  Future<MemoryEntryResponse> readMemory({
-sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';
-sakina-frontend/lib/services/api_service.dart:814:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:417:  Future<CreateConversationResponse> createConversation({
+sakina-frontend/lib/services/api_service.dart:437:  Future<AddMessageResponse> addConversationMessage({
+sakina-frontend/lib/services/api_service.dart:728:  Future<MemoryWriteResponse> writeMemory(
+sakina-frontend/lib/services/api_service.dart:744:  Future<MemoryEntryResponse> readMemory({
+sakina-frontend/lib/services/api_service.dart:795:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:824:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
 sakina-frontend/lib/screens/chat_screen.dart:109:    final response = await widget.api.createConversation(
 sakina-frontend/lib/screens/chat_screen.dart:131:      final stored = await widget.api.addConversationMessage(
 Unauthenticated auth/me status=401
 {
-  "profile_id": "c55ed6c5-823f-402c-8f95-0e2c90cf8155",
-  "user_id": "57b6f0cc-d2b0-4d8a-a285-42a2b917af86"
+  "profile_id": "77d32ce4-d15b-432f-96f5-72ff0628574b",
+  "user_id": "fc84d52b-c9b5-46ae-ab78-f2b72a156ba8"
 }
 Cross-user profile update status=401
 {
-  "conversation_id": "efb41437-8b61-463d-8303-24080e5873a3",
-  "user_message_id": "7a7ed517-f4ab-4266-a7d3-15e94621dddd",
-  "assistant_message_id": "e5f7b154-606b-47c9-8b67-087ce35fce8c",
+  "conversation_id": "c7ddf554-e86c-452b-9a5b-33f64d11bc96",
+  "user_message_id": "1c8c52f4-dff1-46fa-87e2-18947363fcac",
+  "assistant_message_id": "2d069b66-65ed-4406-ac32-e1b8093b2f83",
   "response": "I found verified sources related to Quran 2:153.",
-  "trace_id": "8f3df3dc-c93e-44f6-831f-ce89b19d9539"
+  "trace_id": "50a67935-8b57-44b5-b555-7e38c18654bf"
 }
 Cross-user conversation read status=404
 {
@@ -38,7 +38,7 @@ Cross-user conversation read status=404
   "allowed": true,
   "sensitivity_level": "safe",
   "reason": "memory write allowed",
-  "memory_id": "4d2a3f96-50e5-4b20-92b7-56c3e508ddec"
+  "memory_id": "bf71ffe4-7254-4f83-8222-9bbb687cb9f3"
 }
 Cross-user memory read status=401
 DB profile=1 conversations=1 messages=2 memories=1 brain_traces=1 memory_audits=2

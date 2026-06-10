@@ -1,4 +1,4 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.66s
 Evaluation dataset cases=25
 === prayer-travel-grounded expected=PASS ===
 {
@@ -250,12 +250,14 @@ Evaluation dataset cases=25
   "language_match": false,
   "escalation_needed": false
 }
-Evaluation DB rows before=2295 after=2320
+Evaluation DB rows before=2526 after=2551
 scripts/sakina/final-new-technologies-gate.sh:9:required=(
 scripts/sakina/final-new-technologies-gate.sh:19:  "390:tech-evaluation-ai-proof.sh"
 scripts/sakina/final-new-technologies-gate.sh:39:for item in "${required[@]}"; do
 scripts/sakina/final-new-technologies-gate.sh:44:    printf 'NEW_TECH_GATE_BLOCKER missing required proof script: %s\n' "$script" >&2
 scripts/sakina/final-new-technologies-gate.sh:45:    printf 'Missing required proof script: %s\n' "$script" > "$evidence"
+sakina-backend/src/handlers/evaluation.rs:112:            grounded_in_islamic_sources: Some(true),
+sakina-backend/src/handlers/evaluation.rs:126:            grounded_in_islamic_sources: Some(false),
 sakina-backend/src/services/brain_evaluator.rs:48:        let grounded = generated_from_verified_sources || route.rag_required;
 sakina-backend/src/services/brain_evaluator.rs:57:        } else if evaluation_score >= 0.80 {
 sakina-backend/src/services/brain_evaluator.rs:77:            grounded_in_islamic_sources: grounded,
@@ -266,6 +268,4 @@ sakina-backend/src/services/brain_evaluator.rs:118:            "answer text is r
 sakina-backend/src/services/brain_evaluator.rs:120:            "citations are required for verified delivery".to_string()
 sakina-backend/src/services/brain_evaluator.rs:158:                    INSERT INTO sakina_ai.brain_evaluation_results (
 sakina-backend/src/services/brain_evaluator.rs:191:                    INSERT INTO sakina_ai.brain_evaluation_results (
-sakina-backend/src/handlers/evaluation.rs:112:            grounded_in_islamic_sources: Some(true),
-sakina-backend/src/handlers/evaluation.rs:126:            grounded_in_islamic_sources: Some(false),
 EVALUATION_AI_OK mandatory evaluation AI proof checks completed.

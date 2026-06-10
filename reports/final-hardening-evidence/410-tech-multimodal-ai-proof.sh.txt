@@ -1,4 +1,4 @@
-32:  image_picker: ^1.2.2
+32:  image_picker: ^1.2.1
 33:  file_picker: ^11.0.2
 11:class MultimodalAnalysisScreen extends StatefulWidget {
 12:  MultimodalAnalysisScreen({
@@ -18,18 +18,18 @@ sakina-frontend/lib/screens/multimodal_analysis_screen.dart:123:    if (text.con
 sakina-frontend/lib/screens/multimodal_analysis_screen.dart:124:    if (text.contains('422')) return 'The upload could not be analyzed.';
 sakina-frontend/lib/screens/multimodal_analysis_screen.dart:127:    if (text.contains('429')) return 'Too many upload attempts.';
 sakina-frontend/lib/screens/multimodal_analysis_screen.dart:128:    if (text.contains('500')) return 'The upload service failed.';
-sakina-frontend/lib/services/api_service.dart:767:  Future<MultimodalAnalysisResponse> analyzeMultimodal({
-sakina-frontend/lib/services/api_service.dart:779:        final multipart = http.MultipartRequest(
-sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';
-sakina-frontend/lib/services/api_service.dart:787:        multipart.headers['x-request-id'] = traceId;
-sakina-frontend/lib/services/api_service.dart:801:      return MultimodalAnalysisResponse.fromJson(
-sakina-frontend/lib/services/api_service.dart:814:      headers['Authorization'] = 'Bearer $token';
-sakina-frontend/lib/services/api_service.dart:834:        if (response.statusCode >= 500 &&
-sakina-frontend/lib/services/api_service.dart:862:        if (response.statusCode >= 500 &&
-sakina-frontend/lib/services/api_service.dart:1968:class MultimodalAnalysisResponse {
-sakina-frontend/lib/services/api_service.dart:1979:  const MultimodalAnalysisResponse({
-sakina-frontend/lib/services/api_service.dart:1991:  factory MultimodalAnalysisResponse.fromJson(Map<String, dynamic> json) {
-sakina-frontend/lib/services/api_service.dart:1997:    return MultimodalAnalysisResponse(
+sakina-frontend/lib/services/api_service.dart:777:  Future<MultimodalAnalysisResponse> analyzeMultimodal({
+sakina-frontend/lib/services/api_service.dart:789:        final multipart = http.MultipartRequest(
+sakina-frontend/lib/services/api_service.dart:795:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:797:        multipart.headers['x-request-id'] = traceId;
+sakina-frontend/lib/services/api_service.dart:811:      return MultimodalAnalysisResponse.fromJson(
+sakina-frontend/lib/services/api_service.dart:824:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:844:        if (response.statusCode >= 500 &&
+sakina-frontend/lib/services/api_service.dart:872:        if (response.statusCode >= 500 &&
+sakina-frontend/lib/services/api_service.dart:1978:class MultimodalAnalysisResponse {
+sakina-frontend/lib/services/api_service.dart:1989:  const MultimodalAnalysisResponse({
+sakina-frontend/lib/services/api_service.dart:2001:  factory MultimodalAnalysisResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib/services/api_service.dart:2007:    return MultimodalAnalysisResponse(
 55:      MultimodalAnalysisScreen(session: widget.session),
 99:            icon: Icon(Icons.document_scanner_outlined),
 100:            selectedIcon: Icon(Icons.document_scanner),
@@ -40,7 +40,7 @@ Bad type status=400
 Oversize status=400
 Own asset status=200 Cross-user status=404
 MULTIMODAL_SECURITY_OK auth, type/size validation, private metadata, and owner isolation proved.
-{"indexed_chunks": 36, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+{"indexed_chunks": 41, "collection": "sakina_islamic_chunks_en", "dimension": 128}
 sakina-backend/src/services/brain_audit.rs:57:                        INSERT INTO sakina_ai.brain_decision_traces (
 sakina-backend/src/handlers/multimodal.rs:114:    let route = aia.route(&BrainRouteRequest {
 sakina-backend/src/services/multimodal.rs:15:use crate::services::{AiaOrchestrator, AskIslamicRequest, IslamicAnswerService};
@@ -49,8 +49,8 @@ sakina-backend/src/services/multimodal.rs:327:                AskIslamicRequest 
 sakina-backend/src/services/multimodal.rs:363:            "citations_count": islamic_answer.get("citations").and_then(|v| v.as_array()).map(|v| v.len()).unwrap_or(0),
 sakina-backend/src/services/multimodal.rs:365:            "retrieval_strategy": islamic_answer.get("retrieval_strategy").cloned().unwrap_or(json!(null))
 {
-  "asset_id": "57f32fb6-c7b0-4c74-a5c5-1d71fb5cf37a",
-  "trace_id": "mm-brain-rag-1780688457-25934",
+  "asset_id": "47b97a87-19b0-4b37-8f60-174eb5107fc9",
+  "trace_id": "mm-brain-rag-1780710494-18168",
   "status": "analyzed",
   "extracted_text": "Can I shorten prayers while travelling? Please answer with verified citations.",
   "redacted_text": "Can I shorten prayers while travelling? Please answer with verified citations.",
@@ -133,7 +133,7 @@ sakina-backend/src/services/multimodal.rs:365:            "retrieval_strategy": 
         "step": "memory_action"
       },
       {
-        "outcome": "ae36a171-c60e-4822-b0b9-f83eb8b28348",
+        "outcome": "1f2b4fbb-e690-4b82-9542-a245e73d9921",
         "step": "decision_logged"
       },
       {
@@ -280,21 +280,21 @@ sakina-backend/src/services/multimodal.rs:365:            "retrieval_strategy": 
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30",
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30"
     ],
-    "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
-    "trace_id": "43ad6c4a-ea51-48ae-9795-9f08b8a577aa",
+    "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+    "trace_id": "ff4a27c9-0adc-4770-a7ea-25338e79798d",
     "weak_evidence_blocked": false
   }
 }
 MULTIMODAL_BRAIN_RAG_OK multimodal document upload entered Brain, RAG/Graph fields, citations, DB metadata, and trace.
-{"indexed_chunks": 36, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+{"indexed_chunks": 41, "collection": "sakina_islamic_chunks_en", "dimension": 128}
 {
-  "user_id": "acf7e08b-0aab-4ef0-bff9-c1ae2adbd407",
-  "email": "sakina-mm-live-1780688490-2740@example.com",
+  "user_id": "03e6177b-d2bd-4eff-be58-e1824b7cc8cd",
+  "email": "sakina-mm-live-1780710518-25887@example.com",
   "has_access_token": true
 }
 {
-  "asset_id": "6ca0c5f5-4c89-4a69-b3ae-92127a4a640a",
-  "trace_id": "mm-doc-1780688490-2740",
+  "asset_id": "7d91f639-2967-437f-8e6c-18d4dfe24929",
+  "trace_id": "mm-doc-1780710518-25887",
   "status": "analyzed",
   "extracted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
   "redacted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
@@ -377,7 +377,7 @@ MULTIMODAL_BRAIN_RAG_OK multimodal document upload entered Brain, RAG/Graph fiel
         "step": "memory_action"
       },
       {
-        "outcome": "03dd4a92-030c-499d-8569-c80b26d6ea31",
+        "outcome": "7b0918d2-b237-4cd2-a9bc-7cf1e715c37d",
         "step": "decision_logged"
       },
       {
@@ -524,15 +524,15 @@ MULTIMODAL_BRAIN_RAG_OK multimodal document upload entered Brain, RAG/Graph fiel
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30"
     ],
-    "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
-    "trace_id": "7cfa9df3-74b6-49ff-af9a-49fd6b8e1467",
+    "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+    "trace_id": "425ee4b6-d108-4a44-a712-bf0ad2357171",
     "weak_evidence_blocked": false
   }
 }
 Brain trace rows related to multimodal: 1
 {
-  "asset_id": "5156f8d0-3e49-4660-b988-956c7f667a0f",
-  "trace_id": "mm-image-1780688490-2740",
+  "asset_id": "4402c576-adc2-4551-9fe1-1a9e371db014",
+  "trace_id": "mm-image-1780710518-25887",
   "status": "analyzed",
   "extracted_text": "TRAWEL PRAYER",
   "redacted_text": "TRAWEL PRAYER",
@@ -615,7 +615,7 @@ Brain trace rows related to multimodal: 1
         "step": "memory_action"
       },
       {
-        "outcome": "3fcbfe7e-dee8-430f-8529-d7164d57e14a",
+        "outcome": "204184a8-ec39-4cb6-b217-b685fdaeefe9",
         "step": "decision_logged"
       },
       {
@@ -762,23 +762,87 @@ Brain trace rows related to multimodal: 1
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
       "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31"
     ],
-    "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
-    "trace_id": "939eade9-57f5-4ba8-8ef9-10ec616ed955",
+    "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+    "trace_id": "4c0e3957-3247-4463-8f49-26169f413742",
     "weak_evidence_blocked": false
   }
 }
 MULTIMODAL_LIVE_E2E_OK document and image multimodal workflow proved with real backend, DB, Brain/RAG, and provider.
 2:    <uses-permission android:name="android.permission.CAMERA" />
 sakina-frontend/ios/Runner/Info.plist:29:	<key>NSCameraUsageDescription</key>
-Running Gradle task 'assembleRelease'...                           12.3s
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (100.0.0 available)
+  analyzer 10.0.1 (13.0.0 available)
+  dart_style 3.1.7 (3.1.9 available)
+  flutter_riverpod 2.6.1 (3.3.1 available)
+  flutter_secure_storage 9.2.4 (10.3.1 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.1 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  image_picker_android 0.8.13+17 (0.8.13+19 available)
+  js 0.6.7 (0.7.2 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.17.0 (1.18.3 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  riverpod 2.6.1 (3.2.1 available)
+  shared_preferences_android 2.4.23 (2.4.25 available)
+  sqflite 2.4.2+1 (2.4.3 available)
+  sqflite_android 2.4.2+3 (2.4.3 available)
+  sqflite_common 2.5.8 (2.5.9 available)
+  sqflite_darwin 2.4.2 (2.4.3 available)
+  sqflite_platform_interface 2.4.0 (2.4.1 available)
+  synchronized 3.4.0+1 (3.4.1 available)
+  test_api 0.7.10 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  win32 5.15.0 (6.3.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleRelease'...                            7.0s
 ✓ Built build\app\outputs\flutter-apk\app-release.apk (62.8MB)
-Running Gradle task 'bundleRelease'...                             17.8s
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (100.0.0 available)
+  analyzer 10.0.1 (13.0.0 available)
+  dart_style 3.1.7 (3.1.9 available)
+  flutter_riverpod 2.6.1 (3.3.1 available)
+  flutter_secure_storage 9.2.4 (10.3.1 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.1 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  image_picker_android 0.8.13+17 (0.8.13+19 available)
+  js 0.6.7 (0.7.2 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.17.0 (1.18.3 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  riverpod 2.6.1 (3.2.1 available)
+  shared_preferences_android 2.4.23 (2.4.25 available)
+  sqflite 2.4.2+1 (2.4.3 available)
+  sqflite_android 2.4.2+3 (2.4.3 available)
+  sqflite_common 2.5.8 (2.5.9 available)
+  sqflite_darwin 2.4.2 (2.4.3 available)
+  sqflite_platform_interface 2.4.0 (2.4.1 available)
+  synchronized 3.4.0+1 (3.4.1 available)
+  test_api 0.7.10 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  win32 5.15.0 (6.3.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'bundleRelease'...                             11.3s
 ✓ Built build\app\outputs\bundle\release\app-release.aab (47.1MB)
 
 [32;1mFullName                                                                    [0m[32;1m   Length[0m[32;1m LastWriteTime[0m
 [32;1m--------                                                                    [0m [32;1m  ------[0m [32;1m-------------[0m
-F:\SakinaAL\sakina-frontend\build\app\outputs\flutter-apk\app-release.apk    65867883 6/5/2026 8:41:51 PM
-F:\SakinaAL\sakina-frontend\build\app\outputs\bundle\release\app-release.aab 49420841 6/5/2026 8:42:15 PM
+F:\SakinaAL\sakina-frontend\build\app\outputs\flutter-apk\app-release.apk    65867943 6/6/2026 2:48:51 AM
+F:\SakinaAL\sakina-frontend\build\app\outputs\bundle\release\app-release.aab 49422831 6/6/2026 2:49:07 AM
 
 MULTIMODAL_RELEASE_PERMISSIONS_OK release permissions and Android/iOS release artifacts proved.
 MULTIMODAL_AI_OK LIVE AND END-TO-END PROVEN.

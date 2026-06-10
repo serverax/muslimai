@@ -1,0 +1,1405 @@
+sakina-backend/src\services\semantic_cache.rs:10:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\semantic_cache.rs:11:    pub workspace_id: Option<Uuid>,
+sakina-backend/src\services\semantic_cache.rs:103:        user_id: Option<Uuid>,
+sakina-backend/src\services\semantic_cache.rs:107:            SELECT cache_key, user_id, workspace_id, language, intent, safety_level, source_version,
+sakina-backend/src\services\semantic_cache.rs:111:              AND ($2::uuid IS NULL OR user_id = $2)
+sakina-backend/src\services\semantic_cache.rs:116:        .bind(user_id)
+sakina-backend/src\services\semantic_cache.rs:137:                user_id: row.get("user_id"),
+sakina-backend/src\services\semantic_cache.rs:138:                workspace_id: row.get("workspace_id"),
+sakina-backend/src\services\semantic_cache.rs:155:                cache_key, user_id, workspace_id, language, intent, safety_level, source_version, hit_count, payload, updated_at
+sakina-backend/src\services\semantic_cache.rs:160:                user_id = EXCLUDED.user_id,
+sakina-backend/src\services\semantic_cache.rs:161:                workspace_id = EXCLUDED.workspace_id,
+sakina-backend/src\services\semantic_cache.rs:172:        .bind(entry.user_id)
+sakina-backend/src\services\semantic_cache.rs:173:        .bind(entry.workspace_id)
+sakina-frontend/lib\services\module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:32:    user_id UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:33:    workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:68:CREATE INDEX IF NOT EXISTS idx_ask_shaikh_answers_user_workspace
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:69:    ON sakina_ai.ask_shaikh_answers (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:167:        EXECUTE format('ALTER TABLE sakina_ai.%I ENABLE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:168:        EXECUTE format('ALTER TABLE sakina_ai.%I FORCE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:169:        EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_service', tbl);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:171:            'CREATE POLICY %I ON sakina_ai.%I FOR ALL USING (sakina_ai.rls_service_role()) WITH CHECK (sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:172:            'rls_sakina_ai_' || tbl || '_service',
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:178:DROP POLICY IF EXISTS rls_sakina_ai_ask_shaikh_answers_user
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:180:CREATE POLICY rls_sakina_ai_ask_shaikh_answers_user
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:184:        user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:185:        OR sakina_ai.rls_service_role()
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:188:        user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:189:        OR sakina_ai.rls_service_role()
+sakina-backend/db\migrations\006_sync_state.sql:3:  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:1:CREATE TABLE IF NOT EXISTS sakina_ai.workspaces (
+sakina-backend/db\migrations\020_workspace_learning_core.sql:3:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:4:    name TEXT NOT NULL DEFAULT 'Personal workspace',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:10:    UNIQUE (user_id, is_default)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:14:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:18:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:22:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:26:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:29:    ADD COLUMN IF NOT EXISTS user_id UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:30:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:33:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:36:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:39:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:45:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:46:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:55:    UNIQUE (user_id, workspace_id, preference_key)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:60:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:61:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:73:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:74:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:86:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:87:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:93:    UNIQUE (user_id, workspace_id)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:98:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:99:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:109:CREATE INDEX IF NOT EXISTS idx_workspaces_user_default
+sakina-backend/db\migrations\020_workspace_learning_core.sql:110:    ON sakina_ai.workspaces (user_id, is_default);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:111:CREATE INDEX IF NOT EXISTS idx_conversations_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:112:    ON sakina_ai.conversations (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:113:CREATE INDEX IF NOT EXISTS idx_messages_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:114:    ON sakina_ai.messages (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:115:CREATE INDEX IF NOT EXISTS idx_user_memory_entries_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:116:    ON sakina_ai.user_memory_entries (user_id, workspace_id, memory_key, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:117:CREATE INDEX IF NOT EXISTS idx_brain_decision_traces_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:118:    ON sakina_ai.brain_decision_traces (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:119:CREATE INDEX IF NOT EXISTS idx_learning_preferences_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:120:    ON sakina_ai.user_learning_preferences (user_id, workspace_id, preference_key);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:121:CREATE INDEX IF NOT EXISTS idx_habit_signals_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:122:    ON sakina_ai.user_habit_signals (user_id, workspace_id, signal_type, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:123:CREATE INDEX IF NOT EXISTS idx_interest_signals_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:124:    ON sakina_ai.user_interest_signals (user_id, workspace_id, topic, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:125:CREATE INDEX IF NOT EXISTS idx_mobile_memory_sync_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:126:    ON sakina_ai.mobile_memory_sync (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:128:CREATE OR REPLACE FUNCTION sakina_ai.ensure_default_workspace(p_user_id UUID)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:133:    v_workspace_id UUID;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:135:    SELECT id INTO v_workspace_id
+sakina-backend/db\migrations\020_workspace_learning_core.sql:136:    FROM sakina_ai.workspaces
+sakina-backend/db\migrations\020_workspace_learning_core.sql:137:    WHERE user_id = p_user_id
+sakina-backend/db\migrations\020_workspace_learning_core.sql:142:    IF v_workspace_id IS NULL THEN
+sakina-backend/db\migrations\020_workspace_learning_core.sql:143:        INSERT INTO sakina_ai.workspaces (user_id, name, is_default)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:144:        VALUES (p_user_id, 'Personal workspace', TRUE)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:145:        ON CONFLICT (user_id, is_default)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:147:        RETURNING id INTO v_workspace_id;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:151:        user_id, workspace_id, learning_enabled, local_memory_enabled, server_memory_enabled
+sakina-backend/db\migrations\020_workspace_learning_core.sql:153:    VALUES (p_user_id, v_workspace_id, TRUE, TRUE, TRUE)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:154:    ON CONFLICT (user_id, workspace_id)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:157:    RETURN v_workspace_id;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:165:        'workspaces',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:173:        EXECUTE format('ALTER TABLE sakina_ai.%I ENABLE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:174:        EXECUTE format('ALTER TABLE sakina_ai.%I FORCE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:175:        EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_service', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:177:            'CREATE POLICY %I ON sakina_ai.%I FOR ALL USING (sakina_ai.rls_service_role()) WITH CHECK (sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:178:            'rls_sakina_ai_' || tbl || '_service',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:181:        EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_user', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:183:            'CREATE POLICY %I ON sakina_ai.%I FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role()) WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:184:            'rls_sakina_ai_' || tbl || '_user',
+sakina-backend/db\migrations\005_chat_threads_messages.sql:4:  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\005_chat_threads_messages.sql:12:  user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\005_chat_threads_messages.sql:23:  user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\005_chat_threads_messages.sql:31:  ON sakina_ai.conversations (user_id, created_at DESC);
+sakina-backend/db\migrations\005_chat_threads_messages.sql:36:  user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\004_user_progress.sql:3:  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\004_user_progress.sql:8:  PRIMARY KEY(user_id, module_id)
+sakina-backend/db\migrations\002_users_profiles.sql:50:  user_id UUID NOT NULL UNIQUE REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\002_users_profiles.sql:76:CREATE UNIQUE INDEX IF NOT EXISTS user_profiles_user_id_unique_idx
+sakina-backend/db\migrations\002_users_profiles.sql:77:  ON public.user_profiles (user_id);
+sakina-backend/src\services\phase2.rs:9:use crate::services::auth::{issue_jwt, session_token_hash, validate_jwt};
+sakina-backend/src\services\phase2.rs:46:        if request.provider_user_id.trim().is_empty() {
+sakina-backend/src\services\phase2.rs:47:            request.provider_user_id = request.email.trim().to_ascii_lowercase();
+sakina-backend/src\services\phase2.rs:71:        let user_id: Uuid = user_row.get("id");
+sakina-backend/src\services\phase2.rs:76:                user_id,
+sakina-backend/src\services\phase2.rs:78:                provider_user_id,
+sakina-backend/src\services\phase2.rs:85:            ON CONFLICT (provider, provider_user_id)
+sakina-backend/src\services\phase2.rs:87:                user_id = EXCLUDED.user_id,
+sakina-backend/src\services\phase2.rs:96:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:98:        .bind(&request.provider_user_id)
+sakina-backend/src\services\phase2.rs:117:                    user_id, password_hash, password_salt, password_version
+sakina-backend/src\services\phase2.rs:120:                ON CONFLICT (user_id)
+sakina-backend/src\services\phase2.rs:128:            .bind(user_id)
+sakina-backend/src\services\phase2.rs:141:            user_id,
+sakina-backend/src\services\phase2.rs:149:            refresh_token: None,
+sakina-backend/src\services\phase2.rs:154:                .issue_session_tokens(user_id, None, Some("password-register"))
+sakina-backend/src\services\phase2.rs:157:            response.refresh_token = Some(issued.refresh_token);
+sakina-backend/src\services\phase2.rs:163:    pub async fn create_session(
+sakina-backend/src\services\phase2.rs:165:        request: CreateSessionRequest,
+sakina-backend/src\services\phase2.rs:166:    ) -> Result<CreateSessionResponse, ApiError> {
+sakina-backend/src\services\phase2.rs:171:            .map_err(|_| ApiError::internal("failed to begin session transaction"))?;
+sakina-backend/src\services\phase2.rs:173:        let session_row = sqlx::query(
+sakina-backend/src\services\phase2.rs:175:            INSERT INTO public.auth_sessions (
+sakina-backend/src\services\phase2.rs:176:                user_id,
+sakina-backend/src\services\phase2.rs:177:                session_token_hash,
+sakina-backend/src\services\phase2.rs:187:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:188:        .bind(&request.session_token_hash)
+sakina-backend/src\services\phase2.rs:194:        .map_err(|_| ApiError::internal("failed to create auth session"))?;
+sakina-backend/src\services\phase2.rs:196:        let session_id: Uuid = session_row.get("id");
+sakina-backend/src\services\phase2.rs:198:        let refresh_row = sqlx::query(
+sakina-backend/src\services\phase2.rs:200:            INSERT INTO public.auth_refresh_tokens (
+sakina-backend/src\services\phase2.rs:201:                session_id,
+sakina-backend/src\services\phase2.rs:202:                user_id,
+sakina-backend/src\services\phase2.rs:203:                refresh_token_hash,
+sakina-backend/src\services\phase2.rs:210:        .bind(session_id)
+sakina-backend/src\services\phase2.rs:211:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:212:        .bind(&request.refresh_token_hash)
+sakina-backend/src\services\phase2.rs:213:        .bind(request.refresh_expires_at)
+sakina-backend/src\services\phase2.rs:216:        .map_err(|_| ApiError::internal("failed to create refresh token"))?;
+sakina-backend/src\services\phase2.rs:220:            .map_err(|_| ApiError::internal("failed to commit session transaction"))?;
+sakina-backend/src\services\phase2.rs:222:        Ok(CreateSessionResponse {
+sakina-backend/src\services\phase2.rs:223:            session_id,
+sakina-backend/src\services\phase2.rs:224:            refresh_token_id: refresh_row.get("id"),
+sakina-backend/src\services\phase2.rs:225:            session_created_at: session_row.get("created_at"),
+sakina-backend/src\services\phase2.rs:226:            refresh_created_at: refresh_row.get("created_at"),
+sakina-backend/src\services\phase2.rs:234:                users.id AS user_id,
+sakina-backend/src\services\phase2.rs:240:              ON credentials.user_id = users.id
+sakina-backend/src\services\phase2.rs:252:            return Err(ApiError::unauthorized("invalid email or password"));
+sakina-backend/src\services\phase2.rs:257:            return Err(ApiError::unauthorized("invalid email or password"));
+sakina-backend/src\services\phase2.rs:260:        let user_id: Uuid = row.get("user_id");
+sakina-backend/src\services\phase2.rs:262:            .issue_session_tokens(
+sakina-backend/src\services\phase2.rs:263:                user_id,
+sakina-backend/src\services\phase2.rs:270:            user_id,
+sakina-backend/src\services\phase2.rs:273:            refresh_token: issued.refresh_token,
+sakina-backend/src\services\phase2.rs:278:    pub async fn refresh_session(
+sakina-backend/src\services\phase2.rs:280:        request: RefreshTokenRequest,
+sakina-backend/src\services\phase2.rs:282:        let refresh_token = request.refresh_token.trim();
+sakina-backend/src\services\phase2.rs:283:        if refresh_token.is_empty() {
+sakina-backend/src\services\phase2.rs:284:            return Err(ApiError::unauthorized("refresh_token is required"));
+sakina-backend/src\services\phase2.rs:286:        let jwt_user_id = validate_jwt(refresh_token)?;
+sakina-backend/src\services\phase2.rs:287:        let refresh_hash = session_token_hash(refresh_token);
+sakina-backend/src\services\phase2.rs:293:            .map_err(|_| ApiError::internal("failed to begin refresh transaction"))?;
+sakina-backend/src\services\phase2.rs:295:        let refresh_row = sqlx::query(
+sakina-backend/src\services\phase2.rs:297:            SELECT rt.id, rt.user_id, u.email
+sakina-backend/src\services\phase2.rs:298:            FROM public.auth_refresh_tokens rt
+sakina-backend/src\services\phase2.rs:299:            JOIN public.users u ON u.id = rt.user_id
+sakina-backend/src\services\phase2.rs:300:            WHERE rt.refresh_token_hash = $1
+sakina-backend/src\services\phase2.rs:303:              AND rt.revoked_at IS NULL
+sakina-backend/src\services\phase2.rs:308:        .bind(&refresh_hash)
+sakina-backend/src\services\phase2.rs:311:        .map_err(|_| ApiError::internal("failed to load refresh token"))?;
+sakina-backend/src\services\phase2.rs:313:        let Some(refresh_row) = refresh_row else {
+sakina-backend/src\services\phase2.rs:314:            return Err(ApiError::unauthorized("invalid or expired refresh token"));
+sakina-backend/src\services\phase2.rs:317:        let refresh_user_id: Uuid = refresh_row.get("user_id");
+sakina-backend/src\services\phase2.rs:318:        if refresh_user_id != jwt_user_id {
+sakina-backend/src\services\phase2.rs:319:            return Err(ApiError::unauthorized("refresh token subject mismatch"));
+sakina-backend/src\services\phase2.rs:322:        let refresh_id: Uuid = refresh_row.get("id");
+sakina-backend/src\services\phase2.rs:324:            "UPDATE public.auth_refresh_tokens SET used_at = now(), revoked_at = now() WHERE id = $1",
+sakina-backend/src\services\phase2.rs:326:        .bind(refresh_id)
+sakina-backend/src\services\phase2.rs:329:        .map_err(|_| ApiError::internal("failed to rotate refresh token"))?;
+sakina-backend/src\services\phase2.rs:333:            .map_err(|_| ApiError::internal("failed to commit refresh transaction"))?;
+sakina-backend/src\services\phase2.rs:336:            .issue_session_tokens(refresh_user_id, None, Some("refresh-token"))
+sakina-backend/src\services\phase2.rs:340:            user_id: refresh_user_id,
+sakina-backend/src\services\phase2.rs:341:            email: refresh_row.get("email"),
+sakina-backend/src\services\phase2.rs:343:            refresh_token: issued.refresh_token,
+sakina-backend/src\services\phase2.rs:348:    pub async fn get_user_summary(&self, user_id: Uuid) -> Result<UserSummary, ApiError> {
+sakina-backend/src\services\phase2.rs:356:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:363:            user_id: row.get("id"),
+sakina-backend/src\services\phase2.rs:370:    async fn issue_session_tokens(
+sakina-backend/src\services\phase2.rs:372:        user_id: Uuid,
+sakina-backend/src\services\phase2.rs:376:        let (access_token, expires_at) = issue_jwt(user_id, 12 * 60 * 60)?;
+sakina-backend/src\services\phase2.rs:377:        let (refresh_token, refresh_expires_at) = issue_jwt(user_id, 30 * 24 * 60 * 60)?;
+sakina-backend/src\services\phase2.rs:378:        self.create_session(CreateSessionRequest {
+sakina-backend/src\services\phase2.rs:379:            user_id,
+sakina-backend/src\services\phase2.rs:380:            session_token_hash: token_hash(&access_token),
+sakina-backend/src\services\phase2.rs:381:            refresh_token_hash: token_hash(&refresh_token),
+sakina-backend/src\services\phase2.rs:383:            refresh_expires_at,
+sakina-backend/src\services\phase2.rs:391:            refresh_token,
+sakina-backend/src\services\phase2.rs:409:                user_id, full_name, display_name, timezone, madhhab_preference, metadata
+sakina-backend/src\services\phase2.rs:412:            ON CONFLICT (user_id)
+sakina-backend/src\services\phase2.rs:423:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:436:                user_id, ui_language, content_language, transliteration_enabled
+sakina-backend/src\services\phase2.rs:439:            ON CONFLICT (user_id)
+sakina-backend/src\services\phase2.rs:447:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:458:                user_id, profile_visibility, data_export_allowed, analytics_opt_in
+sakina-backend/src\services\phase2.rs:461:            ON CONFLICT (user_id)
+sakina-backend/src\services\phase2.rs:469:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:480:                user_id, text_scale, high_contrast_enabled, reduced_motion_enabled, screen_reader_optimized
+sakina-backend/src\services\phase2.rs:483:            ON CONFLICT (user_id)
+sakina-backend/src\services\phase2.rs:492:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:504:                user_id, in_app_enabled, email_enabled, push_enabled
+sakina-backend/src\services\phase2.rs:507:            ON CONFLICT (user_id)
+sakina-backend/src\services\phase2.rs:515:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:529:            user_id: request.user_id,
+sakina-backend/src\services\phase2.rs:546:                user_id, family_name, household_size, location_country_code, metadata
+sakina-backend/src\services\phase2.rs:552:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:567:                    family_profile_id, user_id, preferred_name, birth_year, learning_level, notes, metadata
+sakina-backend/src\services\phase2.rs:574:            .bind(child.user_id)
+sakina-backend/src\services\phase2.rs:653:                user_id, provider_id, provider_customer_ref, customer_status
+sakina-backend/src\services\phase2.rs:656:            ON CONFLICT (user_id, provider_id)
+sakina-backend/src\services\phase2.rs:663:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:674:                user_id,
+sakina-backend/src\services\phase2.rs:695:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:709:                user_id,
+sakina-backend/src\services\phase2.rs:727:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:741:                user_id,
+sakina-backend/src\services\phase2.rs:760:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:796:                    user_id, entitlement_id, subscription_id, granted_by
+sakina-backend/src\services\phase2.rs:799:                ON CONFLICT (user_id, entitlement_id)
+sakina-backend/src\services\phase2.rs:802:                    revoked_at = NULL,
+sakina-backend/src\services\phase2.rs:806:            .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:819:            user_id: request.user_id,
+sakina-backend/src\services\phase2.rs:829:        user_id: Uuid,
+sakina-backend/src\services\phase2.rs:840:            WHERE ue.user_id = $1
+sakina-backend/src\services\phase2.rs:841:              AND ue.revoked_at IS NULL
+sakina-backend/src\services\phase2.rs:845:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:868:                user_id, conversation_id, message_id, feedback_type, feedback_score, feedback_comment
+sakina-backend/src\services\phase2.rs:874:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:890:                user_id, message_id, report_reason, report_details, report_status
+sakina-backend/src\services\phase2.rs:896:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:965:                user_id,
+sakina-backend/src\services\phase2.rs:980:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1032:                request_id, user_id, safety_level, islamic_sensitivity, classifier_version, classifier_output
+sakina-backend/src\services\phase2.rs:1039:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1061:        let user_id = request.user_id;
+sakina-backend/src\services\phase2.rs:1066:                user_id,
+sakina-backend/src\services\phase2.rs:1094:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:1121:                request_id, user_id, subscription_tier, entitlement_allowed, policy_version, reason, decision_payload
+sakina-backend/src\services\phase2.rs:1127:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:1285:                admin_user_id, action_type, target_type, target_id, action_status, notes, metadata
+sakina-backend/src\services\phase2.rs:1291:        .bind(request.admin_user_id)
+sakina-backend/src\services\phase2.rs:1310:                admin_user_id, action_key, entity_type, entity_id, new_value, request_id
+sakina-backend/src\services\phase2.rs:1315:        .bind(request.admin_user_id)
+sakina-backend/src\services\phase2.rs:1339:                user_id, scholar_slug, display_name, verified, credentials_summary, account_status
+sakina-backend/src\services\phase2.rs:1352:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1481:                user_id, template_id, channel, notification_status, title, body, payload
+sakina-backend/src\services\phase2.rs:1487:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1518:        user_id: Uuid,
+sakina-backend/src\services\phase2.rs:1525:            WHERE user_id = $1
+sakina-backend/src\services\phase2.rs:1530:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:1560:        user_id: Uuid,
+sakina-backend/src\services\phase2.rs:1569:            WHERE id = $1 AND user_id = $2
+sakina-backend/src\services\phase2.rs:1575:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:1607:                user_id, platform, token_hash, app_version, last_seen_at, is_active
+sakina-backend/src\services\phase2.rs:1612:                user_id = EXCLUDED.user_id,
+sakina-backend/src\services\phase2.rs:1621:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1644:                user_id, ticket_status, priority, category, subject
+sakina-backend/src\services\phase2.rs:1650:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1664:                support_ticket_id, sender_type, sender_user_id, message_body
+sakina-backend/src\services\phase2.rs:1671:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1695:                support_ticket_id, sender_type, sender_user_id, message_body
+sakina-backend/src\services\phase2.rs:1703:        .bind(request.sender_user_id)
+sakina-backend/src\services\phase2.rs:1711:    pub async fn support_ticket_owner(
+sakina-backend/src\services\phase2.rs:1717:            SELECT user_id
+sakina-backend/src\services\phase2.rs:1725:        .map_err(|_| ApiError::internal("failed to fetch support ticket owner"))
+sakina-backend/src\services\phase2.rs:1750:            SELECT id, sender_type, sender_user_id, message_body, created_at::text AS created_at
+sakina-backend/src\services\phase2.rs:1775:                    sender_user_id: row.get("sender_user_id"),
+sakina-backend/src\services\phase2.rs:1786:        user_id: Uuid,
+sakina-backend/src\services\phase2.rs:1792:            WHERE id = $1 AND user_id = $2
+sakina-backend/src\services\phase2.rs:1796:        .bind(user_id)
+sakina-backend/src\services\phase2.rs:1807:            SELECT id, sender_type, sender_user_id, message_body, created_at::text AS created_at
+sakina-backend/src\services\phase2.rs:1832:                    sender_user_id: row.get("sender_user_id"),
+sakina-backend/src\services\phase2.rs:1865:            INSERT INTO public.security_logs (event_type, severity, user_id, ip_address, request_id, details)
+sakina-backend/src\services\phase2.rs:1872:        .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1906:                INSERT INTO public.app_events (user_id, session_id, event_name, event_payload)
+sakina-backend/src\services\phase2.rs:1913:                INSERT INTO public.chat_events (user_id, conversation_id, message_id, event_name, event_payload)
+sakina-backend/src\services\phase2.rs:1920:                INSERT INTO public.rag_events (request_id, user_id, retrieval_audit_id, event_name, event_payload)
+sakina-backend/src\services\phase2.rs:1927:                INSERT INTO public.admin_events (admin_user_id, event_name, event_payload)
+sakina-backend/src\services\phase2.rs:1940:        let rls_user_id = if table == "public.admin_events" {
+sakina-backend/src\services\phase2.rs:1943:            request.user_id
+sakina-backend/src\services\phase2.rs:1945:        if let Some(user_id) = rls_user_id {
+sakina-backend/src\services\phase2.rs:1950:            sqlx::query("SELECT set_config('sakina.current_user_id', $1, true)")
+sakina-backend/src\services\phase2.rs:1951:                .bind(user_id.to_string())
+sakina-backend/src\services\phase2.rs:1956:            sqlx::query("SELECT set_config('sakina.current_user_id', '', true)")
+sakina-backend/src\services\phase2.rs:1969:                    .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1970:                    .bind(request.session_id)
+sakina-backend/src\services\phase2.rs:1982:                    .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:1997:                    .bind(request.user_id)
+sakina-backend/src\services\phase2.rs:2010:                    .bind(request.admin_user_id)
+sakina-backend/src\services\phase2.rs:2090:    refresh_token: String,
+sakina-backend/src\services\phase2.rs:2102:    pub provider_user_id: String,
+sakina-backend/src\services\phase2.rs:2117:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2127:    pub refresh_token: Option<String>,
+sakina-backend/src\services\phase2.rs:2139:pub struct RefreshTokenRequest {
+sakina-backend/src\services\phase2.rs:2140:    pub refresh_token: String,
+sakina-backend/src\services\phase2.rs:2145:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2148:    pub refresh_token: String,
+sakina-backend/src\services\phase2.rs:2154:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2161:pub struct CreateSessionRequest {
+sakina-backend/src\services\phase2.rs:2162:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2163:    pub session_token_hash: String,
+sakina-backend/src\services\phase2.rs:2164:    pub refresh_token_hash: String,
+sakina-backend/src\services\phase2.rs:2166:    pub refresh_expires_at: DateTime<Utc>,
+sakina-backend/src\services\phase2.rs:2172:pub struct CreateSessionResponse {
+sakina-backend/src\services\phase2.rs:2173:    pub session_id: Uuid,
+sakina-backend/src\services\phase2.rs:2174:    pub refresh_token_id: Uuid,
+sakina-backend/src\services\phase2.rs:2175:    pub session_created_at: String,
+sakina-backend/src\services\phase2.rs:2176:    pub refresh_created_at: String,
+sakina-backend/src\services\phase2.rs:2181:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2205:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2210:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2220:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2236:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2255:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2272:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2282:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2304:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2328:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2338:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2394:    pub admin_user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2406:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2448:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2472:    pub user_id: Uuid,
+sakina-backend/src\services\phase2.rs:2480:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2498:    pub sender_user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2506:    pub sender_user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2537:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2546:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2547:    pub admin_user_id: Option<Uuid>,
+sakina-backend/src\services\phase2.rs:2548:    pub session_id: Option<Uuid>,
+sakina-backend/db\init.sql:35:    user_id UUID
+sakina-backend/db\init.sql:70:    user_id UUID REFERENCES public.users(id),
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:3:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:14:    UNIQUE (user_id, journey_date)
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:19:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:26:    UNIQUE (user_id, journey_date)
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:30:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:39:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:49:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:57:    ON public.iman_journey_daily (user_id, journey_date DESC);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:60:    ON public.iman_journey_evidence_bundles (user_id, journey_date DESC);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:63:    ON public.iman_family_reminder_settings (consent_granted, user_id);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:66:    ON public.iman_journey_privacy_settings (user_id, personalization_enabled, reminders_enabled);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:69:    ON public.iman_personal_dua_list (user_id, created_at DESC);
+sakina-backend/src\services\multimodal.rs:19:    pub user_id: Uuid,
+sakina-backend/src\services\multimodal.rs:37:    pub workspace_scope: String,
+sakina-backend/src\services\multimodal.rs:44:    pub user_id: Uuid,
+sakina-backend/src\services\multimodal.rs:112:        user_id: Uuid,
+sakina-backend/src\services\multimodal.rs:116:        let user_dir = Self::storage_root().join(user_id.to_string());
+sakina-backend/src\services\multimodal.rs:275:            .bearer_auth(api_key)
+sakina-backend/src\services\multimodal.rs:309:            Self::persist_private_file(request.user_id, &request.original_name, &request.content)
+sakina-backend/src\services\multimodal.rs:332:                    user_id: Some(request.user_id),
+sakina-backend/src\services\multimodal.rs:340:                user_id, asset_type, original_name, storage_scope, redacted_text,
+sakina-backend/src\services\multimodal.rs:347:        .bind(request.user_id)
+sakina-backend/src\services\multimodal.rs:357:            "workspace_scope": "user",
+sakina-backend/src\services\multimodal.rs:379:            workspace_scope: "user".to_string(),
+sakina-backend/src\services\multimodal.rs:386:        user_id: Uuid,
+sakina-backend/src\services\multimodal.rs:391:            SELECT id, user_id, asset_type, original_name, storage_scope, redacted_text,
+sakina-backend/src\services\multimodal.rs:394:            WHERE id = $1 AND user_id = $2
+sakina-backend/src\services\multimodal.rs:398:        .bind(user_id)
+sakina-backend/src\services\multimodal.rs:405:            user_id: row.get("user_id"),
+sakina-backend/src\services\multimodal.rs:417:    pub async fn delete_asset(&self, user_id: Uuid, asset_id: Uuid) -> Result<bool, ApiError> {
+sakina-backend/src\services\multimodal.rs:421:            WHERE id = $1 AND user_id = $2
+sakina-backend/src\services\multimodal.rs:425:        .bind(user_id)
+sakina-frontend/lib\services\auth_service.dart:7:class AuthSession {
+sakina-frontend/lib\services\auth_service.dart:8:  const AuthSession({
+sakina-frontend/lib\services\auth_service.dart:11:    required this.refreshToken,
+sakina-frontend/lib\services\auth_service.dart:17:  final String refreshToken;
+sakina-frontend/lib\services\auth_service.dart:26:  static const _userIdKey = 'sakina_user_id';
+sakina-frontend/lib\services\auth_service.dart:28:  static const _refreshTokenKey = 'sakina_refresh_token';
+sakina-frontend/lib\services\auth_service.dart:34:  Future<AuthSession?> currentSession() async {
+sakina-frontend/lib\services\auth_service.dart:38:    final refreshToken = await _secureStorage.read(key: _refreshTokenKey);
+sakina-frontend/lib\services\auth_service.dart:40:    if (userId == null || token == null || refreshToken == null || email == null) {
+sakina-frontend/lib\services\auth_service.dart:46:      return AuthSession(
+sakina-frontend/lib\services\auth_service.dart:49:        refreshToken: refreshToken,
+sakina-frontend/lib\services\auth_service.dart:55:          final refreshed = await _api.refreshWithToken(
+sakina-frontend/lib\services\auth_service.dart:56:            refreshToken: refreshToken,
+sakina-frontend/lib\services\auth_service.dart:58:          return _persist(refreshed, refreshed.email ?? email);
+sakina-frontend/lib\services\auth_service.dart:68:  Future<AuthSession> register({
+sakina-frontend/lib\services\auth_service.dart:81:  Future<AuthSession> login({
+sakina-frontend/lib\services\auth_service.dart:97:    await _secureStorage.delete(key: _refreshTokenKey);
+sakina-frontend/lib\services\auth_service.dart:109:  Future<AuthSession> _persist(
+sakina-frontend/lib\services\auth_service.dart:116:      key: _refreshTokenKey,
+sakina-frontend/lib\services\auth_service.dart:117:      value: response.refreshToken,
+sakina-frontend/lib\services\auth_service.dart:120:    return AuthSession(
+sakina-frontend/lib\services\auth_service.dart:123:      refreshToken: response.refreshToken,
+sakina-backend/src\services\brain_controller.rs:83:            user_id: decision_trace.user_id.clone(),
+sakina-backend/src\services\brain_controller.rs:231:            user_id: None,
+sakina-backend/src\services\brain_controller.rs:261:            return Err(ApiError::unauthorized(
+sakina-backend/src\services\brain_controller.rs:277:                user_id: trace.user_id.clone(),
+sakina-backend/src\services\brain_controller.rs:287:            return Err(ApiError::unauthorized(
+sakina-backend/src\services\brain_controller.rs:294:            user_id: trace.user_id.clone(),
+sakina-backend/src\services\brain_audit.rs:38:            user_id = ?record.user_id,
+sakina-backend/src\services\brain_audit.rs:59:                            user_id,
+sakina-backend/src\services\brain_audit.rs:78:                    .bind(&trace.user_id)
+sakina-backend/src\services\mod.rs:32:pub use auth::authenticated_user_id;
+sakina-frontend/lib\services\api_service.dart:35:      'provider_user_id': email.toLowerCase(),
+sakina-frontend/lib\services\api_service.dart:66:  Future<PasswordAuthResponse> refreshWithToken({
+sakina-frontend/lib\services\api_service.dart:67:    required String refreshToken,
+sakina-frontend/lib\services\api_service.dart:69:    final res = await _post('/auth/refresh', {
+sakina-frontend/lib\services\api_service.dart:70:      'refresh_token': refreshToken,
+sakina-frontend/lib\services\api_service.dart:79:    throw _apiException('refresh failed', res);
+sakina-frontend/lib\services\api_service.dart:262:  Future<SessionResponse> createSession(CreateSessionRequest request) async {
+sakina-frontend/lib\services\api_service.dart:263:    final res = await _post('/auth/sessions', request.toJson());
+sakina-frontend/lib\services\api_service.dart:265:      return SessionResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:268:    throw _apiException('create session failed', res);
+sakina-frontend/lib\services\api_service.dart:458:        'user_id': userId,
+sakina-frontend/lib\services\api_service.dart:556:        'user_id': userId,
+sakina-frontend/lib\services\api_service.dart:603:        'user_id': userId,
+sakina-frontend/lib\services\api_service.dart:625:        'user_id': userId,
+sakina-frontend/lib\services\api_service.dart:649:        'sender_user_id': null,
+sakina-frontend/lib\services\api_service.dart:784:      '/api/memory/read?user_id=$userId&memory_key=$encodedKey',
+sakina-frontend/lib\services\api_service.dart:801:      '/api/memory/delete?user_id=$userId&memory_key=$encodedKey',
+sakina-frontend/lib\services\api_service.dart:829:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib\services\api_service.dart:858:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib\services\api_service.dart:1123:  final String workspaceId;
+sakina-frontend/lib\services\api_service.dart:1143:    required this.workspaceId,
+sakina-frontend/lib\services\api_service.dart:1165:        workspaceId: '',
+sakina-frontend/lib\services\api_service.dart:1195:        workspaceId: json['workspace_id']?.toString() ?? '',
+sakina-frontend/lib\services\api_service.dart:1233:  final String workspaceId;
+sakina-frontend/lib\services\api_service.dart:1238:    required this.workspaceId,
+sakina-frontend/lib\services\api_service.dart:1245:        workspaceId: json['workspace_id']?.toString() ?? '',
+sakina-frontend/lib\services\api_service.dart:1477:        'user_id': userId,
+sakina-frontend/lib\services\api_service.dart:1540:        userId: json['user_id']?.toString() ?? '',
+sakina-frontend/lib\services\api_service.dart:1570:        'provider_user_id': providerUserId,
+sakina-frontend/lib\services\api_service.dart:1581:  final String refreshToken;
+sakina-frontend/lib\services\api_service.dart:1587:    required this.refreshToken,
+sakina-frontend/lib\services\api_service.dart:1597:      userId: json['user_id']?.toString() ?? '',
+sakina-frontend/lib\services\api_service.dart:1599:      refreshToken: json['refresh_token']?.toString() ?? '',
+sakina-frontend/lib\services\api_service.dart:1615:    final userId = json['user_id']?.toString() ?? '';
+sakina-frontend/lib\services\api_service.dart:1617:      throw const FormatException('missing user_id in current user response');
+sakina-frontend/lib\services\api_service.dart:1632:    final userId = json['user_id']?.toString() ?? '';
+sakina-frontend/lib\services\api_service.dart:1634:      throw const FormatException('missing user_id in register response');
+sakina-frontend/lib\services\api_service.dart:1640:class CreateSessionRequest {
+sakina-frontend/lib\services\api_service.dart:1642:  final String sessionTokenHash;
+sakina-frontend/lib\services\api_service.dart:1643:  final String refreshTokenHash;
+sakina-frontend/lib\services\api_service.dart:1645:  final String refreshExpiresAt;
+sakina-frontend/lib\services\api_service.dart:1649:  CreateSessionRequest({
+sakina-frontend/lib\services\api_service.dart:1651:    required this.sessionTokenHash,
+sakina-frontend/lib\services\api_service.dart:1652:    required this.refreshTokenHash,
+sakina-frontend/lib\services\api_service.dart:1654:    required this.refreshExpiresAt,
+sakina-frontend/lib\services\api_service.dart:1660:        'user_id': userId,
+sakina-frontend/lib\services\api_service.dart:1661:        'session_token_hash': sessionTokenHash,
+sakina-frontend/lib\services\api_service.dart:1662:        'refresh_token_hash': refreshTokenHash,
+sakina-frontend/lib\services\api_service.dart:1664:        'refresh_expires_at': refreshExpiresAt,
+sakina-frontend/lib\services\api_service.dart:1670:class SessionResponse {
+sakina-frontend/lib\services\api_service.dart:1671:  final String sessionId;
+sakina-frontend/lib\services\api_service.dart:1673:  SessionResponse({required this.sessionId});
+sakina-frontend/lib\services\api_service.dart:1675:  factory SessionResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:1676:    final id = json['session_id']?.toString() ?? '';
+sakina-frontend/lib\services\api_service.dart:1678:      throw const FormatException('missing session_id in session response');
+sakina-frontend/lib\services\api_service.dart:1680:    return SessionResponse(sessionId: id);
+sakina-frontend/lib\services\api_service.dart:1718:        userId: json['user_id']?.toString() ?? '',
+sakina-frontend/lib\services\api_service.dart:2230:  final String workspaceScope;
+sakina-frontend/lib\services\api_service.dart:2241:    required this.workspaceScope,
+sakina-frontend/lib\services\api_service.dart:2259:      workspaceScope: json['workspace_scope']?.toString() ?? '',
+sakina-backend/src\services\llm_gateway.rs:16:    pub workspace_id: String,
+sakina-backend/src\services\llm_gateway.rs:141:    fn request_carries_trace_and_workspace_identity() {
+sakina-backend/src\services\llm_gateway.rs:144:            workspace_id: "workspace-1".to_string(),
+sakina-backend/src\services\llm_gateway.rs:156:        assert_eq!(request.workspace_id, "workspace-1");
+sakina-backend/db\migrations\011_indexes_perf.sql:3:CREATE INDEX IF NOT EXISTS idx_notifications_user_created ON notifications(user_id, created_at DESC);
+sakina-backend/src\services\auth.rs:12:pub fn bearer_token(req: &HttpRequest) -> Result<&str, ApiError> {
+sakina-backend/src\services\auth.rs:15:        .get(actix_web::http::header::AUTHORIZATION)
+sakina-backend/src\services\auth.rs:17:        .ok_or_else(|| ApiError::unauthorized("authorization bearer token is required"))?;
+sakina-backend/src\services\auth.rs:20:        .strip_prefix("Bearer ")
+sakina-backend/src\services\auth.rs:21:        .or_else(|| header.strip_prefix("bearer "))
+sakina-backend/src\services\auth.rs:24:        .ok_or_else(|| ApiError::unauthorized("authorization bearer token is required"))?;
+sakina-backend/src\services\auth.rs:40:pub fn session_token_hash(token: &str) -> String {
+sakina-backend/src\services\auth.rs:45:fn jwt_secret() -> Result<String, ApiError> {
+sakina-backend/src\services\auth.rs:46:    if let Ok(value) = std::env::var("JWT_SECRET").or_else(|_| std::env::var("SAKINA_JWT_SECRET")) {
+sakina-backend/src\services\auth.rs:54:        return Ok("sakina-test-jwt-secret-minimum-32-bytes".to_string());
+sakina-backend/src\services\auth.rs:58:        "JWT_SECRET or SAKINA_JWT_SECRET with at least 32 characters is required",
+sakina-backend/src\services\auth.rs:64:        .map_err(|_| ApiError::internal("failed to initialize JWT signer"))?;
+sakina-backend/src\services\auth.rs:69:pub fn issue_jwt(
+sakina-backend/src\services\auth.rs:70:    user_id: Uuid,
+sakina-backend/src\services\auth.rs:73:    let secret = jwt_secret()?;
+sakina-backend/src\services\auth.rs:76:    let header = URL_SAFE_NO_PAD.encode(r#"{"alg":"HS256","typ":"JWT"}"#);
+sakina-backend/src\services\auth.rs:79:            "sub": user_id.to_string(),
+sakina-backend/src\services\auth.rs:93:pub fn validate_jwt(token: &str) -> Result<Uuid, ApiError> {
+sakina-backend/src\services\auth.rs:94:    let secret = jwt_secret()?;
+sakina-backend/src\services\auth.rs:97:        return Err(ApiError::unauthorized("invalid JWT"));
+sakina-backend/src\services\auth.rs:102:        return Err(ApiError::unauthorized("invalid JWT signature"));
+sakina-backend/src\services\auth.rs:106:        .map_err(|_| ApiError::unauthorized("invalid JWT payload"))?;
+sakina-backend/src\services\auth.rs:108:        .map_err(|_| ApiError::unauthorized("invalid JWT payload"))?;
+sakina-backend/src\services\auth.rs:111:        .ok_or_else(|| ApiError::unauthorized("JWT exp is required"))?;
+sakina-backend/src\services\auth.rs:113:        return Err(ApiError::unauthorized("expired JWT"));
+sakina-backend/src\services\auth.rs:117:        .ok_or_else(|| ApiError::unauthorized("JWT sub is required"))?;
+sakina-backend/src\services\auth.rs:118:    Uuid::parse_str(sub).map_err(|_| ApiError::unauthorized("invalid JWT subject"))
+sakina-backend/src\services\auth.rs:121:pub async fn authenticated_user_id(req: &HttpRequest, pool: &PgPool) -> Result<Uuid, ApiError> {
+sakina-backend/src\services\auth.rs:122:    let token = match bearer_token(req) {
+sakina-backend/src\services\auth.rs:125:            if let Some(user_id) = test_user_header(req) {
+sakina-backend/src\services\auth.rs:126:                return Ok(user_id);
+sakina-backend/src\services\auth.rs:131:    let jwt_user_id = validate_jwt(token)?;
+sakina-backend/src\services\auth.rs:132:    let token_hash = session_token_hash(token);
+sakina-backend/src\services\auth.rs:136:        SELECT user_id
+sakina-backend/src\services\auth.rs:137:        FROM public.auth_sessions
+sakina-backend/src\services\auth.rs:138:        WHERE session_token_hash = $1
+sakina-backend/src\services\auth.rs:140:          AND revoked_at IS NULL
+sakina-backend/src\services\auth.rs:148:    .map_err(|_| ApiError::internal("failed to load authenticated session"))?;
+sakina-backend/src\services\auth.rs:151:        return Err(ApiError::unauthorized("invalid or expired session token"));
+sakina-backend/src\services\auth.rs:154:    let session_user_id: Uuid = row.get("user_id");
+sakina-backend/src\services\auth.rs:155:    if session_user_id != jwt_user_id {
+sakina-backend/src\services\auth.rs:156:        return Err(ApiError::unauthorized("JWT/session subject mismatch"));
+sakina-backend/src\services\auth.rs:158:    Ok(session_user_id)
+sakina-backend/src\services\auth.rs:164:    requested_user_id: Uuid,
+sakina-backend/src\services\auth.rs:166:    let authenticated_user_id = authenticated_user_id(req, pool).await?;
+sakina-backend/src\services\auth.rs:167:    if authenticated_user_id != requested_user_id {
+sakina-backend/src\services\auth.rs:168:        return Err(ApiError::unauthorized(
+sakina-backend/src\services\auth.rs:169:            "requested user_id does not match authenticated user",
+sakina-backend/src\services\auth.rs:172:    Ok(authenticated_user_id)
+sakina-backend/src\services\memory_engine.rs:11:    pub user_id: Uuid,
+sakina-backend/src\services\memory_engine.rs:13:    pub workspace_id: Option<Uuid>,
+sakina-backend/src\services\memory_engine.rs:34:    pub user_id: Uuid,
+sakina-backend/src\services\memory_engine.rs:156:        user_id: Option<Uuid>,
+sakina-backend/src\services\memory_engine.rs:165:                user_id, action, sensitivity_level, allowed, payload
+sakina-backend/src\services\memory_engine.rs:170:        .bind(user_id)
+sakina-backend/src\services\memory_engine.rs:186:            Some(request.user_id),
+sakina-backend/src\services\memory_engine.rs:205:                user_id, workspace_id, memory_key, memory_type, sensitivity_level, encrypted_payload,
+sakina-backend/src\services\memory_engine.rs:212:        .bind(request.user_id)
+sakina-backend/src\services\memory_engine.rs:213:        .bind(request.workspace_id)
+sakina-backend/src\services\memory_engine.rs:242:        user_id: Uuid,
+sakina-backend/src\services\memory_engine.rs:247:            SELECT id, user_id, memory_key, memory_type, sensitivity_level, encrypted_payload,
+sakina-backend/src\services\memory_engine.rs:250:            WHERE user_id = $1
+sakina-backend/src\services\memory_engine.rs:256:        .bind(user_id)
+sakina-backend/src\services\memory_engine.rs:264:                Some(user_id),
+sakina-backend/src\services\memory_engine.rs:283:            Some(user_id),
+sakina-backend/src\services\memory_engine.rs:294:            user_id: row.get("user_id"),
+sakina-backend/src\services\memory_engine.rs:306:    pub async fn delete(&self, user_id: Uuid, memory_key: &str) -> Result<u64, ApiError> {
+sakina-backend/src\services\memory_engine.rs:310:            WHERE user_id = $1
+sakina-backend/src\services\memory_engine.rs:314:        .bind(user_id)
+sakina-backend/src\services\memory_engine.rs:321:            Some(user_id),
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:29:CREATE TABLE IF NOT EXISTS sakina_ai.workspaces (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:31:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:32:    name TEXT NOT NULL DEFAULT 'Personal workspace',
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:38:    UNIQUE (user_id, is_default)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:43:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:45:    provider_user_id TEXT NOT NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:52:    UNIQUE (provider, provider_user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:55:CREATE TABLE IF NOT EXISTS public.auth_sessions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:57:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:58:    session_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:62:    revoked_at TIMESTAMPTZ,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:68:CREATE TABLE IF NOT EXISTS public.auth_refresh_tokens (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:70:    session_id UUID NOT NULL REFERENCES public.auth_sessions(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:71:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:72:    refresh_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:75:    revoked_at TIMESTAMPTZ,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:79:CREATE INDEX IF NOT EXISTS idx_auth_identities_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:80:    ON public.auth_identities (user_id, provider);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:81:CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:82:    ON public.auth_sessions (user_id, expires_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:83:CREATE INDEX IF NOT EXISTS idx_auth_refresh_tokens_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:84:    ON public.auth_refresh_tokens (user_id, expires_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:92:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:103:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:114:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:126:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:138:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:143:    UNIQUE (user_id, preference_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:148:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:154:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:159:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:167:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:172:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:178:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:183:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:190:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:193:CREATE INDEX IF NOT EXISTS idx_family_profiles_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:194:    ON public.family_profiles (user_id, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:197:CREATE INDEX IF NOT EXISTS idx_profile_preferences_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:198:    ON public.profile_preferences (user_id);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:206:    user_id UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:216:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:228:    ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:233:    ON sakina_ai.conversations (user_id, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:406:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:442:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:455:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:467:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:468:    session_id UUID REFERENCES public.auth_sessions(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:533:    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:534:    workspace_id UUID REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:742:    ON sakina_ai.brain_cache_metadata (user_id, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:743:CREATE INDEX IF NOT EXISTS idx_brain_cache_metadata_workspace_updated
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:744:    ON sakina_ai.brain_cache_metadata (workspace_id, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:777:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:783:    UNIQUE (user_id, provider_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:801:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:818:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:837:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:873:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:897:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:903:    revoked_at TIMESTAMPTZ,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:907:    UNIQUE (user_id, entitlement_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:911:    ON public.payment_customers (user_id, provider_id);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:915:    ON public.user_subscriptions (user_id, subscription_status, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:917:    ON public.payment_transactions (user_id, transaction_status, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:919:    ON public.invoices (user_id, invoice_status, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:923:    ON public.user_entitlements (user_id, entitlement_id);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:931:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:964:    admin_user_id UUID REFERENCES public.admin_users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:976:    admin_user_id UUID REFERENCES public.admin_users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:989:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1012:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1034:    ON public.admin_audit_logs (admin_user_id, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1048:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1055:    UNIQUE (user_id, widget_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1060:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1071:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1077:    UNIQUE (user_id, bookmark_type, reference_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1082:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1088:    UNIQUE (user_id, topic_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1093:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1100:    UNIQUE (user_id, surah_number, ayah_number)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1105:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1109:    UNIQUE (user_id, dua_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1114:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1125:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1135:    ON public.user_saved_answers (user_id, saved_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1137:    ON public.user_learning_progress (user_id, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1274:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1300:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1312:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1320:    UNIQUE (user_id, reminder_type)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1325:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1340:    sender_user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1359:    reporter_user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1371:    reporter_user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1450:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1459:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1460:    session_id UUID REFERENCES public.auth_sessions(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1469:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1481:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1491:    admin_user_id UUID REFERENCES public.admin_users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1499:    ON public.user_notifications (user_id, notification_status, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1503:    ON public.support_tickets (user_id, ticket_status, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1517:    ON public.admin_events (admin_user_id, occurred_at DESC);
+sakina-backend/db\migrations\009_notifications.sql:4:  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\019_agent_feedback.sql:19:ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:20:ALTER TABLE public.audit_logs FORCE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:22:DROP POLICY IF EXISTS rls_public_audit_logs_service ON public.audit_logs;
+sakina-backend/db\migrations\019_agent_feedback.sql:23:CREATE POLICY rls_public_audit_logs_service ON public.audit_logs
+sakina-backend/db\migrations\019_agent_feedback.sql:25:USING (sakina_ai.rls_service_role())
+sakina-backend/db\migrations\019_agent_feedback.sql:26:WITH CHECK (sakina_ai.rls_service_role());
+sakina-backend/db\migrations\019_agent_feedback.sql:42:ALTER TABLE outbox.events ENABLE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:43:ALTER TABLE outbox.events FORCE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:45:DROP POLICY IF EXISTS rls_outbox_events_service ON outbox.events;
+sakina-backend/db\migrations\019_agent_feedback.sql:46:CREATE POLICY rls_outbox_events_service ON outbox.events
+sakina-backend/db\migrations\019_agent_feedback.sql:48:USING (sakina_ai.rls_service_role())
+sakina-backend/db\migrations\019_agent_feedback.sql:49:WITH CHECK (sakina_ai.rls_service_role());
+sakina-backend/db\migrations\019_agent_feedback.sql:54:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\019_agent_feedback.sql:65:    ON sakina_ai.agent_feedback (user_id, created_at DESC);
+sakina-backend/db\migrations\019_agent_feedback.sql:67:ALTER TABLE sakina_ai.agent_feedback ENABLE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:68:ALTER TABLE sakina_ai.agent_feedback FORCE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:70:DROP POLICY IF EXISTS rls_sakina_agent_feedback_service ON sakina_ai.agent_feedback;
+sakina-backend/db\migrations\019_agent_feedback.sql:71:CREATE POLICY rls_sakina_agent_feedback_service ON sakina_ai.agent_feedback
+sakina-backend/db\migrations\019_agent_feedback.sql:73:USING (sakina_ai.rls_service_role())
+sakina-backend/db\migrations\019_agent_feedback.sql:74:WITH CHECK (sakina_ai.rls_service_role());
+sakina-backend/db\migrations\019_agent_feedback.sql:76:DROP POLICY IF EXISTS rls_sakina_agent_feedback_user ON sakina_ai.agent_feedback;
+sakina-backend/db\migrations\019_agent_feedback.sql:77:CREATE POLICY rls_sakina_agent_feedback_user ON sakina_ai.agent_feedback
+sakina-backend/db\migrations\019_agent_feedback.sql:79:USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())
+sakina-backend/db\migrations\019_agent_feedback.sql:80:WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+sakina-backend/src\services\islamic_knowledge.rs:228:    pub user_id: Option<Uuid>,
+sakina-backend/src\services\islamic_knowledge.rs:292:            .user_id
+sakina-backend/src\services\islamic_knowledge.rs:293:            .map(|user_id| user_id.to_string())
+sakina-backend/src\services\islamic_knowledge.rs:304:            .lookup(&cache_key, request.user_id)
+sakina-backend/src\services\islamic_knowledge.rs:407:                user_id: request.user_id,
+sakina-backend/src\services\islamic_knowledge.rs:408:                workspace_id: None,
+sakina-frontend/lib\app\app_strings.dart:106:      AppLanguage.english: 'Open Mobile Workspace',
+sakina-backend/src\services\iman_journey.rs:30:        user_id: Uuid,
+sakina-backend/src\services\iman_journey.rs:37:        let privacy = self.get_or_create_privacy_settings(user_id).await?;
+sakina-backend/src\services\iman_journey.rs:47:                user_id, journey_date, today_focus, continue_yesterday_topic,
+sakina-backend/src\services\iman_journey.rs:52:            ON CONFLICT (user_id, journey_date)
+sakina-backend/src\services\iman_journey.rs:64:        .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:92:                    user_id, consent_granted, reminder_text, notify_family, updated_at
+sakina-backend/src\services\iman_journey.rs:95:                ON CONFLICT (user_id)
+sakina-backend/src\services\iman_journey.rs:103:            .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:118:                    user_id, journey_date, reminder_text, confidence_score, evidence_bundle, updated_at
+sakina-backend/src\services\iman_journey.rs:121:                ON CONFLICT (user_id, journey_date)
+sakina-backend/src\services\iman_journey.rs:129:            .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:139:        self.get_journey(user_id, Some(journey_date)).await
+sakina-backend/src\services\iman_journey.rs:144:        user_id: Uuid,
+sakina-backend/src\services\iman_journey.rs:148:        let privacy = self.get_or_create_privacy_settings(user_id).await?;
+sakina-backend/src\services\iman_journey.rs:149:        let family = self.get_family_settings(user_id).await?;
+sakina-backend/src\services\iman_journey.rs:150:        let dua_list = self.list_dua_items(user_id).await?;
+sakina-backend/src\services\iman_journey.rs:164:            WHERE user_id = $1 AND journey_date = $2
+sakina-backend/src\services\iman_journey.rs:167:        .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:174:            .get_reminder_with_evidence(user_id, date, &privacy)
+sakina-backend/src\services\iman_journey.rs:215:        user_id: Uuid,
+sakina-backend/src\services\iman_journey.rs:221:                user_id, personalization_enabled, reminders_enabled, store_journey_enabled, updated_at
+sakina-backend/src\services\iman_journey.rs:224:            ON CONFLICT (user_id)
+sakina-backend/src\services\iman_journey.rs:232:        .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:239:        self.get_or_create_privacy_settings(user_id).await
+sakina-backend/src\services\iman_journey.rs:244:        user_id: Uuid,
+sakina-backend/src\services\iman_journey.rs:249:                user_id, personalization_enabled, reminders_enabled, store_journey_enabled
+sakina-backend/src\services\iman_journey.rs:252:            ON CONFLICT (user_id) DO UPDATE SET updated_at = public.iman_journey_privacy_settings.updated_at
+sakina-backend/src\services\iman_journey.rs:256:        .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:269:        user_id: Uuid,
+sakina-backend/src\services\iman_journey.rs:277:            INSERT INTO public.iman_personal_dua_list (user_id, dua_text, is_answered)
+sakina-backend/src\services\iman_journey.rs:282:        .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:294:    pub async fn list_dua_items(&self, user_id: Uuid) -> Result<Vec<ImanDuaItem>, ApiError> {
+sakina-backend/src\services\iman_journey.rs:299:            WHERE user_id = $1
+sakina-backend/src\services\iman_journey.rs:303:        .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:319:        user_id: Uuid,
+sakina-backend/src\services\iman_journey.rs:325:            WHERE user_id = $1
+sakina-backend/src\services\iman_journey.rs:328:        .bind(user_id)
+sakina-backend/src\services\iman_journey.rs:354:        user_id: Uuid,
+sakina-backend/src\services\iman_journey.rs:374:            WHERE user_id = $1 AND journey_date = $2
+sakina-backend/src\services\iman_journey.rs:377:        .bind(user_id)
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:14:    this.session,
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:19:    final currentSession = session;
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:20:    if (currentSession != null && api == null) {
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:21:      this.api.setAuthToken(currentSession.accessToken);
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:25:  final AuthSession? session;
+sakina-backend/db\migrations\016_password_auth.sql:3:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:5:    provider_user_id TEXT NOT NULL,
+sakina-backend/db\migrations\016_password_auth.sql:12:    UNIQUE (provider, provider_user_id)
+sakina-backend/db\migrations\016_password_auth.sql:15:CREATE INDEX IF NOT EXISTS idx_auth_identities_user_id
+sakina-backend/db\migrations\016_password_auth.sql:16:    ON public.auth_identities (user_id, provider);
+sakina-backend/db\migrations\016_password_auth.sql:18:CREATE TABLE IF NOT EXISTS public.auth_sessions (
+sakina-backend/db\migrations\016_password_auth.sql:20:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:21:    session_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\016_password_auth.sql:25:    revoked_at TIMESTAMPTZ,
+sakina-backend/db\migrations\016_password_auth.sql:31:CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id
+sakina-backend/db\migrations\016_password_auth.sql:32:    ON public.auth_sessions (user_id, expires_at DESC);
+sakina-backend/db\migrations\016_password_auth.sql:34:CREATE TABLE IF NOT EXISTS public.auth_refresh_tokens (
+sakina-backend/db\migrations\016_password_auth.sql:36:    session_id UUID NOT NULL REFERENCES public.auth_sessions(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:37:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:38:    refresh_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\016_password_auth.sql:41:    revoked_at TIMESTAMPTZ,
+sakina-backend/db\migrations\016_password_auth.sql:45:CREATE INDEX IF NOT EXISTS idx_auth_refresh_tokens_user_id
+sakina-backend/db\migrations\016_password_auth.sql:46:    ON public.auth_refresh_tokens (user_id, expires_at DESC);
+sakina-backend/db\migrations\016_password_auth.sql:49:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:60:ALTER TABLE public.auth_sessions
+sakina-backend/db\migrations\016_password_auth.sql:61:    ADD COLUMN IF NOT EXISTS revoked_at TIMESTAMPTZ,
+sakina-backend/db\migrations\016_password_auth.sql:65:ALTER TABLE public.auth_refresh_tokens
+sakina-backend/db\migrations\016_password_auth.sql:67:    ADD COLUMN IF NOT EXISTS revoked_at TIMESTAMPTZ;
+sakina-frontend/lib\screens\module_read_only_state_screen.dart:33:              return _stateText('Unauthorized. Please sign in again.');
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:3:    user_id UUID NOT NULL,
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:21:    user_id UUID NOT NULL,
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:35:    ON sakina_ai.user_memory_entries (user_id, memory_key, created_at DESC);
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:37:    ON sakina_ai.user_memory_entries (user_id, memory_type, created_at DESC);
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:39:    ON sakina_ai.multimodal_assets (user_id, asset_type, created_at DESC);
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:27:    user_id TEXT NULL,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:55:    user_id UUID NULL,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:66:    user_id UUID NULL,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:86:    ON sakina_ai.brain_memory_events (user_id, created_at DESC);
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:88:    ON sakina_ai.brain_cache_metadata (user_id, created_at DESC);
+sakina-frontend/lib\screens\chat_screen.dart:12:    AuthSession? session,
+sakina-frontend/lib\screens\chat_screen.dart:14:        userId = session?.userId ??
+sakina-frontend/lib\screens\chat_screen.dart:16:            const String.fromEnvironment('SAKINA_USER_ID') {
+sakina-frontend/lib\screens\chat_screen.dart:17:    if (session != null && api == null) {
+sakina-frontend/lib\screens\chat_screen.dart:18:      this.api.setAuthToken(session.accessToken);
+sakina-frontend/lib\screens\chat_screen.dart:200:        return 'Unauthorized request. Please sign in again.';
+sakina-backend/src\handlers\agent.rs:13:    pub user_id: Option<Uuid>,
+sakina-backend/src\handlers\agent.rs:47:        request.user_id.unwrap_or_else(Uuid::new_v4),
+sakina-backend/db\migrations\017_rls_user_isolation.sql:3:CREATE OR REPLACE FUNCTION sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:8:    SELECT NULLIF(current_setting('sakina.current_user_id', true), '')::uuid
+sakina-backend/db\migrations\017_rls_user_isolation.sql:11:CREATE OR REPLACE FUNCTION sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:21:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\017_rls_user_isolation.sql:32:    user_id_type TEXT;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:40:        EXECUTE format('ALTER TABLE %I.%I ENABLE ROW LEVEL SECURITY', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:41:        EXECUTE format('ALTER TABLE %I.%I FORCE ROW LEVEL SECURITY', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:43:        policy_name := format('rls_%s_%s_service', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:46:            'CREATE POLICY %I ON %I.%I FOR ALL USING (sakina_ai.rls_service_role()) WITH CHECK (sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:53:        INTO user_id_type
+sakina-backend/db\migrations\017_rls_user_isolation.sql:57:          AND column_name = 'user_id'
+sakina-backend/db\migrations\017_rls_user_isolation.sql:60:        IF user_id_type = 'uuid' THEN
+sakina-backend/db\migrations\017_rls_user_isolation.sql:61:            policy_name := format('rls_%s_%s_user_id', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:64:                'CREATE POLICY %I ON %I.%I FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role()) WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:69:        ELSIF user_id_type IS NOT NULL THEN
+sakina-backend/db\migrations\017_rls_user_isolation.sql:70:            policy_name := format('rls_%s_%s_user_id_text', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:73:                'CREATE POLICY %I ON %I.%I FOR ALL USING (user_id = sakina_ai.current_user_id()::text OR sakina_ai.rls_service_role()) WITH CHECK (user_id = sakina_ai.current_user_id()::text OR sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:79:        user_id_type := NULL;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:83:DROP POLICY IF EXISTS rls_public_users_self ON public.users;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:84:CREATE POLICY rls_public_users_self ON public.users
+sakina-backend/db\migrations\017_rls_user_isolation.sql:86:USING (id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())
+sakina-backend/db\migrations\017_rls_user_isolation.sql:87:WITH CHECK (id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+sakina-backend/db\migrations\017_rls_user_isolation.sql:89:DROP POLICY IF EXISTS rls_public_password_credentials_self ON public.password_credentials;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:90:CREATE POLICY rls_public_password_credentials_self ON public.password_credentials
+sakina-backend/db\migrations\017_rls_user_isolation.sql:92:USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())
+sakina-backend/db\migrations\017_rls_user_isolation.sql:93:WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+sakina-backend/db\migrations\017_rls_user_isolation.sql:95:DROP POLICY IF EXISTS rls_sakina_messages_conversation_owner ON sakina_ai.messages;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:96:CREATE POLICY rls_sakina_messages_conversation_owner ON sakina_ai.messages
+sakina-backend/db\migrations\017_rls_user_isolation.sql:99:    sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:100:    OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:105:          AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:109:    sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:110:    OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:115:          AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:123:        DROP POLICY IF EXISTS rls_public_child_profiles_family_owner ON public.child_profiles;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:124:        CREATE POLICY rls_public_child_profiles_family_owner ON public.child_profiles
+sakina-backend/db\migrations\017_rls_user_isolation.sql:127:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:128:            OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:133:                  AND fp.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:137:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:138:            OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:143:                  AND fp.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:150:        DROP POLICY IF EXISTS rls_public_notification_delivery_attempts_owner ON public.notification_delivery_attempts;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:151:        CREATE POLICY rls_public_notification_delivery_attempts_owner ON public.notification_delivery_attempts
+sakina-backend/db\migrations\017_rls_user_isolation.sql:154:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:159:                  AND n.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:163:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:168:                  AND n.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:175:        DROP POLICY IF EXISTS rls_public_support_ticket_messages_owner ON public.support_ticket_messages;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:176:        CREATE POLICY rls_public_support_ticket_messages_owner ON public.support_ticket_messages
+sakina-backend/db\migrations\017_rls_user_isolation.sql:179:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:180:            OR sender_user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:185:                  AND t.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:189:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:190:            OR sender_user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:195:                  AND t.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:202:        DROP POLICY IF EXISTS rls_public_payment_methods_customer_owner ON public.payment_methods;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:203:        CREATE POLICY rls_public_payment_methods_customer_owner ON public.payment_methods
+sakina-backend/db\migrations\017_rls_user_isolation.sql:206:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:211:                  AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:215:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:220:                  AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:227:        DROP POLICY IF EXISTS rls_public_subscription_events_subscription_owner ON public.subscription_events;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:228:        CREATE POLICY rls_public_subscription_events_subscription_owner ON public.subscription_events
+sakina-backend/db\migrations\017_rls_user_isolation.sql:231:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:236:                  AND s.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:240:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:245:                  AND s.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:252:        DROP POLICY IF EXISTS rls_public_refunds_transaction_owner ON public.refunds;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:253:        CREATE POLICY rls_public_refunds_transaction_owner ON public.refunds
+sakina-backend/db\migrations\017_rls_user_isolation.sql:256:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:261:                  AND tx.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:265:            sakina_ai.rls_service_role()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:270:                  AND tx.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:302:            EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', 'rls_public_' || tbl || '_read', tbl);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:305:                'rls_public_' || tbl || '_read',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:328:            EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_verified_read', tbl);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:331:                'rls_sakina_ai_' || tbl || '_verified_read',
+sakina-frontend/lib\screens\account_intro_screen.dart:54:      final session = _loginMode
+sakina-frontend/lib\screens\account_intro_screen.dart:60:          builder: (_) => HomeShellScreen(appState: app, session: session),
+sakina-backend/src\error.rs:23:    pub fn unauthorized(message: impl Into<String>) -> Self {
+sakina-backend/src\error.rs:25:            code: "unauthorized",
+sakina-backend/src\error.rs:27:            status: StatusCode::UNAUTHORIZED,
+sakina-frontend/lib\screens\islamic_library_screen.dart:167:                      icon: const Icon(Icons.refresh),
+sakina-frontend/lib\screens\islamic_library_screen.dart:168:                      label: const Text('Refresh'),
+sakina-frontend/lib\screens\home_shell_screen.dart:14:  const HomeShellScreen({super.key, required this.appState, this.session});
+sakina-frontend/lib\screens\home_shell_screen.dart:17:  final AuthSession? session;
+sakina-frontend/lib\screens\home_shell_screen.dart:31:      apiClient: ModuleApiClient(authToken: widget.session?.accessToken),
+sakina-frontend/lib\screens\home_shell_screen.dart:40:      ChatScreen(session: widget.session),
+sakina-frontend/lib\screens\home_shell_screen.dart:55:      MultimodalAnalysisScreen(session: widget.session),
+sakina-frontend/lib\screens\home_shell_screen.dart:56:      ComplianceScreen(session: widget.session),
+sakina-backend/src\handlers\brain_traces.rs:5:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\brain_traces.rs:12:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\brain_traces.rs:16:        SELECT request_id, user_id, workspace_id, intent, language, risk_level,
+sakina-backend/src\handlers\brain_traces.rs:21:          AND user_id = $2
+sakina-backend/src\handlers\brain_traces.rs:27:    .bind(user_id.to_string())
+sakina-backend/src\handlers\brain_traces.rs:41:        "user_id": row.get::<Option<String>, _>("user_id"),
+sakina-backend/src\handlers\brain_traces.rs:42:        "workspace_id": row.get::<Option<uuid::Uuid>, _>("workspace_id"),
+sakina-frontend/lib\screens\compliance_screen.dart:8:  const ComplianceScreen({super.key, this.session});
+sakina-frontend/lib\screens\compliance_screen.dart:10:  final AuthSession? session;
+sakina-frontend/lib\screens\compliance_screen.dart:23:    final session = widget.session;
+sakina-frontend/lib\screens\compliance_screen.dart:24:    if (session == null) {
+sakina-frontend/lib\screens\compliance_screen.dart:37:        ApiService(baseUrl: ApiConfig.baseUrl, apiToken: session.accessToken);
+sakina-frontend/lib\screens\compliance_screen.dart:56:    final session = widget.session;
+sakina-frontend/lib\screens\compliance_screen.dart:57:    if (session == null) {
+sakina-frontend/lib\screens\compliance_screen.dart:70:        ApiService(baseUrl: ApiConfig.baseUrl, apiToken: session.accessToken);
+sakina-frontend/lib\screens\compliance_screen.dart:96:          'Sakina stores account, profile, chat, memory, upload, and audit data only for authenticated product use. Private data is user-scoped and protected by backend authorization and database row-level security.',
+sakina-frontend/lib\screens\compliance_screen.dart:116:          'You can request data export or account deletion. Requests are authenticated, audited, queued, and processed against user-owned profile, chat, memory, upload, session, and related private records.',
+sakina-frontend/lib\screens\iman_journey_screen.dart:12:        userId = userId ?? const String.fromEnvironment('SAKINA_USER_ID');
+sakina-frontend/lib\screens\iman_journey_screen.dart:151:      child: RefreshIndicator(
+sakina-frontend/lib\screens\iman_journey_screen.dart:152:        onRefresh: _load,
+sakina-backend/src\handlers\agent_feedback.rs:6:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\agent_feedback.rs:19:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\agent_feedback.rs:28:        SELECT request_id, user_id, execution_trace
+sakina-backend/src\handlers\agent_feedback.rs:44:    let trace_user_id: Option<String> = trace.get("user_id");
+sakina-backend/src\handlers\agent_feedback.rs:45:    if trace_user_id.as_deref() != Some(&user_id.to_string()) {
+sakina-backend/src\handlers\agent_feedback.rs:46:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\agent_feedback.rs:59:        INSERT INTO sakina_ai.agent_feedback (trace_id, user_id, rating, label, reasoning_trace)
+sakina-backend/src\handlers\agent_feedback.rs:65:    .bind(user_id)
+sakina-backend/src\handlers\connectors.rs:4:use crate::services::{authenticated_user_id, McpConnectorRegistry};
+sakina-backend/src\handlers\connectors.rs:11:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\connectors.rs:13:        "user_id": user_id,
+sakina-backend/src\bin\migrate.rs:98:            "017_rls_user_isolation.sql",
+sakina-backend/src\bin\migrate.rs:99:            include_str!("../../db/migrations/017_rls_user_isolation.sql"),
+sakina-backend/src\bin\migrate.rs:110:            "020_workspace_learning_core.sql",
+sakina-backend/src\bin\migrate.rs:111:            include_str!("../../db/migrations/020_workspace_learning_core.sql"),
+sakina-backend/src\handlers\dashboard.rs:10:            "user_id": null
+sakina-backend/src\agent\state.rs:23:    pub user_id: Uuid,
+sakina-backend/src\agent\state.rs:36:    pub fn new(user_id: Uuid, user_query: impl Into<String>, language: impl Into<String>) -> Self {
+sakina-backend/src\agent\state.rs:39:            user_id,
+sakina-backend/src\handlers\chat.rs:12:    authenticated_user_id, AiaOrchestrator, AskIslamicRequest, IslamicAnswerService, MemoryEngine,
+sakina-backend/src\handlers\chat.rs:33:async fn ensure_default_workspace(
+sakina-backend/src\handlers\chat.rs:35:    user_id: Uuid,
+sakina-backend/src\handlers\chat.rs:37:    sqlx::query_scalar::<_, Uuid>("SELECT sakina_ai.ensure_default_workspace($1)")
+sakina-backend/src\handlers\chat.rs:38:        .bind(user_id)
+sakina-backend/src\handlers\chat.rs:42:            tracing::error!("ensure default workspace failed: {}", err);
+sakina-backend/src\handlers\chat.rs:46:                "failed to load user workspace",
+sakina-backend/src\handlers\chat.rs:72:    user_id: Uuid,
+sakina-backend/src\handlers\chat.rs:73:    workspace_id: Uuid,
+sakina-backend/src\handlers\chat.rs:80:            user_id, workspace_id, preference_key, preference_value, source, confidence
+sakina-backend/src\handlers\chat.rs:83:        ON CONFLICT (user_id, workspace_id, preference_key)
+sakina-backend/src\handlers\chat.rs:90:    .bind(user_id)
+sakina-backend/src\handlers\chat.rs:91:    .bind(workspace_id)
+sakina-backend/src\handlers\chat.rs:109:    user_id: Uuid,
+sakina-backend/src\handlers\chat.rs:110:    workspace_id: Uuid,
+sakina-backend/src\handlers\chat.rs:121:            user_id, workspace_id, local_context_hash, allowed_summary
+sakina-backend/src\handlers\chat.rs:126:    .bind(user_id)
+sakina-backend/src\handlers\chat.rs:127:    .bind(workspace_id)
+sakina-backend/src\handlers\chat.rs:143:async fn persist_workspace_brain_trace(
+sakina-backend/src\handlers\chat.rs:145:    user_id: Uuid,
+sakina-backend/src\handlers\chat.rs:146:    workspace_id: Uuid,
+sakina-backend/src\handlers\chat.rs:158:            request_id, user_id, workspace_id, input_type, intent, language, risk_level,
+sakina-backend/src\handlers\chat.rs:166:    .bind(user_id.to_string())
+sakina-backend/src\handlers\chat.rs:167:    .bind(workspace_id)
+sakina-backend/src\handlers\chat.rs:186:        tracing::error!("persist workspace brain trace failed: {}", err);
+sakina-backend/src\handlers\chat.rs:205:    let user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src\handlers\chat.rs:206:        Ok(user_id) => user_id,
+sakina-backend/src\handlers\chat.rs:225:    let workspace_id = match ensure_default_workspace(pool.get_ref(), user_id).await {
+sakina-backend/src\handlers\chat.rs:238:            persist_mobile_memory_sync(pool.get_ref(), user_id, workspace_id, &local_memory_value)
+sakina-backend/src\handlers\chat.rs:254:        "workspace_id": workspace_id,
+sakina-backend/src\handlers\chat.rs:267:            actix_web::http::StatusCode::FORBIDDEN,
+sakina-backend/src\handlers\chat.rs:268:            "forbidden",
+sakina-backend/src\handlers\chat.rs:281:                user_id: Some(user_id),
+sakina-backend/src\handlers\chat.rs:306:    if let Err(response) = persist_workspace_brain_trace(
+sakina-backend/src\handlers\chat.rs:308:        user_id,
+sakina-backend/src\handlers\chat.rs:309:        workspace_id,
+sakina-backend/src\handlers\chat.rs:336:                upsert_learning_preference(pool.get_ref(), user_id, workspace_id, &key, &value)
+sakina-backend/src\handlers\chat.rs:343:                    user_id,
+sakina-backend/src\handlers\chat.rs:344:                    workspace_id: Some(workspace_id),
+sakina-backend/src\handlers\chat.rs:391:        workspace_id,
+sakina-backend/src\handlers\chat.rs:457:    let authenticated_user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src\handlers\chat.rs:458:        Ok(user_id) => user_id,
+sakina-backend/src\handlers\chat.rs:475:    if let Some(requested_user_id) = payload.user_id {
+sakina-backend/src\handlers\chat.rs:476:        if requested_user_id != authenticated_user_id {
+sakina-backend/src\handlers\chat.rs:478:                actix_web::http::StatusCode::UNAUTHORIZED,
+sakina-backend/src\handlers\chat.rs:479:                "unauthorized",
+sakina-backend/src\handlers\chat.rs:480:                "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\chat.rs:493:            actix_web::http::StatusCode::FORBIDDEN,
+sakina-backend/src\handlers\chat.rs:494:            "forbidden",
+sakina-backend/src\handlers\chat.rs:501:        INSERT INTO sakina_ai.conversations (user_id, title)
+sakina-backend/src\handlers\chat.rs:503:        RETURNING id, user_id, title, created_at::text AS created_at, updated_at::text AS updated_at
+sakina-backend/src\handlers\chat.rs:506:    .bind(authenticated_user_id)
+sakina-backend/src\handlers\chat.rs:514:            user_id: row.get("user_id"),
+sakina-backend/src\handlers\chat.rs:536:    let authenticated_user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src\handlers\chat.rs:537:        Ok(user_id) => user_id,
+sakina-backend/src\handlers\chat.rs:542:        SELECT id, user_id, title, created_at::text AS created_at, updated_at::text AS updated_at
+sakina-backend/src\handlers\chat.rs:545:          AND user_id = $2
+sakina-backend/src\handlers\chat.rs:549:    .bind(authenticated_user_id)
+sakina-backend/src\handlers\chat.rs:605:        user_id: conversation_row.get("user_id"),
+sakina-backend/src\handlers\chat.rs:637:    let authenticated_user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src\handlers\chat.rs:638:        Ok(user_id) => user_id,
+sakina-backend/src\handlers\chat.rs:643:        "SELECT id FROM sakina_ai.conversations WHERE id = $1 AND user_id = $2",
+sakina-backend/src\handlers\chat.rs:646:    .bind(authenticated_user_id)
+sakina-backend/src\handlers\chat.rs:676:                user_id: Some(authenticated_user_id),
+sakina-backend/src\handlers\chat.rs:710:        INSERT INTO sakina_ai.messages (conversation_id, user_id, role, content)
+sakina-backend/src\handlers\chat.rs:716:    .bind(authenticated_user_id)
+sakina-backend/src\handlers\chat.rs:734:        INSERT INTO sakina_ai.messages (conversation_id, user_id, role, content)
+sakina-backend/src\handlers\chat.rs:740:    .bind(authenticated_user_id)
+sakina-backend/src\handlers\chat.rs:826:                user_id UUID NULL,
+sakina-backend/src\handlers\chat.rs:852:        sqlx::query("ALTER TABLE sakina_ai.messages ADD COLUMN IF NOT EXISTS user_id UUID NULL")
+sakina-backend/src\handlers\chat.rs:855:            .expect("ensure messages user_id column");
+sakina-backend/src\handlers\chat.rs:859:            CREATE TABLE IF NOT EXISTS public.auth_sessions (
+sakina-backend/src\handlers\chat.rs:861:                user_id UUID NOT NULL,
+sakina-backend/src\handlers\chat.rs:862:                session_token_hash TEXT NOT NULL,
+sakina-backend/src\handlers\chat.rs:866:                revoked_at TIMESTAMPTZ NULL,
+sakina-backend/src\handlers\chat.rs:875:        .expect("create auth_sessions table");
+sakina-backend/src\handlers\chat.rs:878:            "ALTER TABLE public.auth_sessions ADD COLUMN IF NOT EXISTS revoked_at TIMESTAMPTZ NULL, ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now()",
+sakina-backend/src\handlers\chat.rs:882:        .expect("ensure auth session revocation columns");
+sakina-backend/src\handlers\chat.rs:950:                user_id UUID NULL,
+sakina-backend/src\handlers\chat.rs:951:                workspace_id UUID NULL,
+sakina-backend/src\handlers\chat.rs:1064:    async fn insert_session(pool: &PgPool, user_id: Uuid, token: &str) {
+sakina-backend/src\handlers\chat.rs:1072:        .bind(user_id)
+sakina-backend/src\handlers\chat.rs:1073:        .bind(format!("chat-{user_id}@example.com"))
+sakina-backend/src\handlers\chat.rs:1079:            INSERT INTO public.auth_sessions (
+sakina-backend/src\handlers\chat.rs:1080:                user_id, session_token_hash, expires_at
+sakina-backend/src\handlers\chat.rs:1085:        .bind(user_id)
+sakina-backend/src\handlers\chat.rs:1089:        .expect("insert session");
+sakina-backend/src\handlers\chat.rs:1092:    fn bearer_request(token: &str) -> actix_web::test::TestRequest {
+sakina-backend/src\handlers\chat.rs:1094:            .insert_header(("Authorization", format!("Bearer {}", token)))
+sakina-backend/src\handlers\chat.rs:1097:    fn test_jwt(user_id: Uuid) -> String {
+sakina-backend/src\handlers\chat.rs:1098:        crate::services::auth::issue_jwt(user_id, 3600)
+sakina-backend/src\handlers\chat.rs:1099:            .expect("issue chat test JWT")
+sakina-backend/src\handlers\chat.rs:1138:        let user_id = Uuid::new_v4();
+sakina-backend/src\handlers\chat.rs:1139:        let token = test_jwt(user_id);
+sakina-backend/src\handlers\chat.rs:1140:        insert_session(&pool, user_id, &token).await;
+sakina-backend/src\handlers\chat.rs:1142:            bearer_request(&token).to_http_request(),
+sakina-backend/src\handlers\chat.rs:1146:                user_id: None,
+sakina-backend/src\handlers\chat.rs:1163:        let user_id = Uuid::new_v4();
+sakina-backend/src\handlers\chat.rs:1164:        let token = test_jwt(user_id);
+sakina-backend/src\handlers\chat.rs:1165:        insert_session(&pool, user_id, &token).await;
+sakina-backend/src\handlers\chat.rs:1167:            "INSERT INTO sakina_ai.conversations (user_id, title) VALUES ($1, $2) RETURNING id",
+sakina-backend/src\handlers\chat.rs:1169:        .bind(user_id)
+sakina-backend/src\handlers\chat.rs:1176:            bearer_request(&token).to_http_request(),
+sakina-backend/src\handlers\chat.rs:1209:        let user_id = Uuid::new_v4();
+sakina-backend/src\handlers\chat.rs:1210:        let token = test_jwt(user_id);
+sakina-backend/src\handlers\chat.rs:1211:        insert_session(&pool, user_id, &token).await;
+sakina-backend/src\handlers\chat.rs:1213:            "INSERT INTO sakina_ai.conversations (user_id, title) VALUES ($1, $2) RETURNING id",
+sakina-backend/src\handlers\chat.rs:1215:        .bind(user_id)
+sakina-backend/src\handlers\chat.rs:1222:            "INSERT INTO sakina_ai.messages (conversation_id, user_id, role, content) VALUES ($1, $2, 'user', $3)",
+sakina-backend/src\handlers\chat.rs:1225:        .bind(user_id)
+sakina-backend/src\handlers\chat.rs:1232:            bearer_request(&token).to_http_request(),
+sakina-backend/src\handlers\chat.rs:1250:                .insert_header(("Authorization", "Bearer invalid"))
+sakina-backend/src\handlers\chat.rs:1263:        assert_eq!(response.status(), actix_web::http::StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\chat.rs:1267:        assert!(text.contains("\"code\":\"unauthorized\""));
+sakina-backend/src\handlers\chat.rs:1275:        let user_id = Uuid::new_v4();
+sakina-backend/src\handlers\chat.rs:1276:        let token = test_jwt(user_id);
+sakina-backend/src\handlers\chat.rs:1277:        insert_session(&pool, user_id, &token).await;
+sakina-backend/src\handlers\chat.rs:1279:            "INSERT INTO sakina_ai.conversations (user_id, title) VALUES ($1, $2) RETURNING id",
+sakina-backend/src\handlers\chat.rs:1281:        .bind(user_id)
+sakina-backend/src\handlers\chat.rs:1288:            bearer_request(&token).to_http_request(),
+sakina-backend/src\handlers\chat.rs:1298:        assert_eq!(response.status(), actix_web::http::StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\chat.rs:1302:        assert!(text.contains("\"code\":\"unauthorized\""));
+sakina-backend/src\handlers\chat.rs:1311:                .insert_header(("Authorization", "Bearer invalid"))
+sakina-backend/src\bin\llm_gateway.rs:105:    if request.trace_id.trim().is_empty() || request.workspace_id.trim().is_empty() {
+sakina-backend/src\bin\llm_gateway.rs:107:            "error": "trace_id and workspace_id are required",
+sakina-backend/src\bin\llm_gateway.rs:108:            "status": "rejected_missing_trace_or_workspace"
+sakina-backend/src\bin\llm_gateway.rs:119:            "workspace_id": request.workspace_id
+sakina-backend/src\bin\llm_gateway.rs:145:                workspace_id = %request.workspace_id,
+sakina-backend/src\bin\llm_gateway.rs:155:                "workspace_id": request.workspace_id
+sakina-backend/src\bin\llm_gateway.rs:164:            workspace_id = %request.workspace_id,
+sakina-backend/src\bin\llm_gateway.rs:175:            "workspace_id": request.workspace_id
+sakina-backend/src\bin\llm_gateway.rs:187:                "workspace_id": request.workspace_id
+sakina-backend/src\bin\llm_gateway.rs:198:                "workspace_id": request.workspace_id
+sakina-backend/src\bin\llm_gateway.rs:209:        workspace_id = %request.workspace_id,
+sakina-backend/src\bin\llm_gateway.rs:261:            workspace_id: "workspace-1".to_string(),
+sakina-backend/src\handlers\memory.rs:6:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\memory.rs:12:    pub user_id: Uuid,
+sakina-backend/src\handlers\memory.rs:23:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src\handlers\memory.rs:24:    if auth_user_id != request.user_id {
+sakina-backend/src\handlers\memory.rs:25:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\memory.rs:26:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\memory.rs:37:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\memory.rs:50:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src\handlers\memory.rs:51:    if auth_user_id != query.user_id {
+sakina-backend/src\handlers\memory.rs:52:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\memory.rs:53:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\memory.rs:56:    match engine.read(query.user_id, query.memory_key.trim()).await? {
+sakina-backend/src\handlers\memory.rs:69:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src\handlers\memory.rs:70:    if auth_user_id != query.user_id {
+sakina-backend/src\handlers\memory.rs:71:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\memory.rs:72:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\memory.rs:76:        .delete(query.user_id, query.memory_key.trim())
+sakina-backend/src\handlers\memory.rs:87:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src\handlers\memory.rs:90:        SELECT id, user_id, workspace_id, memory_key, memory_type, sensitivity_level,
+sakina-backend/src\handlers\memory.rs:94:        WHERE user_id = $1
+sakina-backend/src\handlers\memory.rs:100:    .bind(auth_user_id)
+sakina-backend/src\handlers\memory.rs:106:        "user_id": auth_user_id,
+sakina-backend/src\handlers\memory.rs:109:            "workspace_id": row.get::<Option<Uuid>, _>("workspace_id"),
+sakina-backend/src\handlers\memory.rs:122:pub async fn list_workspace(
+sakina-backend/src\handlers\memory.rs:127:    let auth_user_id = authenticated_user_id(&req, engine.pool()).await?;
+sakina-backend/src\handlers\memory.rs:128:    let workspace_id = path.into_inner();
+sakina-backend/src\handlers\memory.rs:129:    let owner = sqlx::query_scalar::<_, Option<Uuid>>(
+sakina-backend/src\handlers\memory.rs:130:        "SELECT user_id FROM sakina_ai.workspaces WHERE id = $1 AND deleted_at IS NULL",
+sakina-backend/src\handlers\memory.rs:132:    .bind(workspace_id)
+sakina-backend/src\handlers\memory.rs:135:    .map_err(|_| ApiError::internal("failed to load workspace"))?
+sakina-backend/src\handlers\memory.rs:137:    if owner != Some(auth_user_id) {
+sakina-backend/src\handlers\memory.rs:138:        return Err(ApiError::not_found("workspace memory not found"));
+sakina-backend/src\handlers\memory.rs:144:        WHERE user_id = $1
+sakina-backend/src\handlers\memory.rs:145:          AND workspace_id = $2
+sakina-backend/src\handlers\memory.rs:151:    .bind(auth_user_id)
+sakina-backend/src\handlers\memory.rs:152:    .bind(workspace_id)
+sakina-backend/src\handlers\memory.rs:155:    .map_err(|_| ApiError::internal("failed to list workspace memories"))?;
+sakina-backend/src\handlers\memory.rs:157:        "workspace_id": workspace_id,
+sakina-backend/src\handlers\iman_journey.rs:7:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\iman_journey.rs:18:            .route("/{user_id}", web::get().to(get_iman_journey))
+sakina-backend/src\handlers\iman_journey.rs:19:            .route("/{user_id}", web::put().to(upsert_iman_journey))
+sakina-backend/src\handlers\iman_journey.rs:20:            .route("/{user_id}/privacy", web::get().to(get_privacy_settings))
+sakina-backend/src\handlers\iman_journey.rs:21:            .route("/{user_id}/privacy", web::put().to(update_privacy_settings)),
+sakina-backend/src\handlers\iman_journey.rs:25:            .route("/{user_id}", web::get().to(list_dua_items))
+sakina-backend/src\handlers\iman_journey.rs:26:            .route("/{user_id}", web::post().to(add_dua_item)),
+sakina-backend/src\handlers\iman_journey.rs:36:    let user_id = path.into_inner();
+sakina-backend/src\handlers\iman_journey.rs:37:    ensure_user_scope(&req, service.pool(), user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:39:    let response = service.get_journey(user_id, parsed_date).await?;
+sakina-backend/src\handlers\iman_journey.rs:49:    let user_id = path.into_inner();
+sakina-backend/src\handlers\iman_journey.rs:50:    ensure_user_scope(&req, service.pool(), user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:51:    let response = service.upsert_journey(user_id, body.into_inner()).await?;
+sakina-backend/src\handlers\iman_journey.rs:60:    let user_id = path.into_inner();
+sakina-backend/src\handlers\iman_journey.rs:61:    ensure_user_scope(&req, service.pool(), user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:62:    let response = service.get_or_create_privacy_settings(user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:72:    let user_id = path.into_inner();
+sakina-backend/src\handlers\iman_journey.rs:73:    ensure_user_scope(&req, service.pool(), user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:75:        .upsert_privacy_settings(user_id, body.into_inner())
+sakina-backend/src\handlers\iman_journey.rs:85:    let user_id = path.into_inner();
+sakina-backend/src\handlers\iman_journey.rs:86:    ensure_user_scope(&req, service.pool(), user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:87:    let items = service.list_dua_items(user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:97:    let user_id = path.into_inner();
+sakina-backend/src\handlers\iman_journey.rs:98:    ensure_user_scope(&req, service.pool(), user_id).await?;
+sakina-backend/src\handlers\iman_journey.rs:99:    let item = service.add_dua_item(user_id, body.into_inner()).await?;
+sakina-backend/src\handlers\iman_journey.rs:106:    requested_user_id: Uuid,
+sakina-backend/src\handlers\iman_journey.rs:108:    authenticated_user_id(req, pool)
+sakina-backend/src\handlers\iman_journey.rs:110:        .and_then(|authenticated_user_id| {
+sakina-backend/src\handlers\iman_journey.rs:111:            if authenticated_user_id != requested_user_id {
+sakina-backend/src\handlers\iman_journey.rs:112:                Err(ApiError::unauthorized(
+sakina-backend/src\handlers\iman_journey.rs:113:                    "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\modules.rs:161:    user_id: uuid::Uuid,
+sakina-backend/src\handlers\modules.rs:169:        WHERE ue.user_id = $1
+sakina-backend/src\handlers\modules.rs:172:          AND ue.revoked_at IS NULL
+sakina-backend/src\handlers\modules.rs:177:    .bind(user_id)
+sakina-backend/src\handlers\modules.rs:194:            actix_web::http::StatusCode::FORBIDDEN,
+sakina-backend/src\handlers\modules.rs:200:    let user_id = crate::services::auth::authenticated_user_id(req, pool).await?;
+sakina-backend/src\handlers\modules.rs:201:    if !user_has_entitlement(pool, user_id, entitlement_key).await? {
+sakina-backend/src\handlers\modules.rs:413:        assert_eq!(response.status(), StatusCode::FORBIDDEN);
+sakina-backend/src\handlers\modules.rs:430:            .expect_err("missing JWT must fail before entitlement lookup");
+sakina-backend/src\handlers\modules.rs:431:        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\modules.rs:432:        assert_eq!(error.code, "unauthorized");
+sakina-backend/src\handlers\modules.rs:447:            .expect_err("forged tier header must not bypass JWT/session auth");
+sakina-backend/src\handlers\modules.rs:448:        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\modules.rs:464:        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\modules.rs:480:        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\modules.rs:496:        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\modules.rs:512:        assert_eq!(error.status, StatusCode::UNAUTHORIZED);
+sakina-backend/src\handlers\multimodal.rs:9:    authenticated_user_id, AiaOrchestrator, IslamicAnswerService, MultimodalAnalysisRequest,
+sakina-backend/src\handlers\multimodal.rs:87:    let user_id = authenticated_user_id(&req, service.pool()).await?;
+sakina-backend/src\handlers\multimodal.rs:127:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\multimodal.rs:135:                user_id,
+sakina-backend/src\handlers\multimodal.rs:157:    let user_id = authenticated_user_id(&req, service.pool()).await?;
+sakina-backend/src\handlers\multimodal.rs:158:    match service.get_asset(user_id, asset_id.into_inner()).await? {
+sakina-backend/src\handlers\multimodal.rs:171:    let user_id = authenticated_user_id(&req, service.pool()).await?;
+sakina-backend/src\handlers\multimodal.rs:172:    let deleted = service.delete_asset(user_id, asset_id.into_inner()).await?;
+sakina-backend/src\handlers\model_providers.rs:5:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\model_providers.rs:19:async fn ensure_default_workspace(pool: &sqlx::PgPool, user_id: Uuid) -> Result<Uuid, ApiError> {
+sakina-backend/src\handlers\model_providers.rs:20:    sqlx::query_scalar::<_, Uuid>("SELECT sakina_ai.ensure_default_workspace($1)")
+sakina-backend/src\handlers\model_providers.rs:21:        .bind(user_id)
+sakina-backend/src\handlers\model_providers.rs:24:        .map_err(|_| ApiError::internal("failed to load user workspace"))
+sakina-backend/src\handlers\model_providers.rs:31:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\model_providers.rs:32:    let workspace_id = ensure_default_workspace(pool.get_ref(), user_id).await?;
+sakina-backend/src\handlers\model_providers.rs:37:        "user_id": user_id,
+sakina-backend/src\handlers\model_providers.rs:38:        "workspace_id": workspace_id,
+sakina-backend/src\handlers\user_learning.rs:6:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\user_learning.rs:8:async fn ensure_default_workspace(pool: &sqlx::PgPool, user_id: Uuid) -> Result<Uuid, ApiError> {
+sakina-backend/src\handlers\user_learning.rs:9:    sqlx::query_scalar::<_, Uuid>("SELECT sakina_ai.ensure_default_workspace($1)")
+sakina-backend/src\handlers\user_learning.rs:10:        .bind(user_id)
+sakina-backend/src\handlers\user_learning.rs:13:        .map_err(|_| ApiError::internal("failed to load user workspace"))
+sakina-backend/src\handlers\user_learning.rs:20:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\user_learning.rs:21:    let workspace_id = ensure_default_workspace(pool.get_ref(), user_id).await?;
+sakina-backend/src\handlers\user_learning.rs:26:        WHERE user_id = $1
+sakina-backend/src\handlers\user_learning.rs:27:          AND workspace_id = $2
+sakina-backend/src\handlers\user_learning.rs:32:    .bind(user_id)
+sakina-backend/src\handlers\user_learning.rs:33:    .bind(workspace_id)
+sakina-backend/src\handlers\user_learning.rs:52:        WHERE user_id = $1 AND workspace_id = $2
+sakina-backend/src\handlers\user_learning.rs:56:    .bind(user_id)
+sakina-backend/src\handlers\user_learning.rs:57:    .bind(workspace_id)
+sakina-backend/src\handlers\user_learning.rs:63:        "user_id": user_id,
+sakina-backend/src\handlers\user_learning.rs:64:        "workspace_id": workspace_id,
+sakina-backend/src\handlers\user_learning.rs:86:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\user_learning.rs:87:    let workspace_id = ensure_default_workspace(pool.get_ref(), user_id).await?;
+sakina-backend/src\handlers\user_learning.rs:91:            user_id, workspace_id, learning_enabled, local_memory_enabled, server_memory_enabled
+sakina-backend/src\handlers\user_learning.rs:94:        ON CONFLICT (user_id, workspace_id)
+sakina-backend/src\handlers\user_learning.rs:101:    .bind(user_id)
+sakina-backend/src\handlers\user_learning.rs:102:    .bind(workspace_id)
+sakina-backend/src\handlers\user_learning.rs:111:        "user_id": user_id,
+sakina-backend/src\handlers\user_learning.rs:112:        "workspace_id": workspace_id,
+sakina-backend/src\handlers\user_learning.rs:130:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\user_learning.rs:131:    let workspace_id = ensure_default_workspace(pool.get_ref(), user_id).await?;
+sakina-backend/src\handlers\user_learning.rs:136:        WHERE user_id = $1 AND workspace_id = $2 AND deleted_at IS NULL
+sakina-backend/src\handlers\user_learning.rs:139:    .bind(user_id)
+sakina-backend/src\handlers\user_learning.rs:140:    .bind(workspace_id)
+sakina-backend/src\handlers\user_learning.rs:148:        "workspace_id": workspace_id,
+sakina-backend/src\handlers\user_learning.rs:163:    let user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\user_learning.rs:164:    let workspace_id = ensure_default_workspace(pool.get_ref(), user_id).await?;
+sakina-backend/src\handlers\user_learning.rs:175:            user_id, workspace_id, signal_type, signal_value, confidence
+sakina-backend/src\handlers\user_learning.rs:180:    .bind(user_id)
+sakina-backend/src\handlers\user_learning.rs:181:    .bind(workspace_id)
+sakina-backend/src\handlers\user_learning.rs:190:        "workspace_id": workspace_id,
+sakina-backend/src\handlers\phase2.rs:5:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\phase2.rs:10:    CreateSessionRequest, CreateSourceApprovalItemRequest, CreateSupportTicketRequest,
+sakina-backend/src\handlers\phase2.rs:14:    RefreshTokenRequest, RegisterUserRequest, ReportAnswerRequest, SourceApprovalItem,
+sakina-backend/src\handlers\phase2.rs:43:pub async fn create_session(
+sakina-backend/src\handlers\phase2.rs:45:    body: web::Json<CreateSessionRequest>,
+sakina-backend/src\handlers\phase2.rs:48:    if request.session_token_hash.trim().is_empty() || request.refresh_token_hash.trim().is_empty()
+sakina-backend/src\handlers\phase2.rs:51:            "session_token_hash and refresh_token_hash are required",
+sakina-backend/src\handlers\phase2.rs:54:    let response = repo.create_session(request).await?;
+sakina-backend/src\handlers\phase2.rs:70:pub async fn refresh(
+sakina-backend/src\handlers\phase2.rs:72:    body: web::Json<RefreshTokenRequest>,
+sakina-backend/src\handlers\phase2.rs:74:    let response = repo.refresh_session(body.into_inner()).await?;
+sakina-backend/src\handlers\phase2.rs:82:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:83:    let response = repo.get_user_summary(user_id).await?;
+sakina-backend/src\handlers\phase2.rs:91:    let token = crate::services::auth::bearer_token(&req)?;
+sakina-backend/src\handlers\phase2.rs:92:    let token_hash = crate::services::auth::session_token_hash(token);
+sakina-backend/src\handlers\phase2.rs:99:    let session_id = sqlx::query_scalar::<_, Uuid>(
+sakina-backend/src\handlers\phase2.rs:101:        UPDATE public.auth_sessions
+sakina-backend/src\handlers\phase2.rs:102:        SET revoked_at = now(), updated_at = now()
+sakina-backend/src\handlers\phase2.rs:103:        WHERE session_token_hash = $1 AND revoked_at IS NULL
+sakina-backend/src\handlers\phase2.rs:110:    .map_err(|_| ApiError::internal("failed to revoke session"))?;
+sakina-backend/src\handlers\phase2.rs:112:    let mut refresh_rows = 0;
+sakina-backend/src\handlers\phase2.rs:113:    if let Some(session_id) = session_id {
+sakina-backend/src\handlers\phase2.rs:114:        refresh_rows = sqlx::query(
+sakina-backend/src\handlers\phase2.rs:116:            UPDATE public.auth_refresh_tokens
+sakina-backend/src\handlers\phase2.rs:117:            SET revoked_at = now()
+sakina-backend/src\handlers\phase2.rs:118:            WHERE session_id = $1 AND revoked_at IS NULL
+sakina-backend/src\handlers\phase2.rs:121:        .bind(session_id)
+sakina-backend/src\handlers\phase2.rs:124:        .map_err(|_| ApiError::internal("failed to revoke refresh tokens"))?
+sakina-backend/src\handlers\phase2.rs:133:        "revoked": session_id.is_some(),
+sakina-backend/src\handlers\phase2.rs:134:        "revoked_refresh_tokens": refresh_rows
+sakina-backend/src\handlers\phase2.rs:145:    let requested_user_id = path.into_inner();
+sakina-backend/src\handlers\phase2.rs:146:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:147:    if auth_user_id != requested_user_id {
+sakina-backend/src\handlers\phase2.rs:148:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\phase2.rs:149:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\phase2.rs:152:    request.user_id = auth_user_id;
+sakina-backend/src\handlers\phase2.rs:164:    let requested_user_id = path.into_inner();
+sakina-backend/src\handlers\phase2.rs:165:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:166:    if auth_user_id != requested_user_id {
+sakina-backend/src\handlers\phase2.rs:167:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\phase2.rs:168:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\phase2.rs:171:    request.user_id = auth_user_id;
+sakina-backend/src\handlers\phase2.rs:198:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\phase2.rs:204:    let requested_user_id = path.into_inner();
+sakina-backend/src\handlers\phase2.rs:205:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:206:    if auth_user_id != requested_user_id {
+sakina-backend/src\handlers\phase2.rs:207:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\phase2.rs:208:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\phase2.rs:211:    request.user_id = auth_user_id;
+sakina-backend/src\handlers\phase2.rs:221:    let requested_user_id = path.into_inner();
+sakina-backend/src\handlers\phase2.rs:222:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:223:    if auth_user_id != requested_user_id {
+sakina-backend/src\handlers\phase2.rs:224:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\phase2.rs:225:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\phase2.rs:228:    let entries = repo.list_user_entitlements(auth_user_id).await?;
+sakina-backend/src\handlers\phase2.rs:239:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src\handlers\phase2.rs:252:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src\handlers\phase2.rs:379:    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:388:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:389:    let notifications = repo.list_notifications(user_id).await?;
+sakina-backend/src\handlers\phase2.rs:398:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:400:        .mark_notification_read(user_id, notification_id.into_inner())
+sakina-backend/src\handlers\phase2.rs:414:    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:425:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src\handlers\phase2.rs:441:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:442:    let owner_id = repo
+sakina-backend/src\handlers\phase2.rs:443:        .support_ticket_owner(request.support_ticket_id)
+sakina-backend/src\handlers\phase2.rs:446:    if owner_id != auth_user_id {
+sakina-backend/src\handlers\phase2.rs:447:        return Err(ApiError::unauthorized(
+sakina-backend/src\handlers\phase2.rs:451:    request.sender_user_id = Some(auth_user_id);
+sakina-backend/src\handlers\phase2.rs:463:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:465:        .get_support_ticket_owned_by(support_ticket_id, auth_user_id)
+sakina-backend/src\handlers\phase2.rs:490:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:507:    .bind(user_id.to_string())
+sakina-backend/src\handlers\phase2.rs:526:        "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:546:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src\handlers\phase2.rs:563:    .bind(user_id.to_string())
+sakina-backend/src\handlers\phase2.rs:590:        "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:780:    async fn auth_domain_wires_user_and_session_tables() {
+sakina-backend/src\handlers\phase2.rs:786:                .route("/auth/sessions", web::post().to(create_session)),
+sakina-backend/src\handlers\phase2.rs:796:                "provider_user_id": unique("provider-user"),
+sakina-backend/src\handlers\phase2.rs:805:        let user_id = body["user_id"]
+sakina-backend/src\handlers\phase2.rs:810:        let session_req = test::TestRequest::post()
+sakina-backend/src\handlers\phase2.rs:811:            .uri("/auth/sessions")
+sakina-backend/src\handlers\phase2.rs:813:                "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:814:                "session_token_hash": unique("session-hash"),
+sakina-backend/src\handlers\phase2.rs:815:                "refresh_token_hash": unique("refresh-hash"),
+sakina-backend/src\handlers\phase2.rs:817:                "refresh_expires_at": (Utc::now() + Duration::days(30)).to_rfc3339(),
+sakina-backend/src\handlers\phase2.rs:822:        let session_resp = test::call_service(&app, session_req).await;
+sakina-backend/src\handlers\phase2.rs:823:        assert_eq!(session_resp.status(), StatusCode::CREATED);
+sakina-backend/src\handlers\phase2.rs:827:    async fn register_session_profile_chain_is_fully_wired() {
+sakina-backend/src\handlers\phase2.rs:833:                .route("/auth/sessions", web::post().to(create_session))
+sakina-backend/src\handlers\phase2.rs:834:                .route("/profiles/{user_id}", web::put().to(upsert_profile)),
+sakina-backend/src\handlers\phase2.rs:846:                    "provider_user_id": unique("chain-provider"),
+sakina-backend/src\handlers\phase2.rs:856:        let user_id = register_body["user_id"].as_str().expect("user id string");
+sakina-backend/src\handlers\phase2.rs:858:        let session_resp = test::call_service(
+sakina-backend/src\handlers\phase2.rs:861:                .uri("/auth/sessions")
+sakina-backend/src\handlers\phase2.rs:863:                    "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:864:                    "session_token_hash": unique("chain-session"),
+sakina-backend/src\handlers\phase2.rs:865:                    "refresh_token_hash": unique("chain-refresh"),
+sakina-backend/src\handlers\phase2.rs:867:                    "refresh_expires_at": (Utc::now() + Duration::days(14)).to_rfc3339(),
+sakina-backend/src\handlers\phase2.rs:874:        assert_eq!(session_resp.status(), StatusCode::CREATED);
+sakina-backend/src\handlers\phase2.rs:879:                .uri(&format!("/profiles/{user_id}"))
+sakina-backend/src\handlers\phase2.rs:880:                .insert_header(("x-sakina-user-id", user_id))
+sakina-backend/src\handlers\phase2.rs:882:                    "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:915:                .route("/profiles/{user_id}", web::put().to(upsert_profile))
+sakina-backend/src\handlers\phase2.rs:917:                    "/profiles/{user_id}/family",
+sakina-backend/src\handlers\phase2.rs:929:                "provider_user_id": unique("profile-user"),
+sakina-backend/src\handlers\phase2.rs:937:        let user_id = register_body["user_id"].as_str().expect("user id string");
+sakina-backend/src\handlers\phase2.rs:940:            .uri(&format!("/profiles/{user_id}"))
+sakina-backend/src\handlers\phase2.rs:941:            .insert_header(("x-sakina-user-id", user_id))
+sakina-backend/src\handlers\phase2.rs:943:                "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:968:            .uri(&format!("/profiles/{user_id}/family"))
+sakina-backend/src\handlers\phase2.rs:969:            .insert_header(("x-sakina-user-id", user_id))
+sakina-backend/src\handlers\phase2.rs:971:                "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:977:                    "user_id": null,
+sakina-backend/src\handlers\phase2.rs:1002:                    "/subscriptions/{user_id}/activate",
+sakina-backend/src\handlers\phase2.rs:1006:                    "/subscriptions/{user_id}/entitlements",
+sakina-backend/src\handlers\phase2.rs:1018:                "provider_user_id": unique("sub-user"),
+sakina-backend/src\handlers\phase2.rs:1026:        let user_id = register_body["user_id"].as_str().expect("user id string");
+sakina-backend/src\handlers\phase2.rs:1029:            .uri(&format!("/subscriptions/{user_id}/activate"))
+sakina-backend/src\handlers\phase2.rs:1030:            .insert_header(("x-sakina-user-id", user_id))
+sakina-backend/src\handlers\phase2.rs:1036:                "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:1057:            .uri(&format!("/subscriptions/{user_id}/entitlements"))
+sakina-backend/src\handlers\phase2.rs:1058:            .insert_header(("x-sakina-user-id", user_id))
+sakina-backend/src\handlers\phase2.rs:1124:        let user_id: Uuid = sqlx::query_scalar(
+sakina-backend/src\handlers\phase2.rs:1139:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1141:                    "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:1155:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1179:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1181:                    "user_id": null,
+sakina-backend/src\handlers\phase2.rs:1197:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1199:                    "user_id": null,
+sakina-backend/src\handlers\phase2.rs:1272:                    "user_id": null,
+sakina-backend/src\handlers\phase2.rs:1319:                    "user_id": null,
+sakina-backend/src\handlers\phase2.rs:1336:                    "user_id": null,
+sakina-backend/src\handlers\phase2.rs:1419:                    "user_id": null,
+sakina-backend/src\handlers\phase2.rs:1452:                    "admin_user_id": null,
+sakina-backend/src\handlers\phase2.rs:1493:        let user_id: Uuid = sqlx::query_scalar(
+sakina-backend/src\handlers\phase2.rs:1556:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1558:                    "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:1587:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1589:                    "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:1603:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1605:                    "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:1622:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1626:                    "sender_user_id": null,
+sakina-backend/src\handlers\phase2.rs:1638:                .insert_header(("x-sakina-user-id", user_id.to_string()))
+sakina-backend/src\handlers\phase2.rs:1657:                    "actor_id": user_id,
+sakina-backend/src\handlers\phase2.rs:1673:                    "user_id": user_id,
+sakina-backend/src\handlers\phase2.rs:1689:            let event_user_id = if route == "/events/rag" {
+sakina-backend/src\handlers\phase2.rs:1692:                serde_json::json!(user_id)
+sakina-backend/src\handlers\phase2.rs:1700:                        "user_id": event_user_id,
+sakina-backend/src\handlers\phase2.rs:1701:                        "admin_user_id": null,
+sakina-backend/src\handlers\phase2.rs:1702:                        "session_id": null,
+sakina-backend/src\handlers\sync.rs:8:use crate::services::authenticated_user_id;
+sakina-backend/src\handlers\sync.rs:18:    user_id: web::Path<Uuid>,
+sakina-backend/src\handlers\sync.rs:21:    let requested_user_id = user_id.into_inner();
+sakina-backend/src\handlers\sync.rs:22:    let authenticated_user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\sync.rs:23:    if authenticated_user_id != requested_user_id {
+sakina-backend/src\handlers\sync.rs:25:            actix_web::http::StatusCode::UNAUTHORIZED,
+sakina-backend/src\handlers\sync.rs:26:            "unauthorized",
+sakina-backend/src\handlers\sync.rs:27:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\sync.rs:42:        "INSERT INTO public.user_backups (user_id, encrypted_blob, backup_hash) \
+sakina-backend/src\handlers\sync.rs:45:    .bind(requested_user_id)
+sakina-backend/src\handlers\sync.rs:65:    user_id: web::Path<Uuid>,
+sakina-backend/src\handlers\sync.rs:67:    let requested_user_id = user_id.into_inner();
+sakina-backend/src\handlers\sync.rs:68:    let authenticated_user_id = authenticated_user_id(&req, pool.get_ref()).await?;
+sakina-backend/src\handlers\sync.rs:69:    if authenticated_user_id != requested_user_id {
+sakina-backend/src\handlers\sync.rs:71:            actix_web::http::StatusCode::UNAUTHORIZED,
+sakina-backend/src\handlers\sync.rs:72:            "unauthorized",
+sakina-backend/src\handlers\sync.rs:73:            "requested user_id does not match authenticated user",
+sakina-backend/src\handlers\sync.rs:79:         WHERE user_id = $1 \
+sakina-backend/src\handlers\sync.rs:83:    .bind(requested_user_id)
+sakina-backend/src\handlers\rag.rs:292:            actix_web::http::StatusCode::FORBIDDEN,
+sakina-backend/src\handlers\rag.rs:337:            actix_web::http::StatusCode::FORBIDDEN,
+sakina-backend/src\handlers\rag.rs:415:        assert_eq!(response.status(), StatusCode::FORBIDDEN);
+sakina-backend/src\handlers\sakina_ask.rs:11:    authenticated_user_id, pii_redaction::redact_pii, AiaOrchestrator, AskIslamicRequest,
+sakina-backend/src\handlers\sakina_ask.rs:127:async fn ensure_default_workspace(
+sakina-backend/src\handlers\sakina_ask.rs:129:    user_id: Uuid,
+sakina-backend/src\handlers\sakina_ask.rs:131:    sqlx::query_scalar::<_, Uuid>("SELECT sakina_ai.ensure_default_workspace($1)")
+sakina-backend/src\handlers\sakina_ask.rs:132:        .bind(user_id)
+sakina-backend/src\handlers\sakina_ask.rs:136:            tracing::error!("ensure default workspace failed: {err}");
+sakina-backend/src\handlers\sakina_ask.rs:140:                "failed to load user workspace",
+sakina-backend/src\handlers\sakina_ask.rs:191:    user_id: Uuid,
+sakina-backend/src\handlers\sakina_ask.rs:192:    workspace_id: Uuid,
+sakina-backend/src\handlers\sakina_ask.rs:210:            request_id, user_id, workspace_id, input_type, intent, language, risk_level,
+sakina-backend/src\handlers\sakina_ask.rs:219:    .bind(input.user_id.to_string())
+sakina-backend/src\handlers\sakina_ask.rs:220:    .bind(input.workspace_id)
+sakina-backend/src\handlers\sakina_ask.rs:262:            trace_id, user_id, workspace_id, language, intent, question_redacted,
+sakina-backend/src\handlers\sakina_ask.rs:269:    .bind(input.user_id)
+sakina-backend/src\handlers\sakina_ask.rs:270:    .bind(input.workspace_id)
+sakina-backend/src\handlers\sakina_ask.rs:348:    let user_id = match authenticated_user_id(&req, pool.get_ref()).await {
+sakina-backend/src\handlers\sakina_ask.rs:349:        Ok(user_id) => user_id,
+sakina-backend/src\handlers\sakina_ask.rs:361:    let workspace_id = match ensure_default_workspace(pool.get_ref(), user_id).await {
+sakina-backend/src\handlers\sakina_ask.rs:479:                "workspace_id": workspace_id,
+sakina-backend/src\handlers\sakina_ask.rs:493:                        user_id: Some(user_id),
+sakina-backend/src\handlers\sakina_ask.rs:539:                    workspace_id: workspace_id.to_string(),
+sakina-backend/src\handlers\sakina_ask.rs:608:            user_id,
+sakina-backend/src\handlers\sakina_ask.rs:609:            workspace_id,
+sakina-backend/src\main.rs:119:async fn rls_enabled(pool: &sqlx::PgPool) -> bool {
+sakina-backend/src\main.rs:256:    let rls_ok = database_ok && rls_enabled(pool).await;
+sakina-backend/src\main.rs:260:    let auth_ok = strong_secret("JWT_SECRET") || strong_secret("SAKINA_JWT_SECRET");
+sakina-backend/src\main.rs:268:        "rls": if rls_ok { "ok" } else { "missing" },
+sakina-backend/src\main.rs:283:        && snapshot["rls"] == "ok"
+sakina-backend/src\main.rs:418:            actix_web::http::header::AUTHORIZATION,
+sakina-backend/src\main.rs:610:                    .route("/refresh", web::post().to(handlers::phase2::refresh))
+sakina-backend/src\main.rs:618:                    .route("/refresh", web::post().to(handlers::phase2::refresh))
+sakina-backend/src\main.rs:775:                "/api/workspaces/{workspace_id}/memory",
+sakina-backend/src\main.rs:776:                web::get().to(handlers::memory::list_workspace),
+sakina-backend/src\main.rs:808:                            .route("/refresh", web::post().to(handlers::phase2::refresh))
+sakina-backend/src\main.rs:812:                                "/sessions",
+sakina-backend/src\main.rs:813:                                web::post().to(handlers::phase2::create_session),
+sakina-backend/src\main.rs:819:                                "/{user_id}",
+sakina-backend/src\main.rs:823:                                "/{user_id}/family",
+sakina-backend/src\main.rs:830:                                "/{user_id}/activate",
+sakina-backend/src\main.rs:834:                                "/{user_id}/entitlements",
+sakina-backend/src\main.rs:1007:                        "/api/workspaces/{workspace_id}/memory",
+sakina-backend/src\main.rs:1008:                        web::get().to(handlers::memory::list_workspace),
+sakina-backend/src\main.rs:1174:                                "/backup/{user_id}",
+sakina-backend/src\main.rs:1178:                                "/backup/{user_id}",
+sakina-backend/src\middleware\audit.rs:53:        let user_id = req
+sakina-backend/src\middleware\audit.rs:72:                user_id = %user_id,
+sakina-backend/src\models\mod.rs:15:    pub user_id: Uuid,
+sakina-backend/src\models\mod.rs:79:    pub user_id: Option<String>,
+sakina-backend/src\models\mod.rs:109:    pub user_id: Option<String>,
+sakina-backend/src\models\mod.rs:302:    pub user_id: Option<Uuid>,
+sakina-backend/src\models\mod.rs:309:    pub user_id: Option<Uuid>,
+sakina-backend/src\models\mod.rs:326:    pub user_id: Option<Uuid>,
+sakina-backend/src\models\mod.rs:370:    pub workspace_id: Uuid,

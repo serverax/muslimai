@@ -1,0 +1,684 @@
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:1:CREATE TABLE IF NOT EXISTS public.iman_journey_daily (
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:3:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:14:    UNIQUE (user_id, journey_date)
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:17:CREATE TABLE IF NOT EXISTS public.iman_journey_evidence_bundles (
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:19:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:26:    UNIQUE (user_id, journey_date)
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:29:CREATE TABLE IF NOT EXISTS public.iman_journey_privacy_settings (
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:30:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:38:CREATE TABLE IF NOT EXISTS public.iman_family_reminder_settings (
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:39:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:47:CREATE TABLE IF NOT EXISTS public.iman_personal_dua_list (
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:49:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:56:CREATE INDEX IF NOT EXISTS idx_iman_journey_daily_user_date
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:57:    ON public.iman_journey_daily (user_id, journey_date DESC);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:59:CREATE INDEX IF NOT EXISTS idx_iman_journey_evidence_user_date
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:60:    ON public.iman_journey_evidence_bundles (user_id, journey_date DESC);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:62:CREATE INDEX IF NOT EXISTS idx_iman_family_consent_lookup
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:63:    ON public.iman_family_reminder_settings (consent_granted, user_id);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:65:CREATE INDEX IF NOT EXISTS idx_iman_privacy_lookup
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:66:    ON public.iman_journey_privacy_settings (user_id, personalization_enabled, reminders_enabled);
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:68:CREATE INDEX IF NOT EXISTS idx_iman_dua_user_created
+sakina-backend/db\20260602_phase21_daily_iman_journey.sql:69:    ON public.iman_personal_dua_list (user_id, created_at DESC);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:1:CREATE TABLE IF NOT EXISTS sakina_ai.local_sunni_topics (
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:14:    UNIQUE (topic_key, language)
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:17:CREATE TABLE IF NOT EXISTS sakina_ai.anonymous_learning_events (
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:19:    trace_id TEXT NOT NULL,
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:29:CREATE TABLE IF NOT EXISTS sakina_ai.ask_shaikh_answers (
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:31:    trace_id TEXT NOT NULL,
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:32:    user_id UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:33:    workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:44:CREATE TABLE IF NOT EXISTS sakina_ai.scholar_review_queue (
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:60:CREATE INDEX IF NOT EXISTS idx_local_sunni_topics_topic_language
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:62:CREATE INDEX IF NOT EXISTS idx_anonymous_learning_events_trace
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:63:    ON sakina_ai.anonymous_learning_events (trace_id, created_at DESC);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:64:CREATE INDEX IF NOT EXISTS idx_anonymous_learning_events_intent_language
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:66:CREATE INDEX IF NOT EXISTS idx_ask_shaikh_answers_trace
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:67:    ON sakina_ai.ask_shaikh_answers (trace_id, created_at DESC);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:68:CREATE INDEX IF NOT EXISTS idx_ask_shaikh_answers_user_workspace
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:69:    ON sakina_ai.ask_shaikh_answers (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:70:CREATE INDEX IF NOT EXISTS idx_scholar_review_queue_status
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:167:        EXECUTE format('ALTER TABLE sakina_ai.%I ENABLE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:168:        EXECUTE format('ALTER TABLE sakina_ai.%I FORCE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:169:        EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_service', tbl);
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:171:            'CREATE POLICY %I ON sakina_ai.%I FOR ALL USING (sakina_ai.rls_service_role()) WITH CHECK (sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:178:DROP POLICY IF EXISTS rls_sakina_ai_ask_shaikh_answers_user
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:180:CREATE POLICY rls_sakina_ai_ask_shaikh_answers_user
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:184:        user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:187:    WITH CHECK (
+sakina-backend/db\migrations\021_sakina_mother_local_topics.sql:188:        user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\010_admin_audit.sql:2:CREATE TABLE IF NOT EXISTS admin_audit_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:13:CREATE TABLE IF NOT EXISTS public.users (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:15:    pub_key TEXT UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:16:    email TEXT UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:23:ALTER TABLE public.users
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:29:CREATE TABLE IF NOT EXISTS sakina_ai.workspaces (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:31:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:32:    name TEXT NOT NULL DEFAULT 'Personal workspace',
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:35:    deleted_at TIMESTAMPTZ NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:38:    UNIQUE (user_id, is_default)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:41:CREATE TABLE IF NOT EXISTS public.auth_identities (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:43:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:45:    provider_user_id TEXT NOT NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:52:    UNIQUE (provider, provider_user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:55:CREATE TABLE IF NOT EXISTS public.auth_sessions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:57:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:58:    session_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:68:CREATE TABLE IF NOT EXISTS public.auth_refresh_tokens (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:71:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:72:    refresh_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:79:CREATE INDEX IF NOT EXISTS idx_auth_identities_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:80:    ON public.auth_identities (user_id, provider);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:81:CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:82:    ON public.auth_sessions (user_id, expires_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:83:CREATE INDEX IF NOT EXISTS idx_auth_refresh_tokens_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:84:    ON public.auth_refresh_tokens (user_id, expires_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:90:CREATE TABLE IF NOT EXISTS public.user_profiles (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:92:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:103:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:106:ALTER TABLE public.user_profiles
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:112:CREATE TABLE IF NOT EXISTS public.family_profiles (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:114:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:123:CREATE TABLE IF NOT EXISTS public.child_profiles (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:126:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:136:CREATE TABLE IF NOT EXISTS public.profile_preferences (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:138:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:143:    UNIQUE (user_id, preference_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:146:CREATE TABLE IF NOT EXISTS public.language_preferences (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:148:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:154:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:157:CREATE TABLE IF NOT EXISTS public.notification_preferences (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:159:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:167:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:170:CREATE TABLE IF NOT EXISTS public.privacy_preferences (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:172:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:178:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:181:CREATE TABLE IF NOT EXISTS public.accessibility_preferences (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:183:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:190:    UNIQUE (user_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:193:CREATE INDEX IF NOT EXISTS idx_family_profiles_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:194:    ON public.family_profiles (user_id, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:195:CREATE INDEX IF NOT EXISTS idx_child_profiles_family_profile_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:197:CREATE INDEX IF NOT EXISTS idx_profile_preferences_user_id
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:198:    ON public.profile_preferences (user_id);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:204:CREATE TABLE IF NOT EXISTS sakina_ai.conversations (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:206:    user_id UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:213:CREATE TABLE IF NOT EXISTS sakina_ai.messages (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:216:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:217:    role TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:224:ALTER TABLE sakina_ai.conversations
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:227:ALTER TABLE sakina_ai.messages
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:228:    ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:232:CREATE INDEX IF NOT EXISTS idx_sakina_ai_conversations_user_created
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:233:    ON sakina_ai.conversations (user_id, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:234:CREATE INDEX IF NOT EXISTS idx_sakina_ai_messages_conversation_created
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:241:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_providers (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:243:    provider_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:255:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_sources (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:257:    source_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:273:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_licences (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:291:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_documents (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:294:    document_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:310:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_chunks (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:313:    chunk_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:329:    UNIQUE (document_id, chunk_index)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:332:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_embeddings (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:335:    embedding_ref TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:353:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_api_sync_jobs (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:371:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_api_sync_items (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:382:    UNIQUE (job_id, item_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:385:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_source_reviews (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:403:CREATE TABLE IF NOT EXISTS sakina_ai.rag_retrieval_audit (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:406:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:425:CREATE TABLE IF NOT EXISTS sakina_ai.citation_verification_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:428:    retrieval_audit_id UUID REFERENCES sakina_ai.rag_retrieval_audit(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:439:CREATE TABLE IF NOT EXISTS sakina_ai.safety_classifications (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:442:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:452:CREATE TABLE IF NOT EXISTS sakina_ai.entitlement_decisions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:455:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:464:CREATE TABLE IF NOT EXISTS sakina_ai.mastermind_decisions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:467:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:496:ALTER TABLE sakina_ai.mastermind_decisions
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:503:CREATE TABLE IF NOT EXISTS sakina_ai.scholar_review_queue (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:519:CREATE TABLE IF NOT EXISTS sakina_ai.wasm_verification_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:531:CREATE TABLE IF NOT EXISTS sakina_ai.brain_cache_metadata (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:533:    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:534:    workspace_id UUID REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:545:CREATE TABLE IF NOT EXISTS sakina_ai.knowledge_graph_entities (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:559:CREATE TABLE IF NOT EXISTS sakina_ai.knowledge_graph_edges (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:568:    UNIQUE (from_entity_id, to_entity_id, relation_type)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:571:CREATE INDEX IF NOT EXISTS idx_knowledge_graph_entities_name
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:573:CREATE INDEX IF NOT EXISTS idx_knowledge_graph_entities_type_language
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:575:CREATE INDEX IF NOT EXISTS idx_knowledge_graph_edges_from
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:577:CREATE INDEX IF NOT EXISTS idx_knowledge_graph_edges_to
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:587:        ALTER TABLE sakina_ai.islamic_sources
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:589:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:597:        ALTER TABLE sakina_ai.islamic_sources
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:599:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:607:        ALTER TABLE sakina_ai.islamic_sources
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:609:            CHECK (lower(language) IN ('ar', 'en'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:620:        ALTER TABLE sakina_ai.islamic_documents
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:622:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:630:        ALTER TABLE sakina_ai.islamic_documents
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:632:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:640:        ALTER TABLE sakina_ai.islamic_documents
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:642:            CHECK (lower(language) IN ('ar', 'en'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:653:        ALTER TABLE sakina_ai.islamic_chunks
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:655:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:663:        ALTER TABLE sakina_ai.islamic_chunks
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:665:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:673:        ALTER TABLE sakina_ai.islamic_chunks
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:675:            CHECK (lower(language) IN ('ar', 'en'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:686:        ALTER TABLE sakina_ai.islamic_embeddings
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:688:            CHECK (lower(source_status) IN ('pending', 'approved', 'rejected', 'disabled'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:696:        ALTER TABLE sakina_ai.islamic_embeddings
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:698:            CHECK (lower(source_type) IN ('quran', 'hadith', 'tafsir', 'fiqh', 'scholar-reviewed', 'internal-approved'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:706:        ALTER TABLE sakina_ai.islamic_embeddings
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:708:            CHECK (lower(language) IN ('ar', 'en'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:719:        ALTER TABLE sakina_ai.wasm_verification_events
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:721:            CHECK (lower(runtime_mode) IN ('wasm', 'fallback'));
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:725:CREATE INDEX IF NOT EXISTS idx_islamic_sources_status_type_lang
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:727:CREATE INDEX IF NOT EXISTS idx_islamic_documents_source_language
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:729:CREATE INDEX IF NOT EXISTS idx_islamic_chunks_document
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:731:CREATE INDEX IF NOT EXISTS idx_islamic_embeddings_chunk
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:733:CREATE INDEX IF NOT EXISTS idx_rag_retrieval_audit_request
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:734:    ON sakina_ai.rag_retrieval_audit (request_id, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:735:CREATE INDEX IF NOT EXISTS idx_mastermind_decisions_request
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:737:CREATE INDEX IF NOT EXISTS idx_scholar_review_queue_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:739:CREATE INDEX IF NOT EXISTS idx_wasm_verification_events_request
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:741:CREATE INDEX IF NOT EXISTS idx_brain_cache_metadata_user_updated
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:742:    ON sakina_ai.brain_cache_metadata (user_id, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:743:CREATE INDEX IF NOT EXISTS idx_brain_cache_metadata_workspace_updated
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:744:    ON sakina_ai.brain_cache_metadata (workspace_id, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:750:CREATE TABLE IF NOT EXISTS public.payment_providers (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:752:    provider_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:760:CREATE TABLE IF NOT EXISTS public.subscription_plans (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:763:    plan_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:775:CREATE TABLE IF NOT EXISTS public.payment_customers (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:777:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:779:    provider_customer_ref TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:783:    UNIQUE (user_id, provider_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:786:CREATE TABLE IF NOT EXISTS public.payment_methods (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:790:    provider_method_ref TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:799:CREATE TABLE IF NOT EXISTS public.user_subscriptions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:801:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:804:    provider_subscription_ref TEXT UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:816:CREATE TABLE IF NOT EXISTS public.payment_transactions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:818:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:822:    provider_transaction_ref TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:835:CREATE TABLE IF NOT EXISTS public.invoices (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:837:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:840:    provider_invoice_ref TEXT UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:853:ALTER TABLE public.payment_transactions
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:856:CREATE TABLE IF NOT EXISTS public.refunds (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:860:    provider_refund_ref TEXT UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:870:CREATE TABLE IF NOT EXISTS public.subscription_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:873:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:883:CREATE TABLE IF NOT EXISTS public.entitlements (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:885:    entitlement_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:895:CREATE TABLE IF NOT EXISTS public.user_entitlements (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:897:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:907:    UNIQUE (user_id, entitlement_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:910:CREATE INDEX IF NOT EXISTS idx_payment_customers_user
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:911:    ON public.payment_customers (user_id, provider_id);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:912:CREATE INDEX IF NOT EXISTS idx_payment_methods_customer
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:914:CREATE INDEX IF NOT EXISTS idx_user_subscriptions_user_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:915:    ON public.user_subscriptions (user_id, subscription_status, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:916:CREATE INDEX IF NOT EXISTS idx_payment_transactions_user_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:917:    ON public.payment_transactions (user_id, transaction_status, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:918:CREATE INDEX IF NOT EXISTS idx_invoices_user_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:919:    ON public.invoices (user_id, invoice_status, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:920:CREATE INDEX IF NOT EXISTS idx_subscription_events_subscription_type
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:922:CREATE INDEX IF NOT EXISTS idx_user_entitlements_user
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:923:    ON public.user_entitlements (user_id, entitlement_id);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:929:CREATE TABLE IF NOT EXISTS public.admin_users (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:931:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:932:    admin_email TEXT UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:938:CREATE TABLE IF NOT EXISTS public.admin_roles (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:940:    role_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:947:CREATE TABLE IF NOT EXISTS public.admin_permissions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:949:    permission_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:954:CREATE TABLE IF NOT EXISTS public.admin_role_permissions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:959:    UNIQUE (role_id, permission_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:962:CREATE TABLE IF NOT EXISTS public.admin_audit_logs (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:964:    admin_user_id UUID REFERENCES public.admin_users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:974:CREATE TABLE IF NOT EXISTS public.admin_actions (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:976:    admin_user_id UUID REFERENCES public.admin_users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:986:CREATE TABLE IF NOT EXISTS public.content_moderation_queue (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:989:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:998:CREATE TABLE IF NOT EXISTS public.source_approval_queue (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1010:CREATE TABLE IF NOT EXISTS public.scholar_accounts (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1012:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1013:    scholar_slug TEXT UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1022:CREATE TABLE IF NOT EXISTS public.scholar_review_assignments (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1030:    UNIQUE (scholar_account_id, scholar_review_queue_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1033:CREATE INDEX IF NOT EXISTS idx_admin_audit_logs_admin_user
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1034:    ON public.admin_audit_logs (admin_user_id, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1035:CREATE INDEX IF NOT EXISTS idx_content_moderation_queue_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1037:CREATE INDEX IF NOT EXISTS idx_source_approval_queue_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1039:CREATE INDEX IF NOT EXISTS idx_scholar_review_assignments_queue
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1046:CREATE TABLE IF NOT EXISTS public.user_dashboard_widgets (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1048:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1055:    UNIQUE (user_id, widget_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1058:CREATE TABLE IF NOT EXISTS public.user_saved_answers (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1060:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1069:CREATE TABLE IF NOT EXISTS public.user_bookmarks (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1071:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1077:    UNIQUE (user_id, bookmark_type, reference_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1080:CREATE TABLE IF NOT EXISTS public.user_learning_progress (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1082:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1088:    UNIQUE (user_id, topic_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1091:CREATE TABLE IF NOT EXISTS public.user_quran_progress (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1093:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1100:    UNIQUE (user_id, surah_number, ayah_number)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1103:CREATE TABLE IF NOT EXISTS public.user_dua_favourites (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1105:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1109:    UNIQUE (user_id, dua_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1112:CREATE TABLE IF NOT EXISTS public.user_chat_feedback (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1114:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1123:CREATE TABLE IF NOT EXISTS public.user_reported_answers (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1125:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1134:CREATE INDEX IF NOT EXISTS idx_user_saved_answers_user_saved_at
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1135:    ON public.user_saved_answers (user_id, saved_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1136:CREATE INDEX IF NOT EXISTS idx_user_learning_progress_user
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1137:    ON public.user_learning_progress (user_id, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1138:CREATE INDEX IF NOT EXISTS idx_user_chat_feedback_message
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1145:CREATE TABLE IF NOT EXISTS public.seo_pages (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1147:    page_slug TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1155:CREATE TABLE IF NOT EXISTS public.seo_metadata (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1166:    UNIQUE (seo_page_id)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1169:CREATE TABLE IF NOT EXISTS public.landing_sections (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1171:    section_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1180:CREATE TABLE IF NOT EXISTS public.landing_feature_cards (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1192:    UNIQUE (landing_section_id, card_key)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1195:CREATE TABLE IF NOT EXISTS public.blog_posts (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1197:    slug TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1208:CREATE TABLE IF NOT EXISTS public.faq_items (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1219:CREATE TABLE IF NOT EXISTS public.legal_pages (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1221:    legal_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1230:CREATE TABLE IF NOT EXISTS public.app_store_assets (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1241:CREATE TABLE IF NOT EXISTS public.waitlist_entries (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1243:    email TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1251:CREATE INDEX IF NOT EXISTS idx_seo_pages_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1253:CREATE INDEX IF NOT EXISTS idx_blog_posts_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1257:-- Domains 15/16/17/18/20: notifications, support, settings, audit, analytics
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1260:CREATE TABLE IF NOT EXISTS public.notification_templates (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1262:    template_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1272:CREATE TABLE IF NOT EXISTS public.user_notifications (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1274:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1288:CREATE TABLE IF NOT EXISTS public.notification_delivery_attempts (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1298:CREATE TABLE IF NOT EXISTS public.device_tokens (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1300:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1302:    token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1310:CREATE TABLE IF NOT EXISTS public.reminder_settings (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1312:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1320:    UNIQUE (user_id, reminder_type)
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1323:CREATE TABLE IF NOT EXISTS public.support_tickets (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1325:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1326:    ticket_number BIGINT GENERATED BY DEFAULT AS IDENTITY UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1336:CREATE TABLE IF NOT EXISTS public.support_ticket_messages (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1340:    sender_user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1346:CREATE TABLE IF NOT EXISTS public.contact_messages (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1357:CREATE TABLE IF NOT EXISTS public.abuse_reports (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1359:    reporter_user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1369:CREATE TABLE IF NOT EXISTS public.content_reports (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1371:    reporter_user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1380:CREATE TABLE IF NOT EXISTS public.feature_flags (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1382:    flag_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1392:CREATE TABLE IF NOT EXISTS public.module_status (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1394:    module_name TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1404:CREATE TABLE IF NOT EXISTS public.app_config (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1406:    config_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1414:CREATE TABLE IF NOT EXISTS public.release_flags (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1416:    release_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1425:CREATE TABLE IF NOT EXISTS public.maintenance_windows (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1427:    window_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1436:CREATE TABLE IF NOT EXISTS public.audit_logs (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1446:CREATE TABLE IF NOT EXISTS public.security_logs (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1450:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1457:CREATE TABLE IF NOT EXISTS public.app_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1459:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1467:CREATE TABLE IF NOT EXISTS public.chat_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1469:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1478:CREATE TABLE IF NOT EXISTS public.rag_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1481:    user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1482:    retrieval_audit_id UUID REFERENCES sakina_ai.rag_retrieval_audit(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1489:CREATE TABLE IF NOT EXISTS public.admin_events (
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1491:    admin_user_id UUID REFERENCES public.admin_users(id) ON DELETE SET NULL,
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1498:CREATE INDEX IF NOT EXISTS idx_user_notifications_user_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1499:    ON public.user_notifications (user_id, notification_status, created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1500:CREATE INDEX IF NOT EXISTS idx_notification_delivery_attempts_notification
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1502:CREATE INDEX IF NOT EXISTS idx_support_tickets_user_status
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1503:    ON public.support_tickets (user_id, ticket_status, updated_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1504:CREATE INDEX IF NOT EXISTS idx_feature_flags_enabled
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1506:CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1507:    ON public.audit_logs (created_at DESC);
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1508:CREATE INDEX IF NOT EXISTS idx_security_logs_created_at
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1510:CREATE INDEX IF NOT EXISTS idx_app_events_occurred_at
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1512:CREATE INDEX IF NOT EXISTS idx_chat_events_conversation
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1514:CREATE INDEX IF NOT EXISTS idx_rag_events_request
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1516:CREATE INDEX IF NOT EXISTS idx_admin_events_admin
+sakina-backend/db\20260529_phase3_full_product_schema_revision2.sql:1517:    ON public.admin_events (admin_user_id, occurred_at DESC);
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:1:CREATE TABLE IF NOT EXISTS sakina_ai.user_memory_entries (
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:3:    user_id UUID NOT NULL,
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:19:CREATE TABLE IF NOT EXISTS sakina_ai.multimodal_assets (
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:21:    user_id UUID NOT NULL,
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:34:CREATE INDEX IF NOT EXISTS idx_user_memory_entries_user_key
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:35:    ON sakina_ai.user_memory_entries (user_id, memory_key, created_at DESC);
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:36:CREATE INDEX IF NOT EXISTS idx_user_memory_entries_user_type
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:37:    ON sakina_ai.user_memory_entries (user_id, memory_type, created_at DESC);
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:38:CREATE INDEX IF NOT EXISTS idx_multimodal_assets_user_type
+sakina-backend/db\migrations\015_user_memory_multimodal.sql:39:    ON sakina_ai.multimodal_assets (user_id, asset_type, created_at DESC);
+sakina-backend/db\migrations\009_notifications.sql:2:CREATE TABLE IF NOT EXISTS notifications (
+sakina-backend/db\migrations\009_notifications.sql:4:  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\009_notifications.sql:5:  channel TEXT NOT NULL CHECK (channel IN ('inapp','push','email')),
+sakina-backend/db\migrations\006_sync_state.sql:2:CREATE TABLE IF NOT EXISTS sync_state (
+sakina-backend/db\migrations\006_sync_state.sql:3:  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:1:CREATE TABLE IF NOT EXISTS sakina_ai.knowledge_graph_entities (
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:14:CREATE TABLE IF NOT EXISTS sakina_ai.knowledge_graph_edges (
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:24:CREATE TABLE IF NOT EXISTS sakina_ai.brain_decision_traces (
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:27:    user_id TEXT NULL,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:38:    audit_event_id TEXT NOT NULL,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:39:    execution_trace JSONB NOT NULL DEFAULT '[]'::jsonb,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:43:CREATE TABLE IF NOT EXISTS sakina_ai.brain_evaluation_results (
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:53:CREATE TABLE IF NOT EXISTS sakina_ai.brain_memory_events (
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:55:    user_id UUID NULL,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:63:CREATE TABLE IF NOT EXISTS sakina_ai.brain_cache_metadata (
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:65:    cache_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:66:    user_id UUID NULL,
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:77:CREATE INDEX IF NOT EXISTS idx_knowledge_graph_entities_type_name
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:79:CREATE INDEX IF NOT EXISTS idx_knowledge_graph_edges_from_to
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:81:CREATE INDEX IF NOT EXISTS idx_brain_decision_traces_request
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:82:    ON sakina_ai.brain_decision_traces (request_id, created_at DESC);
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:83:CREATE INDEX IF NOT EXISTS idx_brain_evaluation_results_request
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:85:CREATE INDEX IF NOT EXISTS idx_brain_memory_events_user
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:86:    ON sakina_ai.brain_memory_events (user_id, created_at DESC);
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:87:CREATE INDEX IF NOT EXISTS idx_brain_cache_metadata_user
+sakina-backend/db\migrations\014_brain_knowledge_graph.sql:88:    ON sakina_ai.brain_cache_metadata (user_id, created_at DESC);
+sakina-backend/db\migrations\008_rag_embeddings.sql:2:CREATE TABLE IF NOT EXISTS rag_embeddings (
+sakina-backend/db\migrations\013_waitlist.sql:3:CREATE TABLE IF NOT EXISTS sakina_ai.waitlist (
+sakina-backend/db\migrations\013_waitlist.sql:6:    email TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\013_waitlist.sql:15:CREATE INDEX IF NOT EXISTS idx_sakina_waitlist_status_created_at
+sakina-backend/db\migrations\004_user_progress.sql:2:CREATE TABLE IF NOT EXISTS user_module_progress (
+sakina-backend/db\migrations\004_user_progress.sql:3:  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\004_user_progress.sql:5:  completion_percent INT NOT NULL DEFAULT 0 CHECK (completion_percent BETWEEN 0 AND 100),
+sakina-backend/db\migrations\004_user_progress.sql:8:  PRIMARY KEY(user_id, module_id)
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:2:CREATE TABLE IF NOT EXISTS rag_documents (
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:4:  source_uri TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:10:CREATE TABLE IF NOT EXISTS rag_chunks (
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:16:  UNIQUE(document_id, chunk_index)
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:21:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_sources (
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:23:  source_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:39:CREATE INDEX IF NOT EXISTS idx_islamic_sources_status_type_lang
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:42:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_documents (
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:45:  document_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:61:CREATE INDEX IF NOT EXISTS idx_islamic_documents_source_language
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:64:CREATE TABLE IF NOT EXISTS sakina_ai.islamic_chunks (
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:67:  chunk_key TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:83:  UNIQUE(document_id, chunk_index)
+sakina-backend/db\migrations\007_rag_documents_chunks.sql:86:CREATE INDEX IF NOT EXISTS idx_islamic_chunks_document
+sakina-backend/db\migrations\020_workspace_learning_core.sql:1:CREATE TABLE IF NOT EXISTS sakina_ai.workspaces (
+sakina-backend/db\migrations\020_workspace_learning_core.sql:3:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:4:    name TEXT NOT NULL DEFAULT 'Personal workspace',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:7:    deleted_at TIMESTAMPTZ NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:10:    UNIQUE (user_id, is_default)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:13:ALTER TABLE sakina_ai.conversations
+sakina-backend/db\migrations\020_workspace_learning_core.sql:14:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:17:ALTER TABLE sakina_ai.messages
+sakina-backend/db\migrations\020_workspace_learning_core.sql:18:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:21:ALTER TABLE sakina_ai.user_memory_entries
+sakina-backend/db\migrations\020_workspace_learning_core.sql:22:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:23:    ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ NULL;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:25:ALTER TABLE sakina_ai.brain_decision_traces
+sakina-backend/db\migrations\020_workspace_learning_core.sql:26:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:28:ALTER TABLE sakina_ai.brain_evaluation_results
+sakina-backend/db\migrations\020_workspace_learning_core.sql:29:    ADD COLUMN IF NOT EXISTS user_id UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:30:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:32:ALTER TABLE sakina_ai.brain_memory_events
+sakina-backend/db\migrations\020_workspace_learning_core.sql:33:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:35:ALTER TABLE sakina_ai.brain_cache_metadata
+sakina-backend/db\migrations\020_workspace_learning_core.sql:36:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:38:ALTER TABLE sakina_ai.multimodal_assets
+sakina-backend/db\migrations\020_workspace_learning_core.sql:39:    ADD COLUMN IF NOT EXISTS workspace_id UUID NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:40:    ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:43:CREATE TABLE IF NOT EXISTS sakina_ai.user_learning_preferences (
+sakina-backend/db\migrations\020_workspace_learning_core.sql:45:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:46:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:52:    deleted_at TIMESTAMPTZ NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:55:    UNIQUE (user_id, workspace_id, preference_key)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:58:CREATE TABLE IF NOT EXISTS sakina_ai.user_habit_signals (
+sakina-backend/db\migrations\020_workspace_learning_core.sql:60:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:61:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:66:    deleted_at TIMESTAMPTZ NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:71:CREATE TABLE IF NOT EXISTS sakina_ai.user_interest_signals (
+sakina-backend/db\migrations\020_workspace_learning_core.sql:73:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:74:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:79:    deleted_at TIMESTAMPTZ NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:84:CREATE TABLE IF NOT EXISTS sakina_ai.user_memory_permissions (
+sakina-backend/db\migrations\020_workspace_learning_core.sql:86:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:87:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:93:    UNIQUE (user_id, workspace_id)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:96:CREATE TABLE IF NOT EXISTS sakina_ai.mobile_memory_sync (
+sakina-backend/db\migrations\020_workspace_learning_core.sql:98:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:99:    workspace_id UUID NOT NULL REFERENCES sakina_ai.workspaces(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:104:    deleted_at TIMESTAMPTZ NULL,
+sakina-backend/db\migrations\020_workspace_learning_core.sql:109:CREATE INDEX IF NOT EXISTS idx_workspaces_user_default
+sakina-backend/db\migrations\020_workspace_learning_core.sql:110:    ON sakina_ai.workspaces (user_id, is_default);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:111:CREATE INDEX IF NOT EXISTS idx_conversations_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:112:    ON sakina_ai.conversations (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:113:CREATE INDEX IF NOT EXISTS idx_messages_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:114:    ON sakina_ai.messages (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:115:CREATE INDEX IF NOT EXISTS idx_user_memory_entries_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:116:    ON sakina_ai.user_memory_entries (user_id, workspace_id, memory_key, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:117:CREATE INDEX IF NOT EXISTS idx_brain_decision_traces_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:118:    ON sakina_ai.brain_decision_traces (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:119:CREATE INDEX IF NOT EXISTS idx_learning_preferences_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:120:    ON sakina_ai.user_learning_preferences (user_id, workspace_id, preference_key);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:121:CREATE INDEX IF NOT EXISTS idx_habit_signals_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:122:    ON sakina_ai.user_habit_signals (user_id, workspace_id, signal_type, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:123:CREATE INDEX IF NOT EXISTS idx_interest_signals_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:124:    ON sakina_ai.user_interest_signals (user_id, workspace_id, topic, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:125:CREATE INDEX IF NOT EXISTS idx_mobile_memory_sync_user_workspace
+sakina-backend/db\migrations\020_workspace_learning_core.sql:126:    ON sakina_ai.mobile_memory_sync (user_id, workspace_id, created_at DESC);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:128:CREATE OR REPLACE FUNCTION sakina_ai.ensure_default_workspace(p_user_id UUID)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:133:    v_workspace_id UUID;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:135:    SELECT id INTO v_workspace_id
+sakina-backend/db\migrations\020_workspace_learning_core.sql:136:    FROM sakina_ai.workspaces
+sakina-backend/db\migrations\020_workspace_learning_core.sql:137:    WHERE user_id = p_user_id
+sakina-backend/db\migrations\020_workspace_learning_core.sql:139:      AND deleted_at IS NULL
+sakina-backend/db\migrations\020_workspace_learning_core.sql:142:    IF v_workspace_id IS NULL THEN
+sakina-backend/db\migrations\020_workspace_learning_core.sql:143:        INSERT INTO sakina_ai.workspaces (user_id, name, is_default)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:144:        VALUES (p_user_id, 'Personal workspace', TRUE)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:145:        ON CONFLICT (user_id, is_default)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:147:        RETURNING id INTO v_workspace_id;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:151:        user_id, workspace_id, learning_enabled, local_memory_enabled, server_memory_enabled
+sakina-backend/db\migrations\020_workspace_learning_core.sql:153:    VALUES (p_user_id, v_workspace_id, TRUE, TRUE, TRUE)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:154:    ON CONFLICT (user_id, workspace_id)
+sakina-backend/db\migrations\020_workspace_learning_core.sql:157:    RETURN v_workspace_id;
+sakina-backend/db\migrations\020_workspace_learning_core.sql:165:        'workspaces',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:173:        EXECUTE format('ALTER TABLE sakina_ai.%I ENABLE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:174:        EXECUTE format('ALTER TABLE sakina_ai.%I FORCE ROW LEVEL SECURITY', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:175:        EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_service', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:177:            'CREATE POLICY %I ON sakina_ai.%I FOR ALL USING (sakina_ai.rls_service_role()) WITH CHECK (sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\020_workspace_learning_core.sql:181:        EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_user', tbl);
+sakina-backend/db\migrations\020_workspace_learning_core.sql:183:            'CREATE POLICY %I ON sakina_ai.%I FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role()) WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:3:CREATE OR REPLACE FUNCTION sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:8:    SELECT NULLIF(current_setting('sakina.current_user_id', true), '')::uuid
+sakina-backend/db\migrations\017_rls_user_isolation.sql:20:CREATE TABLE IF NOT EXISTS public.password_credentials (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:21:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\017_rls_user_isolation.sql:32:    user_id_type TEXT;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:38:        WHERE schemaname IN ('public', 'sakina_ai', 'audit', 'outbox')
+sakina-backend/db\migrations\017_rls_user_isolation.sql:40:        EXECUTE format('ALTER TABLE %I.%I ENABLE ROW LEVEL SECURITY', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:41:        EXECUTE format('ALTER TABLE %I.%I FORCE ROW LEVEL SECURITY', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:44:        EXECUTE format('DROP POLICY IF EXISTS %I ON %I.%I', policy_name, tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:46:            'CREATE POLICY %I ON %I.%I FOR ALL USING (sakina_ai.rls_service_role()) WITH CHECK (sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:53:        INTO user_id_type
+sakina-backend/db\migrations\017_rls_user_isolation.sql:57:          AND column_name = 'user_id'
+sakina-backend/db\migrations\017_rls_user_isolation.sql:60:        IF user_id_type = 'uuid' THEN
+sakina-backend/db\migrations\017_rls_user_isolation.sql:61:            policy_name := format('rls_%s_%s_user_id', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:62:            EXECUTE format('DROP POLICY IF EXISTS %I ON %I.%I', policy_name, tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:64:                'CREATE POLICY %I ON %I.%I FOR ALL USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role()) WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:69:        ELSIF user_id_type IS NOT NULL THEN
+sakina-backend/db\migrations\017_rls_user_isolation.sql:70:            policy_name := format('rls_%s_%s_user_id_text', tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:71:            EXECUTE format('DROP POLICY IF EXISTS %I ON %I.%I', policy_name, tbl.schemaname, tbl.tablename);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:73:                'CREATE POLICY %I ON %I.%I FOR ALL USING (user_id = sakina_ai.current_user_id()::text OR sakina_ai.rls_service_role()) WITH CHECK (user_id = sakina_ai.current_user_id()::text OR sakina_ai.rls_service_role())',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:79:        user_id_type := NULL;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:83:DROP POLICY IF EXISTS rls_public_users_self ON public.users;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:84:CREATE POLICY rls_public_users_self ON public.users
+sakina-backend/db\migrations\017_rls_user_isolation.sql:86:USING (id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())
+sakina-backend/db\migrations\017_rls_user_isolation.sql:87:WITH CHECK (id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+sakina-backend/db\migrations\017_rls_user_isolation.sql:89:DROP POLICY IF EXISTS rls_public_password_credentials_self ON public.password_credentials;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:90:CREATE POLICY rls_public_password_credentials_self ON public.password_credentials
+sakina-backend/db\migrations\017_rls_user_isolation.sql:92:USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())
+sakina-backend/db\migrations\017_rls_user_isolation.sql:93:WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+sakina-backend/db\migrations\017_rls_user_isolation.sql:95:DROP POLICY IF EXISTS rls_sakina_messages_conversation_owner ON sakina_ai.messages;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:96:CREATE POLICY rls_sakina_messages_conversation_owner ON sakina_ai.messages
+sakina-backend/db\migrations\017_rls_user_isolation.sql:100:    OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:105:          AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:108:WITH CHECK (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:110:    OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:115:          AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:123:        DROP POLICY IF EXISTS rls_public_child_profiles_family_owner ON public.child_profiles;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:124:        CREATE POLICY rls_public_child_profiles_family_owner ON public.child_profiles
+sakina-backend/db\migrations\017_rls_user_isolation.sql:128:            OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:133:                  AND fp.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:136:        WITH CHECK (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:138:            OR user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:143:                  AND fp.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:150:        DROP POLICY IF EXISTS rls_public_notification_delivery_attempts_owner ON public.notification_delivery_attempts;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:151:        CREATE POLICY rls_public_notification_delivery_attempts_owner ON public.notification_delivery_attempts
+sakina-backend/db\migrations\017_rls_user_isolation.sql:159:                  AND n.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:162:        WITH CHECK (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:168:                  AND n.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:175:        DROP POLICY IF EXISTS rls_public_support_ticket_messages_owner ON public.support_ticket_messages;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:176:        CREATE POLICY rls_public_support_ticket_messages_owner ON public.support_ticket_messages
+sakina-backend/db\migrations\017_rls_user_isolation.sql:180:            OR sender_user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:185:                  AND t.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:188:        WITH CHECK (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:190:            OR sender_user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:195:                  AND t.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:202:        DROP POLICY IF EXISTS rls_public_payment_methods_customer_owner ON public.payment_methods;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:203:        CREATE POLICY rls_public_payment_methods_customer_owner ON public.payment_methods
+sakina-backend/db\migrations\017_rls_user_isolation.sql:211:                  AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:214:        WITH CHECK (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:220:                  AND c.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:227:        DROP POLICY IF EXISTS rls_public_subscription_events_subscription_owner ON public.subscription_events;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:228:        CREATE POLICY rls_public_subscription_events_subscription_owner ON public.subscription_events
+sakina-backend/db\migrations\017_rls_user_isolation.sql:236:                  AND s.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:239:        WITH CHECK (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:245:                  AND s.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:252:        DROP POLICY IF EXISTS rls_public_refunds_transaction_owner ON public.refunds;
+sakina-backend/db\migrations\017_rls_user_isolation.sql:253:        CREATE POLICY rls_public_refunds_transaction_owner ON public.refunds
+sakina-backend/db\migrations\017_rls_user_isolation.sql:261:                  AND tx.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:264:        WITH CHECK (
+sakina-backend/db\migrations\017_rls_user_isolation.sql:270:                  AND tx.user_id = sakina_ai.current_user_id()
+sakina-backend/db\migrations\017_rls_user_isolation.sql:302:            EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', 'rls_public_' || tbl || '_read', tbl);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:304:                'CREATE POLICY %I ON public.%I FOR SELECT USING (true)',
+sakina-backend/db\migrations\017_rls_user_isolation.sql:328:            EXECUTE format('DROP POLICY IF EXISTS %I ON sakina_ai.%I', 'rls_sakina_ai_' || tbl || '_verified_read', tbl);
+sakina-backend/db\migrations\017_rls_user_isolation.sql:330:                'CREATE POLICY %I ON sakina_ai.%I FOR SELECT USING (true)',
+sakina-backend/db\migrations\005_chat_threads_messages.sql:2:CREATE TABLE IF NOT EXISTS chat_threads (
+sakina-backend/db\migrations\005_chat_threads_messages.sql:4:  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\005_chat_threads_messages.sql:9:CREATE TABLE IF NOT EXISTS chat_messages (
+sakina-backend/db\migrations\005_chat_threads_messages.sql:12:  user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\005_chat_threads_messages.sql:13:  role TEXT NOT NULL CHECK (role IN ('user','assistant','system')),
+sakina-backend/db\migrations\005_chat_threads_messages.sql:21:CREATE TABLE IF NOT EXISTS sakina_ai.conversations (
+sakina-backend/db\migrations\005_chat_threads_messages.sql:23:  user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\005_chat_threads_messages.sql:30:CREATE INDEX IF NOT EXISTS idx_sakina_ai_conversations_user_created
+sakina-backend/db\migrations\005_chat_threads_messages.sql:31:  ON sakina_ai.conversations (user_id, created_at DESC);
+sakina-backend/db\migrations\005_chat_threads_messages.sql:33:CREATE TABLE IF NOT EXISTS sakina_ai.messages (
+sakina-backend/db\migrations\005_chat_threads_messages.sql:36:  user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+sakina-backend/db\migrations\005_chat_threads_messages.sql:37:  role TEXT NOT NULL CHECK (role IN ('user','assistant','system')),
+sakina-backend/db\migrations\005_chat_threads_messages.sql:44:CREATE INDEX IF NOT EXISTS idx_sakina_ai_messages_conversation_created
+sakina-backend/db\migrations\016_password_auth.sql:1:CREATE TABLE IF NOT EXISTS public.auth_identities (
+sakina-backend/db\migrations\016_password_auth.sql:3:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:5:    provider_user_id TEXT NOT NULL,
+sakina-backend/db\migrations\016_password_auth.sql:12:    UNIQUE (provider, provider_user_id)
+sakina-backend/db\migrations\016_password_auth.sql:15:CREATE INDEX IF NOT EXISTS idx_auth_identities_user_id
+sakina-backend/db\migrations\016_password_auth.sql:16:    ON public.auth_identities (user_id, provider);
+sakina-backend/db\migrations\016_password_auth.sql:18:CREATE TABLE IF NOT EXISTS public.auth_sessions (
+sakina-backend/db\migrations\016_password_auth.sql:20:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:21:    session_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\016_password_auth.sql:31:CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id
+sakina-backend/db\migrations\016_password_auth.sql:32:    ON public.auth_sessions (user_id, expires_at DESC);
+sakina-backend/db\migrations\016_password_auth.sql:34:CREATE TABLE IF NOT EXISTS public.auth_refresh_tokens (
+sakina-backend/db\migrations\016_password_auth.sql:37:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:38:    refresh_token_hash TEXT NOT NULL UNIQUE,
+sakina-backend/db\migrations\016_password_auth.sql:45:CREATE INDEX IF NOT EXISTS idx_auth_refresh_tokens_user_id
+sakina-backend/db\migrations\016_password_auth.sql:46:    ON public.auth_refresh_tokens (user_id, expires_at DESC);
+sakina-backend/db\migrations\016_password_auth.sql:48:CREATE TABLE IF NOT EXISTS public.password_credentials (
+sakina-backend/db\migrations\016_password_auth.sql:49:    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\016_password_auth.sql:57:CREATE INDEX IF NOT EXISTS idx_password_credentials_updated
+sakina-backend/db\migrations\016_password_auth.sql:60:ALTER TABLE public.auth_sessions
+sakina-backend/db\migrations\016_password_auth.sql:65:ALTER TABLE public.auth_refresh_tokens
+sakina-backend/db\migrations\019_agent_feedback.sql:3:CREATE TABLE IF NOT EXISTS public.audit_logs (
+sakina-backend/db\migrations\019_agent_feedback.sql:13:CREATE INDEX IF NOT EXISTS idx_audit_logs_request_event
+sakina-backend/db\migrations\019_agent_feedback.sql:14:    ON public.audit_logs (request_id, event_type, created_at DESC);
+sakina-backend/db\migrations\019_agent_feedback.sql:16:CREATE INDEX IF NOT EXISTS idx_audit_logs_actor
+sakina-backend/db\migrations\019_agent_feedback.sql:17:    ON public.audit_logs (actor_id, created_at DESC);
+sakina-backend/db\migrations\019_agent_feedback.sql:19:ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:20:ALTER TABLE public.audit_logs FORCE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:22:DROP POLICY IF EXISTS rls_public_audit_logs_service ON public.audit_logs;
+sakina-backend/db\migrations\019_agent_feedback.sql:23:CREATE POLICY rls_public_audit_logs_service ON public.audit_logs
+sakina-backend/db\migrations\019_agent_feedback.sql:26:WITH CHECK (sakina_ai.rls_service_role());
+sakina-backend/db\migrations\019_agent_feedback.sql:28:CREATE TABLE IF NOT EXISTS outbox.events (
+sakina-backend/db\migrations\019_agent_feedback.sql:39:CREATE INDEX IF NOT EXISTS idx_outbox_events_type_status
+sakina-backend/db\migrations\019_agent_feedback.sql:42:ALTER TABLE outbox.events ENABLE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:43:ALTER TABLE outbox.events FORCE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:45:DROP POLICY IF EXISTS rls_outbox_events_service ON outbox.events;
+sakina-backend/db\migrations\019_agent_feedback.sql:46:CREATE POLICY rls_outbox_events_service ON outbox.events
+sakina-backend/db\migrations\019_agent_feedback.sql:49:WITH CHECK (sakina_ai.rls_service_role());
+sakina-backend/db\migrations\019_agent_feedback.sql:51:CREATE TABLE IF NOT EXISTS sakina_ai.agent_feedback (
+sakina-backend/db\migrations\019_agent_feedback.sql:53:    trace_id TEXT NOT NULL,
+sakina-backend/db\migrations\019_agent_feedback.sql:54:    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\019_agent_feedback.sql:57:    reasoning_trace JSONB NOT NULL DEFAULT '[]'::jsonb,
+sakina-backend/db\migrations\019_agent_feedback.sql:61:CREATE INDEX IF NOT EXISTS idx_agent_feedback_trace
+sakina-backend/db\migrations\019_agent_feedback.sql:62:    ON sakina_ai.agent_feedback (trace_id, created_at DESC);
+sakina-backend/db\migrations\019_agent_feedback.sql:64:CREATE INDEX IF NOT EXISTS idx_agent_feedback_user
+sakina-backend/db\migrations\019_agent_feedback.sql:65:    ON sakina_ai.agent_feedback (user_id, created_at DESC);
+sakina-backend/db\migrations\019_agent_feedback.sql:67:ALTER TABLE sakina_ai.agent_feedback ENABLE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:68:ALTER TABLE sakina_ai.agent_feedback FORCE ROW LEVEL SECURITY;
+sakina-backend/db\migrations\019_agent_feedback.sql:70:DROP POLICY IF EXISTS rls_sakina_agent_feedback_service ON sakina_ai.agent_feedback;
+sakina-backend/db\migrations\019_agent_feedback.sql:71:CREATE POLICY rls_sakina_agent_feedback_service ON sakina_ai.agent_feedback
+sakina-backend/db\migrations\019_agent_feedback.sql:74:WITH CHECK (sakina_ai.rls_service_role());
+sakina-backend/db\migrations\019_agent_feedback.sql:76:DROP POLICY IF EXISTS rls_sakina_agent_feedback_user ON sakina_ai.agent_feedback;
+sakina-backend/db\migrations\019_agent_feedback.sql:77:CREATE POLICY rls_sakina_agent_feedback_user ON sakina_ai.agent_feedback
+sakina-backend/db\migrations\019_agent_feedback.sql:79:USING (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role())
+sakina-backend/db\migrations\019_agent_feedback.sql:80:WITH CHECK (user_id = sakina_ai.current_user_id() OR sakina_ai.rls_service_role());
+sakina-backend/db\migrations\003_modules_content.sql:2:CREATE TABLE IF NOT EXISTS modules (
+sakina-backend/db\migrations\003_modules_content.sql:4:  code TEXT UNIQUE NOT NULL,
+sakina-backend/db\migrations\003_modules_content.sql:11:CREATE TABLE IF NOT EXISTS module_lessons (
+sakina-backend/db\migrations\003_modules_content.sql:17:  UNIQUE(module_id, lesson_order)
+sakina-backend/db\init.sql:3:CREATE SCHEMA IF NOT EXISTS audit;
+sakina-backend/db\init.sql:7:CREATE TABLE verified_knowledge.source_documents (
+sakina-backend/db\init.sql:11:    integrity_hash VARCHAR UNIQUE NOT NULL,
+sakina-backend/db\init.sql:16:CREATE TABLE verified_knowledge.chunks (
+sakina-backend/db\init.sql:30:CREATE TABLE audit.logs (
+sakina-backend/db\init.sql:35:    user_id UUID
+sakina-backend/db\init.sql:38:CREATE INDEX idx_audit_logs_timestamp ON audit.logs(timestamp);
+sakina-backend/db\init.sql:39:CREATE INDEX idx_audit_logs_event_type ON audit.logs(event_type);
+sakina-backend/db\init.sql:42:CREATE TABLE outbox.events (
+sakina-backend/db\init.sql:53:CREATE TABLE outbox.dead_letters (
+sakina-backend/db\init.sql:61:CREATE TABLE public.users (
+sakina-backend/db\init.sql:63:    pub_key VARCHAR UNIQUE NOT NULL,
+sakina-backend/db\init.sql:68:CREATE TABLE public.user_backups (
+sakina-backend/db\init.sql:70:    user_id UUID REFERENCES public.users(id),
+sakina-backend/db\init.sql:78:GRANT ALL PRIVILEGES ON SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+sakina-backend/db\init.sql:79:GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
+sakina-backend/db\migrations\011_indexes_perf.sql:2:CREATE INDEX IF NOT EXISTS idx_chat_messages_thread_created ON chat_messages(thread_id, created_at DESC);
+sakina-backend/db\migrations\011_indexes_perf.sql:3:CREATE INDEX IF NOT EXISTS idx_notifications_user_created ON notifications(user_id, created_at DESC);
+sakina-backend/db\migrations\011_indexes_perf.sql:4:CREATE INDEX IF NOT EXISTS idx_rag_chunks_document ON rag_chunks(document_id, chunk_index);
+sakina-backend/db\migrations\011_indexes_perf.sql:5:CREATE INDEX IF NOT EXISTS idx_user_progress_updated ON user_module_progress(updated_at DESC);
+sakina-backend/db\migrations\002_users_profiles.sql:3:CREATE TABLE IF NOT EXISTS public.users (
+sakina-backend/db\migrations\002_users_profiles.sql:5:  pub_key TEXT UNIQUE,
+sakina-backend/db\migrations\002_users_profiles.sql:6:  email TEXT UNIQUE,
+sakina-backend/db\migrations\002_users_profiles.sql:13:ALTER TABLE public.users
+sakina-backend/db\migrations\002_users_profiles.sql:20:ALTER TABLE public.users
+sakina-backend/db\migrations\002_users_profiles.sql:23:ALTER TABLE public.users
+sakina-backend/db\migrations\002_users_profiles.sql:36:    ALTER TABLE public.users ALTER COLUMN display_name DROP NOT NULL;
+sakina-backend/db\migrations\002_users_profiles.sql:40:CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique_idx
+sakina-backend/db\migrations\002_users_profiles.sql:44:CREATE UNIQUE INDEX IF NOT EXISTS users_pub_key_unique_idx
+sakina-backend/db\migrations\002_users_profiles.sql:48:CREATE TABLE IF NOT EXISTS public.user_profiles (
+sakina-backend/db\migrations\002_users_profiles.sql:50:  user_id UUID NOT NULL UNIQUE REFERENCES public.users(id) ON DELETE CASCADE,
+sakina-backend/db\migrations\002_users_profiles.sql:63:ALTER TABLE public.user_profiles
+sakina-backend/db\migrations\002_users_profiles.sql:76:CREATE UNIQUE INDEX IF NOT EXISTS user_profiles_user_id_unique_idx
+sakina-backend/db\migrations\002_users_profiles.sql:77:  ON public.user_profiles (user_id);

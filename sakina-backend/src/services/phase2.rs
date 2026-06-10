@@ -1387,6 +1387,58 @@ impl Phase2Repository {
         Ok(id)
     }
 
+    pub async fn resolve_scholar_review(
+        &self,
+        request: ResolveScholarReviewRequest,
+    ) -> Result<(), ApiError> {
+        let mut tx = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| ApiError::internal("failed to begin resolve review transaction"))?;
+
+        sqlx::query(
+            r#"
+            UPDATE sakina_ai.scholar_review_queue
+            SET review_status = $1,
+                reviewer_notes = $2,
+                reviewed_at = now()
+            WHERE id = $3
+            "#,
+        )
+        .bind(&request.status)
+        .bind(&request.notes)
+        .bind(request.review_id)
+        .execute(&mut *tx)
+        .await
+        .map_err(|_| ApiError::internal("failed to update scholar review status"))?;
+
+        if let Some(answer) = request.final_answer {
+            sqlx::query(
+                r#"
+                INSERT INTO sakina_ai.scholar_resolved_answers (review_id, final_answer, resolved_by)
+                VALUES ($1, $2, $3)
+                ON CONFLICT (review_id) DO UPDATE SET
+                    final_answer = EXCLUDED.final_answer,
+                    resolved_by = EXCLUDED.resolved_by,
+                    updated_at = now()
+                "#,
+            )
+            .bind(request.review_id)
+            .bind(answer)
+            .bind(request.admin_user_id)
+            .execute(&mut *tx)
+            .await
+            .map_err(|_| ApiError::internal("failed to store resolved answer"))?;
+        }
+
+        tx.commit()
+            .await
+            .map_err(|_| ApiError::internal("failed to commit resolve review transaction"))?;
+
+        Ok(())
+    }
+
     pub async fn list_source_approval_queue(&self) -> Result<Vec<SourceApprovalItem>, ApiError> {
         let rows = sqlx::query(
             r#"
@@ -2416,6 +2468,15 @@ pub struct AssignScholarReviewRequest {
     pub scholar_account_id: Uuid,
     pub scholar_review_queue_id: Uuid,
     pub notes: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ResolveScholarReviewRequest {
+    pub review_id: Uuid,
+    pub admin_user_id: Option<Uuid>,
+    pub status: String,
+    pub notes: Option<String>,
+    pub final_answer: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

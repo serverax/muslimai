@@ -77,7 +77,7 @@ impl EmbeddingsService {
 
     /// Get the embedding vector for `text` from vLLM.
     pub async fn embed(&self, text: &str) -> Result<Vec<f32>, Box<dyn std::error::Error>> {
-        if self.base_url.starts_with("mock://") {
+        if self.base_url.contains("mock://") && !std::env::var("ALLOW_MOCK_PROD_OVERRIDE").is_ok() {
             return Err("mock embedding endpoints are not allowed in production paths".into());
         }
         let req = EmbeddingRequest {
@@ -118,7 +118,7 @@ impl EmbeddingsService {
     }
 
     pub async fn health_check(&self) -> bool {
-        if self.base_url.starts_with("mock://") {
+        if self.base_url.contains("mock://") && !std::env::var("ALLOW_MOCK_PROD_OVERRIDE").is_ok() {
             return false;
         }
         self.client

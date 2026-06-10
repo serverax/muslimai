@@ -1,0 +1,22 @@
+sakina-backend/src/main.rs:763:                                web::post().to(handlers::phase2::request_data_export),
+sakina-backend/src/handlers/phase2.rs:542:pub async fn request_data_export(
+sakina-backend/src/handlers/phase2.rs:559:        VALUES ('data_export_requested', 'user', $1, $2, $3)
+sakina-backend/src/handlers/phase2.rs:585:        VALUES ('data_export_requested', $1, 'Pending')
+sakina-frontend/lib/services/api_service.dart:303:  Future<AccountDeletionRequestResponse> requestDataExport() async {
+sakina-frontend/lib/services/api_service.dart:304:    final res = await _post('/account/export-request', const {});
+sakina-frontend/lib/screens/compliance_screen.dart:39:      final response = await api.requestDataExport();
+Missing-auth export request status: 401
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "authorization bearer token is required"
+  }
+}
+{
+  "audit_id": 117,
+  "outbox_event_id": "ab2937f6-3b0a-4fe9-bdf9-f20c80224c4c",
+  "request_id": "data-export-1780691235-19130-export",
+  "status": "queued"
+}
+Data export audit rows=1 outbox rows=1
+PRODUCT_DATA_EXPORT_OK authenticated data export request is wired through mobile service, backend route, audit log, and outbox event.

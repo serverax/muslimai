@@ -1,0 +1,23 @@
+ingress-nginx            ingress-nginx-controller-7rzd7                           0/1     Pending                      0                  4d6h
+lawapp-ai                lawapp-reasoning-worker-55c9fd4db6-894hn                 0/1     CrashLoopBackOff             277 (4m42s ago)    23h
+lawapp-api               lawapp-backend-6c85f79cbd-qm9vl                          0/1     CrashLoopBackOff             275 (3m ago)       23h
+lawapp-monitoring        lawapp-health-probe-29679155-w4x8g                       0/1     Error                        5 (92s ago)        3m6s
+lawapp-rag               lawapp-backup-proof-26bvp                                0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-proof-29vkd                                0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-proof-7cmpm                                0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-proof-btnzg                                0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-proof-gh5f8                                0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-proof-hmnj5                                0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-proof-svl76                                0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-restore-proof-6b2sq                        0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-restore-proof-bts4m                        0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-restore-proof-frvqx                        0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-restore-proof-fv259                        0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-restore-proof-hm9rz                        0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-restore-proof-hw87c                        0/1     Error                        0                  2d6h
+lawapp-rag               lawapp-backup-restore-proof-m4vz5                        0/1     Error                        0                  2d6h
+ns-agent-ayosh           ayosh-professor-chat-api-587494b6fb-w95k6                0/1     CrashLoopBackOff             1521 (2m30s ago)   5d10h
+ns-agent-jordan-bot      jordan-bot-649df6db6b-b8zbk                              0/1     CrashLoopBackOff             1851 (2m11s ago)   6d18h
+ns-agent-palestine       palestine-5968458c5b-kf4d8                               0/1     CrashLoopBackOff             1860 (4m11s ago)   6d19h
+ordinox-agent-runtime    ordinox-nats-0                                           0/2     CreateContainerConfigError   0                  4d22h
+ordinox-monitoring       prometheus-ordinox-monitoring-kube-pr-prometheus-0       1/2     CrashLoopBackOff             2032 (4m16s ago)   7d6h

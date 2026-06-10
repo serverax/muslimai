@@ -1,0 +1,199 @@
+sakina-backend/src\main.rs:498:    let router = std::sync::Arc::new(services::SemanticRouter::new());
+sakina-backend/src\main.rs:499:    let aia_orchestrator = services::AiaOrchestrator::new_with_pool(router.clone(), pool.clone());
+sakina-backend/src\main.rs:504:    let knowledge_graph_service = services::KnowledgeGraphService::new(pool.clone());
+sakina-backend/src\main.rs:505:    let semantic_cache_service = services::SemanticCacheService::new(pool.clone());
+sakina-backend/src\main.rs:506:    let context_compressor = services::ContextCompressionService::new();
+sakina-backend/src\main.rs:551:    let memory_engine = web::Data::new(services::MemoryEngine::new(pool.clone()));
+sakina-backend/src\main.rs:553:    let mcp_registry = web::Data::new(services::McpConnectorRegistry::from_env());
+sakina-backend/src\bin\llm_gateway.rs:32:Do not invent Quran, hadith, fatwa, scholar names, or references.\n\
+sakina-backend/src\models\mod.rs:95:pub struct BrainEvaluationReport {
+sakina-backend/src\models\mod.rs:118:pub struct EvaluationCheckRequest {
+sakina-backend/src\models\mod.rs:128:pub struct EvaluationCheckResponse {
+sakina-backend/src\handlers\brain.rs:4:use crate::services::AiaOrchestrator;
+sakina-backend/src\handlers\brain.rs:6:pub async fn debug_agents(aia: web::Data<AiaOrchestrator>) -> HttpResponse {
+sakina-backend/src\handlers\brain.rs:11:pub async fn health(aia: web::Data<AiaOrchestrator>) -> HttpResponse {
+sakina-backend/src\handlers\brain.rs:14:        "brain_controller": true,
+sakina-backend/src\handlers\brain.rs:24:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\brain.rs:41:pub async fn audit_recent(aia: web::Data<AiaOrchestrator>) -> HttpResponse {
+sakina-backend/src\handlers\brain.rs:52:    use crate::services::SemanticRouter;
+sakina-backend/src\handlers\brain.rs:56:    fn aia_data() -> web::Data<AiaOrchestrator> {
+sakina-backend/src\handlers\brain.rs:57:        web::Data::new(AiaOrchestrator::new(Arc::new(SemanticRouter::new())))
+sakina-backend/src\services\aia_orchestrator.rs:8:use crate::services::brain_controller::BrainController;
+sakina-backend/src\services\aia_orchestrator.rs:12:use crate::services::semantic_router::{ClassifyResult, SemanticRouter};
+sakina-backend/src\services\aia_orchestrator.rs:16:pub struct AiaOrchestrator {
+sakina-backend/src\services\aia_orchestrator.rs:17:    semantic_router: Arc<SemanticRouter>,
+sakina-backend/src\services\aia_orchestrator.rs:19:    brain_controller: Arc<BrainController>,
+sakina-backend/src\services\aia_orchestrator.rs:22:impl AiaOrchestrator {
+sakina-backend/src\services\aia_orchestrator.rs:23:    pub fn new(router: Arc<SemanticRouter>) -> Self {
+sakina-backend/src\services\aia_orchestrator.rs:24:        let ai_router = Arc::new(crate::services::AiRouter::new());
+sakina-backend/src\services\aia_orchestrator.rs:30:            brain_router: ai_router.clone(),
+sakina-backend/src\services\aia_orchestrator.rs:31:            brain_controller: Arc::new(BrainController::new(
+sakina-backend/src\services\aia_orchestrator.rs:32:                ai_router, policy, evaluator, audit_log,
+sakina-backend/src\services\aia_orchestrator.rs:37:    pub fn new_with_pool(router: Arc<SemanticRouter>, pool: sqlx::PgPool) -> Self {
+sakina-backend/src\services\aia_orchestrator.rs:38:        let ai_router = Arc::new(crate::services::AiRouter::new());
+sakina-backend/src\services\aia_orchestrator.rs:44:            brain_router: ai_router.clone(),
+sakina-backend/src\services\aia_orchestrator.rs:45:            brain_controller: Arc::new(BrainController::new(
+sakina-backend/src\services\aia_orchestrator.rs:46:                ai_router, policy, evaluator, audit_log,
+sakina-backend/src\services\aia_orchestrator.rs:56:        self.brain_controller.route(request)
+sakina-backend/src\services\aia_orchestrator.rs:60:        let brain_route = self.brain_controller.route(&BrainRouteRequest {
+sakina-backend/src\services\aia_orchestrator.rs:118:        self.brain_controller.answer_islamic(service, request).await
+sakina-backend/src\services\aia_orchestrator.rs:122:        self.brain_controller.audit_records()
+sakina-backend/src\services\aia_orchestrator.rs:132:        let orchestrator = AiaOrchestrator::new(Arc::new(SemanticRouter::new()));
+sakina-backend/src\services\aia_orchestrator.rs:145:        let orchestrator = AiaOrchestrator::new(Arc::new(SemanticRouter::new()));
+sakina-backend/src\services\aia_orchestrator.rs:168:        let orchestrator = AiaOrchestrator::new(Arc::new(SemanticRouter::new()));
+sakina-backend/src\services\aia_orchestrator.rs:187:        let orchestrator = AiaOrchestrator::new(Arc::new(SemanticRouter::new()));
+sakina-backend/src\services\ai_router.rs:196:                "fatwa", "halal", "haram", "divorce", "marriage", "wife", "husband",
+sakina-backend/src\services\ai_router.rs:450:    if contains_any(&text, &["fatwa", "halal", "haram", "divorce", "marriage"]) {
+sakina-backend/src\handlers\connectors.rs:4:use crate::services::{authenticated_user_id, McpConnectorRegistry};
+sakina-backend/src\handlers\connectors.rs:9:    registry: web::Data<McpConnectorRegistry>,
+sakina-backend/src\services\brain_evaluator.rs:2:    BrainEvaluationReport, BrainRouteResponse, EvaluationCheckRequest, EvaluationCheckResponse,
+sakina-backend/src\services\brain_evaluator.rs:24:    ) -> BrainEvaluationReport {
+sakina-backend/src\services\brain_evaluator.rs:72:        BrainEvaluationReport {
+sakina-backend/src\services\brain_evaluator.rs:84:    pub fn evaluate_check(&self, request: &EvaluationCheckRequest) -> EvaluationCheckResponse {
+sakina-backend/src\services\brain_evaluator.rs:129:        EvaluationCheckResponse {
+sakina-backend/src\services\brain_evaluator.rs:142:        request: &EvaluationCheckRequest,
+sakina-backend/src\services\brain_evaluator.rs:143:        response: &EvaluationCheckResponse,
+sakina-backend/src\services\brain_evaluator.rs:179:        report: &BrainEvaluationReport,
+sakina-backend/src\handlers\classify.rs:3:use crate::services::AiaOrchestrator;
+sakina-backend/src\handlers\classify.rs:8:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\chat.rs:12:    authenticated_user_id, AiaOrchestrator, AskIslamicRequest, IslamicAnswerService, MemoryEngine,
+sakina-backend/src\handlers\chat.rs:199:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\chat.rs:201:    memory_engine: web::Data<MemoryEngine>,
+sakina-backend/src\handlers\chat.rs:303:        "reason": "answer returned only after Mother Brain and Evaluation AI gate",
+sakina-backend/src\handlers\chat.rs:453:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\chat.rs:615:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\chat.rs:1103:    fn aia_data() -> web::Data<AiaOrchestrator> {
+sakina-backend/src\handlers\chat.rs:1104:        web::Data::new(AiaOrchestrator::new(std::sync::Arc::new(
+sakina-backend/src\handlers\chat.rs:1105:            crate::services::SemanticRouter::new(),
+sakina-backend/src\handlers\chat.rs:1121:        let graph = crate::services::KnowledgeGraphService::new(pool.clone());
+sakina-backend/src\handlers\chat.rs:1122:        let compressor = crate::services::ContextCompressionService::new();
+sakina-backend/src\handlers\chat.rs:1130:        let cache = crate::services::SemanticCacheService::new(pool.clone());
+sakina-backend/src\handlers\cache.rs:3:use crate::services::SemanticCacheService;
+sakina-backend/src\handlers\cache.rs:6:    let service = SemanticCacheService::new(pool.get_ref().clone());
+sakina-backend/src\services\brain_controller.rs:412:    fn evaluate_draft(&self, route: &BrainRouteResponse) -> crate::models::BrainEvaluationReport {
+sakina-backend/src\services\brain_controller.rs:413:        crate::models::BrainEvaluationReport {
+sakina-backend/src\handlers\islamic.rs:3:    AiaOrchestrator, AskIslamicRequest, IslamicAnswerService, IslamicKnowledgeRepository,
+sakina-backend/src\handlers\islamic.rs:91:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\services\context_compression.rs:25:pub struct ContextCompressionService;
+sakina-backend/src\services\context_compression.rs:27:impl ContextCompressionService {
+sakina-backend/src\services\context_compression.rs:112:        let service = ContextCompressionService::new();
+sakina-backend/src\handlers\knowledge_graph.rs:5:use crate::services::KnowledgeGraphService;
+sakina-backend/src\handlers\knowledge_graph.rs:44:    service: web::Data<KnowledgeGraphService>,
+sakina-backend/src\handlers\evaluation.rs:4:use crate::models::{EvaluationCheckRequest, EvaluationCheckResponse};
+sakina-backend/src\handlers\evaluation.rs:74:    payload: web::Json<EvaluationCheckRequest>,
+sakina-backend/src\handlers\evaluation.rs:78:    let mut result: EvaluationCheckResponse = evaluator.evaluate_check(&request);
+sakina-backend/src\handlers\evaluation.rs:108:        let body = evaluator.evaluate_check(&EvaluationCheckRequest {
+sakina-backend/src\handlers\evaluation.rs:122:        let body = evaluator.evaluate_check(&EvaluationCheckRequest {
+sakina-backend/src\handlers\multimodal.rs:9:    authenticated_user_id, AiaOrchestrator, IslamicAnswerService, MultimodalAnalysisRequest,
+sakina-backend/src\handlers\multimodal.rs:82:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\services\decision_algorithm.rs:87:        if text.contains("fatwa") || text.contains("halal") || text.contains("haram") {
+sakina-backend/src\services\decision_algorithm.rs:518:            &req("quran", "premium", "is this halal fatwa?"),
+sakina-backend/src\handlers\memory.rs:7:use crate::services::{AiaOrchestrator, MemoryEngine, MemoryWriteRequest};
+sakina-backend/src\handlers\memory.rs:18:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\memory.rs:19:    engine: web::Data<MemoryEngine>,
+sakina-backend/src\handlers\memory.rs:47:    engine: web::Data<MemoryEngine>,
+sakina-backend/src\handlers\memory.rs:66:    engine: web::Data<MemoryEngine>,
+sakina-backend/src\handlers\memory.rs:85:    engine: web::Data<MemoryEngine>,
+sakina-backend/src\handlers\memory.rs:124:    engine: web::Data<MemoryEngine>,
+sakina-backend/src\handlers\phase2.rs:764:        let graph = crate::services::KnowledgeGraphService::new(pool.clone());
+sakina-backend/src\handlers\phase2.rs:765:        let compressor = crate::services::ContextCompressionService::new();
+sakina-backend/src\handlers\phase2.rs:773:        let cache = crate::services::SemanticCacheService::new(pool.clone());
+sakina-backend/src\handlers\phase2.rs:1071:                .app_data(web::Data::new(crate::services::AiaOrchestrator::new(
+sakina-backend/src\handlers\phase2.rs:1072:                    std::sync::Arc::new(crate::services::SemanticRouter::new()),
+sakina-backend/src\handlers\rag.rs:13:    AiaOrchestrator, EmbeddingsService, Guardrails, HybridRagService, QdrantVectorDB,
+sakina-backend/src\handlers\rag.rs:56:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\rag.rs:121:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\rag.rs:259:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\rag.rs:384:    fn aia_data() -> web::Data<AiaOrchestrator> {
+sakina-backend/src\handlers\rag.rs:385:        web::Data::new(AiaOrchestrator::new(Arc::new(
+sakina-backend/src\handlers\rag.rs:386:            crate::services::SemanticRouter::new(),
+sakina-backend/src\handlers\sakina_ask.rs:11:    authenticated_user_id, pii_redaction::redact_pii, AiaOrchestrator, AskIslamicRequest,
+sakina-backend/src\handlers\sakina_ask.rs:104:fn high_risk_fatwa(message: &str) -> bool {
+sakina-backend/src\handlers\sakina_ask.rs:106:    q.contains("final fatwa")
+sakina-backend/src\handlers\sakina_ask.rs:109:        || q.contains("binding fatwa")
+sakina-backend/src\handlers\sakina_ask.rs:224:        if input.safety.crisis_detected || high_risk_fatwa(input.redacted_message) {
+sakina-backend/src\handlers\sakina_ask.rs:342:    aia: web::Data<AiaOrchestrator>,
+sakina-backend/src\handlers\sakina_ask.rs:454:    } else if high_risk_fatwa(&safe_message) {
+sakina-backend/src\handlers\sakina_ask.rs:462:            "This is a sensitive fatwa question that requires a qualified scholar to review the details. I will not give a final ruling or invent a fatwa.".to_string()
+sakina-backend/src\handlers\sakina_ask.rs:468:            "Sakina ask high-risk fatwa escalation",
+sakina-backend/src\handlers\sakina_ask.rs:661:    fn detects_high_risk_fatwa() {
+sakina-backend/src\handlers\sakina_ask.rs:662:        assert!(high_risk_fatwa(
+sakina-backend/src\handlers\sakina_ask.rs:663:            "Give me a final fatwa on a complex divorce situation"
+sakina-backend/src\services\graph_rag.rs:4:use crate::services::KnowledgeGraphService;
+sakina-backend/src\services\graph_rag.rs:17:pub struct GraphRagService {
+sakina-backend/src\services\graph_rag.rs:18:    kg: KnowledgeGraphService,
+sakina-backend/src\services\graph_rag.rs:21:impl GraphRagService {
+sakina-backend/src\services\graph_rag.rs:22:    pub fn new(kg: KnowledgeGraphService) -> Self {
+sakina-backend/src\services\hybrid_rag.rs:10:    CompressedEvidenceChunk, ContextCompressionService, EmbeddingsService, KnowledgeGraphService,
+sakina-backend/src\services\hybrid_rag.rs:51:    graph: KnowledgeGraphService,
+sakina-backend/src\services\hybrid_rag.rs:52:    compressor: ContextCompressionService,
+sakina-backend/src\services\hybrid_rag.rs:60:        graph: KnowledgeGraphService,
+sakina-backend/src\services\hybrid_rag.rs:61:        compressor: ContextCompressionService,
+sakina-backend/src\services\knowledge_graph_service.rs:43:pub struct KnowledgeGraphService {
+sakina-backend/src\services\knowledge_graph_service.rs:47:impl KnowledgeGraphService {
+sakina-backend/src\services\islamic_knowledge.rs:4:    BrainExecutionPermit, HybridRagService, SemanticCacheEntry, SemanticCacheService,
+sakina-backend/src\services\islamic_knowledge.rs:11:use sakina_fatwa_policy_gate::{evaluate as evaluate_fatwa_policy, AnswerInput};
+sakina-backend/src\services\islamic_knowledge.rs:243:    cache: SemanticCacheService,
+sakina-backend/src\services\islamic_knowledge.rs:250:        cache: SemanticCacheService,
+sakina-backend/src\services\islamic_knowledge.rs:285:        let fatwa_sensitive = is_fatwa_sensitive(question);
+sakina-backend/src\services\islamic_knowledge.rs:286:        let safety_level = if fatwa_sensitive { "high" } else { "safe" };
+sakina-backend/src\services\islamic_knowledge.rs:295:        let cache_key = SemanticCacheService::cache_key(
+sakina-backend/src\services\islamic_knowledge.rs:357:        let policy = evaluate_fatwa_policy(&AnswerInput {
+sakina-backend/src\services\islamic_knowledge.rs:360:            publication_mode_public: fatwa_sensitive || citations.is_empty(),
+sakina-backend/src\services\islamic_knowledge.rs:369:                "This question requires scholar review with a verified source. I will not invent a ruling or fatwa without evidence."
+sakina-backend/src\services\islamic_knowledge.rs:388:            "fatwa_sensitive": fatwa_sensitive,
+sakina-backend/src\services\islamic_knowledge.rs:400:            "cache_ttl_seconds": SemanticCacheService::TTL_SECONDS,
+sakina-backend/src\services\islamic_knowledge.rs:404:        if SemanticCacheService::is_cacheable(safety_level, &payload) {
+sakina-backend/src\services\islamic_knowledge.rs:426:fn is_fatwa_sensitive(question: &str) -> bool {
+sakina-backend/src\services\islamic_knowledge.rs:429:        "fatwa",
+sakina-backend/src\services\mcp_registry.rs:4:pub struct McpConnectorSpec {
+sakina-backend/src\services\mcp_registry.rs:12:pub struct McpConnectorRegistry {
+sakina-backend/src\services\mcp_registry.rs:14:    connectors: Vec<McpConnectorSpec>,
+sakina-backend/src\services\mcp_registry.rs:17:impl McpConnectorRegistry {
+sakina-backend/src\services\mcp_registry.rs:29:            McpConnectorSpec {
+sakina-backend/src\services\mcp_registry.rs:35:            McpConnectorSpec {
+sakina-backend/src\services\mcp_registry.rs:41:            McpConnectorSpec {
+sakina-backend/src\services\mcp_registry.rs:47:            McpConnectorSpec {
+sakina-backend/src\services\mcp_registry.rs:53:            McpConnectorSpec {
+sakina-backend/src\services\mcp_registry.rs:66:    pub fn connectors(&self) -> &[McpConnectorSpec] {
+sakina-backend/src\services\mcp_registry.rs:98:        let registry = McpConnectorRegistry::from_env();
+sakina-backend/src\services\mod.rs:1:pub mod ai_router;
+sakina-backend/src\services\mod.rs:5:pub mod brain_controller;
+sakina-backend/src\services\mod.rs:30:pub use ai_router::AiRouter;
+sakina-backend/src\services\mod.rs:31:pub use aia_orchestrator::AiaOrchestrator;
+sakina-backend/src\services\mod.rs:35:pub use brain_controller::{BrainController, BrainExecutionPermit};
+sakina-backend/src\services\mod.rs:39:    CompressedEvidenceChunk, CompressionReport, ContextCompressionService,
+sakina-backend/src\services\mod.rs:47:pub use graph_rag::{GraphRagResult, GraphRagService};
+sakina-backend/src\services\mod.rs:57:    KnowledgeGraphEntityView, KnowledgeGraphLookupResult, KnowledgeGraphService,
+sakina-backend/src\services\mod.rs:60:pub use mcp_registry::{McpConnectorRegistry, McpConnectorSpec};
+sakina-backend/src\services\mod.rs:61:pub use memory_engine::{MemoryEngine, MemoryEntry, MemoryWriteOutcome, MemoryWriteRequest};
+sakina-backend/src\services\mod.rs:68:pub use semantic_cache::{SemanticCacheEntry, SemanticCacheService, SemanticCacheStats};
+sakina-backend/src\services\mod.rs:69:pub use semantic_router::SemanticRouter;
+sakina-backend/src\services\memory_engine.rs:46:pub struct MemoryEngine {
+sakina-backend/src\services\memory_engine.rs:51:impl MemoryEngine {
+sakina-backend/src\services\memory_engine.rs:341:        assert_eq!(MemoryEngine::classify_sensitivity(&payload), "high");
+sakina-backend/src\services\memory_engine.rs:347:        let preview = MemoryEngine::preview_write(&payload, false);
+sakina-backend/src\services\multimodal.rs:15:use crate::services::{AiaOrchestrator, AskIslamicRequest, IslamicAnswerService};
+sakina-backend/src\services\multimodal.rs:304:        aia: &AiaOrchestrator,
+sakina-backend/src\services\offline_islamic_corpus.rs:13:    pub fatwa_sensitive: bool,
+sakina-backend/src\services\offline_islamic_corpus.rs:212:        "This question requires a trusted scholar review and verified texts. I will not invent a fatwa or ruling without source-backed evidence."
+sakina-backend/src\services\offline_islamic_corpus.rs:245:            fatwa_sensitive: true,
+sakina-backend/src\services\offline_islamic_corpus.rs:277:                fatwa_sensitive: false,
+sakina-backend/src\services\offline_islamic_corpus.rs:311:                fatwa_sensitive: false,
+sakina-backend/src\services\offline_islamic_corpus.rs:344:                fatwa_sensitive: false,
+sakina-backend/src\services\offline_islamic_corpus.rs:391:                fatwa_sensitive: false,
+sakina-backend/src\services\offline_islamic_corpus.rs:424:                fatwa_sensitive: false,
+sakina-backend/src\services\offline_islamic_corpus.rs:451:            fatwa_sensitive: false,
+sakina-backend/src\services\offline_islamic_corpus.rs:464:        fatwa_sensitive: false,
+sakina-backend/src\services\offline_islamic_corpus.rs:525:        assert!(out.fatwa_sensitive);
+sakina-backend/src\services\semantic_cache.rs:28:pub struct SemanticCacheService {
+sakina-backend/src\services\semantic_cache.rs:32:impl SemanticCacheService {
+sakina-backend/src\services\semantic_cache.rs:210:        let a = SemanticCacheService::cache_key("en", "answer", "safe", "v1", "q1");
+sakina-backend/src\services\semantic_cache.rs:211:        let b = SemanticCacheService::cache_key("en", "answer", "safe", "v1", "q2");
+sakina-backend/src\services\semantic_cache.rs:218:        assert!(!SemanticCacheService::is_cacheable("safe", &payload));
+sakina-backend/src\services\semantic_router.rs:25:pub struct SemanticRouter {}
+sakina-backend/src\services\semantic_router.rs:27:impl SemanticRouter {
+sakina-backend/src\services\semantic_router.rs:29:        SemanticRouter {}
+sakina-backend/src\services\semantic_router.rs:60:                "fatwa",
+sakina-backend/src\services\semantic_router.rs:106:        let router = SemanticRouter::new();
+sakina-backend/src\services\semantic_router.rs:118:        let router = SemanticRouter::new();

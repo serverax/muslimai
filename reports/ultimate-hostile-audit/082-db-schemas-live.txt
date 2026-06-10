@@ -1,0 +1,7 @@
+        List of schemas
+   Name    |       Owner       
+-----------+-------------------
+ public    | pg_database_owner
+ sakina_ai | postgres
+(2 rows)
+

@@ -1,15 +1,79 @@
-Running Gradle task 'assembleRelease'...                           12.4s
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (100.0.0 available)
+  analyzer 10.0.1 (13.0.0 available)
+  dart_style 3.1.7 (3.1.9 available)
+  flutter_riverpod 2.6.1 (3.3.1 available)
+  flutter_secure_storage 9.2.4 (10.3.1 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.1 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  image_picker_android 0.8.13+17 (0.8.13+19 available)
+  js 0.6.7 (0.7.2 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.17.0 (1.18.3 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  riverpod 2.6.1 (3.2.1 available)
+  shared_preferences_android 2.4.23 (2.4.25 available)
+  sqflite 2.4.2+1 (2.4.3 available)
+  sqflite_android 2.4.2+3 (2.4.3 available)
+  sqflite_common 2.5.8 (2.5.9 available)
+  sqflite_darwin 2.4.2 (2.4.3 available)
+  sqflite_platform_interface 2.4.0 (2.4.1 available)
+  synchronized 3.4.0+1 (3.4.1 available)
+  test_api 0.7.10 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  win32 5.15.0 (6.3.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleRelease'...                            6.9s
 ✓ Built build\app\outputs\flutter-apk\app-release.apk (62.8MB)
-Running Gradle task 'bundleRelease'...                             10.0s
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (100.0.0 available)
+  analyzer 10.0.1 (13.0.0 available)
+  dart_style 3.1.7 (3.1.9 available)
+  flutter_riverpod 2.6.1 (3.3.1 available)
+  flutter_secure_storage 9.2.4 (10.3.1 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.1 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  image_picker_android 0.8.13+17 (0.8.13+19 available)
+  js 0.6.7 (0.7.2 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.17.0 (1.18.3 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  riverpod 2.6.1 (3.2.1 available)
+  shared_preferences_android 2.4.23 (2.4.25 available)
+  sqflite 2.4.2+1 (2.4.3 available)
+  sqflite_android 2.4.2+3 (2.4.3 available)
+  sqflite_common 2.5.8 (2.5.9 available)
+  sqflite_darwin 2.4.2 (2.4.3 available)
+  sqflite_platform_interface 2.4.0 (2.4.1 available)
+  synchronized 3.4.0+1 (3.4.1 available)
+  test_api 0.7.10 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  win32 5.15.0 (6.3.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'bundleRelease'...                              6.1s
 ✓ Built build\app\outputs\bundle\release\app-release.aab (47.1MB)
--rwxrwxrwx 1 kalshafee kalshafee 48M Jun  5 20:42 sakina-frontend/build/app/outputs/bundle/release/app-release.aab
--rwxrwxrwx 1 kalshafee kalshafee 63M Jun  5 20:44 sakina-frontend/build/app/outputs/flutter-apk/app-release.apk
-sakina-frontend/lib/screens/compliance_screen.dart:38:      final response = await api.requestAccountDeletion();
-sakina-frontend/lib/screens/compliance_screen.dart:59:        Text('Privacy Policy', style: Theme.of(context).textTheme.titleLarge),
-sakina-frontend/lib/screens/compliance_screen.dart:65:        Text('Terms', style: Theme.of(context).textTheme.titleLarge),
-sakina-frontend/lib/screens/compliance_screen.dart:71:        Text('Islamic Advisory Disclaimer',
-sakina-frontend/lib/screens/compliance_screen.dart:78:        Text('Data Export and Deletion',
-sakina-frontend/lib/screens/compliance_screen.dart:90:              : 'Request account deletion'),
+-rwxrwxrwx 1 kalshafee kalshafee 48M Jun  6 02:49 sakina-frontend/build/app/outputs/bundle/release/app-release.aab
+-rwxrwxrwx 1 kalshafee kalshafee 63M Jun  6 02:50 sakina-frontend/build/app/outputs/flutter-apk/app-release.apk
+sakina-frontend/lib/screens/compliance_screen.dart:72:      final response = await api.requestAccountDeletion();
+sakina-frontend/lib/screens/compliance_screen.dart:93:        Text('Privacy Policy', style: Theme.of(context).textTheme.titleLarge),
+sakina-frontend/lib/screens/compliance_screen.dart:99:        Text('Terms', style: Theme.of(context).textTheme.titleLarge),
+sakina-frontend/lib/screens/compliance_screen.dart:105:        Text('Islamic Advisory Disclaimer',
+sakina-frontend/lib/screens/compliance_screen.dart:112:        Text('Data Export and Deletion',
+sakina-frontend/lib/screens/compliance_screen.dart:132:              : 'Request account deletion'),
 sakina-frontend/lib/services/api_service.dart:293:  Future<AccountDeletionRequestResponse> requestAccountDeletion() async {
 sakina-frontend/lib/services/api_service.dart:294:    final res = await _post('/account/delete-request', const {});
 sakina-frontend/ios/Runner/Info.plist:10:	<string>Sakina AI</string>
@@ -23,7 +87,7 @@ scripts/sakina/tech-data-retention-deletion-proof.sh:229:  INSERT INTO outbox.ev
 scripts/sakina/tech-data-retention-deletion-proof.sh:283:  FROM outbox.events e
 scripts/sakina/tech-data-retention-deletion-proof.sh:303:         FROM outbox.events e
 scripts/sakina/tech-data-retention-deletion-proof.sh:322:rg -n "user_memory_entries|multimodal_assets|auth_sessions|audit_logs|outbox.events|data_deletion_requested|user_data_deleted" \
-sakina-backend/src/main.rs:757:                        web::post().to(handlers::phase2::request_account_deletion),
+sakina-backend/src/main.rs:771:                                web::post().to(handlers::phase2::request_account_deletion),
 sakina-backend/src/handlers/phase2.rs:5:use crate::services::authenticated_user_id;
 sakina-backend/src/handlers/phase2.rs:82:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
 sakina-backend/src/handlers/phase2.rs:146:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
@@ -44,12 +108,14 @@ sakina-backend/src/handlers/phase2.rs:490:    let user_id = authenticated_user_i
 sakina-backend/src/handlers/phase2.rs:503:        VALUES ('account_deletion_requested', 'user', $1, $2, $3)
 sakina-backend/src/handlers/phase2.rs:520:        INSERT INTO outbox.events (event_type, payload, status)
 sakina-backend/src/handlers/phase2.rs:521:        VALUES ('account_deletion_requested', $1, 'Pending')
+sakina-backend/src/handlers/phase2.rs:546:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:584:        INSERT INTO outbox.events (event_type, payload, status)
 {"error":{"code":"unauthorized","message":"authorization bearer token is required"}}
 Missing-auth delete request status: 401
 {
-  "audit_id": 113,
-  "outbox_event_id": "8efa21f4-ab76-4456-99b9-02039ae12da7",
-  "request_id": "store-compliance-1780688642-4198-delete",
+  "audit_id": 140,
+  "outbox_event_id": "dfa72632-e58e-4579-af0d-b7d608f95f17",
+  "request_id": "store-compliance-1780710620-28899-delete",
   "status": "queued"
 }
 Deletion audit rows=1 outbox rows=1

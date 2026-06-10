@@ -1,22 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS sakina_ai;
-
-CREATE OR REPLACE FUNCTION sakina_ai.current_user_id()
-RETURNS UUID
-LANGUAGE sql
-STABLE
-AS $$
-    SELECT NULLIF(current_setting('sakina.current_user_id', true), '')::uuid
-$$;
-
-CREATE OR REPLACE FUNCTION sakina_ai.rls_service_role()
-RETURNS BOOLEAN
-LANGUAGE sql
-STABLE
-AS $$
-    SELECT COALESCE(current_setting('sakina.service_role', true), '') = 'on'
-        OR current_user IN ('sakina_user', 'postgres')
-$$;
-
 CREATE TABLE IF NOT EXISTS public.password_credentials (
     user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
     password_hash TEXT NOT NULL,

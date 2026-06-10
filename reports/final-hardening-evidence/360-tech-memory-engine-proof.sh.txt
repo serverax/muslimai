@@ -1,12 +1,12 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.05s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.63s
 {
-  "user_id": "4cc16199-2a15-4d72-8cfb-1039f6fb9948",
-  "email": "sakina-memory-a-1780688428-3192@example.com",
+  "user_id": "242ee32b-715e-4252-bcf0-fb4eb4429bdd",
+  "email": "sakina-memory-a-1780710472-9079@example.com",
   "has_access_token": true
 }
 {
-  "user_id": "80000c5d-ac03-4c02-acfb-a0a0602db42a",
-  "email": "sakina-memory-b-1780688428-3192@example.com",
+  "user_id": "3fcbec8b-f28f-4e5a-a264-2637f867b8b8",
+  "email": "sakina-memory-b-1780710472-9079@example.com",
   "has_access_token": true
 }
 Unauthenticated memory read status=401
@@ -28,12 +28,12 @@ Unauthenticated memory read status=401
   "allowed": true,
   "sensitivity_level": "sensitive",
   "reason": "memory write allowed",
-  "memory_id": "b7a80700-e741-4618-9f67-d4b0d62661b8"
+  "memory_id": "7936dd17-0940-472c-a8f1-c8431cf06f0d"
 }
 {
-  "id": "b7a80700-e741-4618-9f67-d4b0d62661b8",
-  "user_id": "4cc16199-2a15-4d72-8cfb-1039f6fb9948",
-  "memory_key": "quran-memory-1780688428-3192",
+  "id": "7936dd17-0940-472c-a8f1-c8431cf06f0d",
+  "user_id": "242ee32b-715e-4252-bcf0-fb4eb4429bdd",
+  "memory_key": "quran-memory-1780710472-9079",
   "memory_type": "quran_memorisation",
   "sensitivity_level": "sensitive",
   "payload": {
@@ -64,19 +64,19 @@ After delete memory read status=404
 {
   "found": false
 }
-718:  Future<MemoryWriteResponse> writeMemory(
-719:    MemoryWriteRequest request,
-734:  Future<MemoryEntryResponse> readMemory({
-744:      return MemoryEntryResponse.fromJson(
-751:  Future<int> deleteMemory({
-785:          multipart.headers['Authorization'] = 'Bearer $token';
-814:      headers['Authorization'] = 'Bearer $token';
-1203:class MemoryWriteRequest {
-1212:  const MemoryWriteRequest({
-1258:class MemoryEntryResponse {
-1270:  const MemoryEntryResponse({
-1283:  factory MemoryEntryResponse.fromJson(Map<String, dynamic> json) =>
-1284:      MemoryEntryResponse(
+728:  Future<MemoryWriteResponse> writeMemory(
+729:    MemoryWriteRequest request,
+744:  Future<MemoryEntryResponse> readMemory({
+754:      return MemoryEntryResponse.fromJson(
+761:  Future<int> deleteMemory({
+795:          multipart.headers['Authorization'] = 'Bearer $token';
+824:      headers['Authorization'] = 'Bearer $token';
+1213:class MemoryWriteRequest {
+1222:  const MemoryWriteRequest({
+1268:class MemoryEntryResponse {
+1280:  const MemoryEntryResponse({
+1293:  factory MemoryEntryResponse.fromJson(Map<String, dynamic> json) =>
+1294:      MemoryEntryResponse(
 sakina-backend/src/handlers/memory.rs:25:            "requested user_id does not match authenticated user",
 sakina-backend/src/handlers/memory.rs:28:    let route = aia.route(&BrainRouteRequest {
 sakina-backend/src/handlers/memory.rs:29:        message: format!("memory write {} {}", request.memory_type, request.payload),

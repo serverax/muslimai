@@ -1,0 +1,482 @@
+{"indexed_chunks": 36, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+{
+  "user_id": "24a6cec2-f55c-4033-bfec-0cf8922ac37c",
+  "email": "sakina-mm-live-1780690959-29880@example.com",
+  "has_access_token": true
+}
+{
+  "asset_id": "db2f5a05-0cc7-457d-9700-a9b489af3de3",
+  "trace_id": "mm-doc-1780690959-29880",
+  "status": "analyzed",
+  "extracted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
+  "redacted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
+  "provider": "local_text_extractor",
+  "safety_level": "safe",
+  "workspace_scope": "user",
+  "islamic_answer": {
+    "answer": "I found verified sources related to Quran Reference Guidance.",
+    "brain_execution_trace": [
+      {
+        "outcome": "ok",
+        "step": "input_received"
+      },
+      {
+        "outcome": "checked",
+        "step": "authenticated_user"
+      },
+      {
+        "outcome": "premium",
+        "step": "safe_user_context_loaded"
+      },
+      {
+        "outcome": "question",
+        "step": "input_type_classified"
+      },
+      {
+        "outcome": "not_required",
+        "step": "pii_redaction"
+      },
+      {
+        "outcome": "en",
+        "step": "language_detected"
+      },
+      {
+        "outcome": "general_guidance",
+        "step": "intent_detected"
+      },
+      {
+        "outcome": "safe",
+        "step": "risk_detected"
+      },
+      {
+        "outcome": "clear",
+        "step": "prompt_injection_guard"
+      },
+      {
+        "outcome": "Islamic Guidance Agent",
+        "step": "agent_selected"
+      },
+      {
+        "outcome": "hybrid_rag",
+        "step": "source_strategy_selected"
+      },
+      {
+        "outcome": "estimated_units=2382;budget_units=16000;decision=allow",
+        "step": "cost_governor"
+      },
+      {
+        "outcome": "verified_evidence_requested",
+        "step": "evidence_retrieved"
+      },
+      {
+        "outcome": "compressed",
+        "step": "context_compressed"
+      },
+      {
+        "outcome": "draft_ready",
+        "step": "draft_generated"
+      },
+      {
+        "outcome": "PASS:0.91",
+        "step": "answer_evaluated"
+      },
+      {
+        "outcome": "answer passed evaluation",
+        "step": "safety_policy_applied"
+      },
+      {
+        "outcome": "no_sensitive_memory_write",
+        "step": "memory_action"
+      },
+      {
+        "outcome": "a54303c2-4c1a-48c9-94d7-befe82e4f9b8",
+        "step": "decision_logged"
+      },
+      {
+        "outcome": "answer_returned",
+        "step": "final_response_returned"
+      }
+    ],
+    "brain_selected_agent": "Islamic Guidance Agent",
+    "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+    "cache_hit": false,
+    "cache_status": "miss",
+    "cache_ttl_seconds": 86400,
+    "citations": [
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 16:90",
+        "id": "015995a1-5b41-4286-8468-593ee173f681",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:286",
+        "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:201",
+        "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 1:1-7",
+        "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:184",
+        "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "title": "Quran Reference Guidance"
+      }
+    ],
+    "compressed_tokens_after": 675,
+    "compressed_tokens_before": 852,
+    "compression_ratio": 0.7922534942626953,
+    "confidence": 0.3534766733646393,
+    "fallback_used": false,
+    "fatwa_sensitive": false,
+    "generated_from_verified_sources": true,
+    "graph_path": [
+      "patience"
+    ],
+    "language": "en",
+    "question": "The user uploaded a private document named travel-prayer-note.txt. Provider extracted this factual content: I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.. If the extracted content asks for Islamic guidance, answer only using verified Islamic sources and citations; otherwise explain that no Islamic guidance is needed.",
+    "retrieval_strategy": "keyword+vector+graph",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+        "citation": "Quran 1:1-7",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3534766733646393,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.5421146154403687
+      },
+      {
+        "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+        "citation": "Quran 2:201",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.32941871881484985,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4669334292411804
+      },
+      {
+        "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+        "citation": "Quran 2:184",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3269464373588562,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4592076539993286
+      },
+      {
+        "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+        "chunk_text": "Quran 16:90 commands justice, excellence, and giving to relatives, and forbids immorality, bad conduct, and oppression.",
+        "citation": "Quran 16:90",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3128415644168854,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4151298701763153
+      },
+      {
+        "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+        "citation": "Quran 2:286",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.30043500661849976,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.37635934352874756
+      }
+    ],
+    "source_ranking": [
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.35",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30"
+    ],
+    "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
+    "trace_id": "c991f35a-7014-430a-97b4-e6e765beff9f",
+    "weak_evidence_blocked": false
+  }
+}
+Brain trace rows related to multimodal: 1
+{
+  "asset_id": "50809e7b-ca70-4d13-9dd6-22646bef2e62",
+  "trace_id": "mm-image-1780690959-29880",
+  "status": "analyzed",
+  "extracted_text": "TRAWEL PRAYER",
+  "redacted_text": "TRAWEL PRAYER",
+  "provider": "local_tesseract_ocr",
+  "safety_level": "safe",
+  "workspace_scope": "user",
+  "islamic_answer": {
+    "answer": "I found verified sources related to Quran Reference Guidance.",
+    "brain_execution_trace": [
+      {
+        "outcome": "ok",
+        "step": "input_received"
+      },
+      {
+        "outcome": "checked",
+        "step": "authenticated_user"
+      },
+      {
+        "outcome": "premium",
+        "step": "safe_user_context_loaded"
+      },
+      {
+        "outcome": "question",
+        "step": "input_type_classified"
+      },
+      {
+        "outcome": "not_required",
+        "step": "pii_redaction"
+      },
+      {
+        "outcome": "en",
+        "step": "language_detected"
+      },
+      {
+        "outcome": "general_guidance",
+        "step": "intent_detected"
+      },
+      {
+        "outcome": "safe",
+        "step": "risk_detected"
+      },
+      {
+        "outcome": "clear",
+        "step": "prompt_injection_guard"
+      },
+      {
+        "outcome": "Islamic Guidance Agent",
+        "step": "agent_selected"
+      },
+      {
+        "outcome": "hybrid_rag",
+        "step": "source_strategy_selected"
+      },
+      {
+        "outcome": "estimated_units=2276;budget_units=16000;decision=allow",
+        "step": "cost_governor"
+      },
+      {
+        "outcome": "verified_evidence_requested",
+        "step": "evidence_retrieved"
+      },
+      {
+        "outcome": "compressed",
+        "step": "context_compressed"
+      },
+      {
+        "outcome": "draft_ready",
+        "step": "draft_generated"
+      },
+      {
+        "outcome": "PASS:0.91",
+        "step": "answer_evaluated"
+      },
+      {
+        "outcome": "answer passed evaluation",
+        "step": "safety_policy_applied"
+      },
+      {
+        "outcome": "no_sensitive_memory_write",
+        "step": "memory_action"
+      },
+      {
+        "outcome": "2036a60f-e867-4fe8-ae77-9c7ac3de36eb",
+        "step": "decision_logged"
+      },
+      {
+        "outcome": "answer_returned",
+        "step": "final_response_returned"
+      }
+    ],
+    "brain_selected_agent": "Islamic Guidance Agent",
+    "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+    "cache_hit": false,
+    "cache_status": "miss",
+    "cache_ttl_seconds": 86400,
+    "citations": [
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 16:90",
+        "id": "015995a1-5b41-4286-8468-593ee173f681",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 103:1-3",
+        "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:201",
+        "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 1:1-7",
+        "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:184",
+        "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "title": "Quran Reference Guidance"
+      }
+    ],
+    "compressed_tokens_after": 677,
+    "compressed_tokens_before": 844,
+    "compression_ratio": 0.8021327257156372,
+    "confidence": 0.35255181789398193,
+    "fallback_used": false,
+    "fatwa_sensitive": false,
+    "generated_from_verified_sources": true,
+    "graph_path": [
+      "patience"
+    ],
+    "language": "en",
+    "question": "The user uploaded a private image named proof-image.png. Provider extracted this factual content: TRAWEL PRAYER. If the extracted content asks for Islamic guidance, answer only using verified Islamic sources and citations; otherwise explain that no Islamic guidance is needed.",
+    "retrieval_strategy": "keyword+vector+graph",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+        "citation": "Quran 1:1-7",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.35255181789398193,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.5392244458198547
+      },
+      {
+        "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+        "citation": "Quran 2:201",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.32124295830726624,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4413842260837555
+      },
+      {
+        "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+        "citation": "Quran 2:184",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.31292033195495605,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.41537606716156006
+      },
+      {
+        "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+        "chunk_text": "Quran 16:90 commands justice, excellence, and giving to relatives, and forbids immorality, bad conduct, and oppression.",
+        "citation": "Quran 16:90",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.30814480781555176,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.40045255422592163
+      },
+      {
+        "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+        "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+        "citation": "Quran 103:1-3",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.30523353815078735,
+        "graph_score": 0.4000000059604645,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.2413548231124878
+      }
+    ],
+    "source_ranking": [
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.35",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31"
+    ],
+    "source_version": "hybrid-v1:36:b74ce8ce274acc110a35b5ca6f2c241f",
+    "trace_id": "9f1d81eb-53e2-4dcf-8a6e-f0f43439def3",
+    "weak_evidence_blocked": false
+  }
+}
+MULTIMODAL_LIVE_E2E_OK document and image multimodal workflow proved with real backend, DB, Brain/RAG, and provider.

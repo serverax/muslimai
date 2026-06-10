@@ -1,7 +1,7 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.58s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.62s
 === english-quran ===
 {
-  "request_id": "ai-router-english-quran-1780688438-14059",
+  "request_id": "ai-router-english-quran-1780710480-30108",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -89,7 +89,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "5d94e0f6-6ae0-4c51-acc1-0d835c1bb352"
+      "outcome": "0b307808-c7a7-47bb-a1ae-b7d3264cd8ab"
     },
     {
       "step": "final_response_returned",
@@ -99,7 +99,7 @@
 }
 === english-fiqh ===
 {
-  "request_id": "ai-router-english-fiqh-1780688438-12799",
+  "request_id": "ai-router-english-fiqh-1780710481-31764",
   "selected_agent": "Islamic Guidance Agent",
   "selected_model": "main_llm",
   "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
@@ -187,7 +187,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "e5da6faa-57cc-470b-a886-2ec76c811794"
+      "outcome": "c98203f1-6d14-47fc-aba3-84475f38b47c"
     },
     {
       "step": "final_response_returned",
@@ -197,7 +197,7 @@
 }
 === free-family-denied ===
 {
-  "request_id": "ai-router-free-family-denied-1780688438-28985",
+  "request_id": "ai-router-free-family-denied-1780710481-18921",
   "selected_agent": "Family/Marriage Advice Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>hybrid_rag>evaluation",
@@ -285,7 +285,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "f5e17eb3-5d40-4c40-938e-7c2a48238843"
+      "outcome": "57be6ef2-ec29-41d4-9332-bc81c6d646e2"
     },
     {
       "step": "final_response_returned",
@@ -295,7 +295,7 @@
 }
 === unsafe-safety ===
 {
-  "request_id": "ai-router-unsafe-safety-1780688439-31463",
+  "request_id": "ai-router-unsafe-safety-1780710481-25672",
   "selected_agent": "Safety/Escalation Agent",
   "selected_model": "safety_agent",
   "selected_pipeline": "mother_brain>safety_gate>human_escalation",
@@ -383,7 +383,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "eb362a7e-3b9a-4e5d-a22d-d271dd2237bd"
+      "outcome": "c99a0024-023b-4c39-a31f-b7dad95f76a3"
     },
     {
       "step": "final_response_returned",
@@ -393,7 +393,7 @@
 }
 === arabic-quran ===
 {
-  "request_id": "ai-router-arabic-quran-1780688439-19487",
+  "request_id": "ai-router-arabic-quran-1780710481-31771",
   "selected_agent": "Quran Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>quran_rag>evaluation",
@@ -481,7 +481,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "2571f2d4-3854-4ba6-919a-539ff5f8cb71"
+      "outcome": "9cc5b3c5-9df8-4540-8238-98a78f9cba05"
     },
     {
       "step": "final_response_returned",
@@ -491,7 +491,7 @@
 }
 === simple-lite ===
 {
-  "request_id": "ai-router-simple-lite-1780688439-29486",
+  "request_id": "ai-router-simple-lite-1780710481-2875",
   "selected_agent": "Dua/Azkar Agent",
   "selected_model": "lite_llm",
   "selected_pipeline": "mother_brain>verified_dua_rag>evaluation",
@@ -579,7 +579,7 @@
     },
     {
       "step": "decision_logged",
-      "outcome": "cf2955b6-c417-4c6a-a262-2de231507bdf"
+      "outcome": "b5c5c1d8-2240-4b6d-b422-c42950f4e043"
     },
     {
       "step": "final_response_returned",
@@ -587,7 +587,7 @@
     }
   ]
 }
-AI router trace count before=3381 after=3387
+AI router trace count before=3767 after=3773
 sakina-backend/src/services/brain_controller.rs:56:        let selected_model = if policy.allowed && cost_decision.allowed {
 sakina-backend/src/services/brain_controller.rs:57:            base_route.selected_model.clone()
 sakina-backend/src/services/brain_controller.rs:61:        let can_generate = base_route.can_generate && policy.allowed && cost_decision.allowed;

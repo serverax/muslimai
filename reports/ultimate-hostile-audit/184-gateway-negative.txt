@@ -1,0 +1,5 @@
+Warning: would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "gw-neg-proof" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "gw-neg-proof" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "gw-neg-proof" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "gw-neg-proof" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+HTTP 400
+Json deserialize error: missing field `trace_id` at line 1 column 18warning: couldn't attach to pod/gw-neg-proof, falling back to streaming logs: unable to upgrade connection: container gw-neg-proof not found in pod gw-neg-proof_sakina-mobile-staging
+HTTP 400
+Json deserialize error: missing field `trace_id` at line 1 column 18

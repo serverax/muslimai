@@ -1,0 +1,102 @@
+ M reports/final-hardening-evidence/190-auth-live-proof.txt
+ M reports/final-hardening-evidence/190-auth-refresh-proof.txt
+ M reports/final-hardening-evidence/190-backend-tests-with-db.txt
+ M reports/final-hardening-evidence/190-db-user-isolation.txt
+ M reports/final-hardening-evidence/190-local-runtime.txt
+ M reports/final-hardening-evidence/190-store-readiness.txt
+ M reports/final-hardening-evidence/231-frontend-fake-wiring-scan.txt
+ M reports/final-hardening-evidence/233-frontend-api-contract-proof.txt
+ M reports/final-hardening-evidence/234-mobile-to-backend-to-db-e2e-proof.txt
+ M reports/final-hardening-evidence/241-backend-routes-scan.txt
+ M reports/final-hardening-evidence/242-backend-functions-scan.txt
+ M reports/final-hardening-evidence/251-db-tables-rls.txt
+ M reports/final-hardening-evidence/254-db-policies.txt
+ M reports/final-hardening-evidence/255-db-functions-triggers-proof.txt
+ M reports/final-hardening-evidence/256-migration-empty-db-proof.txt
+ M reports/final-hardening-evidence/260-end-to-end-trace-id-proof.txt
+ M reports/final-hardening-evidence/270-api-schema-contract-proof.txt
+ M reports/final-hardening-evidence/300-tech-brain-orchestrator-proof.sh.txt
+ M reports/final-hardening-evidence/310-tech-agentic-workflow-proof.sh.txt
+ M reports/final-hardening-evidence/320-tech-rag-proof.sh.txt
+ M reports/final-hardening-evidence/340-tech-hybrid-search-proof.sh.txt
+ M reports/final-hardening-evidence/350-tech-semantic-cache-proof.sh.txt
+ M reports/final-hardening-evidence/360-tech-memory-engine-proof.sh.txt
+ M reports/final-hardening-evidence/370-tech-context-compression-proof.sh.txt
+ M reports/final-hardening-evidence/380-tech-ai-router-proof.sh.txt
+ M reports/final-hardening-evidence/390-tech-evaluation-ai-proof.sh.txt
+ M reports/final-hardening-evidence/400-tech-mcp-connectors-proof.sh.txt
+ M reports/final-hardening-evidence/410-multimodal-ocr-docker-build.txt
+ M reports/final-hardening-evidence/410-tech-multimodal-ai-proof.sh.txt
+ M reports/final-hardening-evidence/420-tech-wasm-proof.sh.txt
+ M reports/final-hardening-evidence/430-qdrant-metadata-export.json
+ M reports/final-hardening-evidence/430-tech-qdrant-vector-db-proof.sh.txt
+ M reports/final-hardening-evidence/440-tech-event-outbox-proof.sh.txt
+ M reports/final-hardening-evidence/450-tech-realtime-notifications-proof.sh.txt
+ M reports/final-hardening-evidence/460-tech-feature-flags-entitlements-proof.sh.txt
+ M reports/final-hardening-evidence/470-tech-policy-as-code-proof.sh.txt
+ M reports/final-hardening-evidence/480-tech-citation-hallucination-validator-proof.sh.txt
+ M reports/final-hardening-evidence/490-tech-observability-stack-proof.sh.txt
+ M reports/final-hardening-evidence/500-tech-secrets-management-proof.sh.txt
+ M reports/final-hardening-evidence/510-tech-zero-trust-api-proof.sh.txt
+ M reports/final-hardening-evidence/520-tech-payments-entitlements-proof.sh.txt
+ M reports/final-hardening-evidence/530-tech-offline-resilience-proof.sh.txt
+ M reports/final-hardening-evidence/540-tech-i18n-arabic-english-proof.sh.txt
+ M reports/final-hardening-evidence/550-tech-store-compliance-proof.sh.txt
+?? .claude-flow/
+?? .local-quarantine/
+?? .quarantine/
+?? .tools/
+?? deploy/
+?? install_sakina_ollama_cpu.sh
+?? k8s/
+?? lawapp-phases-1-3.sh
+?? reports/final-hardening-evidence/1001-sakina-ask-live-http-proof.txt
+?? reports/final-hardening-evidence/1001-trace-fatwa.txt
+?? reports/final-hardening-evidence/1001-trace-pii.txt
+?? reports/final-hardening-evidence/1001-trace-wudu.txt
+?? reports/final-hardening-evidence/1001-user-a.txt
+?? reports/final-hardening-evidence/1001-user-b.txt
+?? reports/final-hardening-evidence/1002-sakina-ask-live-db-proof.txt
+?? reports/final-hardening-evidence/1004-llm-gateway-isolation-gate.txt
+?? reports/final-hardening-evidence/1005-llm-gateway-local-runtime-proof.txt
+?? reports/final-hardening-evidence/900-product-auth-refresh-proof.txt
+?? reports/final-hardening-evidence/901-product-failed-login-proof.txt
+?? reports/final-hardening-evidence/902-product-db-user-isolation-proof.txt
+?? reports/final-hardening-evidence/903-product-e2e-real-user-journey-proof.txt
+?? reports/final-hardening-evidence/904-product-arabic-english-workflow-proof.txt
+?? reports/final-hardening-evidence/905-product-file-document-workflow-proof.txt
+?? reports/final-hardening-evidence/906-product-multimodal-security-proof.txt
+?? reports/final-hardening-evidence/907-product-security-regression-proof.txt
+?? reports/final-hardening-evidence/908-product-zero-trust-api-proof.txt
+?? reports/final-hardening-evidence/909-product-secret-leak-proof.txt
+?? reports/final-hardening-evidence/910-product-frontend-api-contract-proof.txt
+?? reports/final-hardening-evidence/911-product-mobile-to-backend-db-proof.txt
+?? reports/final-hardening-evidence/912-product-store-compliance-proof.txt
+?? reports/final-hardening-evidence/913-product-data-export-proof.txt
+?? reports/final-hardening-evidence/914-claimed-strict-metrics-gate-verification.txt
+?? reports/final-hardening-evidence/915-agentic-learning-code-paths.txt
+?? reports/final-hardening-evidence/916-wasm-validator-code-paths.txt
+?? reports/final-hardening-evidence/917-agentic-learning-backend-tests.txt
+?? reports/final-hardening-evidence/918-wasm-validator-tests.txt
+?? reports/final-hardening-evidence/919-wasm-validator-build.txt
+?? reports/final-hardening-evidence/920-final-agentic-learning-gate-run.txt
+?? reports/final-hardening-evidence/921-agent-integration-tests.txt
+?? reports/final-hardening-evidence/922-agent-gold-dataset.jsonl
+?? reports/final-hardening-evidence/923-agent-feedback-export-proof.txt
+?? reports/final-hardening-evidence/924-agent-secret-scan.txt
+?? reports/final-hardening-evidence/950-staging-agent-rbac.txt
+?? reports/final-hardening-evidence/951-staging-agent-manifest-dry-run.txt
+?? reports/final-hardening-evidence/952-staging-agent-backend-rollout.txt
+?? reports/final-hardening-evidence/953-staging-agent-rag-retrieval-rollout.txt
+?? reports/final-hardening-evidence/954-staging-agent-rag-ingestion-rollout.txt
+?? reports/final-hardening-evidence/955-staging-agent-pods.txt
+?? reports/final-hardening-evidence/956-staging-agent-bad-pods.txt
+?? reports/final-hardening-evidence/959-staging-agent-runtime-proof.txt
+?? reports/ultimate-hostile-audit/
+?? reports/ultimate-hostile-qa/
+?? sakina_deploy_cpu_ollama_fabric.sh
+?? tasks/LAWAPP_CHATGPT_RESTRICTED_GEMINI_QA_REVIEW_ORDER.md
+?? tasks/LAWAPP_FINAL_GAP_CLOSURE_NO_STAGING_UNTIL_E2E_PROOF.md
+?? tasks/LAWAPP_PERMANENT_LOOP_ACCEPTANCE_RULEBOOK.md
+?? tasks/LAWAPP_ULTIMATE_RESTRICTED_CHATGPT_QA_AUDIT_ORDER.md
+?? "tasks/Lawapp Workflow Audit.md"

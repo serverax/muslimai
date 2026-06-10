@@ -7,14 +7,14 @@
     ]
   },
   "status": "ok",
-  "time": 0.000005507
+  "time": 0.000006798
 }
 {
   "result": {
     "status": "green",
     "optimizer_status": "ok",
     "indexed_vectors_count": 0,
-    "points_count": 36,
+    "points_count": 41,
     "segments_count": 8,
     "config": {
       "params": {
@@ -53,9 +53,9 @@
     "payload_schema": {}
   },
   "status": "ok",
-  "time": 0.000055776
+  "time": 0.000048784
 }
-Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 status=green
+Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=41 status=green
 {
   "result": {
     "points": [
@@ -92,15 +92,15 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 statu
         }
       },
       {
-        "id": "09fee409-8c95-492b-bed9-dfff13d12f79",
+        "id": "043c66a1-0ac8-45b1-adb1-ed859086569f",
         "payload": {
           "authenticity_grade": "verified",
-          "chunk_id": "09fee409-8c95-492b-bed9-dfff13d12f79",
+          "chunk_id": "043c66a1-0ac8-45b1-adb1-ed859086569f",
           "citation": "verified citation",
-          "document_id": "da666c33-9319-402d-bee5-010bc771351f",
+          "document_id": "82fa1823-8566-47a3-b4dc-36cdf01b14cd",
           "language": "en",
           "review_status": "verified",
-          "source_id": "19c07e45-1276-476b-8bb5-9ce9e0a9dcdf",
+          "source_id": "4f2e2b82-ee89-4736-867e-313a47e54ded",
           "source_name": "Verified Source",
           "source_reference": "verified citation",
           "source_type": "quran",
@@ -108,27 +108,27 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 statu
         }
       }
     ],
-    "next_page_offset": "0ba71119-a9c1-4adc-a002-2e3372ae39be"
+    "next_page_offset": "09fee409-8c95-492b-bed9-dfff13d12f79"
   },
   "status": "ok",
-  "time": 0.0021191
+  "time": 0.002445499
 }
 {
   "result": {
-    "operation_id": 551,
+    "operation_id": 613,
     "status": "completed"
   },
   "status": "ok",
-  "time": 0.002802736
+  "time": 0.002376522
 }
 {
   "result": [
     {
-      "id": "11111111-1111-4111-8111-543430292258",
-      "version": 551,
+      "id": "11111111-1111-4111-8111-553893698192",
+      "version": 613,
       "score": 1.0000001,
       "payload": {
-        "chunk_id": "11111111-1111-4111-8111-543430292258",
+        "chunk_id": "11111111-1111-4111-8111-553893698192",
         "language": "en",
         "proof": true,
         "review_status": "verified",
@@ -138,7 +138,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 statu
     },
     {
       "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "version": 550,
+      "version": 612,
       "score": 0.45082265,
       "payload": {
         "authenticity_grade": "verified",
@@ -156,7 +156,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 statu
     },
     {
       "id": "67d60cf5-7d60-4b38-8462-254936094923",
-      "version": 550,
+      "version": 612,
       "score": 0.4437724,
       "payload": {
         "authenticity_grade": "approved",
@@ -174,7 +174,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 statu
     },
     {
       "id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
-      "version": 550,
+      "version": 612,
       "score": 0.43704957,
       "payload": {
         "authenticity_grade": "verified",
@@ -192,7 +192,7 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 statu
     },
     {
       "id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
-      "version": 550,
+      "version": 612,
       "score": 0.4197709,
       "payload": {
         "authenticity_grade": "verified",
@@ -210,23 +210,23 @@ Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=36 statu
     }
   ],
   "status": "ok",
-  "time": 0.001130547
+  "time": 0.000877113
 }
-{"status":{"error":"Wrong input: Vector dimension error: expected dim: 128, got 129"},"time":0.002189497}
+{"status":{"error":"Wrong input: Vector dimension error: expected dim: 128, got 129"},"time":0.001746528}
 Wrong-dimension upsert HTTP status: 400
 {
   "result": {
-    "operation_id": 553,
+    "operation_id": 615,
     "status": "completed"
   },
   "status": "ok",
-  "time": 0.001841621
+  "time": 0.001092222
 }
 {
   "result": [
     {
       "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
-      "version": 550,
+      "version": 612,
       "score": 0.45082265,
       "payload": {
         "authenticity_grade": "verified",
@@ -244,7 +244,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "67d60cf5-7d60-4b38-8462-254936094923",
-      "version": 550,
+      "version": 612,
       "score": 0.4437724,
       "payload": {
         "authenticity_grade": "approved",
@@ -262,7 +262,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
-      "version": 550,
+      "version": 612,
       "score": 0.43704957,
       "payload": {
         "authenticity_grade": "verified",
@@ -280,7 +280,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
-      "version": 550,
+      "version": 612,
       "score": 0.4197709,
       "payload": {
         "authenticity_grade": "verified",
@@ -298,7 +298,7 @@ Wrong-dimension upsert HTTP status: 400
     },
     {
       "id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
-      "version": 550,
+      "version": 612,
       "score": 0.3682984,
       "payload": {
         "authenticity_grade": "verified",
@@ -316,7 +316,7 @@ Wrong-dimension upsert HTTP status: 400
     }
   ],
   "status": "ok",
-  "time": 0.001021598
+  "time": 0.001042939
 }
 scripts/sakina/index-approved-rag-corpus.py:16:QDRANT_URL = os.environ.get("QDRANT_URL", "http://localhost:6333").rstrip("/")
 scripts/sakina/index-approved-rag-corpus.py:76:            f"{QDRANT_URL}/collections/{QDRANT_COLLECTION}",

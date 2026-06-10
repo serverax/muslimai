@@ -1,3 +1,7 @@
+sakina-backend/src/handlers/agent.rs:35:pub async fn rollout_route_probe(
+sakina-backend/src/handlers/agent.rs:79:pub async fn rollout_validate_probe(
+sakina-backend/src/handlers/agent.rs:103:fn require_rollout_probe_enabled(req: &HttpRequest) -> Result<(), ApiError> {
+sakina-backend/src/handlers/agent_feedback.rs:14:pub async fn submit_feedback(
 sakina-backend/src/handlers/brain.rs:6:pub async fn debug_agents(aia: web::Data<AiaOrchestrator>) -> HttpResponse {
 sakina-backend/src/handlers/brain.rs:11:pub async fn health(aia: web::Data<AiaOrchestrator>) -> HttpResponse {
 sakina-backend/src/handlers/brain.rs:22:pub async fn test_route(
@@ -125,20 +129,21 @@ sakina-backend/src/handlers/phase2.rs:457:pub async fn get_support_ticket(
 sakina-backend/src/handlers/phase2.rs:470:pub async fn create_audit_log(
 sakina-backend/src/handlers/phase2.rs:478:pub async fn create_security_log(
 sakina-backend/src/handlers/phase2.rs:486:pub async fn request_account_deletion(
-sakina-backend/src/handlers/phase2.rs:542:pub async fn create_app_event(
-sakina-backend/src/handlers/phase2.rs:550:pub async fn create_chat_event(
-sakina-backend/src/handlers/phase2.rs:558:pub async fn create_rag_event(
-sakina-backend/src/handlers/phase2.rs:566:pub async fn create_admin_event(
-sakina-backend/src/handlers/phase2.rs:581:    async fn required_repo_with_pool() -> (Phase2Repository, PgPool) {
-sakina-backend/src/handlers/phase2.rs:609:    async fn required_repo() -> Phase2Repository {
-sakina-backend/src/handlers/phase2.rs:614:    fn unique(suffix: &str) -> String {
-sakina-backend/src/handlers/phase2.rs:618:    fn answer_service_data(pool: PgPool) -> web::Data<crate::services::IslamicAnswerService> {
-sakina-backend/src/handlers/phase2.rs:646:    async fn auth_domain_wires_user_and_session_tables() {
-sakina-backend/src/handlers/phase2.rs:693:    async fn register_session_profile_chain_is_fully_wired() {
-sakina-backend/src/handlers/phase2.rs:775:    async fn profile_domain_wires_profile_and_family_tables() {
-sakina-backend/src/handlers/phase2.rs:857:    async fn subscription_domain_wires_plan_payment_and_entitlement_tables() {
-sakina-backend/src/handlers/phase2.rs:931:    async fn chat_rag_safety_and_admin_domains_wire_tables() {
-sakina-backend/src/handlers/phase2.rs:1357:    async fn notifications_support_and_audit_domains_wire_tables() {
+sakina-backend/src/handlers/phase2.rs:542:pub async fn request_data_export(
+sakina-backend/src/handlers/phase2.rs:607:pub async fn create_app_event(
+sakina-backend/src/handlers/phase2.rs:615:pub async fn create_chat_event(
+sakina-backend/src/handlers/phase2.rs:623:pub async fn create_rag_event(
+sakina-backend/src/handlers/phase2.rs:631:pub async fn create_admin_event(
+sakina-backend/src/handlers/phase2.rs:646:    async fn required_repo_with_pool() -> (Phase2Repository, PgPool) {
+sakina-backend/src/handlers/phase2.rs:674:    async fn required_repo() -> Phase2Repository {
+sakina-backend/src/handlers/phase2.rs:679:    fn unique(suffix: &str) -> String {
+sakina-backend/src/handlers/phase2.rs:683:    fn answer_service_data(pool: PgPool) -> web::Data<crate::services::IslamicAnswerService> {
+sakina-backend/src/handlers/phase2.rs:711:    async fn auth_domain_wires_user_and_session_tables() {
+sakina-backend/src/handlers/phase2.rs:758:    async fn register_session_profile_chain_is_fully_wired() {
+sakina-backend/src/handlers/phase2.rs:840:    async fn profile_domain_wires_profile_and_family_tables() {
+sakina-backend/src/handlers/phase2.rs:922:    async fn subscription_domain_wires_plan_payment_and_entitlement_tables() {
+sakina-backend/src/handlers/phase2.rs:996:    async fn chat_rag_safety_and_admin_domains_wire_tables() {
+sakina-backend/src/handlers/phase2.rs:1422:    async fn notifications_support_and_audit_domains_wire_tables() {
 sakina-backend/src/handlers/rag.rs:16:fn payload_text(payload: Option<&serde_json::Value>, key: &str) -> Option<String> {
 sakina-backend/src/handlers/rag.rs:24:fn source_from_payload(
 sakina-backend/src/handlers/rag.rs:55:pub async fn query_rag(

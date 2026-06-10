@@ -1,0 +1,14 @@
+infra/k8s/sakina-mobile-staging/admin.yaml
+infra/k8s/sakina-mobile-staging/backend.yaml
+infra/k8s/sakina-mobile-staging/db-migrations.yaml
+infra/k8s/sakina-mobile-staging/kustomization.yaml
+infra/k8s/sakina-mobile-staging/llm-gateway.yaml
+infra/k8s/sakina-mobile-staging/namespace.yaml
+infra/k8s/sakina-mobile-staging/ollama-preload.yaml
+infra/k8s/sakina-mobile-staging/ollama.yaml
+infra/k8s/sakina-mobile-staging/postgres.yaml
+infra/k8s/sakina-mobile-staging/qdrant.yaml
+infra/k8s/sakina-mobile-staging/rag.yaml
+infra/k8s/sakina-mobile-staging/redis.yaml
+infra/k8s/sakina-mobile-staging/smoke-tests.yaml
+k8s/ollama/ollama-cpu-lite.yaml

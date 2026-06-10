@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS public.feature_usage (
 
 CREATE TABLE IF NOT EXISTS public.usage_limits (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    plan_id UUID NOT NULL REFERENCES public.subscription_plans(id) ON DELETE CASCADE,
+    plan_id UUID NOT NULL, -- references public.subscription_plans
     feature_key TEXT NOT NULL,
     max_usage INTEGER NOT NULL, -- -1 for unlimited
     period TEXT NOT NULL, -- 'daily', 'monthly'

@@ -1,0 +1,289 @@
+.github/workflows\sakinaai-images.yml:60:        run: docker compose -f sakina-infra/docker-compose.yml config
+.github/workflows\sakinaai-images.yml:70:          assert ":latest" not in backend
+.github/workflows\sakinaai-images.yml:71:          assert ":latest" not in frontend
+.github/workflows\sakinaai-images.yml:140:      - name: Skip image build
+.github/workflows\sakinaai-images.yml:143:          echo "Skipping ${{ matrix.name }} for this run (missing context/dockerfile or PR-scope optimization)."
+scripts/sakina\tech-zero-trust-api-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-zero-trust-api-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-zero-trust-api-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-zero-trust-api-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-zero-trust-api-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\mobile-to-backend-to-db-e2e-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\mobile-to-backend-to-db-e2e-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\mobile-to-backend-to-db-e2e-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\mobile-to-backend-to-db-e2e-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\mobile-to-backend-to-db-e2e-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-wasm-proof.sh:37:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-wasm-proof.sh:38:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-wasm-proof.sh:39:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-wasm-proof.sh:40:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-wasm-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-owasp-masvs-mobile-proof.sh:25:if rg -n -i "SAKINA_API_TOKEN|demo-token|test-token|password123|localhost|127\\.0\\.0\\.1|10\\.0\\.2\\.2|dummy|placeholder|fake" sakina-frontend/lib sakina-frontend/android sakina-frontend/ios \
+scripts/sakina\tech-owasp-masvs-mobile-proof.sh:27:  fail "mobile production paths contain blocked static token/local/demo/fake markers"
+.github/workflows\sakina-deploy.yml:136:            kubectl apply -f "$manifest"
+.github/workflows\sakina-deploy.yml:147:              kubectl apply -f "$manifest"
+.github/workflows\sakina-deploy.yml:252:              --dry-run=client -o yaml | kubectl apply -f -
+.github/workflows\sakina-deploy.yml:261:            --dry-run=client -o yaml | kubectl apply -f -
+.github/workflows\sakina-deploy.yml:322:          kubectl apply -f "$migration_manifest"
+scripts/sakina\tech-event-outbox-proof.sh:36:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-event-outbox-proof.sh:37:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-event-outbox-proof.sh:38:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-event-outbox-proof.sh:39:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-event-outbox-proof.sh:40:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-event-outbox-proof.sh:87:rg -n "OutboxRelay|relay_events|FOR UPDATE SKIP LOCKED|status = 'Sent'|outbox.events" \
+scripts/sakina\final-advanced-technologies-gate.sh:69:if grep -E "NOT ACCEPTED|BLOCKER|MISSING|PARTIAL|LOCAL ONLY|MOCKED|PLACEHOLDER|SAFE DISABLED" "$matrix" > reports/final-hardening-evidence/730-advanced-matrix-blockers.txt; then
+scripts/sakina\tech-store-compliance-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-store-compliance-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-store-compliance-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-store-compliance-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-store-compliance-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-store-compliance-proof.sh:77:if rg -n "localhost|127\\.0\\.0\\.1|10\\.0\\.2\\.2|demo-token|test-token|SAKINA_API_TOKEN|fake privacy|fake terms|lorem|changeme" \
+scripts/sakina\tech-store-compliance-proof.sh:79:  fail "release mobile production paths contain local/demo/fake store blockers"
+scripts/sakina\local-runtime-proof.sh:12:export ALLOW_MOCK_AI=false
+scripts/sakina\local-runtime-proof.sh:13:export ALLOW_MOCK_RAG=false
+scripts/sakina\local-runtime-proof.sh:14:export ALLOW_MOCK_AUTH=false
+scripts/sakina\local-runtime-proof.sh:15:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\local-runtime-proof.sh:16:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\auth-refresh-proof.sh:32:export ALLOW_MOCK_AI=false
+scripts/sakina\auth-refresh-proof.sh:33:export ALLOW_MOCK_RAG=false
+scripts/sakina\auth-refresh-proof.sh:34:export ALLOW_MOCK_AUTH=false
+scripts/sakina\auth-refresh-proof.sh:35:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\auth-refresh-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\deploy-staging.sh:31:kubectl apply -f "${KUSTOMIZE_PATH}/namespace.yaml"
+scripts/sakina\deploy-staging.sh:32:kubectl apply -k "${KUSTOMIZE_PATH}"
+scripts/sakina\tech-owasp-api-security-proof.sh:26:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-owasp-api-security-proof.sh:27:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-owasp-api-security-proof.sh:28:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-owasp-api-security-proof.sh:29:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-owasp-api-security-proof.sh:30:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\llm-gateway-local-runtime-proof.sh:26:trap 'kill "$pid" >/dev/null 2>&1 || true' EXIT
+scripts/sakina\tech-offline-resilience-proof.sh:51:if rg -n "offline.*answer|fake.*offline|mock.*offline|return '.*offline.*answer|Source-backed answer" \
+scripts/sakina\tech-offline-resilience-proof.sh:53:  fail "production frontend contains offline fake-answer behavior"
+scripts/sakina\tech-offline-resilience-proof.sh:56:if rg -n "fake.*offline|mock.*offline|fabricated.*offline|placeholder.*offline" \
+scripts/sakina\tech-offline-resilience-proof.sh:58:  fail "production code contains offline fake-answer behavior"
+scripts/sakina\tech-offline-resilience-proof.sh:61:printf 'OFFLINE_RESILIENCE_OK frontend queues backend-unavailable chat messages as pending, does not fabricate assistant answers, persists pending state in encrypted local DB, retries pending messages when backend becomes available, maps network errors to user-visible state, and production code has no fake offline answer path.\n'
+scripts/sakina\tech-evaluation-ai-proof.sh:32:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-evaluation-ai-proof.sh:33:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-evaluation-ai-proof.sh:34:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-evaluation-ai-proof.sh:35:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-evaluation-ai-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\auth-live-proof.sh:13:export ALLOW_MOCK_AI=false
+scripts/sakina\auth-live-proof.sh:14:export ALLOW_MOCK_RAG=false
+scripts/sakina\auth-live-proof.sh:15:export ALLOW_MOCK_AUTH=false
+scripts/sakina\auth-live-proof.sh:16:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\auth-live-proof.sh:17:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\auth-live-proof.sh:57:echo "=== wrong password ==="
+scripts/sakina\auth-live-proof.sh:83:echo "=== password hash proof ==="
+scripts/sakina\tech-source-trust-ranking-proof.sh:40:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-source-trust-ranking-proof.sh:41:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-source-trust-ranking-proof.sh:42:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-source-trust-ranking-proof.sh:43:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-source-trust-ranking-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-observability-stack-proof.sh:36:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-observability-stack-proof.sh:37:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-observability-stack-proof.sh:38:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-observability-stack-proof.sh:39:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-observability-stack-proof.sh:40:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\end-to-end-trace-id-proof.sh:34:export ALLOW_MOCK_AI=false
+scripts/sakina\end-to-end-trace-id-proof.sh:35:export ALLOW_MOCK_RAG=false
+scripts/sakina\end-to-end-trace-id-proof.sh:36:export ALLOW_MOCK_AUTH=false
+scripts/sakina\end-to-end-trace-id-proof.sh:37:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\end-to-end-trace-id-proof.sh:38:export ALLOW_FAKE_CI_PASS=false
+.github/workflows\sakina-backend-image.yml:38:            latest_tag="${IMAGE_NAME}:latest"
+scripts/sakina\api-schema-contract-proof.sh:40:export ALLOW_MOCK_AI=false
+scripts/sakina\api-schema-contract-proof.sh:41:export ALLOW_MOCK_RAG=false
+scripts/sakina\api-schema-contract-proof.sh:42:export ALLOW_MOCK_AUTH=false
+scripts/sakina\api-schema-contract-proof.sh:43:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\api-schema-contract-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-crash-reporting-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-crash-reporting-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-crash-reporting-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-crash-reporting-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-crash-reporting-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\e2e-real-user-journey.sh:29:export ALLOW_MOCK_AI=false
+scripts/sakina\e2e-real-user-journey.sh:30:export ALLOW_MOCK_RAG=false
+scripts/sakina\e2e-real-user-journey.sh:31:export ALLOW_MOCK_AUTH=false
+scripts/sakina\e2e-real-user-journey.sh:32:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\e2e-real-user-journey.sh:33:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-memory-engine-proof.sh:32:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-memory-engine-proof.sh:33:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-memory-engine-proof.sh:34:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-memory-engine-proof.sh:35:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-memory-engine-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-cost-governor-proof.sh:31:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-cost-governor-proof.sh:32:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-cost-governor-proof.sh:33:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-cost-governor-proof.sh:34:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-cost-governor-proof.sh:35:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\final-security-performance-gate.sh:51:if rg -n -i "continue-on-error: true|echo.*passed|Smoke validation passed|mock_embeddings|ALLOW_FAKE_CI_PASS[[:space:]]*=[[:space:]]*true|fake[ _-]+pass|fake[ _-]+passed|stub[ _-]+pass|stub[ _-]+passed" \
+scripts/sakina\final-security-performance-gate.sh:56:  > reports/final-hardening-evidence/security-performance-fake-ci-scan.txt; then
+scripts/sakina\final-security-performance-gate.sh:57:  fail "CI/script fake-success scanner has hits: reports/final-hardening-evidence/security-performance-fake-ci-scan.txt"
+scripts/sakina\agent-feedback-export-proof.sh:31:export ALLOW_MOCK_AI=false
+scripts/sakina\agent-feedback-export-proof.sh:32:export ALLOW_MOCK_RAG=false
+scripts/sakina\agent-feedback-export-proof.sh:33:export ALLOW_MOCK_AUTH=false
+scripts/sakina\agent-feedback-export-proof.sh:34:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\agent-feedback-export-proof.sh:35:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\final-llm-gateway-isolation-gate.sh:20:  sakina-backend/src infra/k8s/sakina-mobile-staging sakina-frontend/lib .github || true)"
+scripts/sakina\tech-load-performance-proof.sh:39:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-load-performance-proof.sh:40:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-load-performance-proof.sh:41:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-load-performance-proof.sh:42:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-load-performance-proof.sh:43:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-context-compression-proof.sh:35:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-context-compression-proof.sh:36:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-context-compression-proof.sh:37:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-context-compression-proof.sh:38:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-context-compression-proof.sh:39:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-semantic-cache-proof.sh:37:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-semantic-cache-proof.sh:38:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-semantic-cache-proof.sh:39:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-semantic-cache-proof.sh:40:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-semantic-cache-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\final-staging-agent-rollout-gate.sh:51:kubectl apply --dry-run=client -k "$KUSTOMIZE_DIR" \
+scripts/sakina\final-wiring-gate.sh:24:require_file reports/final-hardening-evidence/232-frontend-fake-wiring-scan-review.md
+scripts/sakina\final-wiring-gate.sh:36:if grep -RInE "mock|fake|stub|demo|dummy|placeholder|TODO|FIXME|coming soon|hardcoded|sample|test-token|demo-token|localhost|127.0.0.1|10.0.2.2|Future.delayed|return .*\\[|return .*\\{|static const|Fake|Mock|Stub|Demo" \
+scripts/sakina\final-wiring-gate.sh:38:  > reports/final-hardening-evidence/231-frontend-fake-wiring-scan.txt; then
+scripts/sakina\final-wiring-gate.sh:40:    reports/final-hardening-evidence/232-frontend-fake-wiring-scan-review.md >/dev/null; then
+scripts/sakina\final-wiring-gate.sh:41:    printf 'WIRING_GATE_BLOCKER frontend static/fake scan has unresolved production blockers in review: reports/final-hardening-evidence/232-frontend-fake-wiring-scan-review.md\n' >&2
+scripts/sakina\final-wiring-gate.sh:44:  printf 'Frontend static/fake scan had reviewed non-production hits; continuing with contract and runtime proofs.\n'
+scripts/sakina\final-wiring-gate.sh:46:  printf 'No frontend fake wiring scanner hits.\n' > reports/final-hardening-evidence/231-frontend-fake-wiring-scan.txt
+.github/workflows\infra-ci.yml:54:        run: docker compose -f sakina-infra/docker-compose.yml config
+scripts/sakina\tech-secrets-management-proof.sh:59:rg -n 'strong_secret|JWT_SECRET|SAKINA_JWT_SECRET|ENCRYPTION_KEY|SAKINA_ENCRYPTION_KEY|fake_mode_disabled|do_not_log_secret_values|secretKeyRef' \
+scripts/sakina\tech-citation-hallucination-validator-proof.sh:40:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-citation-hallucination-validator-proof.sh:41:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-citation-hallucination-validator-proof.sh:42:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-citation-hallucination-validator-proof.sh:43:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-citation-hallucination-validator-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\frontend-api-contract-proof.sh:41:export ALLOW_MOCK_AI=false
+scripts/sakina\frontend-api-contract-proof.sh:42:export ALLOW_MOCK_RAG=false
+scripts/sakina\frontend-api-contract-proof.sh:43:export ALLOW_MOCK_AUTH=false
+scripts/sakina\frontend-api-contract-proof.sh:44:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\frontend-api-contract-proof.sh:45:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\multimodal-frontend-proof.sh:33:if rg -n "demo-token|test-token|FakeModuleApiClient|mock.*multimodal|fake.*multimodal|Future\\.delayed" \
+scripts/sakina\multimodal-frontend-proof.sh:35:  fail "frontend multimodal path contains fake/demo/mock behavior"
+scripts/sakina\multimodal-security-proof.sh:37:export ALLOW_MOCK_AI=false
+scripts/sakina\multimodal-security-proof.sh:38:export ALLOW_MOCK_RAG=false
+scripts/sakina\multimodal-security-proof.sh:39:export ALLOW_MOCK_AUTH=false
+scripts/sakina\multimodal-security-proof.sh:40:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\multimodal-security-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-i18n-arabic-english-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-i18n-arabic-english-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-i18n-arabic-english-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-i18n-arabic-english-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-i18n-arabic-english-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\run-regressions-with-local-backend.sh:12:export ALLOW_MOCK_AI=false
+scripts/sakina\run-regressions-with-local-backend.sh:13:export ALLOW_MOCK_RAG=false
+scripts/sakina\run-regressions-with-local-backend.sh:14:export ALLOW_MOCK_AUTH=false
+scripts/sakina\run-regressions-with-local-backend.sh:15:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\run-regressions-with-local-backend.sh:16:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\product-failed-login-proof.sh:30:export ALLOW_MOCK_AI=false
+scripts/sakina\product-failed-login-proof.sh:31:export ALLOW_MOCK_RAG=false
+scripts/sakina\product-failed-login-proof.sh:32:export ALLOW_MOCK_AUTH=false
+scripts/sakina\product-failed-login-proof.sh:33:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\product-failed-login-proof.sh:34:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-sast-sca-container-proof.sh:53:if rg -n -i "continue-on-error:\s*true|echo[^\n]*\bPASS\b|echo[^\n]*\bpassed\b|fake[ _-]+pass|fake[ _-]+passed|stub[ _-]+pass|stub[ _-]+passed|mock[ _-]+pass|mock[ _-]+passed|\|\| true" \
+scripts/sakina\tech-sast-sca-container-proof.sh:58:  > reports/final-hardening-evidence/620-ci-fake-scan.txt; then
+scripts/sakina\tech-sast-sca-container-proof.sh:59:  fail "fake/skip-prone CI or proof-script pattern found: reports/final-hardening-evidence/620-ci-fake-scan.txt"
+scripts/sakina\tech-sast-sca-container-proof.sh:61:  printf 'No fake CI/proof-script pass patterns found in required scan scope.\n' \
+scripts/sakina\tech-sast-sca-container-proof.sh:62:    > reports/final-hardening-evidence/620-ci-fake-scan.txt
+scripts/sakina\tech-sast-sca-container-proof.sh:120:      --skip-dirs .git \
+scripts/sakina\tech-sast-sca-container-proof.sh:121:      --skip-dirs reports \
+scripts/sakina\tech-sast-sca-container-proof.sh:122:      --skip-dirs sakina-frontend/build \
+scripts/sakina\tech-sast-sca-container-proof.sh:132:if "$TRIVY_BIN" image --severity HIGH,CRITICAL --exit-code 1 --skip-db-update --timeout 20m \
+scripts/sakina\multimodal-brain-rag-proof.sh:39:export ALLOW_MOCK_AI=false
+scripts/sakina\multimodal-brain-rag-proof.sh:40:export ALLOW_MOCK_RAG=false
+scripts/sakina\multimodal-brain-rag-proof.sh:41:export ALLOW_MOCK_AUTH=false
+scripts/sakina\multimodal-brain-rag-proof.sh:42:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\multimodal-brain-rag-proof.sh:43:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\multimodal-brain-rag-proof.sh:115:  || fail "multimodal response skipped RAG/Graph/citation fields"
+scripts/sakina\tech-brain-orchestrator-proof.sh:28:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-brain-orchestrator-proof.sh:29:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-brain-orchestrator-proof.sh:30:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-brain-orchestrator-proof.sh:31:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-brain-orchestrator-proof.sh:32:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\smoke-staging.sh:30:kubectl apply -f "${SMOKE_MANIFEST}"
+scripts/sakina\tech-hybrid-search-proof.sh:37:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-hybrid-search-proof.sh:38:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-hybrid-search-proof.sh:39:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-hybrid-search-proof.sh:40:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-hybrid-search-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\multimodal-live-end-to-end-proof.sh:40:export ALLOW_MOCK_AI=false
+scripts/sakina\multimodal-live-end-to-end-proof.sh:41:export ALLOW_MOCK_RAG=false
+scripts/sakina\multimodal-live-end-to-end-proof.sh:42:export ALLOW_MOCK_AUTH=false
+scripts/sakina\multimodal-live-end-to-end-proof.sh:43:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\multimodal-live-end-to-end-proof.sh:44:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-agentic-workflow-proof.sh:27:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-agentic-workflow-proof.sh:28:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-agentic-workflow-proof.sh:29:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-agentic-workflow-proof.sh:30:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-agentic-workflow-proof.sh:31:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\product-data-export-proof.sh:30:export ALLOW_MOCK_AI=false
+scripts/sakina\product-data-export-proof.sh:31:export ALLOW_MOCK_RAG=false
+scripts/sakina\product-data-export-proof.sh:32:export ALLOW_MOCK_AUTH=false
+scripts/sakina\product-data-export-proof.sh:33:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\product-data-export-proof.sh:34:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\new-technologies-master-matrix-proof.sh:115:  fake_hits="$(
+scripts/sakina\new-technologies-master-matrix-proof.sh:116:    grep -nE 'echo[[:space:]]+["'\'']?(PASS|passed)|Smoke validation passed|continue-on-error|ALLOW_FAKE_CI_PASS[[:space:]]*=[[:space:]]*true|mock_embeddings|mode.:.mock' "$script" \
+scripts/sakina\new-technologies-master-matrix-proof.sh:117:      | grep -vE 'rg .*echo|grep .*echo|Select-String .*echo|rg .*continue-on-error|grep .*continue-on-error|Select-String .*continue-on-error'
+scripts/sakina\new-technologies-master-matrix-proof.sh:120:  if [[ -n "$fake_hits" ]]; then
+scripts/sakina\new-technologies-master-matrix-proof.sh:121:    printf '%s\n' "$fake_hits" >&2
+scripts/sakina\new-technologies-master-matrix-proof.sh:122:    fail "matrix proof script contains forbidden fake-pass or mock pattern: $script"
+scripts/sakina\new-technologies-master-matrix-proof.sh:136:    grep -nE '(^|[[:space:]])[A-Z0-9_]+_BLOCKER|NEW_TECH_GATE_BLOCKER|FakeModuleApiClient|SAKINA_API_TOKEN|demo-token|test-token|mock_embeddings|mode.:.mock' "$evidence" \
+scripts/sakina\new-technologies-master-matrix-proof.sh:142:    fail "matrix evidence contains a blocker or fake marker: $evidence"
+scripts/sakina\store-readiness-proof.sh:42:if rg -n -i "fake privacy|fake terms|demo account|demo-token|test-token|SAKINA_API_TOKEN|localhost|127\\.0\\.0\\.1|10\\.0\\.2\\.2|lorem|changeme" \
+scripts/sakina\store-readiness-proof.sh:44:  fail "store mobile production paths contain local/demo/fake placeholder blockers"
+scripts/sakina\tech-realtime-notifications-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-realtime-notifications-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-realtime-notifications-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-realtime-notifications-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-realtime-notifications-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-human-review-queue-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-human-review-queue-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-human-review-queue-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-human-review-queue-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-human-review-queue-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\security-regression.sh:32:export ALLOW_MOCK_AI=false
+scripts/sakina\security-regression.sh:33:export ALLOW_MOCK_RAG=false
+scripts/sakina\security-regression.sh:34:export ALLOW_MOCK_AUTH=false
+scripts/sakina\security-regression.sh:35:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\security-regression.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-ai-router-proof.sh:33:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-ai-router-proof.sh:34:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-ai-router-proof.sh:35:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-ai-router-proof.sh:36:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-ai-router-proof.sh:37:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-rag-proof.sh:32:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-rag-proof.sh:33:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-rag-proof.sh:34:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-rag-proof.sh:35:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-rag-proof.sh:36:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-prompt-injection-proof.sh:39:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-prompt-injection-proof.sh:40:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-prompt-injection-proof.sh:41:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-prompt-injection-proof.sh:42:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-prompt-injection-proof.sh:43:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-policy-as-code-proof.sh:38:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-policy-as-code-proof.sh:39:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-policy-as-code-proof.sh:40:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-policy-as-code-proof.sh:41:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-policy-as-code-proof.sh:42:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-feature-flags-entitlements-proof.sh:38:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-feature-flags-entitlements-proof.sh:39:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-feature-flags-entitlements-proof.sh:40:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-feature-flags-entitlements-proof.sh:41:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-feature-flags-entitlements-proof.sh:42:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-graph-rag-proof.sh:29:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-graph-rag-proof.sh:30:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-graph-rag-proof.sh:31:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-graph-rag-proof.sh:32:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-graph-rag-proof.sh:33:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-pii-redaction-proof.sh:37:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-pii-redaction-proof.sh:38:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-pii-redaction-proof.sh:39:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-pii-redaction-proof.sh:40:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-pii-redaction-proof.sh:41:export ALLOW_FAKE_CI_PASS=false
+scripts/sakina\tech-payments-entitlements-proof.sh:35:export ALLOW_MOCK_AI=false
+scripts/sakina\tech-payments-entitlements-proof.sh:36:export ALLOW_MOCK_RAG=false
+scripts/sakina\tech-payments-entitlements-proof.sh:37:export ALLOW_MOCK_AUTH=false
+scripts/sakina\tech-payments-entitlements-proof.sh:38:export ALLOW_MOCK_PAYMENTS=false
+scripts/sakina\tech-payments-entitlements-proof.sh:39:export ALLOW_FAKE_CI_PASS=false

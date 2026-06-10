@@ -10,63 +10,68 @@
 244:      return ProfileResponse.fromJson(
 250:  Future<FamilyProfileResponse> createFamilyProfile(
 257:      return FamilyProfileResponse.fromJson(
-407:  Future<CreateConversationResponse> createConversation({
-420:      return CreateConversationResponse.fromJson(
-427:  Future<AddMessageResponse> addConversationMessage({
-438:      return AddMessageResponse.fromJson(
-718:  Future<MemoryWriteResponse> writeMemory(
-727:      return MemoryWriteResponse.fromJson(
-734:  Future<MemoryEntryResponse> readMemory({
-744:      return MemoryEntryResponse.fromJson(
-775:    final traceId =
-787:        multipart.headers['x-request-id'] = traceId;
-1233:class MemoryWriteResponse {
-1240:  const MemoryWriteResponse({
-1248:  factory MemoryWriteResponse.fromJson(Map<String, dynamic> json) =>
-1249:      MemoryWriteResponse(
-1258:class MemoryEntryResponse {
-1270:  const MemoryEntryResponse({
-1283:  factory MemoryEntryResponse.fromJson(Map<String, dynamic> json) =>
-1284:      MemoryEntryResponse(
-1324:class PasswordAuthResponse {
-1330:  PasswordAuthResponse({
-1337:  factory PasswordAuthResponse.fromJson(Map<String, dynamic> json) {
-1342:    return PasswordAuthResponse(
-1351:class UserSummaryResponse {
-1355:  const UserSummaryResponse({
-1360:  factory UserSummaryResponse.fromJson(Map<String, dynamic> json) {
-1365:    return UserSummaryResponse(
-1457:class ProfileResponse {
-1460:  ProfileResponse({required this.userId});
-1462:  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
-1463:      ProfileResponse(
-1482:class FamilyProfileResponse {
-1485:  FamilyProfileResponse({required this.familyProfileId});
-1487:  factory FamilyProfileResponse.fromJson(Map<String, dynamic> json) =>
-1488:      FamilyProfileResponse(
-1577:class CreateConversationResponse {
-1581:  CreateConversationResponse({required this.id, required this.title});
-1583:  factory CreateConversationResponse.fromJson(Map<String, dynamic> json) =>
-1584:      CreateConversationResponse(
-1590:class AddMessageResponse {
-1593:  final String? assistantMessageId;
-1595:  final String? traceId;
-1597:  AddMessageResponse({
-1600:    this.assistantMessageId,
-1602:    this.traceId,
-1605:  factory AddMessageResponse.fromJson(Map<String, dynamic> json) {
-1611:    return AddMessageResponse(
-1614:      assistantMessageId: json['assistant_message_id']?.toString(),
-1616:      traceId: json['trace_id']?.toString(),
-1970:  final String traceId;
-1981:    required this.traceId,
-1999:      traceId: json['trace_id']?.toString() ?? '',
-sakina-backend/src/handlers/chat.rs:7:    AddMessageRequest, AddMessageResponse, BrainRouteRequest, ConversationMessageResponse,
-sakina-backend/src/handlers/chat.rs:8:    CreateConversationRequest, CreateConversationResponse, GetConversationResponse,
-sakina-backend/src/handlers/chat.rs:75:        Ok(row) => HttpResponse::Ok().json(CreateConversationResponse {
-sakina-backend/src/handlers/chat.rs:328:    HttpResponse::Ok().json(AddMessageResponse {
+417:  Future<CreateConversationResponse> createConversation({
+430:      return CreateConversationResponse.fromJson(
+437:  Future<AddMessageResponse> addConversationMessage({
+448:      return AddMessageResponse.fromJson(
+728:  Future<MemoryWriteResponse> writeMemory(
+737:      return MemoryWriteResponse.fromJson(
+744:  Future<MemoryEntryResponse> readMemory({
+754:      return MemoryEntryResponse.fromJson(
+785:    final traceId =
+797:        multipart.headers['x-request-id'] = traceId;
+1243:class MemoryWriteResponse {
+1250:  const MemoryWriteResponse({
+1258:  factory MemoryWriteResponse.fromJson(Map<String, dynamic> json) =>
+1259:      MemoryWriteResponse(
+1268:class MemoryEntryResponse {
+1280:  const MemoryEntryResponse({
+1293:  factory MemoryEntryResponse.fromJson(Map<String, dynamic> json) =>
+1294:      MemoryEntryResponse(
+1334:class PasswordAuthResponse {
+1340:  PasswordAuthResponse({
+1347:  factory PasswordAuthResponse.fromJson(Map<String, dynamic> json) {
+1352:    return PasswordAuthResponse(
+1361:class UserSummaryResponse {
+1365:  const UserSummaryResponse({
+1370:  factory UserSummaryResponse.fromJson(Map<String, dynamic> json) {
+1375:    return UserSummaryResponse(
+1467:class ProfileResponse {
+1470:  ProfileResponse({required this.userId});
+1472:  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
+1473:      ProfileResponse(
+1492:class FamilyProfileResponse {
+1495:  FamilyProfileResponse({required this.familyProfileId});
+1497:  factory FamilyProfileResponse.fromJson(Map<String, dynamic> json) =>
+1498:      FamilyProfileResponse(
+1587:class CreateConversationResponse {
+1591:  CreateConversationResponse({required this.id, required this.title});
+1593:  factory CreateConversationResponse.fromJson(Map<String, dynamic> json) =>
+1594:      CreateConversationResponse(
+1600:class AddMessageResponse {
+1603:  final String? assistantMessageId;
+1605:  final String? traceId;
+1607:  AddMessageResponse({
+1610:    this.assistantMessageId,
+1612:    this.traceId,
+1615:  factory AddMessageResponse.fromJson(Map<String, dynamic> json) {
+1621:    return AddMessageResponse(
+1624:      assistantMessageId: json['assistant_message_id']?.toString(),
+1626:      traceId: json['trace_id']?.toString(),
+1980:  final String traceId;
+1991:    required this.traceId,
+2009:      traceId: json['trace_id']?.toString() ?? '',
 sakina-backend/src/models/mod.rs:307:pub struct CreateConversationResponse {
 sakina-backend/src/models/mod.rs:339:pub struct AddMessageResponse {
+sakina-backend/src/services/mod.rs:59:pub use memory_engine::{MemoryEngine, MemoryEntry, MemoryWriteOutcome, MemoryWriteRequest};
+sakina-backend/src/services/memory_engine.rs:21:pub struct MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:30:pub struct MemoryEntry {
+sakina-backend/src/services/memory_engine.rs:97:    pub fn preview_write(payload: &Value, consent_granted: bool) -> MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:106:        MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:178:    pub async fn write(&self, request: MemoryWriteRequest) -> Result<MemoryWriteOutcome, ApiError> {
+sakina-backend/src/services/memory_engine.rs:228:        Ok(MemoryWriteOutcome {
+sakina-backend/src/services/memory_engine.rs:241:    ) -> Result<Option<MemoryEntry>, ApiError> {
+sakina-backend/src/services/memory_engine.rs:289:        Ok(Some(MemoryEntry {
 sakina-backend/src/handlers/phase2.rs:15:    UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
 sakina-backend/src/handlers/phase2.rs:142:    body: web::Json<UpsertProfileRequest>,
 sakina-backend/src/services/phase2.rs:28:    ) -> Result<RegisterUserResponse, ApiError> {
@@ -79,61 +84,56 @@ sakina-backend/src/services/phase2.rs:398:        request: UpsertProfileRequest,
 sakina-backend/src/services/phase2.rs:2116:pub struct RegisterUserResponse {
 sakina-backend/src/services/phase2.rs:2144:pub struct LoginResponse {
 sakina-backend/src/services/phase2.rs:2180:pub struct UpsertProfileRequest {
-sakina-backend/src/services/mod.rs:59:pub use memory_engine::{MemoryEngine, MemoryEntry, MemoryWriteOutcome, MemoryWriteRequest};
-sakina-backend/src/services/memory_engine.rs:21:pub struct MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:30:pub struct MemoryEntry {
-sakina-backend/src/services/memory_engine.rs:97:    pub fn preview_write(payload: &Value, consent_granted: bool) -> MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:106:        MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:178:    pub async fn write(&self, request: MemoryWriteRequest) -> Result<MemoryWriteOutcome, ApiError> {
-sakina-backend/src/services/memory_engine.rs:228:        Ok(MemoryWriteOutcome {
-sakina-backend/src/services/memory_engine.rs:241:    ) -> Result<Option<MemoryEntry>, ApiError> {
-sakina-backend/src/services/memory_engine.rs:289:        Ok(Some(MemoryEntry {
+sakina-backend/src/handlers/chat.rs:7:    AddMessageRequest, AddMessageResponse, BrainRouteRequest, ConversationMessageResponse,
+sakina-backend/src/handlers/chat.rs:8:    CreateConversationRequest, CreateConversationResponse, GetConversationResponse,
+sakina-backend/src/handlers/chat.rs:75:        Ok(row) => HttpResponse::Ok().json(CreateConversationResponse {
+sakina-backend/src/handlers/chat.rs:328:    HttpResponse::Ok().json(AddMessageResponse {
 {
-  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
-  "identity_id": "3bd25dd8-9a36-4897-957d-426872989e81",
-  "email": "schema-contract-1780688385-26098@example.com",
+  "user_id": "769c0d7a-8867-41b3-bea7-13f835ec92a4",
+  "identity_id": "a977a9d5-8b32-414d-948a-eecc30c3a859",
+  "email": "schema-contract-1780710437-28717@example.com",
   "pub_key": null,
   "auth_provider": "password",
-  "created_at": "2026-06-05 19:39:48.823564+00",
-  "updated_at": "2026-06-05 19:39:48.823564+00",
+  "created_at": "2026-06-06 01:47:19.547083+00",
+  "updated_at": "2026-06-06 01:47:19.547083+00",
   "access_token": "[masked]",
   "refresh_token": "[masked]"
 }
 {
-  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
-  "email": "schema-contract-1780688385-26098@example.com",
+  "user_id": "769c0d7a-8867-41b3-bea7-13f835ec92a4",
+  "email": "schema-contract-1780710437-28717@example.com",
   "auth_provider": "password",
-  "created_at": "2026-06-05 19:39:48.823564+00"
+  "created_at": "2026-06-06 01:47:19.547083+00"
 }
 {
-  "profile_id": "d567cb65-ab91-4a35-9a5f-b389ce00cbd6",
-  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74"
+  "profile_id": "059439fc-9afc-4c57-8269-4e397f242973",
+  "user_id": "769c0d7a-8867-41b3-bea7-13f835ec92a4"
 }
 {
-  "id": "4962b216-4c87-4f02-a475-475cc05d0a0d",
-  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
+  "id": "f6b8c8c0-8f54-414e-9d12-4d8ef7d7440a",
+  "user_id": "769c0d7a-8867-41b3-bea7-13f835ec92a4",
   "title": "Schema contract chat",
-  "created_at": "2026-06-05 19:39:50.762733+00",
-  "updated_at": "2026-06-05 19:39:50.762733+00"
+  "created_at": "2026-06-06 01:47:20.33172+00",
+  "updated_at": "2026-06-06 01:47:20.33172+00"
 }
 {
-  "conversation_id": "4962b216-4c87-4f02-a475-475cc05d0a0d",
-  "user_message_id": "a5398ac5-388b-4bcb-8c33-bf2dc9d05c82",
-  "assistant_message_id": "64022739-1c05-48c6-82d0-ec67ee810544",
+  "conversation_id": "f6b8c8c0-8f54-414e-9d12-4d8ef7d7440a",
+  "user_message_id": "cca9d7f0-1b28-4c74-b9c0-b65d847b22c2",
+  "assistant_message_id": "99e63e54-3506-439c-9ad6-e472a838e13a",
   "response": "I found verified sources related to Quran 2:153.",
-  "trace_id": "f99e6a61-622d-40e8-803a-0ba623ed8345"
+  "trace_id": "2a1f9982-be82-430e-8f63-613e0704d1dd"
 }
 {
   "stored": true,
   "allowed": true,
   "sensitivity_level": "safe",
   "reason": "memory write allowed",
-  "memory_id": "53738427-0564-4697-8f5a-8f1aff1aa263"
+  "memory_id": "694fe25d-715c-4c42-8849-4314ca72e57c"
 }
 {
-  "id": "53738427-0564-4697-8f5a-8f1aff1aa263",
-  "user_id": "c268aed1-c526-4723-ad1e-53d118d3bc74",
-  "memory_key": "schema.contract.1780688385-26098",
+  "id": "694fe25d-715c-4c42-8849-4314ca72e57c",
+  "user_id": "769c0d7a-8867-41b3-bea7-13f835ec92a4",
+  "memory_key": "schema.contract.1780710437-28717",
   "memory_type": "preference",
   "sensitivity_level": "safe",
   "payload": {

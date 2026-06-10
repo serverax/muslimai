@@ -5,7 +5,7 @@ off
 t
 on
 t
-RLS policies using helper functions=166
+RLS policies using helper functions=170
 User-owned table policy gaps=0
 Sakina application trigger count=0
 DB_FUNCTION_TRIGGER_OK RLS helper functions exist, runtime user context works, policies use the functions, user-owned tables are policy-wired, and live trigger state is honestly verified.

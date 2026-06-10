@@ -94,6 +94,8 @@ spec:
               value: http://sakina-rag-retrieval:8080
             - name: SAKINA_CITATION_GUARD_URL
               value: http://sakina-citation-guard:8080
+            - name: SAKINA_RULES_ENGINE_URL
+              value: http://sakina-rules-engine:8080
             - name: SAKINA_DOCUMENT_SERVICE_URL
               value: http://sakina-document-service:8080
             - name: SAKINA_LLM_MODEL
