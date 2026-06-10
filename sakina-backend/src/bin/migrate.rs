@@ -67,6 +67,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             include_str!("../../db/migrations/009_notifications.sql"),
         ),
         (
+            "010_admin_core.sql",
+            include_str!("../../db/migrations/010_admin_core.sql"),
+        ),
+        (
             "010_admin_audit.sql",
             include_str!("../../db/migrations/010_admin_audit.sql"),
         ),
