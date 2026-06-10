@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sakina-rag-retrieval
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: rag-retrieval
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   selector:
     app: sakina-rag-retrieval
@@ -19,11 +19,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sakina-rag-ingestion
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: rag-ingestion
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   selector:
     app: sakina-rag-ingestion
@@ -36,11 +36,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sakina-rag
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: rag
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   selector:
     app: sakina-rag-retrieval
@@ -53,11 +53,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sakina-rag-retrieval
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: rag-retrieval
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   replicas: 1
   strategy:
@@ -74,7 +74,7 @@ spec:
         app: sakina-rag-retrieval
         app.kubernetes.io/name: rag-retrieval
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane
@@ -117,7 +117,7 @@ spec:
               name: http
           env:
             - name: SAKINA_ENV
-              value: staging
+              value: production
             - name: SAKINA_LLM_ENABLED
               value: "false"
             - name: POSTGRES_HOST
@@ -142,12 +142,12 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: jwt-secret
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: encryption-key
             - name: QDRANT_URL
               value: http://sakina-qdrant:6333
@@ -204,11 +204,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sakina-rag-ingestion
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: rag-ingestion
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   replicas: 1
   strategy:
@@ -225,7 +225,7 @@ spec:
         app: sakina-rag-ingestion
         app.kubernetes.io/name: rag-ingestion
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane
@@ -268,7 +268,7 @@ spec:
               name: http
           env:
             - name: SAKINA_ENV
-              value: staging
+              value: production
             - name: SAKINA_LLM_ENABLED
               value: "false"
             - name: POSTGRES_HOST
@@ -293,12 +293,12 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: jwt-secret
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: encryption-key
             - name: QDRANT_URL
               value: http://sakina-qdrant:6333

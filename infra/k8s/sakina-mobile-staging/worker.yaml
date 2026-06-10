@@ -38,7 +38,7 @@ spec:
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
           imagePullPolicy: Always
           command:
-            - sakina-ingest
+            - /usr/local/bin/sakina-ingest
           env:
             - name: SAKINA_ENV
               value: staging

@@ -2,11 +2,11 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: sakina-ollama-preload
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: ollama-preload
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   ttlSecondsAfterFinished: 3600
   backoffLimit: 0
@@ -15,7 +15,7 @@ spec:
       labels:
         app.kubernetes.io/name: ollama-preload
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane

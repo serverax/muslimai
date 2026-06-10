@@ -2,11 +2,11 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: sakina-staging-smoke
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: smoke-tests
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   ttlSecondsAfterFinished: 300
   backoffLimit: 0
@@ -15,7 +15,7 @@ spec:
       labels:
         app.kubernetes.io/name: smoke-tests
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane

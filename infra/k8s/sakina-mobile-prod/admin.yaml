@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sakina-admin
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: admin
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   selector:
     app: sakina-admin
@@ -19,11 +19,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sakina-admin
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: admin
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   replicas: 1
   strategy:
@@ -40,7 +40,7 @@ spec:
         app: sakina-admin
         app.kubernetes.io/name: admin
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane

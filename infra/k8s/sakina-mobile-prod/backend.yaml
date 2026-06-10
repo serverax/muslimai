@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sakina-backend
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: backend
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   selector:
     app: sakina-backend
@@ -19,11 +19,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sakina-backend
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: backend
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   replicas: 2
   strategy:
@@ -40,7 +40,7 @@ spec:
         app: sakina-backend
         app.kubernetes.io/name: backend
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane

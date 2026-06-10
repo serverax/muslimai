@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sakina-brain
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: brain
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   selector:
     app: sakina-brain
@@ -19,11 +19,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sakina-brain
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: brain
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   replicas: 1
   selector:
@@ -35,7 +35,7 @@ spec:
         app: sakina-brain
         app.kubernetes.io/name: brain
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane
@@ -59,7 +59,7 @@ spec:
               name: http
           env:
             - name: SAKINA_ENV
-              value: staging
+              value: production
             - name: SERVICE_NAME
               value: "sakina-brain"
             - name: SAKINA_LLM_ENABLED
@@ -86,12 +86,12 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: jwt-secret
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sakina-staging-secrets
+                  name: sakina-prod-secrets
                   key: encryption-key
             - name: SAKINA_REDIS_URL
               value: redis://sakina-redis:6379

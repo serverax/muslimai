@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sakina-worker
-  namespace: sakina-mobile-staging
+  namespace: sakina-mobile-prod
   labels:
     app.kubernetes.io/name: worker
     app.kubernetes.io/part-of: sakina-mobile
-    app.kubernetes.io/environment: staging
+    app.kubernetes.io/environment: production
 spec:
   replicas: 1
   selector:
@@ -18,7 +18,7 @@ spec:
         app: sakina-worker
         app.kubernetes.io/name: worker
         app.kubernetes.io/part-of: sakina-mobile
-        app.kubernetes.io/environment: staging
+        app.kubernetes.io/environment: production
     spec:
       tolerations:
         - key: node-role.kubernetes.io/control-plane
@@ -38,10 +38,10 @@ spec:
           image: ghcr.io/serverax/sakina-backend:qa-security-hardening
           imagePullPolicy: Always
           command:
-            - sakina-ingest
+            - /usr/local/bin/sakina-ingest
           env:
             - name: SAKINA_ENV
-              value: staging
+              value: production
             - name: SERVICE_NAME
               value: "sakina-worker"
             - name: POSTGRES_HOST
