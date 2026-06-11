@@ -27,3 +27,4 @@ pub mod tafsir;
 pub mod user;
 pub mod user_learning;
 pub mod waitlist;
+mod sakina_ask_regression_tests;

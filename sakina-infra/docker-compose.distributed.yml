@@ -8,27 +8,32 @@ services:
       POSTGRES_USER: sakina_user
       POSTGRES_PASSWORD: sakina_password
     ports:
-      - "5432:5432"
-    volumes:
-      - ../sakina-backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - "25432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sakina_user -d sakina"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   qdrant:
     image: qdrant/qdrant:v1.10.1
     ports:
-      - "6333:6333"
+      - "26333:6333"
 
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "26379:6379"
 
   ollama:
     image: ollama/ollama:latest
     ports:
-      - "11434:11434"
+      - "21434:11434"
 
   llm-gateway:
-    image: sakina-backend-api:dev-local
+    build:
+      context: ..
+      dockerfile: sakina-backend/Dockerfile
     command: ["/usr/local/bin/sakina-llm-gateway"]
     environment:
       OLLAMA_BASE_URL: http://ollama:11434
@@ -38,37 +43,80 @@ services:
       - ollama
 
   rules-engine:
-    image: sakina-backend-api:dev-local
+    build:
+      context: ..
+      dockerfile: sakina-backend/Dockerfile
     environment:
       DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_REDIS_URL: redis://redis:6379
+      QDRANT_URL: http://qdrant:6333
+      SERVICE_NAME: "sakina-rules-engine"
+      VLLM_URL: http://ollama:11434
+      SAKINA_LLM_GATEWAY_URL: http://llm-gateway:8080
+      VLLM_EMBEDDING_MODEL: bge-m3
+      JWT_SECRET: sakina_production_jwt_secret_32_chars_long
+      ENCRYPTION_KEY: sakina_production_encryption_key_32_ch
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   citation-guard:
-    image: sakina-backend-api:dev-local
+    build:
+      context: ..
+      dockerfile: sakina-backend/Dockerfile
     environment:
       DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_REDIS_URL: redis://redis:6379
+      QDRANT_URL: http://qdrant:6333
+      SERVICE_NAME: "sakina-citation-guard"
+      VLLM_URL: http://ollama:11434
+      SAKINA_LLM_GATEWAY_URL: http://llm-gateway:8080
+      VLLM_EMBEDDING_MODEL: bge-m3
+      JWT_SECRET: sakina_production_jwt_secret_32_chars_long
+      ENCRYPTION_KEY: sakina_production_encryption_key_32_ch
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   rag-service:
-    image: sakina-backend-api:dev-local
+    build:
+      context: ..
+      dockerfile: sakina-backend/Dockerfile
     environment:
       DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_REDIS_URL: redis://redis:6379
       QDRANT_URL: http://qdrant:6333
+      SERVICE_NAME: "sakina-rag-service"
+      VLLM_URL: http://ollama:11434
+      SAKINA_LLM_GATEWAY_URL: http://llm-gateway:8080
+      VLLM_EMBEDDING_MODEL: bge-m3
+      JWT_SECRET: sakina_production_jwt_secret_32_chars_long
+      ENCRYPTION_KEY: sakina_production_encryption_key_32_ch
+      LLM_PROVIDER_URL: http://llm-gateway:8080
     depends_on:
-      - postgres
-      - qdrant
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
 
   brain:
-    image: sakina-backend-api:dev-local
+    build:
+      context: ..
+      dockerfile: sakina-backend/Dockerfile
     environment:
       DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_REDIS_URL: redis://redis:6379
+      QDRANT_URL: http://qdrant:6333
       SAKINA_RULES_ENGINE_URL: http://rules-engine:8080
       SAKINA_RAG_URL: http://rag-service:8080
-      SAKINA_LLM_GATEWAY_URL: http://llm-gateway:8080
       SAKINA_CITATION_GUARD_URL: http://citation-guard:8080
       SAKINA_LLM_ENABLED: "true"
+      SERVICE_NAME: "sakina-brain"
+      VLLM_URL: http://ollama:11434
+      SAKINA_LLM_GATEWAY_URL: http://llm-gateway:8080
+      VLLM_EMBEDDING_MODEL: bge-m3
+      JWT_SECRET: sakina_production_jwt_secret_32_chars_long
+      ENCRYPTION_KEY: sakina_production_encryption_key_32_ch
     depends_on:
       - rules-engine
       - rag-service
@@ -76,13 +124,21 @@ services:
       - citation-guard
 
   api-gateway:
-    image: sakina-backend-api:dev-local
+    build:
+      context: ..
+      dockerfile: sakina-backend/Dockerfile
     ports:
-      - "8080:8080"
+      - "28080:8080"
     environment:
       DATABASE_URL: postgres://sakina_user:sakina_password@postgres:5432/sakina
+      SAKINA_REDIS_URL: redis://redis:6379
+      QDRANT_URL: http://qdrant:6333
       SAKINA_BRAIN_URL: http://brain:8080
-      JWT_SECRET: sakina_test_secret_32_chars_long_!!
-      ENCRYPTION_KEY: sakina_test_encryption_key_32_ch
+      SAKINA_RULES_ENGINE_URL: http://rules-engine:8080
+      VLLM_URL: http://ollama:11434
+      SAKINA_LLM_GATEWAY_URL: http://llm-gateway:8080
+      VLLM_EMBEDDING_MODEL: bge-m3
+      JWT_SECRET: sakina_production_jwt_secret_32_chars_long
+      ENCRYPTION_KEY: sakina_production_encryption_key_32_ch
     depends_on:
       - brain

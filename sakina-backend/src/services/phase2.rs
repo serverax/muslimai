@@ -1397,21 +1397,28 @@ impl Phase2Repository {
             .await
             .map_err(|_| ApiError::internal("failed to begin resolve review transaction"))?;
 
-        sqlx::query(
+        // Update the queue status, matching by either the internal UUID (id) or the trace UUID (request_id)
+        let row = sqlx::query(
             r#"
             UPDATE sakina_ai.scholar_review_queue
             SET review_status = $1,
                 reviewer_notes = $2,
-                reviewed_at = now()
-            WHERE id = $3
+                updated_at = now()
+            WHERE id = $3 OR request_id = $3
+            RETURNING id
             "#,
         )
         .bind(&request.status)
         .bind(&request.notes)
         .bind(request.review_id)
-        .execute(&mut *tx)
+        .fetch_optional(&mut *tx)
         .await
-        .map_err(|_| ApiError::internal("failed to update scholar review status"))?;
+        .map_err(|e| ApiError::internal(format!("failed to update scholar review status: {}", e)))?;
+
+        let internal_id = match row {
+            Some(r) => r.get::<Uuid, _>("id"),
+            None => return Err(ApiError::not_found("scholar review not found")),
+        };
 
         if let Some(answer) = request.final_answer {
             sqlx::query(
@@ -1424,7 +1431,7 @@ impl Phase2Repository {
                     updated_at = now()
                 "#,
             )
-            .bind(request.review_id)
+            .bind(internal_id)
             .bind(answer)
             .bind(request.admin_user_id)
             .execute(&mut *tx)

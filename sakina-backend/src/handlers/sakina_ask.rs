@@ -101,7 +101,7 @@ fn crisis_or_emergency(message: &str) -> bool {
     .any(|needle| q.contains(needle))
 }
 
-fn high_risk_fatwa(message: &str) -> bool {
+pub fn high_risk_fatwa(message: &str) -> bool {
     let q = message.to_ascii_lowercase();
     q.contains("final fatwa")
         || q.contains("complex divorce")

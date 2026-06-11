@@ -529,6 +529,7 @@ async fn main() -> std::io::Result<()> {
         .unwrap_or_else(|_| "sakina_islamic_chunks_en".to_string());
     let vllm_url =
         std::env::var("VLLM_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
+    tracing::info!("VLLM_URL configured as: {}", vllm_url);
     let qdrant = web::Data::new(services::QdrantVectorDB::new(
         &qdrant_url,
         &qdrant_collection,
@@ -700,6 +701,10 @@ async fn main() -> std::io::Result<()> {
             )
             .route("/api/chat", web::post().to(handlers::chat::core_chat))
             .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
+            .service(
+                web::scope("/api/rules")
+                    .route("/evaluate", web::post().to(handlers::rules::evaluate)),
+            )
             .route(
                 "/api/agent/feedback",
                 web::post().to(handlers::agent_feedback::submit_feedback),
@@ -813,6 +818,37 @@ async fn main() -> std::io::Result<()> {
             .route(
                 "/api/multimodal/assets/{asset_id}",
                 web::delete().to(handlers::multimodal::delete_asset),
+            )
+            .service(
+                web::scope("/admin")
+                    .route(
+                        "/roles",
+                        web::post().to(handlers::phase2::upsert_admin_role),
+                    )
+                    .route(
+                        "/audit-actions",
+                        web::post().to(handlers::phase2::log_admin_action),
+                    )
+                    .route(
+                        "/source-approval-queue",
+                        web::get().to(handlers::phase2::source_approval_queue),
+                    )
+                    .route(
+                        "/source-approval-queue",
+                        web::post().to(handlers::phase2::create_source_approval_item),
+                    )
+                    .route(
+                        "/scholars",
+                        web::post().to(handlers::phase2::create_scholar_account),
+                    )
+                    .route(
+                        "/scholar-assignments",
+                        web::post().to(handlers::phase2::assign_scholar_review),
+                    )
+                    .route(
+                        "/scholar-reviews/resolve",
+                        web::post().to(handlers::phase2::resolve_scholar_review),
+                    ),
             )
             .service(
                 web::scope("/v1")
@@ -1117,37 +1153,6 @@ async fn main() -> std::io::Result<()> {
                             .route(
                                 "/wasm-events",
                                 web::post().to(handlers::phase2::log_wasm_event),
-                            ),
-                    )
-                    .service(
-                        web::scope("/admin")
-                            .route(
-                                "/roles",
-                                web::post().to(handlers::phase2::upsert_admin_role),
-                            )
-                            .route(
-                                "/audit-actions",
-                                web::post().to(handlers::phase2::log_admin_action),
-                            )
-                            .route(
-                                "/source-approval-queue",
-                                web::get().to(handlers::phase2::source_approval_queue),
-                            )
-                            .route(
-                                "/source-approval-queue",
-                                web::post().to(handlers::phase2::create_source_approval_item),
-                            )
-                            .route(
-                                "/scholars",
-                                web::post().to(handlers::phase2::create_scholar_account),
-                            )
-                            .route(
-                                "/scholar-assignments",
-                                web::post().to(handlers::phase2::assign_scholar_review),
-                            )
-                            .route(
-                                "/scholar-reviews/resolve",
-                                web::post().to(handlers::phase2::resolve_scholar_review),
                             ),
                     )
                     .service(
