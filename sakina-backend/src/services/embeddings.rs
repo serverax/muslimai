@@ -30,8 +30,8 @@ pub struct EmbeddingsService {
 impl EmbeddingsService {
     pub fn new(base_url: &str) -> Self {
         let client = Client::builder()
-            .connect_timeout(Duration::from_secs(5))
-            .timeout(Duration::from_secs(20))
+            .connect_timeout(Duration::from_secs(10))
+            .timeout(Duration::from_secs(120))
             .build()
             .unwrap_or_else(|_| Client::new());
         EmbeddingsService {

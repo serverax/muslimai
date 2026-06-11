@@ -117,6 +117,14 @@ services:
       VLLM_EMBEDDING_MODEL: bge-m3
       JWT_SECRET: sakina_production_jwt_secret_32_chars_long
       ENCRYPTION_KEY: sakina_production_encryption_key_32_ch
+      SAKINA_FEATURE_QURAN: "true"
+      SAKINA_FEATURE_PRAYER: "true"
+      SAKINA_FEATURE_KNOWLEDGE: "true"
+      SAKINA_FEATURE_COMMUNITY: "true"
+      SAKINA_RAG_QURAN_ENABLED: "true"
+      SAKINA_FATWA_INGESTION_ENABLED: "true"
+      SAKINA_CITATION_GUARD_ENABLED: "true"
+      SAKINA_ANSWER_TRACE_ENABLED: "true"
     depends_on:
       - rules-engine
       - rag-service
@@ -140,5 +148,9 @@ services:
       VLLM_EMBEDDING_MODEL: bge-m3
       JWT_SECRET: sakina_production_jwt_secret_32_chars_long
       ENCRYPTION_KEY: sakina_production_encryption_key_32_ch
+      SAKINA_FEATURE_QURAN: "true"
+      SAKINA_FEATURE_PRAYER: "true"
+      SAKINA_FEATURE_KNOWLEDGE: "true"
+      SAKINA_FEATURE_COMMUNITY: "true"
     depends_on:
       - brain

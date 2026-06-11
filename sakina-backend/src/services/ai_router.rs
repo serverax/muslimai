@@ -13,6 +13,8 @@ enum AgentKind {
     SafetyEscalation,
     ContentReview,
     GeneralChat,
+    KidsQuran,
+    MentalWellness,
 }
 
 #[derive(Debug, Clone)]
@@ -156,13 +158,34 @@ impl AiRouter {
                     domain: "general",
                     model: "lite_llm",
                     pipeline: "mother_brain>cached_or_cached_rag>evaluation",
-                    requires_rag: false,
+                    requires_rag: true,
                     requires_wasm: false,
                     requires_evaluation: true,
-                },
-            ],
-        }
-    }
+                    },
+                    AgentProfile {
+                    kind: AgentKind::KidsQuran,
+                    name: "Kids Quran Agent",
+                    domain: "kids",
+                    model: "lite_llm",
+                    pipeline: "mother_brain>kids_safe_filter>quran_stories>evaluation",
+                    requires_rag: true,
+                    requires_wasm: false,
+                    requires_evaluation: true,
+                    },
+                    AgentProfile {
+                    kind: AgentKind::MentalWellness,
+                    name: "Mental Wellness Agent",
+                    domain: "wellness",
+                    model: "main_llm",
+                    pipeline: "mother_brain>safety_gate>support_flow>evaluation",
+                    requires_rag: true,
+                    requires_wasm: true,
+                    requires_evaluation: true,
+                    },
+                    ],
+                    }
+                    }
+
 
     pub fn agents(&self) -> Vec<BrainAgentSpec> {
         self.agents.iter().map(AgentProfile::spec).collect()
@@ -190,6 +213,10 @@ impl AiRouter {
 
         let agent = if safety_risk == "critical" {
             AgentKind::SafetyEscalation
+        } else if contains_any(&normalized, &["kid", "child", "story", "learning", "children"]) {
+            AgentKind::KidsQuran
+        } else if contains_any(&normalized, &["depress", "lonely", "sad", "anxious", "mental", "wellness", "support"]) {
+            AgentKind::MentalWellness
         } else if contains_any(
             &normalized,
             &[
