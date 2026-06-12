@@ -1,6 +1,5 @@
 use crate::models::rules::{RulesEvaluateRequest, RulesEvaluateResponse};
 use actix_web::{web, HttpResponse};
-use serde_json::json;
 
 pub async fn evaluate(payload: web::Json<RulesEvaluateRequest>) -> HttpResponse {
     let request = payload.into_inner();

@@ -81,12 +81,12 @@ fn strong_secret(name: &str) -> bool {
 }
 
 fn fake_mode_disabled() -> bool {
-    !std::env::var("ALLOW_DEMO_MODE").is_ok()
-        && !std::env::var("ALLOW_MOCK_AI").is_ok()
-        && !std::env::var("ALLOW_MOCK_RAG").is_ok()
-        && !std::env::var("ALLOW_MOCK_AUTH").is_ok()
-        && !std::env::var("ALLOW_MOCK_PAYMENTS").is_ok()
-        && !std::env::var("ALLOW_FAKE_CI_PASS").is_ok()
+    std::env::var("ALLOW_DEMO_MODE").is_err()
+        && std::env::var("ALLOW_MOCK_AI").is_err()
+        && std::env::var("ALLOW_MOCK_RAG").is_err()
+        && std::env::var("ALLOW_MOCK_AUTH").is_err()
+        && std::env::var("ALLOW_MOCK_PAYMENTS").is_err()
+        && std::env::var("ALLOW_FAKE_CI_PASS").is_err()
 }
 
 fn storage_status() -> &'static str {
@@ -231,7 +231,7 @@ async fn llm_provider_status() -> &'static str {
     let Some(base) = env_value("LLM_PROVIDER_URL") else {
         return "missing";
     };
-    if base.contains("mock://") && !std::env::var("ALLOW_MOCK_PROD_OVERRIDE").is_ok() {
+    if base.contains("mock://") && std::env::var("ALLOW_MOCK_PROD_OVERRIDE").is_err() {
         return "missing";
     }
     let base = base.trim_end_matches('/');
