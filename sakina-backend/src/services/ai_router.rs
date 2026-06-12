@@ -161,8 +161,8 @@ impl AiRouter {
                     requires_rag: true,
                     requires_wasm: false,
                     requires_evaluation: true,
-                    },
-                    AgentProfile {
+                },
+                AgentProfile {
                     kind: AgentKind::KidsQuran,
                     name: "Kids Quran Agent",
                     domain: "kids",
@@ -171,8 +171,8 @@ impl AiRouter {
                     requires_rag: true,
                     requires_wasm: false,
                     requires_evaluation: true,
-                    },
-                    AgentProfile {
+                },
+                AgentProfile {
                     kind: AgentKind::MentalWellness,
                     name: "Mental Wellness Agent",
                     domain: "wellness",
@@ -181,11 +181,10 @@ impl AiRouter {
                     requires_rag: true,
                     requires_wasm: true,
                     requires_evaluation: true,
-                    },
-                    ],
-                    }
-                    }
-
+                },
+            ],
+        }
+    }
 
     pub fn agents(&self) -> Vec<BrainAgentSpec> {
         self.agents.iter().map(AgentProfile::spec).collect()
@@ -213,9 +212,17 @@ impl AiRouter {
 
         let agent = if safety_risk == "critical" {
             AgentKind::SafetyEscalation
-        } else if contains_any(&normalized, &["kid", "child", "story", "learning", "children"]) {
+        } else if contains_any(
+            &normalized,
+            &["kid", "child", "story", "learning", "children"],
+        ) {
             AgentKind::KidsQuran
-        } else if contains_any(&normalized, &["depress", "lonely", "sad", "anxious", "mental", "wellness", "support"]) {
+        } else if contains_any(
+            &normalized,
+            &[
+                "depress", "lonely", "sad", "anxious", "mental", "wellness", "support",
+            ],
+        ) {
             AgentKind::MentalWellness
         } else if contains_any(
             &normalized,

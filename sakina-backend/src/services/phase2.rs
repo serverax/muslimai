@@ -1413,7 +1413,9 @@ impl Phase2Repository {
         .bind(request.review_id)
         .fetch_optional(&mut *tx)
         .await
-        .map_err(|e| ApiError::internal(format!("failed to update scholar review status: {}", e)))?;
+        .map_err(|e| {
+            ApiError::internal(format!("failed to update scholar review status: {}", e))
+        })?;
 
         let internal_id = match row {
             Some(r) => r.get::<Uuid, _>("id"),

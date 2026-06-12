@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::handlers::sakina_ask::high_risk_fatwa;
-    
+
     #[test]
     fn test_high_risk_fatwa_detection() {
         assert!(high_risk_fatwa("How to divorce?"));

@@ -1,6 +1,6 @@
+use crate::models::rules::{RulesEvaluateRequest, RulesEvaluateResponse};
 use actix_web::{web, HttpResponse};
 use serde_json::json;
-use crate::models::rules::{RulesEvaluateRequest, RulesEvaluateResponse};
 
 pub async fn evaluate(payload: web::Json<RulesEvaluateRequest>) -> HttpResponse {
     let request = payload.into_inner();
@@ -73,23 +73,29 @@ pub async fn evaluate(payload: web::Json<RulesEvaluateRequest>) -> HttpResponse 
 
 fn detects_crisis(text: &str) -> bool {
     [
-        "kill myself", "self harm", "suicide", "انتحار", "إيذاء النفس",
-    ].iter().any(|&needle| text.contains(needle))
+        "kill myself",
+        "self harm",
+        "suicide",
+        "انتحار",
+        "إيذاء النفس",
+    ]
+    .iter()
+    .any(|&needle| text.contains(needle))
 }
 
 fn is_out_of_scope(text: &str) -> bool {
-    [
-        "hacking", "malware", "illegal", "drugs", "porn",
-    ].iter().any(|&needle| text.contains(needle))
+    ["hacking", "malware", "illegal", "drugs", "porn"]
+        .iter()
+        .any(|&needle| text.contains(needle))
 }
 
 fn is_fabricated_ritual(text: &str) -> bool {
     // Example: Maghrib with 4 rakats
-    let maghrib_four = (text.contains("maghrib") || text.contains("المغرب")) 
+    let maghrib_four = (text.contains("maghrib") || text.contains("المغرب"))
         && (text.contains("4 rakat") || text.contains("٤ ركعات") || text.contains("4 ركعات"));
-    
+
     let stop_maghrib = text.contains("stop praying maghrib") || text.contains("ترك صلاة المغرب");
-    
+
     maghrib_four || stop_maghrib
 }
 

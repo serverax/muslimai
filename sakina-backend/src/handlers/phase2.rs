@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 use crate::error::ApiError;
 use crate::services::authenticated_user_id;
-use crate::services::phase2::{ResolveScholarReviewRequest, 
+use crate::services::phase2::{
     ActivateSubscriptionRequest, AppendSupportTicketMessageRequest, AssignScholarReviewRequest,
     CreateAuditLogRequest, CreateChatFeedbackRequest, CreateEventRequest,
     CreateNotificationTemplateRequest, CreateScholarAccountRequest, CreateSecurityLogRequest,
@@ -11,8 +11,8 @@ use crate::services::phase2::{ResolveScholarReviewRequest,
     EnqueueNotificationRequest, EnqueueScholarReviewRequest, LogAdminActionRequest,
     LogCitationEventRequest, LogMastermindDecisionRequest, LogRagRetrievalRequest,
     LogSafetyClassificationRequest, LogWasmVerificationRequest, LoginRequest, Phase2Repository,
-    RefreshTokenRequest, RegisterUserRequest, ReportAnswerRequest, SourceApprovalItem,
-    UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
+    RefreshTokenRequest, RegisterUserRequest, ReportAnswerRequest, ResolveScholarReviewRequest,
+    SourceApprovalItem, UpsertAdminRoleRequest, UpsertDeviceTokenRequest, UpsertProfileRequest,
 };
 
 #[derive(Debug, serde::Deserialize)]

@@ -1,8 +1,8 @@
 use crate::error::ApiError;
+use crate::models::rules::{RulesEvaluateRequest, RulesEvaluateResponse};
 use crate::models::{
     BrainRouteRequest, BrainRouteResponse, RagQuery, RagResponse, SakinaAskRequest,
 };
-use crate::models::rules::{RulesEvaluateRequest, RulesEvaluateResponse};
 use serde_json::Value;
 
 #[derive(Clone)]
@@ -36,7 +36,9 @@ impl DistributedClient {
             .json(request)
             .send()
             .await
-            .map_err(|e| ApiError::internal(format!("failed to call rules engine service: {}", e)))?;
+            .map_err(|e| {
+                ApiError::internal(format!("failed to call rules engine service: {}", e))
+            })?;
 
         if !res.status().is_success() {
             return Err(ApiError::internal(format!(
