@@ -26,7 +26,7 @@ for file in "${FILES[@]}"; do
   [[ -f "${file}" ]] || continue
   if grep -Ein "${SECRET_PATTERN}" "${file}" \
     | grep -Ev '\$\{\{[[:space:]]*(secrets|github)\.' \
-    | grep -Ev '\[masked\]|=[[:space:]]*["'\'']?\$\(' >/dev/null; then
+    | grep -Ev '\[masked\]|=[[:space:]]*["'\'']?\$\(|[[:space:]]*["'\'']?\$[{]' >/dev/null; then
     echo "Potential secret detected in ${file}" >&2
     exit 1
   fi

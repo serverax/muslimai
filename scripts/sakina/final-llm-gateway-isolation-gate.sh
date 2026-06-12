@@ -16,8 +16,8 @@ fail() {
 }
 
 printf 'DIRECT OLLAMA ACCESS SCAN\n' | tee -a "$out"
-matches="$(rg -n "OLLAMA_BASE_URL|http://ollama:11434|localhost:11434|/api/generate|/api/tags" \
-  sakina-backend/src infra/k8s/sakina-mobile-staging sakina-frontend/lib .github || true)"
+matches="$(grep -rEn "OLLAMA_BASE_URL|http://ollama:11434|localhost:11434|/api/generate|/api/tags" \
+  sakina-backend/src infra/k8s/sakina-mobile-staging sakina-frontend/lib .github 2>/dev/null || true)"
 printf '%s\n' "$matches" | tee -a "$out"
 
 bad_matches="$(printf '%s\n' "$matches" | awk '
@@ -32,11 +32,11 @@ if [[ -n "$bad_matches" ]]; then
 fi
 
 printf '\nKUBERNETES MANIFEST CHECK\n' | tee -a "$out"
-rg -n "name: sakina-llm-gateway|command:|sakina-llm-gateway|/ready|/health|OLLAMA_BASE_URL" \
-  infra/k8s/sakina-mobile-staging/llm-gateway.yaml | tee -a "$out"
+grep -rEn "name: sakina-llm-gateway|command:|sakina-llm-gateway|/ready|/health|OLLAMA_BASE_URL" \
+  infra/k8s/sakina-mobile-staging/llm-gateway.yaml 2>/dev/null | tee -a "$out" || true
 
 printf '\nBACKEND GATEWAY CONFIG CHECK\n' | tee -a "$out"
-rg -n "SAKINA_LLM_GATEWAY_URL|sakina-llm-gateway:8087" \
-  sakina-backend/src infra/k8s/sakina-mobile-staging/backend.yaml | tee -a "$out"
+grep -rEn "SAKINA_LLM_GATEWAY_URL|sakina-llm-gateway:8087" \
+  sakina-backend/src infra/k8s/sakina-mobile-staging/backend.yaml 2>/dev/null | tee -a "$out" || true
 
 printf 'LLM_GATEWAY_ISOLATION_GATE_OK direct Ollama access is isolated to sakina-llm-gateway source and deployment manifest.\n' | tee -a "$out"

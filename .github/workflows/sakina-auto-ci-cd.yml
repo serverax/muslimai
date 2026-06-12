@@ -62,7 +62,7 @@ jobs:
           matches="$(grep -RInE 'OLLAMA_BASE_URL|ollama-inference|:11434|/api/generate' \
             sakina-backend/src sakina-frontend/lib infra/k8s .github/workflows scripts 2>/dev/null || true)"
           printf '%s\n' "$matches"
-          disallowed="$(printf '%s\n' "$matches" | grep -vE 'sakina-backend/src/bin/llm_gateway.rs|infra/k8s/.*/llm-gateway.yaml|infra/k8s/.*/ollama|sakina-deploy|sakina-auto-ci-cd|final-llm-gateway-isolation|llm-gateway-local-runtime-proof' || true)"
+          disallowed="$(printf '%s\n' "$matches" | grep -vE 'sakina-backend/src/bin/llm_gateway.rs|infra/k8s/.*/llm-gateway.yaml|infra/k8s/.*/ollama|sakina-deploy|sakina-auto-ci-cd|final-llm-gateway-isolation|llm-gateway-local-runtime-proof|scripts/proof/scan-frontend-for-internal-calls.sh' || true)"
           if [ -n "$disallowed" ]; then
             echo "Direct Ollama or gateway endpoint references found outside approved files:"
             printf '%s\n' "$disallowed"
