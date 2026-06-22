@@ -131,6 +131,41 @@ class ApiService {
     return BrainChatResponse.fromSakinaAsk(response);
   }
 
+  // --- Public Islamic calculators (no auth required) ---
+  Future<Map<String, dynamic>> calculateZakat(Map<String, dynamic> input) async {
+    final res = await _post('/api/tools/zakat', input);
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('zakat calculation failed', res);
+  }
+
+  Future<Map<String, dynamic>> calculateInheritance(
+      Map<String, dynamic> input) async {
+    final res = await _post('/api/tools/inheritance', input);
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('inheritance calculation failed', res);
+  }
+
+  Future<Map<String, dynamic>> qiblaDirection(
+      {required double lat, required double lng}) async {
+    final res = await _get('/api/tools/qibla?lat=$lat&lng=$lng');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('qibla lookup failed', res);
+  }
+
+  Future<Map<String, dynamic>> hijriDate(String date) async {
+    final res = await _get('/api/tools/hijri?date=$date');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('hijri lookup failed', res);
+  }
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {

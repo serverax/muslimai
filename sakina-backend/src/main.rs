@@ -707,6 +707,14 @@ async fn main() -> std::io::Result<()> {
             )
             .route("/api/chat", web::post().to(handlers::chat::core_chat))
             .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
+            // Public deterministic Islamic calculators (no login required).
+            .route("/api/tools/zakat", web::post().to(handlers::tools::zakat))
+            .route("/api/tools/qibla", web::get().to(handlers::tools::qibla))
+            .route("/api/tools/hijri", web::get().to(handlers::tools::hijri))
+            .route(
+                "/api/tools/inheritance",
+                web::post().to(handlers::tools::inheritance),
+            )
             .service(
                 web::scope("/api/rules")
                     .route("/evaluate", web::post().to(handlers::rules::evaluate)),
@@ -1014,6 +1022,14 @@ async fn main() -> std::io::Result<()> {
                     )
                     .route("/api/chat", web::post().to(handlers::chat::core_chat))
                     .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
+                    // Public deterministic Islamic calculators (also under /v1 for the mobile client).
+                    .route("/api/tools/zakat", web::post().to(handlers::tools::zakat))
+                    .route("/api/tools/qibla", web::get().to(handlers::tools::qibla))
+                    .route("/api/tools/hijri", web::get().to(handlers::tools::hijri))
+                    .route(
+                        "/api/tools/inheritance",
+                        web::post().to(handlers::tools::inheritance),
+                    )
                     .route(
                         "/api/test/route",
                         web::post().to(handlers::brain::test_route),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../app/app_state.dart';
 import '../services/auth_service.dart';
 import '../services/module_service.dart';
+import 'calculators_screen.dart';
 import 'chat_screen.dart';
 import 'compliance_screen.dart';
 import 'iman_journey_screen.dart';
@@ -56,6 +57,7 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
       ImanJourneyScreen(),
       MultimodalAnalysisScreen(session: widget.session),
       ComplianceScreen(session: widget.session),
+      CalculatorsScreen(),
     ];
 
     return Scaffold(
@@ -116,6 +118,11 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
             icon: Icon(Icons.privacy_tip_outlined),
             selectedIcon: Icon(Icons.privacy_tip),
             label: 'Privacy',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.calculate_outlined),
+            selectedIcon: Icon(Icons.calculate),
+            label: 'Tools',
           ),
         ],
       ),
