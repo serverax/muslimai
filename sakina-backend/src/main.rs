@@ -564,6 +564,8 @@ async fn main() -> std::io::Result<()> {
         5,
         std::time::Duration::from_secs(60),
     ));
+    // SAK-011: shared per-IP rate limiter for auth/ask/admin routes.
+    let rate_limiter = web::Data::new(services::rate_limit::RateLimiter::new());
     // Start HTTP server
     info!("Starting HTTP server on 0.0.0.0:8080");
 
@@ -590,6 +592,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(tafsir_service.clone())
             .app_data(fatwa_service.clone())
             .app_data(waitlist_limiter.clone())
+            .app_data(rate_limiter.clone())
             .app_data(
                 web::JsonConfig::default()
                     .limit(256 * 1024)
@@ -608,6 +611,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(build_cors())
             .wrap(Logger::default())
             .wrap(middleware::AuditMiddleware)
+            .wrap(actix_web::middleware::from_fn(
+                services::rate_limit::rate_limit_mw,
+            ))
             .route("/health", web::get().to(handlers::health::health_check))
             .route("/health/ready", web::get().to(production_readiness_check))
             .route("/health/observability", web::get().to(observability_check))

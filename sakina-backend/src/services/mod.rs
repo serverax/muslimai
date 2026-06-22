@@ -23,6 +23,7 @@ pub mod memory_engine;
 pub mod multimodal;
 pub mod offline_islamic_corpus;
 pub mod outbox_relay;
+pub mod rate_limit;
 pub mod phase2;
 pub mod pii_redaction;
 pub mod qdrant_client;

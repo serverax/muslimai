@@ -75,6 +75,14 @@ impl ApiError {
             status: StatusCode::SERVICE_UNAVAILABLE,
         }
     }
+
+    pub fn too_many_requests(message: impl Into<String>) -> Self {
+        Self {
+            code: "rate_limited",
+            message: message.into(),
+            status: StatusCode::TOO_MANY_REQUESTS,
+        }
+    }
 }
 
 pub fn error_response(

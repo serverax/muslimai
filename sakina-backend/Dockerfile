@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7
 FROM rust:1.88-slim AS builder
 
 WORKDIR /app
@@ -9,7 +10,11 @@ COPY sakina-wasm /sakina-wasm
 COPY wasm /wasm
 
 RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev pkg-config && rm -rf /var/lib/apt/lists/*
-RUN cargo build --release --bin sakina-api --bin sakina-llm-gateway --bin sakina-migrate --bin sakina-ingest
+# Cache the cargo registry + git index across builds so a transient crates.io
+# timeout cannot break the build and rebuilds do not re-download every crate.
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    cargo build --release --bin sakina-api --bin sakina-llm-gateway --bin sakina-migrate --bin sakina-ingest
 
 FROM debian:bookworm-slim
 
