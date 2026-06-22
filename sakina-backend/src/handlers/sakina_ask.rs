@@ -356,8 +356,10 @@ async fn persist_anonymous_learning(
     .await;
 }
 
-async fn enqueue_scholar_review(pool: &sqlx::PgPool, trace_uuid: Uuid, notes: &str) {
-    let _ = sqlx::query(
+async fn enqueue_scholar_review(pool: &sqlx::PgPool, trace_uuid: Uuid, notes: &str) -> bool {
+    // SAK-022: do not silently swallow a failed escalation insert. Log it and
+    // report success so the caller can avoid telling the user "escalated" falsely.
+    match sqlx::query(
         r#"
         INSERT INTO sakina_ai.scholar_review_queue (
             request_id, priority, review_status, reviewer_notes
@@ -368,7 +370,14 @@ async fn enqueue_scholar_review(pool: &sqlx::PgPool, trace_uuid: Uuid, notes: &s
     .bind(trace_uuid)
     .bind(notes)
     .execute(pool)
-    .await;
+    .await
+    {
+        Ok(_) => true,
+        Err(e) => {
+            tracing::error!(trace_id = %trace_uuid, "failed to enqueue scholar review: {:?}", e);
+            false
+        }
+    }
 }
 
 pub async fn ask(

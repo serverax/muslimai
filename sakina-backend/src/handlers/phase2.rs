@@ -378,6 +378,28 @@ pub async fn create_notification_template(
     Ok(HttpResponse::Created().json(serde_json::json!({ "id": id })))
 }
 
+// PHASE 1: scholar workflow read APIs (scope is scholar/admin-gated in main.rs).
+pub async fn scholar_queue(repo: web::Data<Phase2Repository>) -> Result<HttpResponse, ApiError> {
+    Ok(HttpResponse::Ok().json(repo.list_scholar_queue().await?))
+}
+
+pub async fn scholar_review_detail(
+    repo: web::Data<Phase2Repository>,
+    path: web::Path<Uuid>,
+) -> Result<HttpResponse, ApiError> {
+    Ok(HttpResponse::Ok().json(repo.get_scholar_review_detail(path.into_inner()).await?))
+}
+
+// PHASE 1: user-facing review status for their own ask trace (ownership enforced).
+pub async fn user_review_status(
+    req: HttpRequest,
+    repo: web::Data<Phase2Repository>,
+    path: web::Path<Uuid>,
+) -> Result<HttpResponse, ApiError> {
+    let user_id = crate::services::auth::authenticated_user_id(&req, repo.pool()).await?;
+    Ok(HttpResponse::Ok().json(repo.get_user_review_status(user_id, path.into_inner()).await?))
+}
+
 pub async fn enqueue_notification(
     req: HttpRequest,
     repo: web::Data<Phase2Repository>,

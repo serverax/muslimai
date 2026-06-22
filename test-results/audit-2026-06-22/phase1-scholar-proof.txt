@@ -1,0 +1,48 @@
+########## PHASE 1 SCHOLAR LOOP PROOF Mon Jun 22 21:37:03 UTC 2026 ##########
+=== users: A (asker), S (scholar), B (other) ===
+A=e2fba9b3-8c2e-4ac4-9171-3144b86e4592  S=c22feb42-6206-4145-b798-3f21338c027e
+-- grant S a scholar account --
+INSERT 0 1
+
+=== 1. user A asks high-risk fatwa -> escalate + queue row ===
+safety_state=ESCALATED_TO_HUMAN  trace=0695dd8c-f596-4898-9271-6321b3ed6a9b
+DB queue row:
+ pending       | high
+
+
+=== 2. scholar S lists queue (expect 200 + item) ===
+S GET /scholar/queue -> 200
+queue count for our trace:
+['0695dd8c-f596-4898-9271-6321b3ed6a9b']
+
+=== 3. scholar opens review detail ===
+detail review_status= pending final_answer= None
+
+=== 4. scholar resolves (approve + final answer) ===
+S POST /scholar/reviews/resolve -> 200
+
+=== 5. user A sees final review status + answer ===
+status= scholar_answered | answer= After review: divorce validity depends on the specific wordi
+
+=== 6. non-scholar (A) hits scholar route (expect 403) ===
+A GET /scholar/queue -> 403 (expect 403)
+anon GET /scholar/queue -> 401 (expect 401)
+
+=== 7. user B cannot see user A review (expect 404) ===
+B GET review-status(A trace) -> 404 (expect 404)
+
+=== 8. audit trail row for scholar action ===
+       event_type        | actor_type |              request_id              |  status  
+-------------------------+------------+--------------------------------------+----------
+ scholar_review_resolved | scholar    | 8e8c03de-c3ff-4af5-a81d-738936405233 | approved
+(1 row)
+
+
+=== 9. SAK-022: enqueue returns bool + logs on failure (queue insert succeeded above = not swallowed) ===
+74:fn out_of_scope(message: &str) -> bool {
+88:fn crisis_or_emergency(message: &str) -> bool {
+132:pub fn high_risk_fatwa(message: &str) -> bool {
+148:fn fabricated_or_unsupported_ritual_claim(message: &str) -> bool {
+359:async fn enqueue_scholar_review(pool: &sqlx::PgPool, trace_uuid: Uuid, notes: &str) -> bool {
+377:            tracing::error!(trace_id = %trace_uuid, "failed to enqueue scholar review: {:?}", e);
+########## END PHASE 1 ##########

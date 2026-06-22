@@ -707,6 +707,10 @@ async fn main() -> std::io::Result<()> {
             )
             .route("/api/chat", web::post().to(handlers::chat::core_chat))
             .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
+            .route(
+                "/api/sakina/review-status/{trace_id}",
+                web::get().to(handlers::phase2::user_review_status),
+            )
             // Public deterministic Islamic calculators (no login required).
             .route("/api/tools/zakat", web::post().to(handlers::tools::zakat))
             .route("/api/tools/qibla", web::get().to(handlers::tools::qibla))
@@ -867,6 +871,22 @@ async fn main() -> std::io::Result<()> {
                         web::post().to(handlers::phase2::resolve_scholar_review),
                     ),
             )
+            // PHASE 1: scholar workflow (scholar OR admin) — queue read + detail + resolve.
+            .service(
+                web::scope("/scholar")
+                    .wrap(actix_web::middleware::from_fn(
+                        crate::services::auth::scholar_guard,
+                    ))
+                    .route("/queue", web::get().to(handlers::phase2::scholar_queue))
+                    .route(
+                        "/reviews/{review_id}",
+                        web::get().to(handlers::phase2::scholar_review_detail),
+                    )
+                    .route(
+                        "/reviews/resolve",
+                        web::post().to(handlers::phase2::resolve_scholar_review),
+                    ),
+            )
             .service(
                 web::scope("/v1")
                     .route("/health", web::get().to(handlers::health::health_check))
@@ -1022,6 +1042,10 @@ async fn main() -> std::io::Result<()> {
                     )
                     .route("/api/chat", web::post().to(handlers::chat::core_chat))
                     .route("/api/sakina/ask", web::post().to(handlers::sakina_ask::ask))
+                    .route(
+                        "/api/sakina/review-status/{trace_id}",
+                        web::get().to(handlers::phase2::user_review_status),
+                    )
                     // Public deterministic Islamic calculators (also under /v1 for the mobile client).
                     .route("/api/tools/zakat", web::post().to(handlers::tools::zakat))
                     .route("/api/tools/qibla", web::get().to(handlers::tools::qibla))

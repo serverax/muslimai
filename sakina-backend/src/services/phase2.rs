@@ -1441,11 +1441,167 @@ impl Phase2Repository {
             .map_err(|_| ApiError::internal("failed to store resolved answer"))?;
         }
 
+        // PHASE 1 / SAK-009: audit trail for the state transition (with trace id).
+        sqlx::query(
+            r#"
+            INSERT INTO public.audit_logs (event_type, actor_type, actor_id, request_id, payload)
+            VALUES ('scholar_review_resolved', 'scholar', $1, $2, $3)
+            "#,
+        )
+        .bind(request.admin_user_id.map(|u| u.to_string()))
+        .bind(internal_id.to_string())
+        .bind(serde_json::json!({ "status": request.status }))
+        .execute(&mut *tx)
+        .await
+        .map_err(|_| ApiError::internal("failed to write scholar audit log"))?;
+
         tx.commit()
             .await
             .map_err(|_| ApiError::internal("failed to commit resolve review transaction"))?;
 
         Ok(())
+    }
+
+    /// PHASE 1: list scholar review queue items (pending first). Scholar/admin only.
+    pub async fn list_scholar_queue(&self) -> Result<serde_json::Value, ApiError> {
+        let rows = sqlx::query(
+            r#"
+            SELECT q.id::text AS id,
+                   q.request_id::text AS request_id,
+                   q.priority,
+                   q.review_status,
+                   q.assigned_reviewer,
+                   q.reviewer_notes,
+                   q.created_at::text AS created_at,
+                   (r.review_id IS NOT NULL) AS has_final_answer
+            FROM sakina_ai.scholar_review_queue q
+            LEFT JOIN sakina_ai.scholar_resolved_answers r ON r.review_id = q.id
+            ORDER BY (q.review_status = 'pending') DESC, q.created_at DESC
+            LIMIT 100
+            "#,
+        )
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to list scholar queue"))?;
+
+        let items: Vec<serde_json::Value> = rows
+            .into_iter()
+            .map(|row| {
+                serde_json::json!({
+                    "id": row.get::<String, _>("id"),
+                    "request_id": row.get::<String, _>("request_id"),
+                    "priority": row.get::<String, _>("priority"),
+                    "review_status": row.get::<String, _>("review_status"),
+                    "assigned_reviewer": row.get::<Option<String>, _>("assigned_reviewer"),
+                    "reviewer_notes": row.get::<Option<String>, _>("reviewer_notes"),
+                    "created_at": row.get::<String, _>("created_at"),
+                    "has_final_answer": row.get::<bool, _>("has_final_answer"),
+                })
+            })
+            .collect();
+        Ok(serde_json::json!({ "queue": items, "count": items.len() }))
+    }
+
+    /// PHASE 1: scholar review detail (queue row + resolved answer if any).
+    pub async fn get_scholar_review_detail(
+        &self,
+        review_id: Uuid,
+    ) -> Result<serde_json::Value, ApiError> {
+        let row = sqlx::query(
+            r#"
+            SELECT q.id::text AS id,
+                   q.request_id::text AS request_id,
+                   q.priority,
+                   q.review_status,
+                   q.assigned_reviewer,
+                   q.reviewer_notes,
+                   q.created_at::text AS created_at,
+                   r.final_answer,
+                   r.resolved_by::text AS resolved_by
+            FROM sakina_ai.scholar_review_queue q
+            LEFT JOIN sakina_ai.scholar_resolved_answers r ON r.review_id = q.id
+            WHERE q.id = $1 OR q.request_id = $1
+            LIMIT 1
+            "#,
+        )
+        .bind(review_id)
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to load scholar review"))?;
+
+        let Some(row) = row else {
+            return Err(ApiError::not_found("scholar review not found"));
+        };
+        Ok(serde_json::json!({
+            "id": row.get::<String, _>("id"),
+            "request_id": row.get::<String, _>("request_id"),
+            "priority": row.get::<String, _>("priority"),
+            "review_status": row.get::<String, _>("review_status"),
+            "assigned_reviewer": row.get::<Option<String>, _>("assigned_reviewer"),
+            "reviewer_notes": row.get::<Option<String>, _>("reviewer_notes"),
+            "created_at": row.get::<String, _>("created_at"),
+            "final_answer": row.get::<Option<String>, _>("final_answer"),
+            "resolved_by": row.get::<Option<String>, _>("resolved_by"),
+        }))
+    }
+
+    /// PHASE 1: user-facing review status for their own trace. Ownership enforced
+    /// via brain_decision_traces(user_id) so user B cannot see user A's review.
+    pub async fn get_user_review_status(
+        &self,
+        user_id: Uuid,
+        trace_id: Uuid,
+    ) -> Result<serde_json::Value, ApiError> {
+        let owns = sqlx::query_scalar::<_, bool>(
+            r#"SELECT EXISTS(
+                SELECT 1 FROM sakina_ai.brain_decision_traces
+                WHERE request_id = $1 AND user_id = $2
+            )"#,
+        )
+        .bind(trace_id.to_string())
+        .bind(user_id.to_string())
+        .fetch_one(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to verify trace ownership"))?;
+        if !owns {
+            return Err(ApiError::not_found("review not found for this user"));
+        }
+
+        let row = sqlx::query(
+            r#"
+            SELECT q.review_status, r.final_answer, r.updated_at::text AS answered_at
+            FROM sakina_ai.scholar_review_queue q
+            LEFT JOIN sakina_ai.scholar_resolved_answers r ON r.review_id = q.id
+            WHERE q.request_id = $1
+            ORDER BY q.created_at DESC
+            LIMIT 1
+            "#,
+        )
+        .bind(trace_id)
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| ApiError::internal("failed to load review status"))?;
+
+        match row {
+            None => {
+                Ok(serde_json::json!({ "trace_id": trace_id.to_string(), "status": "no_review" }))
+            }
+            Some(r) => {
+                let final_answer = r.get::<Option<String>, _>("final_answer");
+                let status = if final_answer.is_some() {
+                    "scholar_answered"
+                } else {
+                    "pending_scholar_review"
+                };
+                Ok(serde_json::json!({
+                    "trace_id": trace_id.to_string(),
+                    "status": status,
+                    "review_status": r.get::<String, _>("review_status"),
+                    "final_answer": final_answer,
+                    "answered_at": r.get::<Option<String>, _>("answered_at"),
+                }))
+            }
+        }
     }
 
     pub async fn list_source_approval_queue(&self) -> Result<Vec<SourceApprovalItem>, ApiError> {
