@@ -82,9 +82,13 @@ class _TajweedCoachScreenState extends State<TajweedCoachScreen> {
                     setState(() {
                       _recording = !_recording;
                       if (!_recording) {
-                        _feedback = 'Excellent! Your makhraj for "Qaf" is 92% accurate.';
+                        // SAK-019: no automated tajweed scoring exists yet — do not
+                        // fabricate an accuracy figure. Be honest about the limitation.
+                        _feedback =
+                            'Recording stopped. Automated tajweed scoring is not available yet — please review your makharij with a qualified teacher.';
                       } else {
-                        _feedback = 'Listening to your recitation...';
+                        _feedback =
+                            'Recording locally… (audio is not analysed or uploaded yet).';
                       }
                     });
                   },

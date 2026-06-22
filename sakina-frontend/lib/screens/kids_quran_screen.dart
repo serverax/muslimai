@@ -29,6 +29,14 @@ class _KidsQuranScreenState extends State<KidsQuranScreen> {
     'The First Ayah',
   ];
 
+  // SAK-019: these lessons are not wired to a backend yet. Give honest feedback
+  // instead of a silent dead button.
+  void _comingSoon(BuildContext context, String title) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('"$title" is coming soon, in shā’ Allāh.')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +81,7 @@ class _KidsQuranScreenState extends State<KidsQuranScreen> {
                       title: 'Learn Letters',
                       icon: Icons.abc,
                       color: Colors.blue,
-                      onTap: () {},
+                      onTap: () => _comingSoon(context, 'Learn Letters'),
                     );
                   }
                   if (index == 1) {
@@ -81,7 +89,7 @@ class _KidsQuranScreenState extends State<KidsQuranScreen> {
                       title: 'Short Surahs',
                       icon: Icons.mic_none,
                       color: Colors.green,
-                      onTap: () {},
+                      onTap: () => _comingSoon(context, 'Short Surahs'),
                     );
                   }
                   final story = _stories[index - 2];
@@ -89,7 +97,7 @@ class _KidsQuranScreenState extends State<KidsQuranScreen> {
                     title: story,
                     icon: Icons.auto_stories,
                     color: Colors.purple,
-                    onTap: () {},
+                    onTap: () => _comingSoon(context, story),
                   );
                 },
               ),
