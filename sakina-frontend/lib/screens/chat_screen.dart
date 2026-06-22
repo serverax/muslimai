@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../config/api_config.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import '../services/pending_review_store.dart';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({
@@ -36,6 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String? _lastMessageId;
   String _status = '';
   bool _contractWarning = false;
+  final PendingReviewStore _pendingReviews = PendingReviewStore();
 
   Future<void> _sendNotificationFlow() async {
     if (_notificationBusy) return;
@@ -136,6 +138,22 @@ class _ChatScreenState extends State<ChatScreen> {
         _status =
             'Trace ${response.traceId} | ${response.sourcePath['answer_source'] ?? 'unknown'} | ${response.modelProvider}';
       });
+      // PHASE 1B: high-risk question escalated to a scholar — track it locally so
+      // the user can return to the Reviews screen and poll for the final answer.
+      if (response.safetyState == 'ESCALATED_TO_HUMAN' &&
+          response.traceId.isNotEmpty) {
+        await _pendingReviews.add(PendingReview(
+          traceId: response.traceId,
+          question: text,
+          createdAt: DateTime.now().toIso8601String(),
+        ));
+        if (mounted) {
+          setState(() {
+            _messages.add(ChatItem.system(
+                'This question was escalated to a scholar for review. Open the Reviews tab to see the answer when it is ready.'));
+          });
+        }
+      }
     } catch (error) {
       if (!mounted) return;
       setState(() {

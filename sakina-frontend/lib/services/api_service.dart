@@ -166,6 +166,15 @@ class ApiService {
     throw _apiException('hijri lookup failed', res);
   }
 
+  // --- Scholar review status for the user's own ask trace (auth required) ---
+  Future<Map<String, dynamic>> reviewStatus(String traceId) async {
+    final res = await _get('/api/sakina/review-status/$traceId');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('review status lookup failed', res);
+  }
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {

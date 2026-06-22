@@ -12,6 +12,7 @@ import 'kids_quran_screen.dart';
 import 'mental_wellness_screen.dart';
 import 'module_read_only_state_screen.dart';
 import 'multimodal_analysis_screen.dart';
+import 'scholar_reviews_screen.dart';
 import 'tajweed_coach_screen.dart';
 
 class HomeShellScreen extends StatefulWidget {
@@ -58,6 +59,7 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
       MultimodalAnalysisScreen(session: widget.session),
       ComplianceScreen(session: widget.session),
       CalculatorsScreen(),
+      ScholarReviewsScreen(session: widget.session),
     ];
 
     return Scaffold(
@@ -123,6 +125,11 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
             icon: Icon(Icons.calculate_outlined),
             selectedIcon: Icon(Icons.calculate),
             label: 'Tools',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.gavel_outlined),
+            selectedIcon: Icon(Icons.gavel),
+            label: 'Reviews',
           ),
         ],
       ),
