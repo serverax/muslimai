@@ -208,3 +208,97 @@ pub async fn ensure_user_scope(
     }
     Ok(authenticated_user_id)
 }
+
+// ---------------------------------------------------------------------------
+// RBAC guards (SAK-001). Authentication alone is not enough for privileged
+// surfaces; these verify the authenticated user holds an active admin/scholar
+// account before any handler logic runs.
+// ---------------------------------------------------------------------------
+
+/// Require an authenticated user that is an active admin (`public.admin_users`).
+pub async fn require_admin(req: &HttpRequest, pool: &PgPool) -> Result<Uuid, ApiError> {
+    let user_id = authenticated_user_id(req, pool).await?;
+    let is_admin = sqlx::query_scalar::<_, bool>(
+        r#"SELECT EXISTS(
+            SELECT 1 FROM public.admin_users
+            WHERE user_id = $1 AND account_status = 'active'
+        )"#,
+    )
+    .bind(user_id)
+    .fetch_one(pool)
+    .await
+    .map_err(|_| ApiError::internal("failed to verify admin role"))?;
+    if !is_admin {
+        return Err(ApiError::forbidden("admin role required"));
+    }
+    Ok(user_id)
+}
+
+/// Require an authenticated user that is an active scholar OR an active admin.
+pub async fn require_scholar_or_admin(req: &HttpRequest, pool: &PgPool) -> Result<Uuid, ApiError> {
+    let user_id = authenticated_user_id(req, pool).await?;
+    let allowed = sqlx::query_scalar::<_, bool>(
+        r#"SELECT EXISTS(
+            SELECT 1 FROM public.scholar_accounts
+            WHERE user_id = $1 AND account_status = 'active'
+        ) OR EXISTS(
+            SELECT 1 FROM public.admin_users
+            WHERE user_id = $1 AND account_status = 'active'
+        )"#,
+    )
+    .bind(user_id)
+    .fetch_one(pool)
+    .await
+    .map_err(|_| ApiError::internal("failed to verify scholar role"))?;
+    if !allowed {
+        return Err(ApiError::forbidden("scholar or admin role required"));
+    }
+    Ok(user_id)
+}
+
+// ---------------------------------------------------------------------------
+// Scope-level middleware backstop (SAK-001). Without this, auth is opt-in per
+// handler and a forgotten check silently exposes a route. These wrap whole
+// scopes so privileged/telemetry surfaces fail closed.
+// ---------------------------------------------------------------------------
+use actix_web::body::MessageBody;
+use actix_web::dev::{ServiceRequest, ServiceResponse};
+use actix_web::middleware::Next;
+use actix_web::web;
+
+fn guard_pool(req: &ServiceRequest) -> Result<PgPool, ApiError> {
+    req.app_data::<web::Data<PgPool>>()
+        .map(|p| p.get_ref().clone())
+        .ok_or_else(|| ApiError::internal("database pool unavailable"))
+}
+
+/// Middleware: require an active admin for the wrapped scope.
+pub async fn admin_guard(
+    req: ServiceRequest,
+    next: Next<impl MessageBody + 'static>,
+) -> Result<ServiceResponse<impl MessageBody>, actix_web::Error> {
+    let pool = guard_pool(&req)?;
+    require_admin(req.request(), &pool).await?;
+    next.call(req).await
+}
+
+/// Middleware: require an active scholar or admin for the wrapped scope.
+pub async fn scholar_guard(
+    req: ServiceRequest,
+    next: Next<impl MessageBody + 'static>,
+) -> Result<ServiceResponse<impl MessageBody>, actix_web::Error> {
+    let pool = guard_pool(&req)?;
+    require_scholar_or_admin(req.request(), &pool).await?;
+    next.call(req).await
+}
+
+/// Middleware: require any authenticated user for the wrapped scope.
+/// Closes anonymous audit/security/event/safety log injection.
+pub async fn authenticated_guard(
+    req: ServiceRequest,
+    next: Next<impl MessageBody + 'static>,
+) -> Result<ServiceResponse<impl MessageBody>, actix_web::Error> {
+    let pool = guard_pool(&req)?;
+    authenticated_user_id(req.request(), &pool).await?;
+    next.call(req).await
+}

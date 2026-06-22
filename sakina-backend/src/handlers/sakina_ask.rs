@@ -88,14 +88,42 @@ fn out_of_scope(message: &str) -> bool {
 fn crisis_or_emergency(message: &str) -> bool {
     let q = message.to_ascii_lowercase();
     [
+        // self-harm / suicidal ideation — broadened recall (SAK-004)
         "kill myself",
+        "kill me",
         "self harm",
+        "self-harm",
+        "harm myself",
+        "hurt myself",
+        "harming myself",
+        "end my life",
+        "end it all",
+        "take my life",
+        "want to die",
+        "wanna die",
+        "don't want to live",
+        "dont want to live",
+        "no reason to live",
+        "no point in living",
+        "better off dead",
         "suicide",
+        "suicidal",
+        // medical emergencies
         "medical emergency",
         "chest pain",
+        "can't breathe",
+        "cant breathe",
+        "overdose",
+        // Arabic
         "انتحار",
+        "أريد أن أموت",
+        "اريد ان اموت",
+        "أنهي حياتي",
+        "انهي حياتي",
         "إيذاء النفس",
         "ايذاء النفس",
+        "أؤذي نفسي",
+        "اؤذي نفسي",
     ]
     .iter()
     .any(|needle| q.contains(needle))
@@ -606,7 +634,14 @@ pub async fn ask(
                         })
                         .unwrap_or_default();
                 }
-                Err(err) => return err.error_response(),
+                Err(err) => {
+                    // SAK-010: degrade instead of 5xx. Leave answer empty so the
+                    // citation gate / empty-answer refusal handles it safely.
+                    tracing::error!(
+                        trace_id = %trace_id,
+                        "RAG retrieval failed; degrading to safe refusal: {:?}", err
+                    );
+                }
             }
         }
 
@@ -661,7 +696,25 @@ pub async fn ask(
                 .await
             {
                 Ok(value) => value,
-                Err(err) => return err.error_response(),
+                Err(err) => {
+                    // SAK-010: never 5xx a user question because the LLM gateway is
+                    // down. Degrade to a non-used result; the grounded answer (if any)
+                    // or the empty-answer refusal below is returned instead.
+                    tracing::error!(
+                        trace_id = %trace_id,
+                        "LLM gateway unavailable; degrading to grounded/refusal answer: {:?}", err
+                    );
+                    crate::services::llm_gateway::SakinaLlmGatewayResult {
+                        answer: String::new(),
+                        provider: "ollama".to_string(),
+                        model: String::new(),
+                        used: false,
+                        fallback_used: true,
+                        status: "gateway_unavailable".to_string(),
+                        latency_ms: None,
+                        token_usage: None,
+                    }
+                }
             };
             if llm_result.used {
                 answer = llm_result.answer;
@@ -735,6 +788,34 @@ pub async fn ask(
         }
     }
 
+    // SAK-005: no uncited Islamic answer. If a substantive religious answer
+    // (from local DB / RAG / LLM) carries no verified citations, refuse rather
+    // than emit an unsourced ruling. Local citation guard for monolithic mode,
+    // independent of the optional external SAKINA_CITATION_GUARD_URL.
+    let citations_empty = citations
+        .as_array()
+        .map(|items| items.is_empty())
+        .unwrap_or(true);
+    let requires_citation = !source_path.blocked
+        && !answer.is_empty()
+        && intent != "emotional_support"
+        && matches!(
+            source_path.answer_source.as_str(),
+            "local_db" | "rag" | "llm_generation_with_controlled_context"
+        );
+    if requires_citation && citations_empty {
+        safety.guardrails_passed = false;
+        source_path.blocked = true;
+        safety_state = "CAVEATED_SHORT_CIRCUIT".to_string();
+        answer = if language == "ar" {
+            "لا أستطيع تقديم جواب ديني بدون مصدر موثوق. يُرجى إعادة صياغة السؤال أو سؤال عالم موثوق.".to_string()
+        } else {
+            "I can't give a religious answer without a verified source. Please rephrase, or consult a trusted scholar.".to_string()
+        };
+        citations = json!([]);
+        source_path.answer_source = "insufficient_verified_context".to_string();
+    }
+
     if answer.is_empty() {
         answer = if language == "ar" {
             "لا أستطيع التحقق من جواب موثوق لهذا السؤال الآن.".to_string()
@@ -787,10 +868,17 @@ pub async fn ask(
         return response;
     }
 
+    let risk_level = if safety.crisis_detected || high_risk_fatwa(&safe_message) {
+        "high".to_string()
+    } else {
+        "normal".to_string()
+    };
+
     HttpResponse::Ok().json(SakinaAskResponse {
         answer,
         language,
         intent,
+        risk_level,
         trace_id,
         safety_state,
         source_path,

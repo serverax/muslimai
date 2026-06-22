@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS public.users (
 );
 
 ALTER TABLE public.users
+  ADD COLUMN IF NOT EXISTS email TEXT,
   ADD COLUMN IF NOT EXISTS pub_key TEXT,
   ADD COLUMN IF NOT EXISTS auth_provider TEXT NOT NULL DEFAULT 'internal',
   ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -40,6 +41,23 @@ END $$;
 CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique_idx
   ON public.users (email)
   WHERE email IS NOT NULL;
+
+-- A full (non-partial) UNIQUE constraint is required so register_user's
+-- `INSERT ... ON CONFLICT (email)` has a valid arbiter. When init.sql pre-creates
+-- public.users, the `email TEXT UNIQUE` above is skipped (CREATE TABLE IF NOT EXISTS),
+-- leaving only the partial index, which Postgres cannot use for ON CONFLICT inference.
+-- Postgres permits multiple NULL emails under a UNIQUE constraint, so pub_key-only
+-- users are unaffected. See reports/sakina-db-audit.md (registration blocker).
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conrelid = 'public.users'::regclass
+      AND conname = 'users_email_key'
+  ) THEN
+    ALTER TABLE public.users ADD CONSTRAINT users_email_key UNIQUE (email);
+  END IF;
+END $$;
 
 CREATE UNIQUE INDEX IF NOT EXISTS users_pub_key_unique_idx
   ON public.users (pub_key)

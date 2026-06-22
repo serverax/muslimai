@@ -13,8 +13,9 @@ pub async fn get_guardrails(
     req: HttpRequest,
     pool: web::Data<PgPool>,
 ) -> Result<HttpResponse, ApiError> {
-    // Authenticate first; unauthenticated callers get no dashboard data.
-    let _user_id = crate::services::auth::authenticated_user_id(&req, pool.get_ref()).await?;
+    // SAK-007: this returns safety rows across all users, so it is an admin-only
+    // surface. Require an active admin, not merely any authenticated user.
+    let _admin_id = crate::services::auth::require_admin(&req, pool.get_ref()).await?;
 
     let rows = sqlx::query(
         r#"

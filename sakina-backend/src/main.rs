@@ -821,6 +821,9 @@ async fn main() -> std::io::Result<()> {
             )
             .service(
                 web::scope("/admin")
+                    .wrap(actix_web::middleware::from_fn(
+                        crate::services::auth::admin_guard,
+                    ))
                     .route(
                         "/roles",
                         web::post().to(handlers::phase2::upsert_admin_role),
@@ -1134,6 +1137,9 @@ async fn main() -> std::io::Result<()> {
                     )
                     .service(
                         web::scope("/safety")
+                            .wrap(actix_web::middleware::from_fn(
+                                crate::services::auth::authenticated_guard,
+                            ))
                             .route(
                                 "/classifications",
                                 web::post().to(handlers::phase2::log_safety_classification),
@@ -1157,6 +1163,9 @@ async fn main() -> std::io::Result<()> {
                     )
                     .service(
                         web::scope("/notifications")
+                            .wrap(actix_web::middleware::from_fn(
+                                crate::services::auth::authenticated_guard,
+                            ))
                             .route("", web::get().to(handlers::phase2::list_notifications))
                             .route(
                                 "/templates",
@@ -1192,14 +1201,26 @@ async fn main() -> std::io::Result<()> {
                     )
                     .service(
                         web::scope("/audit")
+                            .wrap(actix_web::middleware::from_fn(
+                                crate::services::auth::authenticated_guard,
+                            ))
                             .route("/logs", web::post().to(handlers::phase2::create_audit_log)),
                     )
-                    .service(web::scope("/security").route(
-                        "/logs",
-                        web::post().to(handlers::phase2::create_security_log),
-                    ))
+                    .service(
+                        web::scope("/security")
+                            .wrap(actix_web::middleware::from_fn(
+                                crate::services::auth::authenticated_guard,
+                            ))
+                            .route(
+                                "/logs",
+                                web::post().to(handlers::phase2::create_security_log),
+                            ),
+                    )
                     .service(
                         web::scope("/events")
+                            .wrap(actix_web::middleware::from_fn(
+                                crate::services::auth::authenticated_guard,
+                            ))
                             .route("/app", web::post().to(handlers::phase2::create_app_event))
                             .route("/chat", web::post().to(handlers::phase2::create_chat_event))
                             .route("/rag", web::post().to(handlers::phase2::create_rag_event))

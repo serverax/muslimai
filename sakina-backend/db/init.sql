@@ -58,14 +58,17 @@ CREATE TABLE outbox.dead_letters (
 );
 
 -- Public Schema
-CREATE TABLE public.users (
+-- NOTE: authoritative shape lives in migration 002_users_profiles.sql (adds email/auth_provider).
+-- pub_key is intentionally nullable here so email/password registration (no pub_key) is not blocked
+-- by this bootstrap definition. See reports/sakina-db-audit.md (dual public.users definition).
+CREATE TABLE IF NOT EXISTS public.users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    pub_key VARCHAR UNIQUE NOT NULL,
+    pub_key VARCHAR UNIQUE,
     madhhab_preference VARCHAR(50),
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE public.user_backups (
+CREATE TABLE IF NOT EXISTS public.user_backups (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES public.users(id),
     encrypted_blob BYTEA NOT NULL,
@@ -73,7 +76,15 @@ CREATE TABLE public.user_backups (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- Create user and grant permissions
-CREATE USER sakina_user WITH PASSWORD 'sakina_password';
+-- Create the application role only if it does not already exist.
+-- The Postgres image entrypoint already creates POSTGRES_USER (sakina_user),
+-- so an unguarded CREATE USER aborts container init. See reports/sakina-db-audit.md.
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'sakina_user') THEN
+        CREATE USER sakina_user WITH PASSWORD 'sakina_password';
+    END IF;
+END
+$$;
 GRANT ALL PRIVILEGES ON SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA verified_knowledge, audit, outbox, public TO sakina_user;
