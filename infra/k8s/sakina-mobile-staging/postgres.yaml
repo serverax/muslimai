@@ -70,6 +70,10 @@ spec:
                   name: sakina-postgres-secret
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
             - name: SAKINA_REDIS_URL
               value: redis://sakina-redis:6379
             - name: JWT_SECRET
@@ -82,10 +86,6 @@ spec:
                 secretKeyRef:
                   name: sakina-staging-secrets
                   key: encryption-key
-              valueFrom:
-                secretKeyRef:
-                  name: sakina-postgres-secret
-                  key: POSTGRES_PASSWORD
           readinessProbe:
             exec:
               command:
