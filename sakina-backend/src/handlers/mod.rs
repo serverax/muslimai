@@ -24,6 +24,7 @@ pub mod rules;
 pub mod sakina_ask;
 mod sakina_ask_regression_tests;
 pub mod corpus;
+pub mod guides;
 pub mod library;
 pub mod sync;
 pub mod tafsir;

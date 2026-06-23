@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_config.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import 'phase4_screens.dart';
 import 'quran_corpus_screen.dart';
 
 /// PHASE 2 hub: Prayer Times, Islamic Calendar, Dua Library (public),
@@ -54,6 +55,12 @@ class DailyEssentialsScreen extends StatelessWidget {
                 : _loginNeeded(context)),
         _tile(context, Icons.volume_up, 'Adhan Settings', 'On this device',
             () => _go(context, const AdhanSettingsScreen())),
+        _tile(context, Icons.article_outlined, 'Guides', 'Wudu, Salah, Ramadan, Hajj, New Muslim',
+            () => _go(context, GuidesScreen(api: api))),
+        _tile(context, Icons.mosque, 'Masjid Near Me', 'Location-based (provider needed)',
+            () => _go(context, MasjidScreen(api: api))),
+        _tile(context, Icons.child_care, 'Kids Quiz', 'Fun Islamic learning',
+            () => _go(context, KidsLearningScreen(api: api, loggedIn: loggedIn))),
       ]),
     );
   }

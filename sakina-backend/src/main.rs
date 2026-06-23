@@ -1145,6 +1145,40 @@ async fn main() -> std::io::Result<()> {
                         "/citation-check",
                         web::get().to(handlers::corpus::citation_check),
                     )
+                    // PHASE 4 — guides, new-muslim, kids, masjid fallback, preferences.
+                    .route("/guides/{slug}", web::get().to(handlers::guides::guide_by_slug))
+                    .route(
+                        "/new-muslim/steps",
+                        web::get().to(handlers::guides::new_muslim_steps),
+                    )
+                    .route("/kids/lessons", web::get().to(handlers::guides::kids_lessons))
+                    .route("/kids/quiz", web::get().to(handlers::guides::kids_quiz))
+                    .route(
+                        "/kids/progress",
+                        web::post().to(handlers::guides::kids_save_progress),
+                    )
+                    .route(
+                        "/kids/progress",
+                        web::get().to(handlers::guides::kids_list_progress),
+                    )
+                    .route("/masjid/nearby", web::get().to(handlers::guides::masjid_nearby))
+                    .route("/preferences", web::put().to(handlers::guides::set_preference))
+                    .route("/preferences", web::get().to(handlers::guides::list_preferences))
+                    // PHASE 4 — /v1 aliases for existing tool handlers (feature-family parity).
+                    .route("/prayer-times", web::get().to(handlers::tools::prayer_times))
+                    .route("/islamic-dates", web::get().to(handlers::tools::islamic_dates))
+                    .route("/qibla", web::get().to(handlers::tools::qibla))
+                    .route("/zakat/calculate", web::post().to(handlers::tools::zakat))
+                    .route(
+                        "/mirath/calculate",
+                        web::post().to(handlers::tools::inheritance),
+                    )
+                    .route("/dua", web::get().to(handlers::library::list_duas))
+                    .route("/ask", web::post().to(handlers::sakina_ask::ask))
+                    .route(
+                        "/review-status/{trace_id}",
+                        web::get().to(handlers::phase2::user_review_status),
+                    )
                     .route(
                         "/api/test/route",
                         web::post().to(handlers::brain::test_route),

@@ -264,6 +264,21 @@ class ApiService {
       _getJsonPublic('/hadith/search?q=${Uri.encodeQueryComponent(q)}');
   Future<Map<String, dynamic>> islamicSources() => _getJsonPublic('/islamic-sources');
 
+  // --- PHASE 4: guides / kids / masjid (public read; kids progress login) ---
+  Future<Map<String, dynamic>> guide(String slug) => _getJsonPublic('/guides/$slug');
+  Future<Map<String, dynamic>> newMuslimSteps() => _getJsonPublic('/new-muslim/steps');
+  Future<Map<String, dynamic>> kidsQuiz() => _getJsonPublic('/kids/quiz');
+  Future<Map<String, dynamic>> kidsLessons() => _getJsonPublic('/kids/lessons');
+  Future<Map<String, dynamic>> masjidNearby({double? lat, double? lng}) =>
+      _getJsonPublic('/masjid/nearby?lat=${lat ?? ''}&lng=${lng ?? ''}');
+
+  Future<void> saveKidsProgress(
+      {required String activity, required int score, required int total}) async {
+    final res = await _post(
+        '/kids/progress', {'activity': activity, 'score': score, 'total': total});
+    if (res.statusCode != 201) throw _apiException('save kids progress failed', res);
+  }
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {
