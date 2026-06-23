@@ -26,6 +26,7 @@ mod sakina_ask_regression_tests;
 pub mod corpus;
 pub mod guides;
 pub mod library;
+pub mod subscription;
 pub mod sync;
 pub mod tafsir;
 pub mod tools;

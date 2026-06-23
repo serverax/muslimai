@@ -279,6 +279,29 @@ class ApiService {
     if (res.statusCode != 201) throw _apiException('save kids progress failed', res);
   }
 
+  // --- PHASE 5: subscriptions / entitlements / payment ---
+  Future<Map<String, dynamic>> subscriptionPlans() => _getJsonPublic('/subscription/plans');
+  Future<Map<String, dynamic>> paymentProviderStatus() =>
+      _getJsonPublic('/payment/provider-status');
+
+  Future<Map<String, dynamic>> subscriptionMe() async {
+    final res = await _get('/subscription/me');
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('subscription lookup failed', res);
+  }
+
+  Future<Map<String, dynamic>> entitlementsMe() async {
+    final res = await _get('/entitlements/me');
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('entitlements lookup failed', res);
+  }
+
+  Future<Map<String, dynamic>> createCheckoutSession() async {
+    final res = await _post('/payment/create-checkout-session', {});
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('checkout failed', res);
+  }
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {

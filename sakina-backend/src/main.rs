@@ -1179,6 +1179,51 @@ async fn main() -> std::io::Result<()> {
                         "/review-status/{trace_id}",
                         web::get().to(handlers::phase2::user_review_status),
                     )
+                    // PHASE 5 — subscriptions, entitlements, payment (honest provider fallback).
+                    .route(
+                        "/subscription/plans",
+                        web::get().to(handlers::subscription::list_plans),
+                    )
+                    .route(
+                        "/subscription/me",
+                        web::get().to(handlers::subscription::my_subscription),
+                    )
+                    .route(
+                        "/entitlements/me",
+                        web::get().to(handlers::subscription::my_entitlements),
+                    )
+                    .route(
+                        "/entitlements/check",
+                        web::post().to(handlers::subscription::check_entitlement),
+                    )
+                    .route(
+                        "/entitlements/usage",
+                        web::post().to(handlers::subscription::record_usage),
+                    )
+                    .route(
+                        "/admin/entitlements/grant",
+                        web::post().to(handlers::subscription::admin_grant),
+                    )
+                    .route(
+                        "/admin/entitlements/revoke",
+                        web::post().to(handlers::subscription::admin_revoke),
+                    )
+                    .route(
+                        "/payment/provider-status",
+                        web::get().to(handlers::subscription::provider_status),
+                    )
+                    .route(
+                        "/payment/create-checkout-session",
+                        web::post().to(handlers::subscription::create_checkout_session),
+                    )
+                    .route(
+                        "/payment/webhook",
+                        web::post().to(handlers::subscription::payment_webhook),
+                    )
+                    .route(
+                        "/payment/events",
+                        web::get().to(handlers::subscription::payment_events),
+                    )
                     .route(
                         "/api/test/route",
                         web::post().to(handlers::brain::test_route),

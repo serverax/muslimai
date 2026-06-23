@@ -411,6 +411,12 @@ pub async fn ask(
         Ok(user_id) => user_id,
         Err(err) => return err.error_response(),
     };
+    // PHASE 5: enforce the free daily Ask quota (premium/admin bypass).
+    if let Err(err) =
+        crate::handlers::subscription::enforce_ask_quota(pool.get_ref(), user_id).await
+    {
+        return err.error_response();
+    }
     let message = payload.message.trim();
     if message.is_empty() {
         return error_response(

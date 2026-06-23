@@ -83,6 +83,14 @@ impl ApiError {
             status: StatusCode::TOO_MANY_REQUESTS,
         }
     }
+
+    pub fn payment_required(message: impl Into<String>) -> Self {
+        Self {
+            code: "entitlement_required",
+            message: message.into(),
+            status: StatusCode::PAYMENT_REQUIRED,
+        }
+    }
 }
 
 pub fn error_response(
