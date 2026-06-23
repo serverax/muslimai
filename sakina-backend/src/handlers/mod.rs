@@ -23,6 +23,7 @@ pub mod rag;
 pub mod rules;
 pub mod sakina_ask;
 mod sakina_ask_regression_tests;
+pub mod library;
 pub mod sync;
 pub mod tafsir;
 pub mod tools;

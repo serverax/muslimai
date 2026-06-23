@@ -352,6 +352,205 @@ pub async fn inheritance(req: web::Json<InheritanceRequest>) -> Result<HttpRespo
 
 // --------------------------------------------------------------------------
 
+// --------------------------------------------------------------------------
+// Prayer times — deterministic astronomical calculation (no external API).
+// Algorithm after PrayTimes.org. Public, no login.
+// --------------------------------------------------------------------------
+
+const DEG2RAD: f64 = std::f64::consts::PI / 180.0;
+
+#[derive(Debug, Deserialize)]
+pub struct PrayerQuery {
+    pub lat: f64,
+    pub lng: f64,
+    /// Gregorian date YYYY-MM-DD.
+    pub date: String,
+    /// Timezone offset in hours from UTC (e.g. 3 for Makkah, 0 for London winter).
+    #[serde(default)]
+    pub tz: f64,
+    /// mwl | isna | egypt | makkah | karachi (default mwl).
+    #[serde(default)]
+    pub method: Option<String>,
+    /// standard | hanafi (default standard).
+    #[serde(default)]
+    pub asr: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct PrayerTimes {
+    pub date: String,
+    pub method: String,
+    pub asr_method: String,
+    pub location: [f64; 2],
+    pub timezone: f64,
+    pub fajr: String,
+    pub sunrise: String,
+    pub dhuhr: String,
+    pub asr: String,
+    pub maghrib: String,
+    pub isha: String,
+    pub note: &'static str,
+}
+
+fn julian_day(y: i64, m: i64, d: i64) -> f64 {
+    let (yy, mm) = if m <= 2 { (y - 1, m + 12) } else { (y, m) };
+    let a = (yy as f64 / 100.0).floor();
+    let b = 2.0 - a + (a / 4.0).floor();
+    (365.25 * (yy as f64 + 4716.0)).floor()
+        + (30.6001 * (mm as f64 + 1.0)).floor()
+        + d as f64
+        + b
+        - 1524.5
+}
+
+/// (declination_deg, equation_of_time_hours)
+fn sun_position(jd: f64) -> (f64, f64) {
+    let d = jd - 2451545.0;
+    let g = (357.529 + 0.98560028 * d).rem_euclid(360.0);
+    let q = (280.459 + 0.98564736 * d).rem_euclid(360.0);
+    let l = (q + 1.915 * (g * DEG2RAD).sin() + 0.020 * (2.0 * g * DEG2RAD).sin())
+        .rem_euclid(360.0);
+    let e = 23.439 - 0.00000036 * d;
+    let ra = (((e * DEG2RAD).cos() * (l * DEG2RAD).sin()).atan2((l * DEG2RAD).cos()) / DEG2RAD
+        / 15.0)
+        .rem_euclid(24.0);
+    let decl = (((e * DEG2RAD).sin()) * (l * DEG2RAD).sin()).asin() / DEG2RAD;
+    let eqt = q / 15.0 - ra;
+    (decl, eqt)
+}
+
+/// hours from local noon for the sun to reach angle `a` degrees below the horizon.
+fn time_for_angle(a: f64, lat: f64, decl: f64) -> Option<f64> {
+    let x = (-(a * DEG2RAD).sin() - (lat * DEG2RAD).sin() * (decl * DEG2RAD).sin())
+        / ((lat * DEG2RAD).cos() * (decl * DEG2RAD).cos());
+    if !(-1.0..=1.0).contains(&x) {
+        return None;
+    }
+    Some(x.acos() / DEG2RAD / 15.0)
+}
+
+fn asr_time(factor: f64, lat: f64, decl: f64) -> Option<f64> {
+    let alt = (1.0 / (factor + ((lat - decl).abs() * DEG2RAD).tan())).atan() / DEG2RAD;
+    time_for_angle(-alt, lat, decl)
+}
+
+fn fmt_hm(h: f64) -> String {
+    let h = h.rem_euclid(24.0);
+    let mut hh = h.floor() as i64;
+    let mut mm = ((h - hh as f64) * 60.0).round() as i64;
+    if mm == 60 {
+        mm = 0;
+        hh += 1;
+    }
+    format!("{:02}:{:02}", hh.rem_euclid(24), mm)
+}
+
+pub fn compute_prayer_times(q: &PrayerQuery) -> Result<PrayerTimes, ApiError> {
+    let parts: Vec<&str> = q.date.split('-').collect();
+    if parts.len() != 3 {
+        return Err(ApiError::bad_request("date must be YYYY-MM-DD"));
+    }
+    let y: i64 = parts[0].parse().map_err(|_| ApiError::bad_request("bad year"))?;
+    let m: i64 = parts[1].parse().map_err(|_| ApiError::bad_request("bad month"))?;
+    let d: i64 = parts[2].parse().map_err(|_| ApiError::bad_request("bad day"))?;
+    if !(-90.0..=90.0).contains(&q.lat) || !(-180.0..=180.0).contains(&q.lng) {
+        return Err(ApiError::bad_request("lat/lng out of range"));
+    }
+
+    let method = q.method.as_deref().unwrap_or("mwl").to_lowercase();
+    let (fajr_angle, isha_angle, isha_is_interval) = match method.as_str() {
+        "isna" => (15.0, 15.0, false),
+        "egypt" => (19.5, 17.5, false),
+        "karachi" => (18.0, 18.0, false),
+        "makkah" => (18.5, 0.0, true), // Isha = Maghrib + 90 min
+        _ => (18.0, 17.0, false),      // mwl
+    };
+    let asr_method = q.asr.as_deref().unwrap_or("standard").to_lowercase();
+    let asr_factor = if asr_method == "hanafi" { 2.0 } else { 1.0 };
+
+    let jd = julian_day(y, m, d) - q.lng / (15.0 * 24.0);
+    let (decl, eqt) = sun_position(jd + 0.5);
+
+    let dhuhr = 12.0 + q.tz - q.lng / 15.0 - eqt;
+    let err = || ApiError::bad_request("prayer times undefined at this latitude/date (polar)");
+    // Sunrise/Maghrib (sun at 0.833 below horizon). Error only in true polar day/night.
+    let rise_t = time_for_angle(0.833, q.lat, decl).ok_or_else(err)?;
+    let sunrise = dhuhr - rise_t;
+    let maghrib = dhuhr + rise_t;
+    // Length of the night (Maghrib -> next Sunrise), used for high-latitude fallback.
+    let night = 24.0 - 2.0 * rise_t;
+    let asr = dhuhr + asr_time(asr_factor, q.lat, decl).ok_or_else(err)?;
+    // High-latitude rule: when the twilight angle never occurs (e.g. London in
+    // summer), fall back to the "one-seventh of the night" method instead of failing.
+    let fajr = match time_for_angle(fajr_angle, q.lat, decl) {
+        Some(t) => dhuhr - t,
+        None => sunrise - night / 7.0,
+    };
+    let isha = if isha_is_interval {
+        maghrib + 1.5
+    } else {
+        match time_for_angle(isha_angle, q.lat, decl) {
+            Some(t) => dhuhr + t,
+            None => maghrib + night / 7.0,
+        }
+    };
+
+    Ok(PrayerTimes {
+        date: q.date.clone(),
+        method,
+        asr_method,
+        location: [q.lat, q.lng],
+        timezone: q.tz,
+        fajr: fmt_hm(fajr),
+        sunrise: fmt_hm(sunrise),
+        dhuhr: fmt_hm(dhuhr),
+        asr: fmt_hm(asr),
+        maghrib: fmt_hm(maghrib),
+        isha: fmt_hm(isha),
+        note: "deterministic calculation; confirm with your local masjid timetable",
+    })
+}
+
+pub async fn prayer_times(q: web::Query<PrayerQuery>) -> Result<HttpResponse, ApiError> {
+    Ok(HttpResponse::Ok().json(compute_prayer_times(&q)?))
+}
+
+// --------------------------------------------------------------------------
+// Islamic calendar — today's Hijri + important dates (Hijri-anchored; Gregorian
+// varies by moon sighting, stated honestly).
+// --------------------------------------------------------------------------
+
+pub async fn islamic_dates(q: web::Query<HijriQuery>) -> Result<HttpResponse, ApiError> {
+    let parts: Vec<&str> = q.date.split('-').collect();
+    if parts.len() != 3 {
+        return Err(ApiError::bad_request("date must be YYYY-MM-DD"));
+    }
+    let y: i64 = parts[0].parse().map_err(|_| ApiError::bad_request("bad year"))?;
+    let m: i64 = parts[1].parse().map_err(|_| ApiError::bad_request("bad month"))?;
+    let d: i64 = parts[2].parse().map_err(|_| ApiError::bad_request("bad day"))?;
+    let (hy, hm, hd) = gregorian_to_hijri(y, m, d);
+    let name = HIJRI_MONTHS
+        .get((hm - 1).clamp(0, 11) as usize)
+        .copied()
+        .unwrap_or("Unknown");
+
+    let important = serde_json::json!([
+        {"name": "Ramadan (start)", "hijri_month": 9, "hijri_day": 1, "note": "exact start depends on moon sighting"},
+        {"name": "Laylat al-Qadr", "hijri_month": 9, "hijri_day": "odd nights of last 10", "note": "seek in the last ten nights of Ramadan"},
+        {"name": "Eid al-Fitr", "hijri_month": 10, "hijri_day": 1, "note": "1 Shawwal; depends on moon sighting"},
+        {"name": "Day of Arafah", "hijri_month": 12, "hijri_day": 9, "note": "first ten days of Dhul Hijjah are blessed"},
+        {"name": "Eid al-Adha", "hijri_month": 12, "hijri_day": 10, "note": "10 Dhul Hijjah"},
+        {"name": "Day of Ashura", "hijri_month": 1, "hijri_day": 10, "note": "10 Muharram"},
+    ]);
+
+    Ok(HttpResponse::Ok().json(serde_json::json!({
+        "gregorian": q.date,
+        "today_hijri": { "year": hy, "month": hm, "day": hd, "month_name": name },
+        "important_dates": important,
+        "note": "Hijri dates are calculated (tabular); the actual day can shift by 1 day with local moon sighting.",
+    })))
+}
+
 fn round2(v: f64) -> f64 {
     (v * 100.0).round() / 100.0
 }
@@ -473,5 +672,28 @@ mod tests {
         assert!(!out.awl_applied);
         let total: f64 = out.shares.iter().map(|s| s.amount).sum();
         assert!((total - 7000.0).abs() < 1.0, "total {total}");
+    }
+
+    #[test]
+    fn prayer_times_are_ordered_for_london() {
+        let q = PrayerQuery {
+            lat: 51.5074,
+            lng: -0.1278,
+            date: "2026-06-23".to_string(),
+            tz: 1.0,
+            method: None,
+            asr: None,
+        };
+        let p = compute_prayer_times(&q).expect("london prayer times");
+        let mins = |s: &str| {
+            let v: Vec<i64> = s.split(':').map(|x| x.parse().unwrap()).collect();
+            v[0] * 60 + v[1]
+        };
+        // Fajr < Sunrise < Dhuhr < Asr < Maghrib < Isha
+        assert!(mins(&p.fajr) < mins(&p.sunrise), "{p:?}");
+        assert!(mins(&p.sunrise) < mins(&p.dhuhr));
+        assert!(mins(&p.dhuhr) < mins(&p.asr));
+        assert!(mins(&p.asr) < mins(&p.maghrib));
+        assert!(mins(&p.maghrib) < mins(&p.isha));
     }
 }

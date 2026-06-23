@@ -175,6 +175,75 @@ class ApiService {
     throw _apiException('review status lookup failed', res);
   }
 
+  // --- PHASE 2: daily essentials ---
+  Future<Map<String, dynamic>> prayerTimes({
+    required double lat,
+    required double lng,
+    required String date,
+    double tz = 0,
+    String method = 'mwl',
+    String asr = 'standard',
+  }) async {
+    final res = await _get(
+        '/api/tools/prayer-times?lat=$lat&lng=$lng&date=$date&tz=$tz&method=$method&asr=$asr');
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('prayer times failed', res);
+  }
+
+  Future<Map<String, dynamic>> islamicDates(String date) async {
+    final res = await _get('/api/tools/islamic-dates?date=$date');
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('islamic dates failed', res);
+  }
+
+  Future<Map<String, dynamic>> listDuas({String? category, String? q}) async {
+    final params = <String>[];
+    if (category != null && category.isNotEmpty) params.add('category=$category');
+    if (q != null && q.isNotEmpty) params.add('q=${Uri.encodeQueryComponent(q)}');
+    final qs = params.isEmpty ? '' : '?${params.join('&')}';
+    final res = await _get('/api/duas$qs');
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('list duas failed', res);
+  }
+
+  Future<Map<String, dynamic>> addBookmark(
+      {required String itemType, required String itemRef, String? label}) async {
+    final res = await _post('/api/bookmarks',
+        {'item_type': itemType, 'item_ref': itemRef, 'label': label});
+    if (res.statusCode == 201) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('add bookmark failed', res);
+  }
+
+  Future<Map<String, dynamic>> listBookmarks() async {
+    final res = await _get('/api/bookmarks');
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('list bookmarks failed', res);
+  }
+
+  Future<void> deleteBookmark(String id) async {
+    final res = await _delete('/api/bookmarks/$id');
+    if (res.statusCode != 200) throw _apiException('delete bookmark failed', res);
+  }
+
+  Future<Map<String, dynamic>> addReminder(
+      {required String title, String? type, String? schedule}) async {
+    final res = await _post('/api/reminders',
+        {'title': title, 'reminder_type': type, 'schedule_rule': schedule});
+    if (res.statusCode == 201) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('add reminder failed', res);
+  }
+
+  Future<Map<String, dynamic>> listReminders() async {
+    final res = await _get('/api/reminders');
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('list reminders failed', res);
+  }
+
+  Future<void> deleteReminder(String id) async {
+    final res = await _delete('/api/reminders/$id');
+    if (res.statusCode != 200) throw _apiException('delete reminder failed', res);
+  }
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {

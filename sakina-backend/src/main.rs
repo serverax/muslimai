@@ -716,8 +716,31 @@ async fn main() -> std::io::Result<()> {
             .route("/api/tools/qibla", web::get().to(handlers::tools::qibla))
             .route("/api/tools/hijri", web::get().to(handlers::tools::hijri))
             .route(
+                "/api/tools/prayer-times",
+                web::get().to(handlers::tools::prayer_times),
+            )
+            .route(
+                "/api/tools/islamic-dates",
+                web::get().to(handlers::tools::islamic_dates),
+            )
+            .route(
                 "/api/tools/inheritance",
                 web::post().to(handlers::tools::inheritance),
+            )
+            // PHASE 2 — dua library (public) + bookmarks/reminders (login required).
+            .route("/api/duas", web::get().to(handlers::library::list_duas))
+            .route("/api/duas/{id}", web::get().to(handlers::library::dua_detail))
+            .route("/api/bookmarks", web::post().to(handlers::library::add_bookmark))
+            .route("/api/bookmarks", web::get().to(handlers::library::list_bookmarks))
+            .route(
+                "/api/bookmarks/{id}",
+                web::delete().to(handlers::library::delete_bookmark),
+            )
+            .route("/api/reminders", web::post().to(handlers::library::add_reminder))
+            .route("/api/reminders", web::get().to(handlers::library::list_reminders))
+            .route(
+                "/api/reminders/{id}",
+                web::delete().to(handlers::library::delete_reminder),
             )
             .service(
                 web::scope("/api/rules")
@@ -1051,8 +1074,43 @@ async fn main() -> std::io::Result<()> {
                     .route("/api/tools/qibla", web::get().to(handlers::tools::qibla))
                     .route("/api/tools/hijri", web::get().to(handlers::tools::hijri))
                     .route(
+                        "/api/tools/prayer-times",
+                        web::get().to(handlers::tools::prayer_times),
+                    )
+                    .route(
+                        "/api/tools/islamic-dates",
+                        web::get().to(handlers::tools::islamic_dates),
+                    )
+                    .route(
                         "/api/tools/inheritance",
                         web::post().to(handlers::tools::inheritance),
+                    )
+                    // PHASE 2 — dua library + bookmarks/reminders (also under /v1 for mobile).
+                    .route("/api/duas", web::get().to(handlers::library::list_duas))
+                    .route("/api/duas/{id}", web::get().to(handlers::library::dua_detail))
+                    .route(
+                        "/api/bookmarks",
+                        web::post().to(handlers::library::add_bookmark),
+                    )
+                    .route(
+                        "/api/bookmarks",
+                        web::get().to(handlers::library::list_bookmarks),
+                    )
+                    .route(
+                        "/api/bookmarks/{id}",
+                        web::delete().to(handlers::library::delete_bookmark),
+                    )
+                    .route(
+                        "/api/reminders",
+                        web::post().to(handlers::library::add_reminder),
+                    )
+                    .route(
+                        "/api/reminders",
+                        web::get().to(handlers::library::list_reminders),
+                    )
+                    .route(
+                        "/api/reminders/{id}",
+                        web::delete().to(handlers::library::delete_reminder),
                     )
                     .route(
                         "/api/test/route",

@@ -5,6 +5,7 @@ import '../services/auth_service.dart';
 import '../services/module_service.dart';
 import 'calculators_screen.dart';
 import 'chat_screen.dart';
+import 'daily_essentials_screen.dart';
 import 'compliance_screen.dart';
 import 'iman_journey_screen.dart';
 import 'islamic_library_screen.dart';
@@ -60,6 +61,7 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
       ComplianceScreen(session: widget.session),
       CalculatorsScreen(),
       ScholarReviewsScreen(session: widget.session),
+      DailyEssentialsScreen(session: widget.session),
     ];
 
     return Scaffold(
@@ -130,6 +132,11 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
             icon: Icon(Icons.gavel_outlined),
             selectedIcon: Icon(Icons.gavel),
             label: 'Reviews',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.mosque_outlined),
+            selectedIcon: Icon(Icons.mosque),
+            label: 'Daily',
           ),
         ],
       ),
