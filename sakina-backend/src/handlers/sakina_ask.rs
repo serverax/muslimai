@@ -877,6 +877,18 @@ pub async fn ask(
         return response;
     }
 
+    // PHASE 3: citation guard — record citation validation + source links + RAG trace.
+    crate::handlers::corpus::persist_citation_trace(
+        pool.get_ref(),
+        &trace_id,
+        &intent,
+        &safe_message,
+        &citations,
+        source_path.blocked,
+        &safety_state,
+    )
+    .await;
+
     let risk_level = if safety.crisis_detected || high_risk_fatwa(&safe_message) {
         "high".to_string()
     } else {

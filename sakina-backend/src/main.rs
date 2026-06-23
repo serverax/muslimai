@@ -1112,6 +1112,39 @@ async fn main() -> std::io::Result<()> {
                         "/api/reminders/{id}",
                         web::delete().to(handlers::library::delete_reminder),
                     )
+                    // PHASE 3 — Islamic corpus (public read) + citation guard lookup.
+                    .route("/quran/surahs", web::get().to(handlers::corpus::quran_surahs))
+                    .route(
+                        "/quran/surah/{surah}",
+                        web::get().to(handlers::corpus::quran_surah),
+                    )
+                    .route(
+                        "/quran/ayah/{surah}/{ayah}",
+                        web::get().to(handlers::corpus::quran_ayah),
+                    )
+                    .route("/quran/search", web::get().to(handlers::corpus::quran_search))
+                    .route(
+                        "/quran/tafsir/{surah}/{ayah}",
+                        web::get().to(handlers::corpus::quran_tafsir),
+                    )
+                    .route(
+                        "/hadith/collections",
+                        web::get().to(handlers::corpus::hadith_collections),
+                    )
+                    .route("/hadith/search", web::get().to(handlers::corpus::hadith_search))
+                    .route(
+                        "/hadith/{collection}/{number}",
+                        web::get().to(handlers::corpus::hadith_detail),
+                    )
+                    .route(
+                        "/islamic-sources",
+                        web::get().to(handlers::corpus::islamic_sources),
+                    )
+                    .route("/fatwa/search", web::get().to(handlers::corpus::fatwa_search))
+                    .route(
+                        "/citation-check",
+                        web::get().to(handlers::corpus::citation_check),
+                    )
                     .route(
                         "/api/test/route",
                         web::post().to(handlers::brain::test_route),

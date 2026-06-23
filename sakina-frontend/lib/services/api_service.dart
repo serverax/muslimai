@@ -244,6 +244,26 @@ class ApiService {
     if (res.statusCode != 200) throw _apiException('delete reminder failed', res);
   }
 
+  // --- PHASE 3: Islamic corpus (public read) ---
+  Future<Map<String, dynamic>> _getJsonPublic(String path) async {
+    final res = await _get(path);
+    if (res.statusCode == 200) return jsonDecode(res.body) as Map<String, dynamic>;
+    throw _apiException('corpus request failed ($path)', res);
+  }
+
+  Future<Map<String, dynamic>> quranSurahs() => _getJsonPublic('/quran/surahs');
+  Future<Map<String, dynamic>> quranSurah(int surah) =>
+      _getJsonPublic('/quran/surah/$surah');
+  Future<Map<String, dynamic>> quranSearch(String q) =>
+      _getJsonPublic('/quran/search?q=${Uri.encodeQueryComponent(q)}');
+  Future<Map<String, dynamic>> quranTafsir(int surah, int ayah) =>
+      _getJsonPublic('/quran/tafsir/$surah/$ayah');
+  Future<Map<String, dynamic>> hadithCollections() =>
+      _getJsonPublic('/hadith/collections');
+  Future<Map<String, dynamic>> hadithSearch(String q) =>
+      _getJsonPublic('/hadith/search?q=${Uri.encodeQueryComponent(q)}');
+  Future<Map<String, dynamic>> islamicSources() => _getJsonPublic('/islamic-sources');
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {

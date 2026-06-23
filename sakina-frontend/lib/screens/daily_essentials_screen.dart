@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_config.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import 'quran_corpus_screen.dart';
 
 /// PHASE 2 hub: Prayer Times, Islamic Calendar, Dua Library (public),
 /// Bookmarks + Reminders (login required), Adhan settings (local-only).
@@ -25,6 +26,10 @@ class DailyEssentialsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Daily Essentials')),
       body: ListView(children: [
+        _tile(context, Icons.menu_book_rounded, 'Quran', 'Read & search, with sources',
+            () => _go(context, QuranScreen(api: api))),
+        _tile(context, Icons.format_quote, 'Hadith', 'Search authentic hadith',
+            () => _go(context, HadithScreen(api: api))),
         _tile(context, Icons.access_time, 'Prayer Times', 'No login needed',
             () => _go(context, PrayerTimesScreen(api: api))),
         _tile(context, Icons.calendar_month, 'Islamic Calendar', 'No login needed',

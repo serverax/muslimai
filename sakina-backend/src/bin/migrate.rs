@@ -163,6 +163,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             include_str!("../../db/migrations/032_reminders.sql"),
         ),
         (
+            "033_islamic_corpus.sql",
+            include_str!("../../db/migrations/033_islamic_corpus.sql"),
+        ),
+        (
+            "034_islamic_corpus_seed.sql",
+            include_str!("../../db/migrations/034_islamic_corpus_seed.sql"),
+        ),
+        (
             "seed_knowledge.sql",
             include_str!("../../db/seed_knowledge.sql"),
         ),
