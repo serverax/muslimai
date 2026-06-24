@@ -1224,6 +1224,27 @@ async fn main() -> std::io::Result<()> {
                         "/payment/events",
                         web::get().to(handlers::subscription::payment_events),
                     )
+                    // PHASE 6H — mobile feature gates (public read + admin control).
+                    .route(
+                        "/features",
+                        web::get().to(handlers::app_features::list_public_features),
+                    )
+                    .route(
+                        "/admin/features",
+                        web::get().to(handlers::app_features::list_admin_features),
+                    )
+                    .route(
+                        "/admin/features/reset-defaults",
+                        web::post().to(handlers::app_features::reset_defaults),
+                    )
+                    .route(
+                        "/admin/features/{feature_key}",
+                        web::put().to(handlers::app_features::update_feature),
+                    )
+                    .route(
+                        "/admin/app-status",
+                        web::get().to(handlers::app_features::app_status),
+                    )
                     .route(
                         "/api/test/route",
                         web::post().to(handlers::brain::test_route),

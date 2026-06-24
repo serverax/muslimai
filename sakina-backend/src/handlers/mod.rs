@@ -1,3 +1,4 @@
+pub mod app_features;
 pub mod agent;
 pub mod agent_feedback;
 pub mod brain;

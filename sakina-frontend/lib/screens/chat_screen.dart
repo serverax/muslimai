@@ -4,6 +4,7 @@ import '../config/api_config.dart';
 import '../config/brand_config.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import '../widgets/luxury/luxury_components.dart';
 import '../services/pending_review_store.dart';
 import 'scholar_reviews_screen.dart';
 
@@ -182,6 +183,15 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(12, 8, 12, 0),
+            child: SafeDisclaimerBanner(
+              compact: true,
+              message:
+                  'AI Islamic guidance may be limited. For personal fatwa matters consult a qualified scholar. '
+                  'Not for emergency, legal, medical, or life-threatening decisions.',
+            ),
+          ),
           if (_status.isNotEmpty)
             Container(
               width: double.infinity,

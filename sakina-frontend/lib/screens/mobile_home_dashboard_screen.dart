@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../app/app_state.dart';
-import '../config/brand_config.dart';
+import '../design/sakina_colors.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import '../services/feature_service.dart';
 import '../services/pending_review_store.dart';
 import '../services/sakina_api.dart';
+import '../widgets/luxury/luxury_components.dart';
 import 'admin_tools_screen.dart';
 import 'calculators_screen.dart';
 import 'chat_screen.dart';
@@ -18,7 +20,7 @@ import 'settings_screen.dart';
 import 'study_hub_screen.dart';
 import 'subscription_screen.dart';
 
-/// Logged-in user dashboard — 12 journey cards.
+/// Logged-in user dashboard — luxury journey cards with feature gates.
 class MobileHomeDashboardScreen extends StatefulWidget {
   const MobileHomeDashboardScreen({
     super.key,
@@ -50,6 +52,7 @@ class _MobileHomeDashboardScreenState extends State<MobileHomeDashboardScreen> {
 
   Future<void> _load() async {
     final api = await SakinaApi.create(session: widget.session);
+    await FeatureService.instance.load(api);
     Map<String, dynamic>? ent;
     Map<String, dynamic>? prayer;
     int pending = 0;
@@ -82,8 +85,17 @@ class _MobileHomeDashboardScreenState extends State<MobileHomeDashboardScreen> {
     }
   }
 
-  void _go(Widget screen) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  void _gate(String featureKey, Widget Function() screen) {
+    FeatureService.instance.navigateToFeature(
+      context: context,
+      featureKey: featureKey,
+      appState: widget.appState,
+      session: widget.session,
+      entitlements: _entitlements,
+      isAdmin: false,
+      isScholar: _scholarAccess,
+      onAllowed: screen,
+    );
   }
 
   Future<void> _logout() async {
@@ -97,13 +109,14 @@ class _MobileHomeDashboardScreenState extends State<MobileHomeDashboardScreen> {
   Widget build(BuildContext context) {
     final api = _api;
     if (api == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const SakinaLoadingState(message: 'Loading your dashboard…');
     }
     final session = widget.session;
     final tier = _entitlements?['tier']?.toString() ?? 'free';
 
     return RefreshIndicator(
       onRefresh: _load,
+      color: SakinaColors.emerald,
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -112,162 +125,131 @@ class _MobileHomeDashboardScreenState extends State<MobileHomeDashboardScreen> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.settings_outlined),
-                onPressed: () => _go(SettingsScreen(
-                  appState: widget.appState,
-                  session: session,
-                  onLogout: _logout,
-                )),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => SettingsScreen(
+                      appState: widget.appState,
+                      session: session,
+                      onLogout: _logout,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
           SliverPadding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _identityCard(tier),
-                if (_prayerSummary != null) _prayerCard(),
-                const SizedBox(height: 8),
-                _gridCard(
+                LuxuryDashboardCard(
+                  title: 'As-salamu alaykum',
+                  subtitle: session.email,
+                  gradient: true,
+                  badges: [
+                    RoleBadge(role: SakinaRole.user),
+                    StatusBadge(label: 'Plan: $tier', color: SakinaColors.goldSoft),
+                  ],
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.white24,
+                    child: Icon(Icons.mosque, color: Colors.white),
+                  ),
+                ),
+                if (_prayerSummary != null)
+                  FeatureTile(
+                    icon: Icons.access_time,
+                    title: "Today's prayer times",
+                    subtitle:
+                        'Fajr ${_prayerSummary!['fajr']} · Dhuhr ${_prayerSummary!['dhuhr']} · Asr ${_prayerSummary!['asr']}',
+                    onTap: () => _gate('prayer_times', () => PrayerHubScreen(api: api, session: session)),
+                  ),
+                const IslamicSectionHeader(title: 'Guidance & study'),
+                FeatureTile(
                   icon: Icons.chat_bubble_outline,
                   title: 'Ask AI Shaikh',
-                  onTap: () => _go(ChatScreen(session: session)),
+                  onTap: () => _gate('ask_ai_shaikh', () => ChatScreen(session: session)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.menu_book,
                   title: 'Quran Study',
-                  onTap: () => _go(StudyHubScreen(api: api, session: session)),
+                  onTap: () => _gate('quran_reader', () => StudyHubScreen(api: api, session: session)),
                 ),
-                _gridCard(
+                const IslamicSectionHeader(title: 'Daily essentials'),
+                FeatureTile(
                   icon: Icons.access_time,
                   title: 'Prayer & Qibla',
-                  onTap: () => _go(PrayerHubScreen(api: api, session: session)),
+                  onTap: () => _gate('prayer_times', () => PrayerHubScreen(api: api, session: session)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.wb_twilight,
                   title: 'Dua Library',
-                  onTap: () => _go(DuaLibraryScreen(api: api, loggedIn: true)),
+                  onTap: () => _gate('dua_library', () => DuaLibraryScreen(api: api, loggedIn: true)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.bookmark,
                   title: 'Bookmarks',
-                  onTap: () => _go(BookmarksScreen(api: api)),
+                  onTap: () => _gate('bookmarks', () => BookmarksScreen(api: api)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.notifications,
                   title: 'Reminders',
-                  onTap: () => _go(RemindersScreen(api: api)),
+                  onTap: () => _gate('reminders', () => RemindersScreen(api: api)),
                 ),
-                _gridCard(
+                const IslamicSectionHeader(title: 'Family & tools'),
+                FeatureTile(
                   icon: Icons.child_care,
                   title: 'Kids Learning',
-                  onTap: () => _go(KidsLearningScreen(api: api, loggedIn: true)),
+                  onTap: () => _gate('kids_learning', () => KidsLearningScreen(api: api, loggedIn: true)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.calculate,
                   title: 'Zakat Calculator',
-                  onTap: () => _go(CalculatorsScreen(api: api, initialTab: 0)),
+                  onTap: () => _gate('zakat', () => CalculatorsScreen(api: api, initialTab: 0)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.family_restroom,
                   title: 'Mirath Calculator',
-                  onTap: () => _go(CalculatorsScreen(api: api, initialTab: 1)),
+                  onTap: () => _gate('mirath', () => CalculatorsScreen(api: api, initialTab: 1)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.workspace_premium,
                   title: 'Subscription',
-                  onTap: () => _go(SubscriptionScreen(session: session)),
+                  onTap: () => _gate('subscription', () => SubscriptionScreen(session: session)),
                 ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.gavel,
                   title: 'Scholar Review',
                   subtitle: _pendingReviews > 0 ? '$_pendingReviews pending' : null,
-                  onTap: () => _go(ScholarReviewsScreen(session: session)),
+                  onTap: () => _gate('scholar_review', () => ScholarReviewsScreen(session: session)),
                 ),
                 if (_scholarAccess)
-                  _gridCard(
+                  FeatureTile(
                     icon: Icons.school,
                     title: 'Scholar Dashboard',
-                    onTap: () => _go(ScholarDashboardScreen(session: session)),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ScholarDashboardScreen(session: session),
+                      ),
+                    ),
                   ),
-                _gridCard(
+                FeatureTile(
                   icon: Icons.admin_panel_settings,
                   title: 'Admin Tools',
-                  onTap: () => _go(AdminToolsScreen(session: session)),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => AdminToolsScreen(session: session, appState: widget.appState),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 OutlinedButton.icon(
                   onPressed: _logout,
                   icon: const Icon(Icons.logout),
-                  label: Text('Logout (${session.email})'),
+                  label: Text('Logout'),
                 ),
               ]),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _identityCard(String tier) {
-    return Card(
-      color: const Color(SakinaBrand.colorPrimary),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            const CircleAvatar(
-              backgroundColor: Colors.white24,
-              child: Icon(Icons.mosque, color: Colors.white),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Sakina AI', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  Text(widget.session.email, style: const TextStyle(color: Colors.white70)),
-                  Text('Plan: $tier', style: const TextStyle(color: Colors.white70, fontSize: 12)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _prayerCard() {
-    final p = _prayerSummary!;
-    return Card(
-      child: ListTile(
-        leading: const Icon(Icons.access_time, color: Color(SakinaBrand.colorPrimary)),
-        title: const Text('Today\'s prayer times'),
-        subtitle: Text(
-          'Fajr ${p['fajr']} · Dhuhr ${p['dhuhr']} · Asr ${p['asr']} · Maghrib ${p['maghrib']} · Isha ${p['isha']}',
-        ),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () => _go(PrayerHubScreen(api: _api!, session: widget.session)),
-      ),
-    );
-  }
-
-  Widget _gridCard({
-    required IconData icon,
-    required String title,
-    String? subtitle,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: const Color(SakinaBrand.colorAccent),
-          child: Icon(icon, color: const Color(SakinaBrand.colorPrimary)),
-        ),
-        title: Text(title),
-        subtitle: subtitle != null ? Text(subtitle) : null,
-        trailing: const Icon(Icons.chevron_right),
-        onTap: onTap,
       ),
     );
   }

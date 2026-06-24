@@ -3,12 +3,15 @@ import 'package:http/http.dart' as http;
 
 import '../app/app_state.dart';
 import '../config/api_config.dart';
+import '../design/sakina_colors.dart';
 import '../services/auth_service.dart';
+import '../widgets/luxury/luxury_components.dart';
 import 'account_intro_screen.dart';
 import 'home_shell_screen.dart';
+import 'terms_privacy_screen.dart';
 import 'welcome_screen.dart';
 
-/// Splash + API health probe, then route to welcome/guest/logged-in shell.
+/// Splash + API health probe with luxury styling and safety disclaimer.
 class SplashEnvironmentScreen extends StatefulWidget {
   const SplashEnvironmentScreen({super.key, required this.appState});
 
@@ -59,7 +62,9 @@ class _SplashEnvironmentScreenState extends State<SplashEnvironmentScreen> {
     if (!mounted) return;
     setState(() {
       _healthOk = healthOk;
-      _status = healthOk ? 'Sakina API is online.' : 'API offline — you can still browse cached guides.';
+      _status = healthOk
+          ? 'Sakina API is online.'
+          : 'API offline — you can still browse guides and cached content.';
       _ready = true;
     });
 
@@ -76,9 +81,7 @@ class _SplashEnvironmentScreenState extends State<SplashEnvironmentScreen> {
     } else {
       next = HomeShellScreen(appState: app, session: session);
     }
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => next),
-    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => next));
   }
 
   Future<void> _retry() async {
@@ -94,6 +97,7 @@ class _SplashEnvironmentScreenState extends State<SplashEnvironmentScreen> {
   Widget build(BuildContext context) {
     final health = _healthOk;
     return Scaffold(
+      backgroundColor: SakinaColors.cream,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -101,32 +105,53 @@ class _SplashEnvironmentScreenState extends State<SplashEnvironmentScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(),
-              Text(
-                'Sakina AI',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1B6B5E),
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Your Muslim companion',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 32),
-              if (!_ready)
-                const Center(child: CircularProgressIndicator())
-              else ...[
-                _infoRow('API base', _apiBase ?? '—'),
-                _infoRow(
-                  'Health',
-                  health == true ? 'Online' : 'Offline',
-                  color: health == true ? Colors.green : Colors.orange,
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [SakinaColors.navy, SakinaColors.emerald],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                const SizedBox(height: 12),
-                Text(_status, textAlign: TextAlign.center),
+                child: Column(
+                  children: [
+                    const Icon(Icons.mosque, size: 48, color: Colors.white),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Sakina AI',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Your trusted Islamic companion',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              const SafeDisclaimerBanner(compact: true),
+              const SizedBox(height: 16),
+              if (!_ready)
+                const SakinaLoadingState(message: 'Connecting…')
+              else ...[
+                LuxuryDashboardCard(
+                  title: 'Environment',
+                  subtitle: _apiBase ?? '—',
+                  badges: [
+                    StatusBadge(
+                      label: health == true ? 'API online' : 'API offline',
+                      color: health == true ? SakinaColors.success : SakinaColors.error,
+                      icon: health == true ? Icons.check_circle : Icons.warning_amber,
+                    ),
+                  ],
+                ),
+                Text(_status, textAlign: TextAlign.center, style: const TextStyle(color: SakinaColors.textSecondary)),
               ],
               const Spacer(),
               if (_ready) ...[
@@ -141,25 +166,16 @@ class _SplashEnvironmentScreenState extends State<SplashEnvironmentScreen> {
                 ),
                 const SizedBox(height: 8),
                 TextButton(
-                  onPressed: _retry,
-                  child: const Text('Retry health check'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const TermsPrivacyScreen()),
+                  ),
+                  child: const Text('Terms & Privacy'),
                 ),
+                TextButton(onPressed: _retry, child: const Text('Retry health check')),
               ],
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _infoRow(String label, String value, {Color? color}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.w600)),
-          Expanded(child: Text(value, style: TextStyle(color: color))),
-        ],
       ),
     );
   }

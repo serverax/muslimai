@@ -895,7 +895,7 @@ pub async fn ask(
     )
     .await;
 
-    let risk_level = if safety.crisis_detected || high_risk_fatwa(&safe_message) {
+    let _risk_level = if safety.crisis_detected || high_risk_fatwa(&safe_message) {
         "high".to_string()
     } else {
         "normal".to_string()
@@ -905,7 +905,6 @@ pub async fn ask(
         answer,
         language,
         intent,
-        risk_level,
         trace_id,
         safety_state,
         source_path,

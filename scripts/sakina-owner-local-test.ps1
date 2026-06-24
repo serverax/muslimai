@@ -63,7 +63,7 @@ function Get-LanIp {
       else { 2 }
     } |
     Select-Object -First 1 -ExpandProperty IPAddress
-  if (-not $ip) { return "127.0.0.1" }
+  if ([string]::IsNullOrWhiteSpace($ip)) { return $null }
   return $ip
 }
 
@@ -170,11 +170,21 @@ try { docker info *> $null } catch {
 Write-Pass "Docker daemon is running"
 
 $lan = Get-LanIp
-Write-Host "LAN IP detected: $lan (used for APK only — not hardcoded in web build)" -ForegroundColor Yellow
+if ([string]::IsNullOrWhiteSpace($lan)) {
+  Write-Host "LAN IP not detected — phone APK commands will use YOUR_LAN_IP placeholder" -ForegroundColor Yellow
+  $lanApiBase = "http://YOUR_LAN_IP:$ApiPort/v1"
+  $lanDisplay = "YOUR_LAN_IP (run: ipconfig and use your Wi-Fi IPv4 address)"
+} else {
+  Write-Host "LAN IP detected: $lan (used for phone APK only)" -ForegroundColor Yellow
+  $lanApiBase = "http://${lan}:$ApiPort/v1"
+  $lanDisplay = $lan
+}
 
 $origins = @(
-  "http://localhost:$WebPort", "http://127.0.0.1:$WebPort", "http://${lan}:$WebPort",
-  "http://localhost:8091", "http://127.0.0.1:8091", "http://${lan}:8091"
+  "http://localhost:$WebPort", "http://127.0.0.1:$WebPort",
+  $(if ($lan) { "http://${lan}:$WebPort" } else { "http://127.0.0.1:$WebPort" }),
+  "http://localhost:8091", "http://127.0.0.1:8091",
+  $(if ($lan) { "http://${lan}:8091" } else { "http://127.0.0.1:8091" })
 ) -join ","
 $env:CORS_ALLOWED_ORIGINS = $origins
 Ensure-EnvFile
@@ -262,7 +272,6 @@ Write-Pass "Quran + prayer-times endpoints return 200"
 # --- 4. Flutter web ---
 $webUrl = "http://localhost:$WebPort/"
 $apiBase = "http://localhost:$ApiPort/v1"
-$lanApiBase = "http://${lan}:$ApiPort/v1"
 $emulatorApiBase = "http://10.0.2.2:$ApiPort/v1"
 $apkPath = Join-Path $frontend "build/app/outputs/flutter-apk/app-debug.apk"
 $webCurlResult = 'not started'

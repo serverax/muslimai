@@ -165,3 +165,23 @@ cd sakina-frontend && flutter build apk --debug \
 ```powershell
 pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk
 ```
+
+---
+
+## Phase 6H — luxury design + server feature gates
+
+Mobile loads `GET /v1/features` on dashboard init. Each tile uses gate logic:
+
+| State | User sees |
+|-------|-----------|
+| Free + enabled | Real feature screen |
+| `requires_login` + guest | Login-required luxury card |
+| `requires_premium` + no entitlement | Premium locked card |
+| `coming_soon` | Coming soon card |
+| `!enabled` | Disabled card |
+| `maintenance_mode` | Maintenance card |
+| `admin_only` / `scholar_only` | Hidden or access denied |
+
+**25 admin-managed features:** ask_ai_shaikh, quran_reader, quran_search, tafsir, hadith, islamic_sources, dua_library, prayer_times, qibla, adhan_preferences, islamic_calendar, zakat, mirath, masjid_near_me, new_muslim_guide, wudu_guide, salah_guide, ramadan_guide, hajj_umrah_guide, halal_haram_guidance, scholar_review, bookmarks, reminders, kids_learning, subscription.
+
+Design system: deep navy, emerald, gold, cream — `lib/design/` + `lib/widgets/luxury/`.

@@ -3,11 +3,12 @@ import 'package:http/http.dart' as http;
 
 import '../app/app_state.dart';
 import '../config/api_config.dart';
-import '../config/brand_config.dart';
+import '../design/sakina_colors.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import '../services/feature_service.dart';
 import '../services/sakina_api.dart';
-import '../widgets/workflow_states.dart';
+import '../widgets/luxury/luxury_components.dart';
 import 'account_intro_screen.dart';
 import 'daily_essentials_screen.dart';
 import 'phase4_screens.dart';
@@ -15,7 +16,7 @@ import 'prayer_hub_screen.dart';
 import 'study_hub_screen.dart';
 import 'subscription_screen.dart';
 
-/// Guest home — public features without login.
+/// Guest home — public features with luxury design and feature gates.
 class GuestHomeDashboardScreen extends StatefulWidget {
   const GuestHomeDashboardScreen({
     super.key,
@@ -44,6 +45,7 @@ class _GuestHomeDashboardScreenState extends State<GuestHomeDashboardScreen> {
   Future<void> _init() async {
     final base = await ApiConfig.resolveBaseUrl();
     final api = await SakinaApi.create();
+    await FeatureService.instance.load(api);
     bool ok = false;
     try {
       final res = await http
@@ -60,8 +62,17 @@ class _GuestHomeDashboardScreenState extends State<GuestHomeDashboardScreen> {
     }
   }
 
-  void _go(Widget screen) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  void _gate(String featureKey, Widget Function() screen) {
+    FeatureService.instance.navigateToFeature(
+      context: context,
+      featureKey: featureKey,
+      appState: widget.appState,
+      session: null,
+      entitlements: null,
+      isAdmin: false,
+      isScholar: false,
+      onAllowed: screen,
+    );
   }
 
   void _login({bool register = false}) async {
@@ -80,19 +91,11 @@ class _GuestHomeDashboardScreenState extends State<GuestHomeDashboardScreen> {
     }
   }
 
-  void _protected(String name, Widget Function(AuthSession) builder) {
-    _go(LoginRequiredScreen(
-      appState: widget.appState,
-      featureName: name,
-      onLoggedIn: widget.onLoggedIn,
-    ));
-  }
-
   @override
   Widget build(BuildContext context) {
     final api = _api;
     if (api == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const SakinaLoadingState(message: 'Loading…');
     }
 
     return CustomScrollView(
@@ -103,91 +106,76 @@ class _GuestHomeDashboardScreenState extends State<GuestHomeDashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(widget.appState.t('appTitle')),
-              Text(
-                SakinaBrand.tagline,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              Text('Trusted Islamic companion', style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
           actions: [
             _HealthDot(ok: _healthOk),
             TextButton(onPressed: () => _login(register: true), child: const Text('Register')),
-            TextButton(onPressed: _login, child: const Text('Login')),
+            TextButton(onPressed: () => _login(), child: const Text('Login')),
           ],
         ),
         SliverPadding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              _headerCard(),
-              _section('Explore as guest'),
-              _card(Icons.menu_book, 'Quran Study', 'Read & search with sources',
-                  () => _go(StudyHubScreen(api: api))),
-              _card(Icons.access_time, 'Prayer & Qibla', 'Times, Qibla, calendar',
-                  () => _go(PrayerHubScreen(api: api))),
-              _card(Icons.wb_twilight, 'Dua Library', 'Search duas',
-                  () => _go(DuaLibraryScreen(api: api))),
-              _card(Icons.article_outlined, 'Islamic Guides', 'Wudu, Salah, Ramadan, Hajj',
-                  () => _go(GuidesScreen(api: api))),
-              _card(Icons.workspace_premium, 'Subscription Plans', 'Free vs premium preview',
-                  () => _go(SubscriptionScreen())),
-              _section('Requires login'),
-              _card(Icons.bookmark, 'Bookmarks', 'Save your favourites',
-                  () => _protected('Bookmarks', (s) => BookmarksScreen(api: api))),
-              _card(Icons.notifications, 'Reminders', 'Prayer & study reminders',
-                  () => _protected('Reminders', (s) => RemindersScreen(api: api))),
-              _card(Icons.chat_bubble, 'Ask AI Shaikh', 'Personalised guidance',
-                  () => _protected('Ask AI Shaikh', (_) => const SizedBox())),
+              LuxuryDashboardCard(
+                title: 'As-salamu alaykum',
+                subtitle: 'Browse Quran, prayer times, duas, and guides as a guest.',
+                gradient: true,
+                badges: const [RoleBadge(role: SakinaRole.guest)],
+              ),
+              const SafeDisclaimerBanner(compact: true),
+              const IslamicSectionHeader(title: 'Explore as guest'),
+              FeatureTile(
+                icon: Icons.menu_book,
+                title: 'Quran Study',
+                subtitle: 'Read & search with sources',
+                onTap: () => _gate('quran_reader', () => StudyHubScreen(api: api)),
+              ),
+              FeatureTile(
+                icon: Icons.access_time,
+                title: 'Prayer & Qibla',
+                subtitle: 'Times, Qibla, calendar',
+                onTap: () => _gate('prayer_times', () => PrayerHubScreen(api: api)),
+              ),
+              FeatureTile(
+                icon: Icons.wb_twilight,
+                title: 'Dua Library',
+                onTap: () => _gate('dua_library', () => DuaLibraryScreen(api: api)),
+              ),
+              FeatureTile(
+                icon: Icons.article_outlined,
+                title: 'Islamic Guides',
+                onTap: () => _gate('new_muslim_guide', () => GuidesScreen(api: api)),
+              ),
+              FeatureTile(
+                icon: Icons.workspace_premium,
+                title: 'Subscription Plans',
+                onTap: () => _gate('subscription', () => SubscriptionScreen()),
+              ),
+              const IslamicSectionHeader(title: 'Requires login'),
+              FeatureTile(
+                icon: Icons.bookmark,
+                title: 'Bookmarks',
+                onTap: () => _gate('bookmarks', () => BookmarksScreen(api: api)),
+              ),
+              FeatureTile(
+                icon: Icons.notifications,
+                title: 'Reminders',
+                onTap: () => _gate('reminders', () => RemindersScreen(api: api)),
+              ),
+              FeatureTile(
+                icon: Icons.chat_bubble,
+                title: 'Ask AI Shaikh',
+                onTap: () => _gate('ask_ai_shaikh', () => const SizedBox()),
+              ),
               const SizedBox(height: 8),
-              Text('API: $_apiBase', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+              Text('API: $_apiBase', style: const TextStyle(fontSize: 11, color: SakinaColors.textSecondary)),
             ]),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _headerCard() {
-    return Card(
-      color: const Color(SakinaBrand.colorPrimary),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'As-salamu alaykum',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Browse Quran, prayer times, duas, and guides without an account.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _section(String title) => Padding(
-        padding: const EdgeInsets.fromLTRB(4, 16, 4, 8),
-        child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-      );
-
-  Widget _card(IconData icon, String title, String subtitle, VoidCallback onTap) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: const Color(SakinaBrand.colorAccent),
-          child: Icon(icon, color: const Color(SakinaBrand.colorPrimary)),
-        ),
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: onTap,
-      ),
     );
   }
 }
@@ -200,8 +188,8 @@ class _HealthDot extends StatelessWidget {
     final color = ok == null
         ? Colors.grey
         : ok!
-            ? Colors.green
-            : Colors.orange;
+            ? SakinaColors.success
+            : SakinaColors.error;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Icon(Icons.circle, size: 10, color: color),

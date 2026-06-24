@@ -383,6 +383,49 @@ class ApiService {
     throw _apiException('modules status failed', res);
   }
 
+  Future<Map<String, dynamic>> listFeatures() async {
+    final res = await _get('/features');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('features list failed', res);
+  }
+
+  Future<Map<String, dynamic>> adminListFeatures() async {
+    final res = await _get('/admin/features');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('admin features failed', res);
+  }
+
+  Future<Map<String, dynamic>> adminAppStatus() async {
+    final res = await _get('/admin/app-status');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('admin app status failed', res);
+  }
+
+  Future<Map<String, dynamic>> adminUpdateFeature({
+    required String featureKey,
+    required Map<String, dynamic> patch,
+  }) async {
+    final res = await _put('/admin/features/$featureKey', patch);
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('admin update feature failed', res);
+  }
+
+  Future<Map<String, dynamic>> adminResetFeatures() async {
+    final res = await _post('/admin/features/reset-defaults', {});
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('admin reset features failed', res);
+  }
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {

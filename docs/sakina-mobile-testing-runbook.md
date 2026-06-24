@@ -1,6 +1,8 @@
 # Sakina Mobile Testing Runbook
 
-Phase 6G — test the **Android APK** as the real product. Web at `:8090` is diagnostic only.
+Phase 6H — test the **Android APK** as the real product. Web at `:8090` is diagnostic only.
+
+**Status target:** `MOBILE_OWNER_TEST_READY` (not `APP_STORE_READY`).
 
 ---
 
@@ -8,7 +10,6 @@ Phase 6G — test the **Android APK** as the real product. Web at `:8090` is dia
 
 ```bash
 cd sakina-infra
-# Create .env if missing (placeholders only — do not commit secrets)
 cat > .env <<'EOF'
 POSTGRES_PASSWORD=sakina_local_pw
 JWT_SECRET=local-dev-jwt-secret-change-me-32chars
@@ -16,10 +17,23 @@ ENCRYPTION_KEY=local-dev-encryption-key-change-32
 EOF
 
 docker compose -f docker-compose.qa.yml up -d --build
+docker compose -f docker-compose.qa.yml run --rm api sakina-migrate
 curl http://localhost:28080/health
+curl http://localhost:28080/v1/features
 ```
 
-Expected: HTTP 200.
+Expected: HTTP 200; `/v1/features` returns 25 feature gates.
+
+### Owner one-command scripts
+```bash
+./scripts/sakina-owner-local-test.sh
+BUILD_APK=1 ./scripts/sakina-owner-local-test.sh
+```
+```powershell
+pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk
+```
+
+Phone API URL must use a detected LAN IP or the placeholder `YOUR_LAN_IP` with instructions — never `http://:28080/v1`.
 
 ---
 
@@ -72,7 +86,23 @@ adb install -r sakina-frontend/build/app/outputs/flutter-apk/app-debug.apk
 
 ## 4. Journey test checklist
 
-See [sakina-mobile-workflows-and-button-map.md](./sakina-mobile-workflows-and-button-map.md) for every button.
+## 8. Admin feature control (Phase 6H)
+
+| Action | Who | API / UI |
+|--------|-----|----------|
+| View public gates | Anyone | `GET /v1/features` — mobile reads on dashboard load |
+| List all 25 features | Admin JWT | Admin Tools screen or `GET /v1/admin/features` |
+| Toggle enabled/login/premium/soon/maintenance | Admin JWT | Admin Tools → edit feature |
+| Reset defaults | Admin JWT | Admin Tools → Reset |
+| App status summary | Admin JWT | `GET /v1/admin/app-status` |
+
+Without admin JWT: Admin Tools shows honest permission-required state (403 on admin APIs).
+
+**Local test only:** dart-defines, HTTP API, Stripe not configured, no store signing.
+
+**Not production yet:** HTTPS release API, privacy policy URL, release keystore, store screenshots.
+
+See [sakina-app-store-readiness-checklist.md](./sakina-app-store-readiness-checklist.md).
 
 | Journey | Steps | Expected |
 |---------|-------|----------|
