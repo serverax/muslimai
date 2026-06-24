@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sakina_frontend/models/app_feature.dart';
+import 'package:sakina_frontend/app/app_feature.dart';
 
 void main() {
   test('login-required feature blocks guest', () {

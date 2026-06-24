@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app/app_state.dart';
 import '../app/feature_flags.dart';
-import '../models/app_feature.dart';
+import '../app/app_feature.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../widgets/workflow_states.dart';
