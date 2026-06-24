@@ -1,80 +1,59 @@
-# Cursor Phase 6G — Mobile Workflows User Journeys Proof
+# Cursor Phase 6G — Mobile Workflows User Journeys Proof (updated)
 
 Date: 2026-06-24  
-Branch: `qa-security-hardening`
+Branch: `qa-security-hardening`  
+Commit: `804397a` (+ continuation proof)
 
 ## Final verdict
 
-**PARTIAL** — Mobile workflow implementation and documentation complete; `flutter analyze` and `flutter test` PASS. Docker daemon and Android SDK were not available in the cloud proof VM (APK build and live API health blocked here). Owner machine with Docker + Android SDK can complete end-to-end APK testing using the runbook.
+**PARTIAL** — Mobile workflows implemented and documented. Backend Docker + API smoke **PASS** on continuation run. `flutter analyze` + `flutter test` **PASS**. APK build requires Android SDK on owner machine (cloud VM SDK download did not complete in time).
 
-## PASS/FAIL table
+## PASS/FAIL table (updated)
 
-| # | Check | Result | Notes |
-|---|-------|--------|-------|
-| 1 | Docker backend build | SKIP | No docker.sock in proof VM |
-| 2 | Docker services | SKIP | No docker.sock in proof VM |
-| 3 | API health | SKIP | Backend not started in VM |
-| 4 | flutter analyze | PASS | No issues |
-| 5 | APK build | BLOCKED (env) | No Android SDK in proof VM |
-| 6 | Login/register flow | PASS (code) | AccountIntroScreen + AuthService |
-| 7 | Guest journey | PASS (code+test) | GuestHomeDashboardScreen |
-| 8 | User dashboard journey | PASS (code) | MobileHomeDashboardScreen 12 cards |
-| 9 | Ask AI safe flow | PASS (code) | ChatScreen wired to askSakina |
-| 10 | High-risk escalation | PASS (code) | PendingReviewStore + scholar reviews |
-| 11 | Quran/Tafsir/Hadith | PASS (code) | StudyHubScreen |
-| 12 | Prayer/Qibla/calendar | PASS (code) | PrayerHubScreen |
-| 13 | Dua/bookmark/reminder | PASS (code) | Daily essentials + LoginRequired |
-| 14 | Zakat/Mirath | PASS (code) | CalculatorsScreen |
-| 15 | Kids | PASS (code) | KidsLearningScreen |
-| 16 | Subscription/entitlement | PASS (code) | SubscriptionScreen |
-| 17 | Scholar review | PARTIAL | User status PASS; scholar resolve needs scholar account |
-| 18 | Admin/owner tools | PARTIAL | Honest screen; admin APIs need admin JWT |
-| 19 | No feature-flag dead ends | PASS (code) | SAKINA_LOCAL_TEST + founding tier defaults |
-| 20 | No secrets committed | PASS | Only placeholder .env template in docs |
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | Docker backend build | PASS | `sudo docker compose -f docker-compose.qa.yml up -d --build` |
+| 2 | Docker services | PASS | api, postgres, redis, qdrant, ollama, llm-gateway Up |
+| 3 | API health | PASS | `curl http://localhost:28080/health` → 200 |
+| 3b | Quran endpoint | PASS | `GET /v1/quran/surahs` → 200 |
+| 3c | Prayer endpoint | PASS | `GET /v1/api/tools/prayer-times` → 200 |
+| 3d | Subscription plans | PASS | `GET /v1/subscription/plans` → 200 |
+| 4 | flutter analyze | PASS | No issues found |
+| 5 | flutter test | PASS | 39 tests |
+| 6 | APK build | BLOCKED (env) | Android SDK platforms not installed in cloud VM |
+| 7–18 | Mobile journeys (code) | PASS/PARTIAL | See prior report |
+| 19 | No feature-flag dead ends | PASS | SAKINA_LOCAL_TEST defaults |
+| 20 | No secrets committed | PASS | |
 
-## What was broken
+## Docker services (continuation run)
 
-- 13-tab developer shell with ModuleReadOnlyStateScreen dead ends
-- Feature flags default false → "disabled by feature flag"
-- EntitlementGate default `free` blocked modules
-- No guest home, no journey documentation, no login-required screens
-- Web treated as primary product
+```
+sakina-infra-api-1           Up   0.0.0.0:28080->8080/tcp
+sakina-infra-postgres-1      Up   0.0.0.0:5433->5432/tcp
+sakina-infra-redis-1         Up   0.0.0.0:6380->6379/tcp
+sakina-infra-qdrant-1        Up   6333/tcp
+sakina-infra-ollama-1        Up
+sakina-infra-llm-gateway-1   Up
+```
 
-## Root cause
+## Owner commands
 
-Phase 6D optimized web diagnostic UI; mobile shell was never refactored for product journeys. Compile-time flags and entitlement defaults were production-safe but blocked local APK testing.
+**Windows:**
+```powershell
+pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk
+```
 
-## Fix applied
+**Linux:**
+```bash
+BUILD_APK=1 ./scripts/sakina-owner-local-test.sh
+```
 
-- 5-tab mobile shell (Home / Ask / Study / Daily / More)
-- GuestHomeDashboardScreen + MobileHomeDashboardScreen (12 cards)
-- SplashEnvironmentScreen with health probe + session restore
-- LoginRequiredScreen, PremiumLockedScreen, NotImplementedScreen
-- StudyHubScreen, PrayerHubScreen, Settings, Admin, Scholar dashboards
-- Feature flag local test defaults + APK dart-define bundle in owner script
-- `docs/sakina-mobile-workflows-and-button-map.md`
-- `docs/sakina-mobile-testing-runbook.md`
+**Backend only:**
+```bash
+cd sakina-infra && docker compose -f docker-compose.qa.yml up -d
+```
 
-## User journeys completed
-
-1. Guest / first-time  
-2. Register / login  
-3. Logged-in home (12 cards)  
-4. Ask AI Shaikh  
-5. Scholar review (user); scholar dashboard PARTIAL  
-6. Quran / Tafsir / Hadith  
-7. Prayer / Qibla / calendar  
-8. Dua / bookmarks / reminders  
-9. Zakat / Mirath  
-10. Kids learning  
-11. Subscription / entitlement  
-12. Admin / owner tools (honest PARTIAL)
-
-## Button map
-
-Created: `docs/sakina-mobile-workflows-and-button-map.md` (40+ buttons documented)
-
-## APK (owner machine)
+## APK build (owner machine)
 
 ```bash
 cd sakina-frontend && flutter build apk --debug \
@@ -87,24 +66,15 @@ cd sakina-frontend && flutter build apk --debug \
   --dart-define=SAKINA_SUBSCRIPTION_TIER=founding
 ```
 
-Path: `sakina-frontend/build/app/outputs/flutter-apk/app-debug.apk`
+Output: `sakina-frontend/build/app/outputs/flutter-apk/app-debug.apk`
 
-## Owner commands
+## Documentation
 
-```powershell
-pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk
-```
-
-## Known limitations
-
-- Scholar resolve requires scholar-seeded account
-- Admin grant/revoke requires admin JWT
-- Payment provider not configured locally
-- Masjid near me not implemented (honest screen)
-- Docker/APK proof blocked in cloud VM without daemon/SDK
+- `docs/sakina-mobile-workflows-and-button-map.md`
+- `docs/sakina-mobile-testing-runbook.md`
 
 ## Owner next steps
 
-1. Run `pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk` on Windows with Docker Desktop
-2. Install APK on emulator or phone
-3. Walk through journey checklist in `docs/sakina-mobile-testing-runbook.md`
+1. `BUILD_APK=1 ./scripts/sakina-owner-local-test.sh` (Linux) or `pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk` (Windows)
+2. `adb install -r sakina-frontend/build/app/outputs/flutter-apk/app-debug.apk`
+3. Test journeys per runbook
