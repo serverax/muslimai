@@ -1,3 +1,0 @@
-grep: k8s: No such file or directory
-grep: helm: No such file or directory
-SECURITY_PERFORMANCE_GATE_OK security, performance, CI, and deployment policy proof scripts exited successfully.

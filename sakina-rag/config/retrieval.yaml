@@ -1,5 +1,0 @@
-environment: staging
-namespace: sakina-rag-staging
-min_similarity: 0.72
-rerank_enabled: false
-require_citations: true

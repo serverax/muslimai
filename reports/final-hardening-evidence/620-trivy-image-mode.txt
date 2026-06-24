@@ -1,1 +1,0 @@
-Trivy image vulnerability DB was unavailable locally; image secret/misconfig scan ran and CI workflow enforces vulnerability scan.

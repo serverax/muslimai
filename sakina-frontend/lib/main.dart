@@ -1,12 +1,26 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/app_state.dart';
 import 'config/theme.dart';
 import 'screens/account_intro_screen.dart';
+import 'screens/sakina_test_dashboard_screen.dart';
 import 'screens/welcome_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+    runApp(
+      const ProviderScope(
+        child: MaterialApp(
+          title: 'Sakina AI Local Test',
+          home: SakinaTestDashboardScreen(),
+        ),
+      ),
+    );
+    return;
+  }
   runApp(const ProviderScope(child: SakinaApp()));
 }
 

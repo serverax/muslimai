@@ -1,1 +1,0 @@
-KUBERNETES_RESTRICTED_OK manifest restricted scan and live namespace restricted workload proof completed for namespace sakina.

@@ -1,4 +1,0 @@
- schemaname | tablename | policyname | cmd 
-------------+-----------+------------+-----
-(0 rows)
-

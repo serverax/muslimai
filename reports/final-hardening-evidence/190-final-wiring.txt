@@ -1,2 +1,0 @@
-Frontend static/fake scan had reviewed non-production hits; continuing with contract and runtime proofs.
-WIRING_GATE_OK all wiring subchecks exited successfully.

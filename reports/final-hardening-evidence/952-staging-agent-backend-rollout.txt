@@ -1,1 +1,0 @@
-deployment "sakina-backend" successfully rolled out

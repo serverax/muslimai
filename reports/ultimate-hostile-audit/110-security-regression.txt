@@ -1,1 +1,0 @@
-SAKINA_SECURITY_FAIL: required command missing: jq

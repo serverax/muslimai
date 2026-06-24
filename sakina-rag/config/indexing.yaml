@@ -1,6 +1,0 @@
-environment: staging
-namespace: sakina-rag-staging
-chunk_size: 700
-chunk_overlap: 120
-embedding_model: text-embedding-3-large
-retrieval_top_k: 6

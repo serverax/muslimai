@@ -1,2 +1,0 @@
-networkpolicy.networking.k8s.io/sakina-ollama-allow-gateway-only created
-networkpolicy.networking.k8s.io/sakina-backend-deny-ollama created

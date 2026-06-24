@@ -1,4 +1,0 @@
-Deployment blockers
-1) Azure token expired (AADSTS50132 invalid_grant).
-2) terraform CLI missing on local workstation.
-3) No staging DB connection details provided for migration apply.

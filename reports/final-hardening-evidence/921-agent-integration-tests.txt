@@ -1,9 +1,0 @@
-   Compiling sakina-backend v1.0.0 (/mnt/f/SakinaAL/sakina-backend)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 5m 59s
-     Running tests/agent_integration_tests.rs (sakina-backend/target/debug/deps/agent_integration_tests-ebb898079c24ed12)
-
-running 1 test
-test redis_persists_agent_state_and_researcher_returns_rag_context ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
-

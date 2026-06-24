@@ -1,3 +1,0 @@
-service/sakina-ollama unchanged
-Warning: would violate PodSecurity "restricted:latest": runAsNonRoot != true (pod or container "ollama" must set securityContext.runAsNonRoot=true)
-daemonset.apps/sakina-ollama configured

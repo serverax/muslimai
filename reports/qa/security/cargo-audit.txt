@@ -1,1 +1,0 @@
-./sakina-local-qa-check.sh: line 70: cargo: command not found

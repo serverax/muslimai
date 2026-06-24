@@ -1,5 +1,0 @@
-    Checking sakina-fatwa-policy-gate v0.1.0 (F:\sakinaal\sakina-wasm\fatwa-policy-gate)
-    Checking sakina-validator v0.1.0 (F:\sakinaal\wasm)
-    Checking sakina-backend v1.0.0 (F:\sakinaal\sakina-backend)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 37.17s
-EXIT=0 at Sat Jun  6 13:02:39 GMTST 2026

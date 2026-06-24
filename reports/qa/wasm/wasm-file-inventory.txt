@@ -1,2 +1,0 @@
-./reports/qa/wasm/wasm-file-inventory.txt
-./reports/qa/wasm/wasm-search.txt

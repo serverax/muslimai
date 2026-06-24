@@ -1,8 +1,0 @@
-infra/sakina-mobile/variables.tf:32:  description = "Redis cache name"
-infra/k8s/sakina-mobile-staging/backend.yaml:94:            - name: SAKINA_REDIS_URL
-infra/k8s/sakina-mobile-staging/rag.yaml:128:            - name: SAKINA_REDIS_URL
-infra/k8s/sakina-mobile-staging/rag.yaml:240:            - name: SAKINA_REDIS_URL
-sakina-backend/src/main.rs:169:    let Some(raw) = env_value("SAKINA_REDIS_URL")
-sakina-backend/src/main.rs:170:        .or_else(|| env_value("VALKEY_URL"))
-sakina-backend/src/main.rs:171:        .or_else(|| env_value("REDIS_URL"))
-REDIS_VALKEY_CACHE_OK live Sakina Redis/Valkey runtime responded and code references integration.

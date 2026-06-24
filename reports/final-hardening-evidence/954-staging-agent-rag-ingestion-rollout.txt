@@ -1,1 +1,0 @@
-deployment "sakina-rag-ingestion" successfully rolled out

@@ -1,1 +1,0 @@
-RUSTSEC-2023-0071 reviewed: rsa is only present through SQLx inactive optional MySQL metadata; Sakina enables Postgres only and feature-tree proof shows no active path.

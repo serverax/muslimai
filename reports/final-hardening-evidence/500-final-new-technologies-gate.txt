@@ -1,1 +1,0 @@
-NEW_TECH_GATE_BLOCKER missing required proof script: scripts/sakina/tech-graph-rag-proof.sh
