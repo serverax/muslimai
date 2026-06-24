@@ -1,0 +1,52 @@
+sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:25:  Future<PasswordAuthResponse> registerWithPassword({
+sakina-frontend/lib/services/api_service.dart:48:  Future<PasswordAuthResponse> loginWithPassword({
+sakina-frontend/lib/services/api_service.dart:66:  Future<PasswordAuthResponse> refreshWithToken({
+sakina-frontend/lib/services/api_service.dart:82:  Future<UserSummaryResponse> currentUser() async {
+sakina-frontend/lib/services/api_service.dart:92:  Future<void> logout() async {
+sakina-frontend/lib/services/api_service.dart:795:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:824:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/auth_service.dart:1:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+sakina-frontend/lib/services/auth_service.dart:28:  static const _refreshTokenKey = 'sakina_refresh_token';
+sakina-frontend/lib/services/auth_service.dart:45:      final current = await _api.currentUser();
+sakina-frontend/lib/services/auth_service.dart:55:          final refreshed = await _api.refreshWithToken(
+sakina-frontend/lib/services/auth_service.dart:73:    final response = await _api.registerWithPassword(
+sakina-frontend/lib/services/auth_service.dart:85:    final response = await _api.loginWithPassword(
+sakina-frontend/lib/services/auth_service.dart:100:  Future<void> logout() async {
+sakina-frontend/lib/services/auth_service.dart:104:      await _api.logout();
+{
+  "user_id": "c1936e2b-7aba-4357-8b5f-c37778400d13",
+  "identity_id": "7f7b23ef-c69c-4fa9-b1bf-0f6618efb1a9",
+  "email": "frontend-contract-1780710417-10547@example.com",
+  "pub_key": null,
+  "auth_provider": "password",
+  "created_at": "2026-06-06 01:46:58.974334+00",
+  "updated_at": "2026-06-06 01:46:58.974334+00",
+  "access_token": "[masked]",
+  "refresh_token": "[masked]"
+}
+{
+  "user_id": "c1936e2b-7aba-4357-8b5f-c37778400d13",
+  "email": "frontend-contract-1780710417-10547@example.com",
+  "access_token": "[masked]",
+  "refresh_token": "[masked]",
+  "expires_at": "2026-06-06T13:47:00.344577004Z"
+}
+{
+  "user_id": "c1936e2b-7aba-4357-8b5f-c37778400d13",
+  "email": "frontend-contract-1780710417-10547@example.com",
+  "auth_provider": "password",
+  "created_at": "2026-06-06 01:46:58.974334+00"
+}
+{
+  "user_id": "c1936e2b-7aba-4357-8b5f-c37778400d13",
+  "email": "frontend-contract-1780710417-10547@example.com",
+  "access_token": "[masked]",
+  "refresh_token": "[masked]",
+  "expires_at": "2026-06-06T13:47:00.458203167Z"
+}
+Refresh token reuse status=401
+Logout status=200
+Revoked token /auth/me status=401
+DB sessions=3 used_refresh_tokens=1
+FRONTEND_API_CONTRACT_OK register/login/refresh/me/logout/error contracts match frontend models and backend runtime.

@@ -1,0 +1,80 @@
+sakina-frontend/lib\config\api_config.dart:2:  static const String baseUrl = String.fromEnvironment(
+sakina-frontend/lib\config\api_config.dart:4:    defaultValue: 'https://api.7jzi.com/v1',
+sakina-frontend/lib\config\staging_client_config.dart:5:    defaultValue: 'https://api.sakina-mobile-staging.example',
+sakina-frontend/lib\services\auth_service.dart:22:  AuthService({ApiService? api, FlutterSecureStorage? secureStorage})
+sakina-frontend/lib\services\auth_service.dart:23:      : _api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
+sakina-frontend/lib\services\auth_service.dart:31:  final ApiService _api;
+sakina-frontend/lib\services\module_service.dart:3:import 'package:http/http.dart' as http;
+sakina-frontend/lib\services\module_service.dart:300:    String? baseUrl,
+sakina-frontend/lib\services\module_service.dart:301:    http.Client? client,
+sakina-frontend/lib\services\module_service.dart:303:  })  : _baseUrl = baseUrl ?? ApiConfig.baseUrl,
+sakina-frontend/lib\services\module_service.dart:304:        _client = client ?? http.Client(),
+sakina-frontend/lib\services\module_service.dart:307:  final String _baseUrl;
+sakina-frontend/lib\services\module_service.dart:308:  final http.Client _client;
+sakina-frontend/lib\services\module_service.dart:352:    final uri = Uri.parse('${_endpointBase()}$path');
+sakina-frontend/lib\services\module_service.dart:368:    if (_baseUrl.endsWith('/v1')) return _baseUrl;
+sakina-frontend/lib\services\module_service.dart:369:    return '$_baseUrl/v1';
+sakina-frontend/lib\services\module_service.dart:372:  String _errorMessage(String fallback, http.Response response) {
+sakina-frontend/lib\screens\chat_screen.dart:10:    ApiService? api,
+sakina-frontend/lib\screens\chat_screen.dart:13:  })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
+sakina-frontend/lib\screens\chat_screen.dart:22:  final ApiService api;
+sakina-frontend/lib\screens\iman_journey_screen.dart:9:    ApiService? api,
+sakina-frontend/lib\screens\iman_journey_screen.dart:11:  })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
+sakina-frontend/lib\screens\iman_journey_screen.dart:14:  final ApiService api;
+sakina-frontend/lib\screens\islamic_library_screen.dart:15:  late final ApiService _api;
+sakina-frontend/lib\screens\islamic_library_screen.dart:29:    _api = ApiService(baseUrl: ApiConfig.baseUrl);
+sakina-frontend/lib\chat\chat_controller.dart:102:    ApiService? api,
+sakina-frontend/lib\chat\chat_controller.dart:103:  }) : _api = api ?? ApiService(baseUrl: ApiConfig.baseUrl);
+sakina-frontend/lib\chat\chat_controller.dart:105:  final ApiService _api;
+sakina-frontend/lib\services\sync_service.dart:13:/// is wired once ApiService exists (Step 12).
+sakina-frontend/lib\screens\compliance_screen.dart:37:        ApiService(baseUrl: ApiConfig.baseUrl, apiToken: session.accessToken);
+sakina-frontend/lib\screens\compliance_screen.dart:70:        ApiService(baseUrl: ApiConfig.baseUrl, apiToken: session.accessToken);
+sakina-frontend/lib\services\api_service.dart:4:import 'package:http/http.dart' as http;
+sakina-frontend/lib\services\api_service.dart:8:/// Step 12 (Phase 3): typed client for the Sakina backend (uses `http`).
+sakina-frontend/lib\services\api_service.dart:9:class ApiService {
+sakina-frontend/lib\services\api_service.dart:10:  final String baseUrl;
+sakina-frontend/lib\services\api_service.dart:11:  final http.Client _client;
+sakina-frontend/lib\services\api_service.dart:14:  ApiService({
+sakina-frontend/lib\services\api_service.dart:15:    required this.baseUrl,
+sakina-frontend/lib\services\api_service.dart:16:    http.Client? client,
+sakina-frontend/lib\services\api_service.dart:18:  })  : _client = client ?? http.Client(),
+sakina-frontend/lib\services\api_service.dart:114:    final res = await _post('/api/sakina/ask', body);
+sakina-frontend/lib\services\api_service.dart:135:    final res = await _get('/api/user-learning/profile');
+sakina-frontend/lib\services\api_service.dart:149:    final res = await _post('/api/user-learning/consent', {
+sakina-frontend/lib\services\api_service.dart:164:            Uri.parse(_endpoint('/classify')),
+sakina-frontend/lib\services\api_service.dart:181:          .get(Uri.parse(_endpoint('/users/pubkey')), headers: _headers())
+sakina-frontend/lib\services\api_service.dart:201:            Uri.parse(_endpoint('/waitlist')),
+sakina-frontend/lib\services\api_service.dart:226:            Uri.parse(_endpoint('/sync/backup/$userId')),
+sakina-frontend/lib\services\api_service.dart:241:            Uri.parse(_endpoint('/sync/backup/$userId')),
+sakina-frontend/lib\services\api_service.dart:354:    final uri = Uri.parse(_endpoint('/islamic/sources'))
+sakina-frontend/lib\services\api_service.dart:378:    final uri = Uri.parse(_endpoint('/islamic/documents'))
+sakina-frontend/lib\services\api_service.dart:416:    final uri = Uri.parse(_endpoint('/islamic/search'))
+sakina-frontend/lib\services\api_service.dart:676:    final uri = Uri.parse(_endpoint('/iman-journey/$userId'))
+sakina-frontend/lib\services\api_service.dart:766:      '/api/memory/write',
+sakina-frontend/lib\services\api_service.dart:782:    final encodedKey = Uri.encodeQueryComponent(memoryKey);
+sakina-frontend/lib\services\api_service.dart:784:      '/api/memory/read?user_id=$userId&memory_key=$encodedKey',
+sakina-frontend/lib\services\api_service.dart:799:    final encodedKey = Uri.encodeQueryComponent(memoryKey);
+sakina-frontend/lib\services\api_service.dart:801:      '/api/memory/delete?user_id=$userId&memory_key=$encodedKey',
+sakina-frontend/lib\services\api_service.dart:823:        final multipart = http.MultipartRequest(
+sakina-frontend/lib\services\api_service.dart:825:          Uri.parse(_endpoint('/api/multimodal/analyze')),
+sakina-frontend/lib\services\api_service.dart:835:        multipart.files.add(http.MultipartFile.fromBytes(
+sakina-frontend/lib\services\api_service.dart:843:    final res = await http.Response.fromStream(streamed);
+sakina-frontend/lib\services\api_service.dart:867:    if (baseUrl.endsWith('/v1')) {
+sakina-frontend/lib\services\api_service.dart:868:      return '$baseUrl$path';
+sakina-frontend/lib\services\api_service.dart:870:    return '$baseUrl/v1$path';
+sakina-frontend/lib\services\api_service.dart:873:  Future<http.Response> _withRetry(Future<http.Response> Function() run) async {
+sakina-frontend/lib\services\api_service.dart:899:  Future<http.StreamedResponse> _withStreamRetry(
+sakina-frontend/lib\services\api_service.dart:900:    Future<http.StreamedResponse> Function() run,
+sakina-frontend/lib\services\api_service.dart:927:  Future<http.Response> _post(
+sakina-frontend/lib\services\api_service.dart:935:            Uri.parse(_endpoint(path)),
+sakina-frontend/lib\services\api_service.dart:943:  Future<http.Response> _put(
+sakina-frontend/lib\services\api_service.dart:951:            Uri.parse(_endpoint(path)),
+sakina-frontend/lib\services\api_service.dart:959:  Future<http.Response> _get(String path, {String? userId}) {
+sakina-frontend/lib\services\api_service.dart:962:          .get(Uri.parse(_endpoint(path)), headers: _headers(userId: userId))
+sakina-frontend/lib\services\api_service.dart:967:  Future<http.Response> _delete(String path, {String? userId}) {
+sakina-frontend/lib\services\api_service.dart:970:          .delete(Uri.parse(_endpoint(path)), headers: _headers(userId: userId))
+sakina-frontend/lib\services\api_service.dart:975:  String _errorMessage(String fallback, http.Response response) {
+sakina-frontend/lib\services\api_service.dart:996:  ApiException _apiException(String fallback, http.Response response) {
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:15:    ApiService? api,
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:17:  })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
+sakina-frontend/lib\screens\multimodal_analysis_screen.dart:26:  final ApiService api;

@@ -1,0 +1,264 @@
+sakina-frontend/lib\chat\chat_controller.dart:91:        .map((item) => Citation.fromJson(item as Map<String, dynamic>))
+sakina-frontend/lib\services\module_service.dart:52:  factory ModuleStatusDto.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\module_service.dart:78:  factory SourceProvenanceDto.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\module_service.dart:122:  factory RagReadinessDto.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\module_service.dart:144:  factory QuranOverviewDto.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\module_service.dart:150:      rag: RagReadinessDto.fromJson(
+sakina-frontend/lib\services\module_service.dart:151:          (json['rag'] as Map<String, dynamic>? ?? const {})),
+sakina-frontend/lib\services\module_service.dart:153:          .map((e) => SourceProvenanceDto.fromJson(e as Map<String, dynamic>))
+sakina-frontend/lib\services\module_service.dart:169:  factory PrayerOverviewDto.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\module_service.dart:175:      rag: RagReadinessDto.fromJson(
+sakina-frontend/lib\services\module_service.dart:176:          (json['rag'] as Map<String, dynamic>? ?? const {})),
+sakina-frontend/lib\services\module_service.dart:178:          .map((e) => SourceProvenanceDto.fromJson(e as Map<String, dynamic>))
+sakina-frontend/lib\services\module_service.dart:194:  factory KnowledgeOverviewDto.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\module_service.dart:200:      rag: RagReadinessDto.fromJson(
+sakina-frontend/lib\services\module_service.dart:201:          (json['rag'] as Map<String, dynamic>? ?? const {})),
+sakina-frontend/lib\services\module_service.dart:203:          .map((e) => SourceProvenanceDto.fromJson(e as Map<String, dynamic>))
+sakina-frontend/lib\services\module_service.dart:219:  factory CommunityOverviewDto.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\module_service.dart:225:      rag: RagReadinessDto.fromJson(
+sakina-frontend/lib\services\module_service.dart:226:          (json['rag'] as Map<String, dynamic>? ?? const {})),
+sakina-frontend/lib\services\module_service.dart:228:          .map((e) => SourceProvenanceDto.fromJson(e as Map<String, dynamic>))
+sakina-frontend/lib\services\module_service.dart:313:    return QuranOverviewDto.fromJson(response);
+sakina-frontend/lib\services\module_service.dart:318:    return PrayerOverviewDto.fromJson(response);
+sakina-frontend/lib\services\module_service.dart:324:    return KnowledgeOverviewDto.fromJson(response);
+sakina-frontend/lib\services\module_service.dart:330:    return CommunityOverviewDto.fromJson(response);
+sakina-frontend/lib\services\module_service.dart:338:        .map((e) => ModuleStatusDto.fromJson(e as Map<String, dynamic>))
+sakina-frontend/lib\services\module_service.dart:348:    return ModuleStatusDto.fromJson(response);
+sakina-frontend/lib\services\module_service.dart:351:  Future<Map<String, dynamic>> _get(String path, {required String tier}) async {
+sakina-frontend/lib\services\module_service.dart:362:      return jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\module_service.dart:374:      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\module_service.dart:376:      if (error is Map<String, dynamic>) {
+sakina-frontend/lib\services\module_service.dart:580:String _requiredField(Map<String, dynamic> json, String key) {
+sakina-frontend/lib\services\api_service.dart:39:      final auth = PasswordAuthResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:40:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:57:      final auth = PasswordAuthResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:58:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:73:      final auth = PasswordAuthResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:74:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:85:      return UserSummaryResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:86:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:112:        'local_memory_context': localMemoryContext.toJson(),
+sakina-frontend/lib\services\api_service.dart:116:      return SakinaAskResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:117:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:137:      return UserLearningProfileResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:138:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:171:      return ClassifyResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:172:          jsonDecode(res.body) as Map<String, dynamic>);
+sakina-frontend/lib\services\api_service.dart:185:      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:247:      return (jsonDecode(res.body) as Map<String, dynamic>)['data'] as String;
+sakina-frontend/lib\services\api_service.dart:253:    final res = await _post('/auth/register', request.toJson());
+sakina-frontend/lib\services\api_service.dart:255:      return RegisterUserResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:256:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:263:    final res = await _post('/auth/sessions', request.toJson());
+sakina-frontend/lib\services\api_service.dart:265:      return SessionResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:266:          jsonDecode(res.body) as Map<String, dynamic>);
+sakina-frontend/lib\services\api_service.dart:276:        await _put('/profiles/$userId', request.toJson(), userId: userId);
+sakina-frontend/lib\services\api_service.dart:278:      return ProfileResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:279:          jsonDecode(res.body) as Map<String, dynamic>);
+sakina-frontend/lib\services\api_service.dart:288:    final res = await _post('/profiles/$userId/family', request.toJson(),
+sakina-frontend/lib\services\api_service.dart:291:      return FamilyProfileResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:292:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:304:      request.toJson(),
+sakina-frontend/lib\services\api_service.dart:308:      return SubscriptionResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:309:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:319:      final json = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:330:      return AccountDeletionRequestResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:331:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:340:      return AccountDeletionRequestResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:341:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:362:      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:364:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:365:          .map(IslamicSourceDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:386:      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:388:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:389:          .map(IslamicDocumentDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:398:      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:400:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:401:          .map(IslamicChunkDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:424:      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:426:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:427:          .map(IslamicSearchResultDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:445:      return IslamicAskResponseDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:446:          jsonDecode(res.body) as Map<String, dynamic>);
+sakina-frontend/lib\services\api_service.dart:464:      return CreateConversationResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:465:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:482:      return AddMessageResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:483:          jsonDecode(res.body) as Map<String, dynamic>);
+sakina-frontend/lib\services\api_service.dart:541:      final json = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:573:      final json = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:575:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:576:          .map(UserNotificationDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:587:      return UserNotificationDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:588:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:634:      return CreateSupportTicketResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:635:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:661:      return SupportTicketResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:662:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:684:      return ImanJourneyResponseDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:685:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:697:      request.toJson(),
+sakina-frontend/lib\services\api_service.dart:701:      return ImanJourneyResponseDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:702:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:713:      return ImanJourneyPrivacySettingsDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:714:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:726:      request.toJson(),
+sakina-frontend/lib\services\api_service.dart:730:      return ImanJourneyPrivacySettingsDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:731:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:740:      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:742:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:743:          .map(ImanDuaItemDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:756:      return ImanDuaItemDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:757:          jsonDecode(res.body) as Map<String, dynamic>);
+sakina-frontend/lib\services\api_service.dart:767:      request.toJson(),
+sakina-frontend/lib\services\api_service.dart:771:      return MemoryWriteResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:772:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:788:      return MemoryEntryResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:789:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:805:      final decoded = jsonDecode(res.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:845:      return MultimodalAnalysisResponse.fromJson(
+sakina-frontend/lib\services\api_service.dart:846:        jsonDecode(res.body) as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:929:    Map<String, dynamic> body, {
+sakina-frontend/lib\services\api_service.dart:945:    Map<String, dynamic> body, {
+sakina-frontend/lib\services\api_service.dart:977:      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:979:      if (error is Map<String, dynamic>) {
+sakina-frontend/lib\services\api_service.dart:1000:      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+sakina-frontend/lib\services\api_service.dart:1002:      if (error is Map<String, dynamic>) {
+sakina-frontend/lib\services\api_service.dart:1018:class RagResponse {
+sakina-frontend/lib\services\api_service.dart:1033:  factory RagResponse.fromJson(Map<String, dynamic> json) => RagResponse(
+sakina-frontend/lib\services\api_service.dart:1036:                ?.map((s) => Citation.fromJson(s as Map<String, dynamic>))
+sakina-frontend/lib\services\api_service.dart:1058:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1066:class SakinaAskResponse {
+sakina-frontend/lib\services\api_service.dart:1072:  final Map<String, dynamic> sourcePath;
+sakina-frontend/lib\services\api_service.dart:1073:  final Map<String, dynamic> safety;
+sakina-frontend/lib\services\api_service.dart:1076:  final Map<String, dynamic> ragContext;
+sakina-frontend/lib\services\api_service.dart:1095:  factory SakinaAskResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:1102:      sourcePath: json['source_path'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1103:          ? json['source_path'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1105:      safety: json['safety'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1106:          ? json['safety'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1109:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:1110:          .map(Citation.fromJson)
+sakina-frontend/lib\services\api_service.dart:1113:      ragContext: json['rag_context'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1114:          ? json['rag_context'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1122:class BrainChatResponse {
+sakina-frontend/lib\services\api_service.dart:1130:  final Map<String, dynamic> memoryUpdateSuggestion;
+sakina-frontend/lib\services\api_service.dart:1135:  final Map<String, dynamic> evaluationResult;
+sakina-frontend/lib\services\api_service.dart:1136:  final Map<String, dynamic> cacheDecision;
+sakina-frontend/lib\services\api_service.dart:1137:  final Map<String, dynamic> routerDecision;
+sakina-frontend/lib\services\api_service.dart:1139:  final Map<String, dynamic> ollamaStatus;
+sakina-frontend/lib\services\api_service.dart:1193:  factory BrainChatResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1203:            json['memory_update_suggestion'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1204:                ? json['memory_update_suggestion'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1212:            .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:1213:            .map(Citation.fromJson)
+sakina-frontend/lib\services\api_service.dart:1215:        evaluationResult: json['evaluation_result'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1216:            ? json['evaluation_result'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1218:        cacheDecision: json['cache_decision'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1219:            ? json['cache_decision'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1221:        routerDecision: json['router_decision'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1222:            ? json['router_decision'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1225:        ollamaStatus: json['ollama_status'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1226:            ? json['ollama_status'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1232:class UserLearningProfileResponse {
+sakina-frontend/lib\services\api_service.dart:1234:  final Map<String, dynamic> permissions;
+sakina-frontend/lib\services\api_service.dart:1235:  final List<Map<String, dynamic>> preferences;
+sakina-frontend/lib\services\api_service.dart:1243:  factory UserLearningProfileResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1246:        permissions: json['permissions'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1247:            ? json['permissions'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1250:            .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:1255:class ClassifyResponse {
+sakina-frontend/lib\services\api_service.dart:1266:  factory ClassifyResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1289:  factory Citation.fromJson(Map<String, dynamic> json) => Citation(
+sakina-frontend/lib\services\api_service.dart:1337:  factory IslamicSourceDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1365:  factory IslamicDocumentDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1391:  factory IslamicChunkDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1418:  factory IslamicSearchResultDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1429:class IslamicAskResponseDto {
+sakina-frontend/lib\services\api_service.dart:1444:  factory IslamicAskResponseDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1451:            .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:1452:            .map(Citation.fromJson)
+sakina-frontend/lib\services\api_service.dart:1461:  final Map<String, dynamic> payload;
+sakina-frontend/lib\services\api_service.dart:1476:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1487:class MemoryWriteResponse {
+sakina-frontend/lib\services\api_service.dart:1502:  factory MemoryWriteResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1512:class MemoryEntryResponse {
+sakina-frontend/lib\services\api_service.dart:1518:  final Map<String, dynamic> payload;
+sakina-frontend/lib\services\api_service.dart:1537:  factory MemoryEntryResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1544:        payload: json['payload'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1545:            ? json['payload'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:1567:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1578:class PasswordAuthResponse {
+sakina-frontend/lib\services\api_service.dart:1591:  factory PasswordAuthResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:1605:class UserSummaryResponse {
+sakina-frontend/lib\services\api_service.dart:1614:  factory UserSummaryResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:1626:class RegisterUserResponse {
+sakina-frontend/lib\services\api_service.dart:1631:  factory RegisterUserResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:1659:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1670:class SessionResponse {
+sakina-frontend/lib\services\api_service.dart:1675:  factory SessionResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:1689:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1711:class ProfileResponse {
+sakina-frontend/lib\services\api_service.dart:1716:  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1727:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1736:class FamilyProfileResponse {
+sakina-frontend/lib\services\api_service.dart:1741:  factory FamilyProfileResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1780:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1798:class SubscriptionResponse {
+sakina-frontend/lib\services\api_service.dart:1803:  factory SubscriptionResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1809:class AccountDeletionRequestResponse {
+sakina-frontend/lib\services\api_service.dart:1822:  factory AccountDeletionRequestResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1831:class CreateConversationResponse {
+sakina-frontend/lib\services\api_service.dart:1837:  factory CreateConversationResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1844:class AddMessageResponse {
+sakina-frontend/lib\services\api_service.dart:1859:  factory AddMessageResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:1875:class CreateSupportTicketResponse {
+sakina-frontend/lib\services\api_service.dart:1880:  factory CreateSupportTicketResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1894:  factory SupportTicketMessage.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1901:class SupportTicketResponse {
+sakina-frontend/lib\services\api_service.dart:1910:  factory SupportTicketResponse.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1914:            .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:1915:            .map(SupportTicketMessage.fromJson)
+sakina-frontend/lib\services\api_service.dart:1931:  factory ImanJourneyProgressDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1938:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1956:  factory ImanJourneyFamilyReminderDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1963:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:1981:  factory ImanJourneyEvidenceItemDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:1988:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:2004:  factory ImanJourneySafeFallbackDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:2024:  factory ImanJourneyReligiousReminderDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:2029:            .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:2030:            .map(ImanJourneyEvidenceItemDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:2032:        safeFallback: json['safe_fallback'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:2033:            ? ImanJourneySafeFallbackDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:2034:                json['safe_fallback'] as Map<String, dynamic>,
+sakina-frontend/lib\services\api_service.dart:2051:  factory ImanJourneyPrivacySettingsDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:2059:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:2077:  factory ImanDuaItemDto.fromJson(Map<String, dynamic> json) => ImanDuaItemDto(
+sakina-frontend/lib\services\api_service.dart:2084:class ImanJourneyResponseDto {
+sakina-frontend/lib\services\api_service.dart:2109:  factory ImanJourneyResponseDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:2114:        progress: ImanJourneyProgressDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:2115:          json['progress'] as Map<String, dynamic>? ?? const {},
+sakina-frontend/lib\services\api_service.dart:2119:                .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:2120:                .map(ImanDuaItemDto.fromJson)
+sakina-frontend/lib\services\api_service.dart:2122:        familyReminder: ImanJourneyFamilyReminderDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:2123:          json['family_reminder'] as Map<String, dynamic>? ?? const {},
+sakina-frontend/lib\services\api_service.dart:2127:        privacySettings: ImanJourneyPrivacySettingsDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:2128:          json['privacy_settings'] as Map<String, dynamic>? ?? const {},
+sakina-frontend/lib\services\api_service.dart:2130:        religiousReminder: ImanJourneyReligiousReminderDto.fromJson(
+sakina-frontend/lib\services\api_service.dart:2131:          json['religious_reminder'] as Map<String, dynamic>? ?? const {},
+sakina-frontend/lib\services\api_service.dart:2161:  Map<String, dynamic> toJson() => {
+sakina-frontend/lib\services\api_service.dart:2166:        'progress': progress.toJson(),
+sakina-frontend/lib\services\api_service.dart:2169:        if (familyReminder != null) 'family_reminder': familyReminder!.toJson(),
+sakina-frontend/lib\services\api_service.dart:2174:              evidenceBundle!.map((item) => item.toJson()).toList(),
+sakina-frontend/lib\services\api_service.dart:2184:  final Map<String, dynamic> payload;
+sakina-frontend/lib\services\api_service.dart:2203:  factory UserNotificationDto.fromJson(Map<String, dynamic> json) =>
+sakina-frontend/lib\services\api_service.dart:2212:        payload: json['payload'] is Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:2213:            ? json['payload'] as Map<String, dynamic>
+sakina-frontend/lib\services\api_service.dart:2222:class MultimodalAnalysisResponse {
+sakina-frontend/lib\services\api_service.dart:2231:  final Map<String, dynamic> islamicAnswer;
+sakina-frontend/lib\services\api_service.dart:2245:  factory MultimodalAnalysisResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib\services\api_service.dart:2260:      islamicAnswer: answer is Map<String, dynamic> ? answer : const {},
+sakina-frontend/lib\services\api_service.dart:2268:          .whereType<Map<String, dynamic>>()
+sakina-frontend/lib\services\api_service.dart:2269:          .map(Citation.fromJson)
+sakina-frontend/lib\services\local_db_service.dart:89:  Map<String, dynamic> toMap() => {
+sakina-frontend/lib\services\local_db_service.dart:99:  factory Message.fromMap(Map<String, dynamic> map) => Message(

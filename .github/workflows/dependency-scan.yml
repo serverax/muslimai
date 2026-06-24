@@ -1,0 +1,38 @@
+name: Dependency And Security Scan
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - production-hardening-scoped
+      - qa-security-hardening
+
+jobs:
+  backend-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+      - name: Run cargo audit
+        run: |
+          cd sakina-backend
+          cargo tree -i sqlx-mysql -e features | tee ../reports-sqlx-mysql-feature-tree.txt
+          cargo tree -i rsa -e features | tee ../reports-rsa-feature-tree.txt
+          cargo audit --ignore RUSTSEC-2023-0071
+
+  trivy-fs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH

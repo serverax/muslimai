@@ -1,0 +1,332 @@
+{
+  "result": {
+    "collections": [
+      {
+        "name": "sakina_islamic_chunks_en"
+      }
+    ]
+  },
+  "status": "ok",
+  "time": 0.000006798
+}
+{
+  "result": {
+    "status": "green",
+    "optimizer_status": "ok",
+    "indexed_vectors_count": 0,
+    "points_count": 41,
+    "segments_count": 8,
+    "config": {
+      "params": {
+        "vectors": {
+          "size": 128,
+          "distance": "Cosine"
+        },
+        "shard_number": 1,
+        "replication_factor": 1,
+        "write_consistency_factor": 1,
+        "on_disk_payload": true
+      },
+      "hnsw_config": {
+        "m": 16,
+        "ef_construct": 100,
+        "full_scan_threshold": 10000,
+        "max_indexing_threads": 0,
+        "on_disk": false
+      },
+      "optimizer_config": {
+        "deleted_threshold": 0.2,
+        "vacuum_min_vector_number": 1000,
+        "default_segment_number": 0,
+        "max_segment_size": null,
+        "memmap_threshold": null,
+        "indexing_threshold": 20000,
+        "flush_interval_sec": 5,
+        "max_optimization_threads": null
+      },
+      "wal_config": {
+        "wal_capacity_mb": 32,
+        "wal_segments_ahead": 0
+      },
+      "quantization_config": null
+    },
+    "payload_schema": {}
+  },
+  "status": "ok",
+  "time": 0.000048784
+}
+Qdrant collection=sakina_islamic_chunks_en vector_size=128 points_count=41 status=green
+{
+  "result": {
+    "points": [
+      {
+        "id": "014312e5-3da1-4096-b9b4-0013223c793c",
+        "payload": {
+          "authenticity_grade": "verified",
+          "chunk_id": "014312e5-3da1-4096-b9b4-0013223c793c",
+          "citation": "verified citation",
+          "document_id": "3fa374c4-5a51-4ac4-b52c-22b99f1f67e6",
+          "language": "en",
+          "review_status": "verified",
+          "source_id": "446b6f45-7a65-4229-98d5-69d817e9a110",
+          "source_name": "Verified Source",
+          "source_reference": "verified citation",
+          "source_type": "quran",
+          "title": "Verified Source"
+        }
+      },
+      {
+        "id": "015995a1-5b41-4286-8468-593ee173f681",
+        "payload": {
+          "authenticity_grade": "verified",
+          "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+          "citation": "Quran 16:90",
+          "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+          "language": "en",
+          "review_status": "verified",
+          "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+          "source_name": "Quran Reference Guidance",
+          "source_reference": "Quran 16:90",
+          "source_type": "quran",
+          "title": "Quran Reference Guidance"
+        }
+      },
+      {
+        "id": "043c66a1-0ac8-45b1-adb1-ed859086569f",
+        "payload": {
+          "authenticity_grade": "verified",
+          "chunk_id": "043c66a1-0ac8-45b1-adb1-ed859086569f",
+          "citation": "verified citation",
+          "document_id": "82fa1823-8566-47a3-b4dc-36cdf01b14cd",
+          "language": "en",
+          "review_status": "verified",
+          "source_id": "4f2e2b82-ee89-4736-867e-313a47e54ded",
+          "source_name": "Verified Source",
+          "source_reference": "verified citation",
+          "source_type": "quran",
+          "title": "Verified Source"
+        }
+      }
+    ],
+    "next_page_offset": "09fee409-8c95-492b-bed9-dfff13d12f79"
+  },
+  "status": "ok",
+  "time": 0.002445499
+}
+{
+  "result": {
+    "operation_id": 613,
+    "status": "completed"
+  },
+  "status": "ok",
+  "time": 0.002376522
+}
+{
+  "result": [
+    {
+      "id": "11111111-1111-4111-8111-553893698192",
+      "version": 613,
+      "score": 1.0000001,
+      "payload": {
+        "chunk_id": "11111111-1111-4111-8111-553893698192",
+        "language": "en",
+        "proof": true,
+        "review_status": "verified",
+        "source_id": "qdrant-proof-source",
+        "title": "Qdrant Runtime Proof"
+      }
+    },
+    {
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "version": 612,
+      "score": 0.45082265,
+      "payload": {
+        "authenticity_grade": "verified",
+        "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "citation": "Quran 2:286",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "language": "en",
+        "review_status": "verified",
+        "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+        "source_name": "Quran Reference Guidance",
+        "source_reference": "Quran 2:286",
+        "source_type": "quran",
+        "title": "Quran Reference Guidance"
+      }
+    },
+    {
+      "id": "67d60cf5-7d60-4b38-8462-254936094923",
+      "version": 612,
+      "score": 0.4437724,
+      "payload": {
+        "authenticity_grade": "approved",
+        "chunk_id": "67d60cf5-7d60-4b38-8462-254936094923",
+        "citation": "Sakina Starter Source: Reading Dhikr from the Phone",
+        "document_id": "bdfd25d3-7bfa-499d-8ce7-de089da9210c",
+        "language": "ar",
+        "review_status": "approved",
+        "source_id": "1282111f-a9c0-4db1-a8ee-c21d88c54df3",
+        "source_name": "Reading Dhikr from the Phone",
+        "source_reference": "Sakina Starter Source: Reading Dhikr from the Phone",
+        "source_type": "internal-approved",
+        "title": "Reading Dhikr from the Phone"
+      }
+    },
+    {
+      "id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
+      "version": 612,
+      "score": 0.43704957,
+      "payload": {
+        "authenticity_grade": "verified",
+        "chunk_id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
+        "citation": "Quran 114:1-6",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "language": "en",
+        "review_status": "verified",
+        "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+        "source_name": "Quran Reference Guidance",
+        "source_reference": "Quran 114:1-6",
+        "source_type": "quran",
+        "title": "Quran Reference Guidance"
+      }
+    },
+    {
+      "id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
+      "version": 612,
+      "score": 0.4197709,
+      "payload": {
+        "authenticity_grade": "verified",
+        "chunk_id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
+        "citation": "Quran 113:1-5",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "language": "en",
+        "review_status": "verified",
+        "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+        "source_name": "Quran Reference Guidance",
+        "source_reference": "Quran 113:1-5",
+        "source_type": "quran",
+        "title": "Quran Reference Guidance"
+      }
+    }
+  ],
+  "status": "ok",
+  "time": 0.000877113
+}
+{"status":{"error":"Wrong input: Vector dimension error: expected dim: 128, got 129"},"time":0.001746528}
+Wrong-dimension upsert HTTP status: 400
+{
+  "result": {
+    "operation_id": 615,
+    "status": "completed"
+  },
+  "status": "ok",
+  "time": 0.001092222
+}
+{
+  "result": [
+    {
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "version": 612,
+      "score": 0.45082265,
+      "payload": {
+        "authenticity_grade": "verified",
+        "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "citation": "Quran 2:286",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "language": "en",
+        "review_status": "verified",
+        "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+        "source_name": "Quran Reference Guidance",
+        "source_reference": "Quran 2:286",
+        "source_type": "quran",
+        "title": "Quran Reference Guidance"
+      }
+    },
+    {
+      "id": "67d60cf5-7d60-4b38-8462-254936094923",
+      "version": 612,
+      "score": 0.4437724,
+      "payload": {
+        "authenticity_grade": "approved",
+        "chunk_id": "67d60cf5-7d60-4b38-8462-254936094923",
+        "citation": "Sakina Starter Source: Reading Dhikr from the Phone",
+        "document_id": "bdfd25d3-7bfa-499d-8ce7-de089da9210c",
+        "language": "ar",
+        "review_status": "approved",
+        "source_id": "1282111f-a9c0-4db1-a8ee-c21d88c54df3",
+        "source_name": "Reading Dhikr from the Phone",
+        "source_reference": "Sakina Starter Source: Reading Dhikr from the Phone",
+        "source_type": "internal-approved",
+        "title": "Reading Dhikr from the Phone"
+      }
+    },
+    {
+      "id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
+      "version": 612,
+      "score": 0.43704957,
+      "payload": {
+        "authenticity_grade": "verified",
+        "chunk_id": "1fcf0a78-13e6-4942-9cae-b059f292a909",
+        "citation": "Quran 114:1-6",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "language": "en",
+        "review_status": "verified",
+        "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+        "source_name": "Quran Reference Guidance",
+        "source_reference": "Quran 114:1-6",
+        "source_type": "quran",
+        "title": "Quran Reference Guidance"
+      }
+    },
+    {
+      "id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
+      "version": 612,
+      "score": 0.4197709,
+      "payload": {
+        "authenticity_grade": "verified",
+        "chunk_id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
+        "citation": "Quran 113:1-5",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "language": "en",
+        "review_status": "verified",
+        "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+        "source_name": "Quran Reference Guidance",
+        "source_reference": "Quran 113:1-5",
+        "source_type": "quran",
+        "title": "Quran Reference Guidance"
+      }
+    },
+    {
+      "id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
+      "version": 612,
+      "score": 0.3682984,
+      "payload": {
+        "authenticity_grade": "verified",
+        "chunk_id": "2ccb9cef-17ab-4199-a9e0-846b2067698c",
+        "citation": "Quran 112:1-4",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "language": "en",
+        "review_status": "verified",
+        "source_id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+        "source_name": "Quran Reference Guidance",
+        "source_reference": "Quran 112:1-4",
+        "source_type": "quran",
+        "title": "Quran Reference Guidance"
+      }
+    }
+  ],
+  "status": "ok",
+  "time": 0.001042939
+}
+scripts/sakina/index-approved-rag-corpus.py:16:QDRANT_URL = os.environ.get("QDRANT_URL", "http://localhost:6333").rstrip("/")
+scripts/sakina/index-approved-rag-corpus.py:76:            f"{QDRANT_URL}/collections/{QDRANT_COLLECTION}",
+scripts/sakina/index-approved-rag-corpus.py:84:    existing = http_json("GET", f"{QDRANT_URL}/collections/{QDRANT_COLLECTION}")
+scripts/sakina/index-approved-rag-corpus.py:96:        f"{QDRANT_URL}/collections/{QDRANT_COLLECTION}/points?wait=true",
+sakina-backend/src/main.rs:134:async fn qdrant_reachable() -> bool {
+sakina-backend/src/main.rs:135:    let Some(base) = env_value("QDRANT_URL") else {
+sakina-backend/src/main.rs:240:    let qdrant_ok = qdrant_reachable().await;
+sakina-backend/src/main.rs:267:        && snapshot["qdrant"] == "ok"
+sakina-backend/src/main.rs:510:        std::env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6333".to_string());
+sakina-backend/src/services/qdrant_client.rs:111:            "{}/collections/{}/points?wait=true",
+sakina-backend/src/services/qdrant_client.rs:149:            "{}/collections/{}/points/search",
+QDRANT_VECTOR_DB_OK collection, vectors, metadata, upsert, search, wrong-dimension rejection, delete/reindex, readiness wiring, and export proof completed.

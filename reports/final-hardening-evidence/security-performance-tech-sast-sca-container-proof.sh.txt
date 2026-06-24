@@ -1,0 +1,1 @@
+SAST_SCA_CONTAINER_OK gitleaks, custom secret scan, cargo audit, Trivy filesystem scan, Docker build, image scan, and CI scan wiring completed.

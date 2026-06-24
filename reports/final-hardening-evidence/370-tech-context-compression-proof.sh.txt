@@ -1,0 +1,214 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.65s
+     Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_backend-e9c5005c4f4b74ce)
+
+running 1 test
+test services::context_compression::tests::compression_deduplicates_and_preserves_citations ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 97 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (/tmp/sakina-cargo-target/debug/deps/sakina_api-0c957a05109e7568)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running unittests src/bin/ingest.rs (/tmp/sakina-cargo-target/debug/deps/sakina_ingest-0b444f4b2677c2aa)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/migrate.rs (/tmp/sakina-cargo-target/debug/deps/sakina_migrate-8bcaf1eaf2f0d12d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/agent_integration_tests.rs (/tmp/sakina-cargo-target/debug/deps/agent_integration_tests-ebb898079c24ed12)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/islamic_source_registry.rs (/tmp/sakina-cargo-target/debug/deps/islamic_source_registry-2e29c3c7cb8c3466)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/offline_islamic_assets.rs (/tmp/sakina-cargo-target/debug/deps/offline_islamic_assets-2c6a5588cd0f92dc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase21_iman_journey_contract.rs (/tmp/sakina-cargo-target/debug/deps/phase21_iman_journey_contract-1787b9a320a946cc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+{"indexed_chunks": 41, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.53s
+{
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:201",
+      "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 1:1-7",
+      "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 677,
+  "compressed_tokens_before": 864,
+  "compression_ratio": 0.7835648059844971,
+  "graph_path": [
+    "patience"
+  ],
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.8799999952316284,
+      "graph_score": 0.0,
+      "keyword_score": 1.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 1.0
+    },
+    {
+      "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+      "citation": "Quran 1:1-7",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3304117023944855,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4700365662574768
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.32354816794395447,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.29858797788619995
+    },
+    {
+      "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+      "citation": "Quran 2:201",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31900155544281006,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.43437978625297546
+    },
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.31897878646850586,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4343086779117584
+    }
+  ],
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.88",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
+  ],
+  "weak_evidence_blocked": false
+}
+sakina-backend/src/services/hybrid_rag.rs:40:    pub compressed_tokens_before: usize,
+sakina-backend/src/services/hybrid_rag.rs:41:    pub compressed_tokens_after: usize,
+sakina-backend/src/services/hybrid_rag.rs:42:    pub compression_ratio: f32,
+sakina-backend/src/services/hybrid_rag.rs:43:    pub weak_evidence_blocked: bool,
+sakina-backend/src/services/hybrid_rag.rs:376:        let weak_evidence_blocked = chunks.is_empty()
+sakina-backend/src/services/hybrid_rag.rs:390:            compressed_tokens_before: compression_report.tokens_before,
+sakina-backend/src/services/hybrid_rag.rs:391:            compressed_tokens_after: compression_report.tokens_after,
+sakina-backend/src/services/hybrid_rag.rs:392:            compression_ratio: compression_report.compression_ratio,
+sakina-backend/src/services/hybrid_rag.rs:393:            weak_evidence_blocked,
+sakina-backend/src/services/hybrid_rag.rs:412:            compressed_tokens_before: 0,
+sakina-backend/src/services/hybrid_rag.rs:413:            compressed_tokens_after: 0,
+sakina-backend/src/services/hybrid_rag.rs:414:            compression_ratio: 1.0,
+sakina-backend/src/services/hybrid_rag.rs:415:            weak_evidence_blocked: true,
+sakina-backend/src/handlers/rag.rs:145:        "compressed_tokens_before": result.compressed_tokens_before,
+sakina-backend/src/handlers/rag.rs:146:        "compressed_tokens_after": result.compressed_tokens_after,
+sakina-backend/src/handlers/rag.rs:147:        "compression_ratio": result.compression_ratio,
+sakina-backend/src/handlers/rag.rs:148:        "weak_evidence_blocked": result.weak_evidence_blocked,
+sakina-backend/src/services/context_compression.rs:19:    pub compression_ratio: f32,
+sakina-backend/src/services/context_compression.rs:20:    pub preserved_citations: Vec<String>,
+sakina-backend/src/services/context_compression.rs:50:        let mut preserved_citations = Vec::new();
+sakina-backend/src/services/context_compression.rs:57:                preserved_citations.push(chunk.citation.clone());
+sakina-backend/src/services/context_compression.rs:59:                    text: compress_text(&chunk.text),
+sakina-backend/src/services/context_compression.rs:72:        let compression_ratio = if tokens_before == 0 {
+sakina-backend/src/services/context_compression.rs:81:            compression_ratio,
+sakina-backend/src/services/context_compression.rs:82:            preserved_citations,
+sakina-backend/src/services/context_compression.rs:95:fn compress_text(text: &str) -> String {
+sakina-backend/src/services/context_compression.rs:135:        assert_eq!(report.preserved_citations, vec!["Quran 2:153"]);
+CONTEXT_COMPRESSION_OK mandatory context compression proof checks completed.

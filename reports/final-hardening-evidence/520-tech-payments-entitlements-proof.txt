@@ -1,0 +1,73 @@
+Payments entitlement proof users: A=8ea3dccc-53f7-4e1a-9467-388fff065f2c B=47a7536f-db2d-4ef4-9823-558693a42bfa
+{"error":{"code":"unauthorized","message":"manual entitlement grant credential is invalid"}}
+Missing grant secret status: 401
+{"error":{"code":"unauthorized","message":"manual entitlement grant credential is invalid"}}
+Wrong grant secret status: 401
+{"error":{"code":"unauthorized","message":"requested user_id does not match authenticated user"}}
+Cross-user activation status: 401
+{
+  "user_id": "8ea3dccc-53f7-4e1a-9467-388fff065f2c",
+  "subscription_id": "63629bbe-0e96-4ee0-90a5-5724de710ea7",
+  "payment_customer_id": "77a1a220-d115-4eb2-ab3b-51e549553985",
+  "plan_id": "f2d3afa3-fd46-484c-980d-2fc3dadf1a6b",
+  "invoice_id": "e172cf6e-322a-4513-9c95-e9360283ed46"
+}
+{
+  "user_id": "8ea3dccc-53f7-4e1a-9467-388fff065f2c",
+  "subscription_id": "63629bbe-0e96-4ee0-90a5-5724de710ea7",
+  "payment_customer_id": "77a1a220-d115-4eb2-ab3b-51e549553985",
+  "plan_id": "f2d3afa3-fd46-484c-980d-2fc3dadf1a6b",
+  "invoice_id": "e172cf6e-322a-4513-9c95-e9360283ed46"
+}
+{
+  "entitlements": [
+    {
+      "entitlement_key": "quran_access",
+      "expires_at": null,
+      "granted_at": "2026-06-05 06:50:21.871399+00",
+      "id": "bc4a67b1-6b93-40e0-a8a3-4a4c6ad55c56"
+    },
+    {
+      "entitlement_key": "chat_premium",
+      "expires_at": null,
+      "granted_at": "2026-06-05 06:50:21.871399+00",
+      "id": "eb32bb10-1737-417b-862f-1452126bbed9"
+    },
+    {
+      "entitlement_key": "rag_verified",
+      "expires_at": null,
+      "granted_at": "2026-06-05 06:50:21.871399+00",
+      "id": "cf88e460-ca7d-472a-8d5f-c1e1a1f06d8d"
+    }
+  ]
+}
+{"error":{"code":"unauthorized","message":"requested user_id does not match authenticated user"}}
+Cross-user entitlement read status: 401
+{"module":"quran","safety_status":"requires_review","review_status":"scholar_review_required","message":"coming soon / under review","rag":{"rag_enabled":false,"rag_index_ready":false,"verified_source_count":0,"last_indexed_at":null,"review_status":"scholar_review_required"},"entries":[]}
+Owner module access status: 200
+DB payment/subscription/entitlement counts: 1,1,1,1,1,1,1
+INSERT 0 1
+Failed-payment entitlement count for user B: 0
+264:  Future<SubscriptionResponse> activateSubscription(
+266:    ActivateSubscriptionRequest request,
+281:  Future<List<String>> listEntitlements(String userId) async {
+775:          multipart.headers['Authorization'] = 'Bearer $token';
+804:      headers['Authorization'] = 'Bearer $token';
+1483:class ActivateSubscriptionRequest {
+1499:  ActivateSubscriptionRequest({
+sakina-backend/src/handlers/phase2.rs:154:    let grant_secret = std::env::var("SAKINA_MANUAL_ENTITLEMENT_GRANT_SECRET")
+sakina-backend/src/handlers/phase2.rs:163:        .get("X-Sakina-Grant-Secret")
+sakina-backend/src/handlers/phase2.rs:197:    let entries = repo.list_user_entitlements(auth_user_id).await?;
+sakina-backend/src/handlers/phase2.rs:745:            "SAKINA_MANUAL_ENTITLEMENT_GRANT_SECRET",
+sakina-backend/src/handlers/phase2.rs:784:                "X-Sakina-Grant-Secret",
+sakina-backend/src/handlers/phase2.rs:795:                "provider_subscription_ref": unique("sub"),
+sakina-backend/src/services/phase2.rs:608:            INSERT INTO public.payment_providers (provider_key, display_name, provider_status)
+sakina-backend/src/services/phase2.rs:677:                provider_subscription_ref,
+sakina-backend/src/services/phase2.rs:684:            ON CONFLICT (provider_subscription_ref)
+sakina-backend/src/services/phase2.rs:698:        .bind(&request.provider_subscription_ref)
+sakina-backend/src/services/phase2.rs:740:            INSERT INTO public.payment_transactions (
+sakina-backend/src/services/phase2.rs:795:                INSERT INTO public.user_entitlements (
+sakina-backend/src/services/phase2.rs:827:    pub async fn list_user_entitlements(
+sakina-backend/src/services/phase2.rs:838:            FROM public.user_entitlements ue
+sakina-backend/src/services/phase2.rs:2209:    pub provider_subscription_ref: String,
+PAYMENTS_ENTITLEMENTS_OK manual closed-beta entitlement grants require a backend grant secret, user self-grant and cross-user grant are blocked, subscription/payment rows persist, duplicate provider references are idempotent, failed payment does not grant entitlement, frontend reads entitlements through real API, and static frontend provider references are removed.

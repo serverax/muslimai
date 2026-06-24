@@ -1,0 +1,220 @@
+{
+  "result": {
+    "collections": [
+      {
+        "name": "sakina_islamic_chunks_en"
+      }
+    ]
+  },
+  "status": "ok",
+  "time": 0.000006605
+}
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "sakina-feature-hash-128",
+      "object": "model",
+      "owned_by": "sakina-local-runtime"
+    }
+  ]
+}
+{
+  "object": "list",
+  "model": "sakina-local-embedding",
+  "data": [
+    {
+      "object": "embedding",
+      "index": 0,
+      "embedding": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.34299717028501764,
+        0.08574929257125441,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.34299717028501764,
+        0.08574929257125441,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.34299717028501764,
+        0.08574929257125441,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.34299717028501764,
+        0.08574929257125441,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.6859943405700353,
+        0.17149858514250882,
+        0.0
+      ]
+    }
+  ]
+}
+{"indexed_chunks": 41, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+Approved Islamic chunks in DB: 41
+{
+  "answer": "",
+  "sources": [
+    {
+      "id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+      "title": "Quran Reference Guidance",
+      "author": "",
+      "chapter": "Quran 2:184",
+      "authenticity_grade": "verified"
+    },
+    {
+      "id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+      "title": "Quran Reference Guidance",
+      "author": "",
+      "chapter": "Quran 1:1-7",
+      "authenticity_grade": "verified"
+    },
+    {
+      "id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+      "title": "Quran Reference Guidance",
+      "author": "",
+      "chapter": "Quran 2:201",
+      "authenticity_grade": "verified"
+    },
+    {
+      "id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+      "title": "Quran Reference Guidance",
+      "author": "",
+      "chapter": "Quran 2:286",
+      "authenticity_grade": "verified"
+    },
+    {
+      "id": "5ce87583-5d72-49d2-b6fa-7303416aa47d",
+      "title": "Quran Reference Guidance",
+      "author": "",
+      "chapter": "Quran 2:183",
+      "authenticity_grade": "verified"
+    }
+  ],
+  "confidence": 1.0,
+  "guardrail_triggered": false,
+  "processing_time_ms": 12
+}
+sakina-backend/src/services/hybrid_rag.rs:10:    CompressedEvidenceChunk, ContextCompressionService, EmbeddingsService, KnowledgeGraphService,
+sakina-backend/src/services/hybrid_rag.rs:11:    QdrantVectorDB,
+sakina-backend/src/services/hybrid_rag.rs:49:    embeddings: EmbeddingsService,
+sakina-backend/src/services/hybrid_rag.rs:50:    qdrant: QdrantVectorDB,
+sakina-backend/src/services/hybrid_rag.rs:58:        embeddings: EmbeddingsService,
+sakina-backend/src/services/hybrid_rag.rs:59:        qdrant: QdrantVectorDB,
+sakina-backend/src/handlers/rag.rs:13:    AiaOrchestrator, EmbeddingsService, Guardrails, HybridRagService, QdrantVectorDB,
+sakina-backend/src/handlers/rag.rs:24:fn source_from_payload(
+sakina-backend/src/handlers/rag.rs:58:    qdrant: web::Data<QdrantVectorDB>,
+sakina-backend/src/handlers/rag.rs:59:    embeddings: web::Data<EmbeddingsService>,
+sakina-backend/src/handlers/rag.rs:65:    let _trace = aia.route(&BrainRouteRequest {
+sakina-backend/src/handlers/rag.rs:102:    let sources: Vec<SourceReference> = hits.iter().filter_map(source_from_payload).collect();
+sakina-backend/src/handlers/rag.rs:126:    let route = aia.route(&BrainRouteRequest {
+RAG_TECH_OK mandatory RAG proof checks completed.

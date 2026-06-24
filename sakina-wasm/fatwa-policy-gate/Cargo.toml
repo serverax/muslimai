@@ -1,0 +1,18 @@
+[package]
+name = "sakina-fatwa-policy-gate"
+version = "0.1.0"
+edition = "2021"
+description = "Deterministic Sakina fatwa policy gate (Rust + WASM)"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+wasm-bindgen = "0.2"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false

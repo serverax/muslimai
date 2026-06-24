@@ -1,0 +1,100 @@
+ M .github/workflows/backend-ci.yml
+ M .github/workflows/frontend-ci.yml
+ M .github/workflows/infra-ci.yml
+ M .github/workflows/sakinaai-images.yml
+ M .gitignore
+ M sakina-backend/.dockerignore
+ M sakina-backend/Cargo.toml
+ M sakina-backend/Dockerfile.api
+ M sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql
+ M sakina-backend/db/init.sql
+ M sakina-backend/src/handlers/chat.rs
+ M sakina-backend/src/handlers/classify.rs
+ M sakina-backend/src/handlers/health.rs
+ M sakina-backend/src/handlers/phase2.rs
+ M sakina-backend/src/handlers/rag.rs
+ M sakina-backend/src/handlers/sync.rs
+ M sakina-backend/src/main.rs
+ M sakina-backend/src/middleware/mod.rs
+ M sakina-backend/src/services/embeddings.rs
+ M sakina-backend/src/services/guardrails.rs
+ M sakina-backend/src/services/ingestion_producer.rs
+ M sakina-backend/src/services/outbox_relay.rs
+ M sakina-backend/src/services/qdrant_client.rs
+ M sakina-backend/src/telemetry.rs
+ M sakina-backend/tests/phase21_iman_journey_contract.rs
+ M sakina-docs/MOBILE_APP_GUIDE.md
+ M sakina-docs/PHASE_2_CLOSEOUT.md
+ M sakina-docs/PHASE_3_CHAT_FOUNDATION_RELEASE_NOTES.md
+ M sakina-docs/PRODUCTION_DEPLOYMENT.md
+ M sakina-frontend/.gitignore
+ M sakina-frontend/README.md
+ M sakina-frontend/analysis_options.yaml
+ M sakina-frontend/android/.gitignore
+ M sakina-frontend/android/app/build.gradle.kts
+ M sakina-frontend/android/app/src/debug/AndroidManifest.xml
+ M sakina-frontend/android/app/src/main/AndroidManifest.xml
+ M sakina-frontend/android/app/src/main/kotlin/com/example/sakina_frontend/MainActivity.kt
+ M sakina-frontend/android/app/src/main/res/drawable-v21/launch_background.xml
+ M sakina-frontend/android/app/src/main/res/drawable/launch_background.xml
+ M sakina-frontend/android/app/src/main/res/values-night/styles.xml
+ M sakina-frontend/android/app/src/main/res/values/styles.xml
+ M sakina-frontend/android/app/src/profile/AndroidManifest.xml
+ M sakina-frontend/android/build.gradle.kts
+ M sakina-frontend/android/gradle.properties
+ M sakina-frontend/android/gradle/wrapper/gradle-wrapper.properties
+ M sakina-frontend/android/settings.gradle.kts
+ M sakina-frontend/lib/chat/chat_controller.dart
+ M sakina-frontend/lib/config/api_config.dart
+ M sakina-frontend/lib/main.dart
+ M sakina-frontend/lib/screens/chat_screen.dart
+ M sakina-frontend/lib/widgets/brand_widget.dart
+ M sakina-frontend/pubspec.lock
+ M sakina-frontend/pubspec.yaml
+ M sakina-frontend/test/api_service_test.dart
+ M sakina-frontend/test/widget_test.dart
+ M sakina-infra/Makefile
+ M sakina-infra/docker-compose.yml
+ M sakina-infra/manifests/postgres-deployment.yaml
+ M sakina-infra/manifests/qdrant-deployment.yaml
+ M sakina-infra/manifests/sakina-api-deployment.yaml
+ M sakina-infra/manifests/sakina-prod/sakina-backend.yaml
+ M sakina-infra/manifests/storage-class.yaml
+?? .github/workflows/sakina-mobile-db-verify.yml
+?? .github/workflows/sakina-mobile-infra-plan.yml
+?? .github/workflows/sakina-mobile-rag-ci.yml
+?? .github/workflows/sakina-mobile-smoke.yml
+?? .github/workflows/sakina-mobile-staging-deploy.yml
+?? .local-quarantine/
+?? aia-factory-api/
+?? docs/sakina-mobile-aks-hld.md
+?? docs/sakina-mobile-aks-lld.md
+?? docs/sakina-mobile-db-schema-plan.md
+?? docs/sakina-mobile-deployment-runbook.md
+?? docs/sakina-mobile-infra-runbook.md
+?? docs/sakina-mobile-live-demo-plan.md
+?? docs/sakina-mobile-openapi.yaml
+?? docs/sakina-mobile-rag-plan.md
+?? docs/sakina-mobile-ui-ux-spec.md
+?? docs/sakina-mobile-wireframe-plan.md
+?? docs/sakina-phase25-ui-implementation-backlog.md
+?? docs/sakina-ui-api-traceability-matrix.md
+?? docs/sakina-ui-ux-user-stories.md
+?? infra/sakina-mobile/
+?? reports/
+?? sakina-backend/db/migrations/
+?? sakina-backend/src/handlers/islamic.rs
+?? sakina-backend/src/routes/
+?? sakina-backend/src/services/islamic_knowledge.rs
+?? sakina-dashboard/admin/
+?? sakina-frontend/lib/config/staging_client_config.dart
+?? sakina-frontend/lib/screens/islamic_library_screen.dart
+?? sakina-local-qa-check.sh
+?? sakina-rag/README.md
+?? sakina-rag/config/
+?? sakina-rag/src/
+?? sakina-rag/tests/
+?? scripts/phase183d-repo-hygiene-secret-scan.sh
+?? scripts/sakina/smoke-backend.sh
+?? scripts/sakina/smoke-mobile-config.sh
+?? scripts/sakina/verify-db-schema.sh

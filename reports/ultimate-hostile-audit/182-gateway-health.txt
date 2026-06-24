@@ -1,0 +1,4 @@
+Warning: would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "gw-health-proof" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "gw-health-proof" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "gw-health-proof" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "gw-health-proof" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+HTTP 200
+warning: couldn't attach to pod/gw-health-proof, falling back to streaming logs: unable to upgrade connection: container gw-health-proof not found in pod gw-health-proof_sakina-mobile-staging
+HTTP 200

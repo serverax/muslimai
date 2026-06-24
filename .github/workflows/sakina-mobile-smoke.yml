@@ -1,0 +1,22 @@
+name: sakina-mobile-smoke
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mobile-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run mobile config smoke
+        run: bash scripts/sakina/smoke-mobile-config.sh
+
+  backend-smoke:
+    runs-on: ubuntu-latest
+    needs: mobile-config
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run backend smoke
+        env:
+          SAKINA_BACKEND_BASE_URL: ${{ secrets.SAKINA_STAGING_BACKEND_URL }}
+        run: bash scripts/sakina/smoke-backend.sh

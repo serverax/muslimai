@@ -1,0 +1,67 @@
+
+
+# Build artifacts
+# Cache
+# Dependencies
+# Environment
+# IDEs
+# Kubernetes
+# Local security/tool binaries - never commit
+# Logs
+# Node/npm
+# OS
+# Python
+# Security-sensitive local handoff/cluster files
+*.apk
+*.env
+*.env.*
+*.ipa
+*.key
+*.kubeconfig
+*.log
+*.pyc
+*.so
+*.swo
+*.swp
+*kubeconfig*.yaml
+.DS_Store
+.cargo/
+.dart_tool/
+.env
+.env.local
+.flutter-cli/
+.idea
+.local-bin/
+.local-tools/
+.vscode
+/manifests/*.yaml.bak
+Thumbs.db
+__pycache__/
+bin/trivy
+build/
+dist/
+kubeconfig
+logs/
+node_modules/
+package-lock.json
+sakina-developer-kubeconfig.yaml
+sakina-frontend/android/key.properties
+sakina-frontend/android/keystore/
+sakina-secure-handoff.zip
+sakina-secure-handoff/
+target/
+trivy
+yarn.lock
+node_modules/
+build/
+dist/
+.dart_tool/
+.gradle/
+*.pem
+*.p8
+*.key
+.env
+.env.*
+models/
+*.gguf
+*.safetensors

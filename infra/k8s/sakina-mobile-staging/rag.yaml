@@ -1,0 +1,352 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-rag-retrieval
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: rag-retrieval
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  selector:
+    app: sakina-rag-retrieval
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-rag-ingestion
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: rag-ingestion
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  selector:
+    app: sakina-rag-ingestion
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-rag
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: rag
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  selector:
+    app: sakina-rag-retrieval
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-rag-retrieval
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: rag-retrieval
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: sakina-rag-retrieval
+  template:
+    metadata:
+      labels:
+        app: sakina-rag-retrieval
+        app.kubernetes.io/name: rag-retrieval
+        app.kubernetes.io/part-of: sakina-mobile
+        app.kubernetes.io/environment: staging
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: install-agent-validator-wasm
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+            - cp /usr/local/share/sakina/wasm/sakina_validator.wasm /agent-wasm/sakina_validator.wasm && test -s /agent-wasm/sakina_validator.wasm
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: agent-validator-wasm
+              mountPath: /agent-wasm
+      containers:
+        - name: retrieval
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SAKINA_ENV
+              value: staging
+            - name: SAKINA_LLM_ENABLED
+              value: "false"
+            - name: POSTGRES_HOST
+              value: sakina-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: jwt-secret
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: encryption-key
+            - name: QDRANT_URL
+              value: http://sakina-qdrant:6333
+            - name: QDRANT_COLLECTION
+              value: sakina_islamic_chunks_en
+            - name: ISLAMIC_QDRANT_COLLECTION
+              value: sakina_islamic_chunks_en
+            - name: SAKINA_REDIS_URL
+              value: redis://sakina-redis:6379
+            - name: SAKINA_AGENT_ROLLOUT_PROBE_ENABLED
+              value: "true"
+            - name: SAKINA_VALIDATOR_WASM_PATH
+              value: /opt/sakina/wasm/sakina_validator.wasm
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "750m"
+              memory: "768Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: agent-validator-wasm
+              mountPath: /opt/sakina/wasm
+              readOnly: true
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: agent-validator-wasm
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-rag-ingestion
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: rag-ingestion
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: sakina-rag-ingestion
+  template:
+    metadata:
+      labels:
+        app: sakina-rag-ingestion
+        app.kubernetes.io/name: rag-ingestion
+        app.kubernetes.io/part-of: sakina-mobile
+        app.kubernetes.io/environment: staging
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: install-agent-validator-wasm
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+            - cp /usr/local/share/sakina/wasm/sakina_validator.wasm /agent-wasm/sakina_validator.wasm && test -s /agent-wasm/sakina_validator.wasm
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: agent-validator-wasm
+              mountPath: /agent-wasm
+      containers:
+        - name: ingestion
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SAKINA_ENV
+              value: staging
+            - name: SAKINA_LLM_ENABLED
+              value: "false"
+            - name: POSTGRES_HOST
+              value: sakina-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: jwt-secret
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: encryption-key
+            - name: QDRANT_URL
+              value: http://sakina-qdrant:6333
+            - name: QDRANT_COLLECTION
+              value: sakina_islamic_chunks_en
+            - name: ISLAMIC_QDRANT_COLLECTION
+              value: sakina_islamic_chunks_en
+            - name: SAKINA_REDIS_URL
+              value: redis://sakina-redis:6379
+            - name: SAKINA_AGENT_ROLLOUT_PROBE_ENABLED
+              value: "true"
+            - name: SAKINA_VALIDATOR_WASM_PATH
+              value: /opt/sakina/wasm/sakina_validator.wasm
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "750m"
+              memory: "768Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: agent-validator-wasm
+              mountPath: /opt/sakina/wasm
+              readOnly: true
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: agent-validator-wasm
+          emptyDir: {}

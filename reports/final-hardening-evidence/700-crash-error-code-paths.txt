@@ -1,0 +1,76 @@
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1392:CREATE TABLE IF NOT EXISTS public.app_events (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1445:CREATE INDEX IF NOT EXISTS idx_app_events_occurred_at
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1446:    ON public.app_events (occurred_at DESC);
+sakina-backend/src/main.rs:11:    sakina_backend::error::error_response(
+sakina-backend/src/main.rs:503:            tracing::error!("outbox relay stopped: {e}");
+sakina-backend/src/main.rs:569:                            sakina_backend::error::error_response(
+sakina-backend/src/main.rs:1078:                                sakina_backend::error::error_response(
+sakina-backend/src/handlers/waitlist.rs:7:use crate::error::error_response;
+sakina-backend/src/handlers/waitlist.rs:86:        return error_response(
+sakina-backend/src/handlers/waitlist.rs:102:        return error_response(
+sakina-backend/src/handlers/waitlist.rs:109:        return error_response(
+sakina-backend/src/handlers/waitlist.rs:138:        return error_response(
+sakina-backend/src/handlers/waitlist.rs:175:            tracing::error!("waitlist insert failed: {}", err);
+sakina-backend/src/handlers/waitlist.rs:176:            error_response(
+sakina-backend/src/handlers/user.rs:8:        _ => crate::error::error_response(
+sakina-backend/src/handlers/sync.rs:7:use crate::error::{error_response, ApiError};
+sakina-backend/src/handlers/sync.rs:24:        return Ok(error_response(
+sakina-backend/src/handlers/sync.rs:31:        return Ok(error_response(
+sakina-backend/src/handlers/sync.rs:51:        tracing::error!("upload backup db error: {}", e);
+sakina-backend/src/handlers/sync.rs:70:        return Ok(error_response(
+sakina-backend/src/handlers/sync.rs:87:        tracing::error!("download backup db error: {}", e);
+sakina-backend/src/handlers/sync.rs:94:                tracing::error!("backup blob decode error: {}", e);
+sakina-backend/src/handlers/sync.rs:103:        None => Ok(error_response(
+sakina-backend/src/handlers/rag.rs:276:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:283:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:291:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:298:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:307:        Err(err) => crate::error::error_response(err.status, err.code, err.message),
+sakina-backend/src/handlers/rag.rs:318:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:325:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:336:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:343:        return crate::error::error_response(
+sakina-backend/src/handlers/rag.rs:372:        Err(err) => crate::error::error_response(err.status, err.code, err.message),
+sakina-backend/src/services/phase2.rs:1883:        self.create_event("public.app_events", request).await
+sakina-backend/src/services/phase2.rs:1904:            "public.app_events" => {
+sakina-backend/src/services/phase2.rs:1906:                INSERT INTO public.app_events (user_id, session_id, event_name, event_payload)
+sakina-backend/src/services/phase2.rs:1967:            "public.app_events" => {
+sakina-backend/src/handlers/modules.rs:4:use crate::error::{error_response, ApiError};
+sakina-backend/src/handlers/modules.rs:193:        return Ok(Some(error_response(
+sakina-backend/src/handlers/modules.rs:202:        return Ok(Some(error_response(
+sakina-backend/src/handlers/modules.rs:236:        return Some(error_response(
+sakina-backend/src/handlers/islamic.rs:82:        None => Ok(crate::error::error_response(
+sakina-backend/src/error.rs:72:pub fn error_response(
+sakina-backend/src/error.rs:96:    fn error_response(&self) -> HttpResponse {
+sakina-backend/src/error.rs:97:        error_response(self.status, self.code, self.message.clone())
+sakina-backend/src/error.rs:103:        tracing::error!("internal service error: {}", e);
+sakina-backend/src/error.rs:114:    async fn error_response_uses_consistent_contract_shape() {
+sakina-backend/src/error.rs:115:        let response = error_response(StatusCode::BAD_REQUEST, "bad_request", "invalid payload");
+sakina-backend/src/handlers/chat.rs:5:use crate::error::error_response;
+sakina-backend/src/handlers/chat.rs:22:        Err(err) => return err.error_response(),
+sakina-backend/src/handlers/chat.rs:32:        return error_response(
+sakina-backend/src/handlers/chat.rs:40:            return error_response(
+sakina-backend/src/handlers/chat.rs:55:        return error_response(
+sakina-backend/src/handlers/chat.rs:83:            tracing::error!("create conversation failed: {}", err);
+sakina-backend/src/handlers/chat.rs:84:            error_response(
+sakina-backend/src/handlers/chat.rs:101:        Err(err) => return err.error_response(),
+sakina-backend/src/handlers/chat.rs:119:            tracing::error!("get conversation failed: {}", err);
+sakina-backend/src/handlers/chat.rs:120:            return error_response(
+sakina-backend/src/handlers/chat.rs:127:        return error_response(
+sakina-backend/src/handlers/chat.rs:157:            tracing::error!("get conversation messages failed: {}", err);
+sakina-backend/src/handlers/chat.rs:158:            return error_response(
+sakina-backend/src/handlers/chat.rs:187:        return error_response(
+sakina-backend/src/handlers/chat.rs:194:        return error_response(
+sakina-backend/src/handlers/chat.rs:202:        Err(err) => return err.error_response(),
+sakina-backend/src/handlers/chat.rs:216:            return error_response(
+sakina-backend/src/handlers/chat.rs:223:            tracing::error!("conversation lookup failed: {}", err);
+sakina-backend/src/handlers/chat.rs:224:            return error_response(
+sakina-backend/src/handlers/chat.rs:245:        Err(err) => return err.error_response(),
+sakina-backend/src/handlers/chat.rs:262:            tracing::error!("open transaction failed: {}", err);
+sakina-backend/src/handlers/chat.rs:263:            return error_response(
+sakina-backend/src/handlers/chat.rs:286:            tracing::error!("insert user message failed: {}", err);
+sakina-backend/src/handlers/chat.rs:287:            return error_response(
+sakina-backend/src/handlers/chat.rs:310:            tracing::error!("insert assistant message failed: {}", err);
+sakina-backend/src/handlers/chat.rs:311:            return error_response(
+sakina-backend/src/handlers/chat.rs:320:        tracing::error!("commit chat message transaction failed: {}", err);
+sakina-backend/src/handlers/chat.rs:321:        return error_response(

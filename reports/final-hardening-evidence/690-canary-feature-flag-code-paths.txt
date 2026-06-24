@@ -1,0 +1,86 @@
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1315:CREATE TABLE IF NOT EXISTS public.feature_flags (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1327:CREATE TABLE IF NOT EXISTS public.module_status (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1349:CREATE TABLE IF NOT EXISTS public.release_flags (
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1439:CREATE INDEX IF NOT EXISTS idx_feature_flags_enabled
+sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:1440:    ON public.feature_flags (is_enabled, updated_at DESC);
+sakina-backend/db/migrations/017_rls_user_isolation.sql:294:        'feature_flags',
+sakina-backend/db/migrations/017_rls_user_isolation.sql:295:        'module_status',
+sakina-backend/db/migrations/017_rls_user_isolation.sql:297:        'release_flags',
+sakina-frontend/lib/app/feature_flags.dart:5:      bool.fromEnvironment('SAKINA_FEATURE_QURAN', defaultValue: false);
+sakina-frontend/lib/app/feature_flags.dart:7:      bool.fromEnvironment('SAKINA_FEATURE_PRAYER', defaultValue: false);
+sakina-frontend/lib/app/feature_flags.dart:9:      bool.fromEnvironment('SAKINA_FEATURE_COMMUNITY', defaultValue: false);
+sakina-frontend/lib/app/feature_flags.dart:11:      bool.fromEnvironment('SAKINA_FEATURE_KNOWLEDGE', defaultValue: false);
+sakina-backend/src/handlers/rag.rs:160:        "quran" => Some("SAKINA_FEATURE_QURAN"),
+sakina-backend/src/handlers/rag.rs:161:        "prayer" => Some("SAKINA_FEATURE_PRAYER"),
+sakina-backend/src/handlers/rag.rs:162:        "knowledge" => Some("SAKINA_FEATURE_KNOWLEDGE"),
+sakina-backend/src/handlers/rag.rs:163:        "community" => Some("SAKINA_FEATURE_COMMUNITY"),
+sakina-backend/src/handlers/rag.rs:399:        std::env::set_var("SAKINA_FEATURE_QURAN", "false");
+sakina-backend/src/handlers/rag.rs:416:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/handlers/rag.rs:423:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/handlers/rag.rs:438:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-frontend/lib/services/module_service.dart:5:import '../app/feature_flags.dart';
+sakina-backend/src/services/decision_algorithm.rs:140:        DecisionModule::Quran => Some("SAKINA_FEATURE_QURAN"),
+sakina-backend/src/services/decision_algorithm.rs:141:        DecisionModule::Prayer => Some("SAKINA_FEATURE_PRAYER"),
+sakina-backend/src/services/decision_algorithm.rs:142:        DecisionModule::Knowledge => Some("SAKINA_FEATURE_KNOWLEDGE"),
+sakina-backend/src/services/decision_algorithm.rs:143:        DecisionModule::Community => Some("SAKINA_FEATURE_COMMUNITY"),
+sakina-backend/src/services/decision_algorithm.rs:144:        DecisionModule::GeneralChat => Some("SAKINA_FEATURE_CHAT"),
+sakina-backend/src/services/decision_algorithm.rs:377:        std::env::set_var("SAKINA_FEATURE_QURAN", "false");
+sakina-backend/src/services/decision_algorithm.rs:390:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/services/decision_algorithm.rs:396:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/services/decision_algorithm.rs:408:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/services/decision_algorithm.rs:414:        std::env::set_var("SAKINA_FEATURE_CHAT", "true");
+sakina-backend/src/services/decision_algorithm.rs:424:        std::env::remove_var("SAKINA_FEATURE_CHAT");
+sakina-backend/src/services/decision_algorithm.rs:430:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/services/decision_algorithm.rs:446:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/services/decision_algorithm.rs:452:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/services/decision_algorithm.rs:467:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/services/decision_algorithm.rs:473:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/services/decision_algorithm.rs:489:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/services/decision_algorithm.rs:495:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/services/decision_algorithm.rs:506:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/services/decision_algorithm.rs:512:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/services/decision_algorithm.rs:529:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/services/decision_algorithm.rs:535:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/services/decision_algorithm.rs:552:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/handlers/modules.rs:19:fn module_status(module: &str) -> ModuleStatusResponse {
+sakina-backend/src/handlers/modules.rs:22:            let enabled = std::env::var("SAKINA_FEATURE_CHAT")
+sakina-backend/src/handlers/modules.rs:42:            let enabled = env_flag_enabled("SAKINA_FEATURE_QURAN");
+sakina-backend/src/handlers/modules.rs:59:            let enabled = env_flag_enabled("SAKINA_FEATURE_PRAYER");
+sakina-backend/src/handlers/modules.rs:77:            let enabled = env_flag_enabled("SAKINA_FEATURE_COMMUNITY");
+sakina-backend/src/handlers/modules.rs:94:            let enabled = env_flag_enabled("SAKINA_FEATURE_KNOWLEDGE");
+sakina-backend/src/handlers/modules.rs:130:            module_status("chat"),
+sakina-backend/src/handlers/modules.rs:131:            module_status("quran"),
+sakina-backend/src/handlers/modules.rs:132:            module_status("prayer"),
+sakina-backend/src/handlers/modules.rs:133:            module_status("community"),
+sakina-backend/src/handlers/modules.rs:134:            module_status("knowledge"),
+sakina-backend/src/handlers/modules.rs:140:    HttpResponse::Ok().json(module_status("chat"))
+sakina-backend/src/handlers/modules.rs:144:    HttpResponse::Ok().json(module_status("quran"))
+sakina-backend/src/handlers/modules.rs:148:    HttpResponse::Ok().json(module_status("prayer"))
+sakina-backend/src/handlers/modules.rs:152:    HttpResponse::Ok().json(module_status("community"))
+sakina-backend/src/handlers/modules.rs:156:    HttpResponse::Ok().json(module_status("knowledge"))
+sakina-backend/src/handlers/modules.rs:253:        enforce_module_gate(&req, pool.get_ref(), "SAKINA_FEATURE_QURAN", "quran_access").await?
+sakina-backend/src/handlers/modules.rs:288:        "SAKINA_FEATURE_PRAYER",
+sakina-backend/src/handlers/modules.rs:326:        "SAKINA_FEATURE_KNOWLEDGE",
+sakina-backend/src/handlers/modules.rs:364:        "SAKINA_FEATURE_COMMUNITY",
+sakina-backend/src/handlers/modules.rs:406:        std::env::set_var("SAKINA_FEATURE_QURAN", "false");
+sakina-backend/src/handlers/modules.rs:418:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/handlers/modules.rs:424:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/handlers/modules.rs:433:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/handlers/modules.rs:439:        std::env::set_var("SAKINA_FEATURE_COMMUNITY", "true");
+sakina-backend/src/handlers/modules.rs:449:        std::env::remove_var("SAKINA_FEATURE_COMMUNITY");
+sakina-backend/src/handlers/modules.rs:455:        std::env::set_var("SAKINA_FEATURE_QURAN", "true");
+sakina-backend/src/handlers/modules.rs:465:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/handlers/modules.rs:471:        std::env::set_var("SAKINA_FEATURE_PRAYER", "true");
+sakina-backend/src/handlers/modules.rs:481:        std::env::remove_var("SAKINA_FEATURE_PRAYER");
+sakina-backend/src/handlers/modules.rs:487:        std::env::set_var("SAKINA_FEATURE_KNOWLEDGE", "true");
+sakina-backend/src/handlers/modules.rs:497:        std::env::remove_var("SAKINA_FEATURE_KNOWLEDGE");
+sakina-backend/src/handlers/modules.rs:503:        std::env::set_var("SAKINA_FEATURE_COMMUNITY", "true");
+sakina-backend/src/handlers/modules.rs:513:        std::env::remove_var("SAKINA_FEATURE_COMMUNITY");
+sakina-backend/src/handlers/modules.rs:535:    async fn module_status_defaults_to_chat_active_and_others_coming_soon() {
+sakina-backend/src/handlers/modules.rs:537:        std::env::remove_var("SAKINA_FEATURE_CHAT");
+sakina-backend/src/handlers/modules.rs:538:        std::env::remove_var("SAKINA_FEATURE_QURAN");
+sakina-backend/src/handlers/modules.rs:539:        std::env::remove_var("SAKINA_FEATURE_PRAYER");
+sakina-backend/src/handlers/modules.rs:540:        std::env::remove_var("SAKINA_FEATURE_COMMUNITY");
+sakina-backend/src/handlers/modules.rs:541:        std::env::remove_var("SAKINA_FEATURE_KNOWLEDGE");
+sakina-backend/src/handlers/modules.rs:543:        let chat = module_status("chat");
+sakina-backend/src/handlers/modules.rs:544:        let quran = module_status("quran");

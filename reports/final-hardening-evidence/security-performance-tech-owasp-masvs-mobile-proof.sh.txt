@@ -1,0 +1,62 @@
+sakina-frontend/lib/screens/chat_screen.dart:21:      this.api.setAuthToken(session.accessToken);
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:21:      this.api.setAuthToken(currentSession.accessToken);
+sakina-frontend/lib/services/auth_service.dart:1:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+sakina-frontend/lib/services/auth_service.dart:22:  AuthService({ApiService? api, FlutterSecureStorage? secureStorage})
+sakina-frontend/lib/services/auth_service.dart:24:        _secureStorage = secureStorage ?? const FlutterSecureStorage();
+sakina-frontend/lib/services/auth_service.dart:32:  final FlutterSecureStorage _secureStorage;
+sakina-frontend/lib/services/auth_service.dart:43:    _api.setAuthToken(token);
+sakina-frontend/lib/services/auth_service.dart:96:    await _secureStorage.delete(key: _tokenKey);
+sakina-frontend/lib/services/auth_service.dart:103:      _api.setAuthToken(token);
+sakina-frontend/lib/services/auth_service.dart:119:    _api.setAuthToken(response.accessToken);
+sakina-frontend/lib/services/api_service.dart:21:  void setAuthToken(String? token) {
+sakina-frontend/lib/services/api_service.dart:42:      setAuthToken(auth.accessToken);
+sakina-frontend/lib/services/api_service.dart:60:      setAuthToken(auth.accessToken);
+sakina-frontend/lib/services/api_service.dart:76:      setAuthToken(auth.accessToken);
+sakina-frontend/lib/services/api_service.dart:95:      setAuthToken(null);
+sakina-frontend/ios/Runner/Info.plist:29:	<key>NSCameraUsageDescription</key>
+sakina-frontend/android/app/src/profile/AndroidManifest.xml:6:    <uses-permission android:name="android.permission.INTERNET"/>
+sakina-frontend/android/app/src/debug/AndroidManifest.xml:6:    <uses-permission android:name="android.permission.INTERNET"/>
+sakina-frontend/android/app/src/main/AndroidManifest.xml:2:    <uses-permission android:name="android.permission.CAMERA" />
+Analyzing sakina-frontend...                                    
+No issues found! (ran in 15.8s)
+00:00 +0: loading F:/SakinaAL/sakina-frontend/test/api_service_test.dart
+00:00 +0: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: query() parses RagResponse (answer + sources + confidence)
+00:00 +1: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: query() safely handles empty verified-evidence payload
+00:00 +2: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: classify() parses ClassifyResponse
+00:00 +3: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
+00:01 +4: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
+00:02 +5: F:/SakinaAL/sakina-frontend/test/api_service_test.dart: non-200 throws ApiException
+00:03 +6: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: renders fallback and privacy switches
+00:03 +7: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: renders fallback and privacy switches
+00:03 +8: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: renders fallback and privacy switches
+00:03 +9: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: renders fallback and privacy switches
+00:03 +10: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: renders fallback and privacy switches
+00:04 +11: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: renders fallback and privacy switches
+00:04 +12: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: renders fallback and privacy switches
+00:04 +13: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +14: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +15: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +16: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +17: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +18: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +19: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +20: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +21: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +22: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +23: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:04 +24: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:05 +25: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:05 +26: F:/SakinaAL/sakina-frontend/test/module_read_only_state_screen_test.dart: gated module blocks UI access
+00:05 +27: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: updates privacy and adds dua item
+00:05 +28: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: updates privacy and adds dua item
+00:05 +29: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: updates privacy and adds dua item
+00:06 +30: F:/SakinaAL/sakina-frontend/test/iman_journey_screen_test.dart: updates privacy and adds dua item
+00:07 +31: F:/SakinaAL/sakina-frontend/test/sync_service_test.dart: ChaCha20-Poly1305 encrypt/decrypt round-trips
+00:07 +32: F:/SakinaAL/sakina-frontend/test/sync_service_test.dart: X25519 ECDH yields a shared key both sides can use
+00:07 +33: F:/SakinaAL/sakina-frontend/test/sync_service_test.dart: wrong key fails to decrypt
+00:08 +34: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Welcome screen renders key CTAs
+00:09 +35: F:/SakinaAL/sakina-frontend/test/widget_test.dart: Onboarding flow reaches account intro
+00:11 +36: All tests passed!
+Running Gradle task 'assembleDebug'...                             11.3s
+✓ Built build\app\outputs\flutter-apk\app-debug.apk
+OWASP_MASVS_MOBILE_OK secure storage, permission declarations, static-token scan, and Flutter build proof completed.

@@ -1,0 +1,56 @@
+Running Gradle task 'assembleRelease'...                           13.1s
+✓ Built build\app\outputs\flutter-apk\app-release.apk (62.8MB)
+Running Gradle task 'bundleRelease'...                              9.0s
+✓ Built build\app\outputs\bundle\release\app-release.aab (47.1MB)
+-rwxrwxrwx 1 kalshafee kalshafee 48M Jun  5 20:42 sakina-frontend/build/app/outputs/bundle/release/app-release.aab
+-rwxrwxrwx 1 kalshafee kalshafee 63M Jun  5 21:24 sakina-frontend/build/app/outputs/flutter-apk/app-release.apk
+sakina-frontend/lib/screens/compliance_screen.dart:38:      final response = await api.requestAccountDeletion();
+sakina-frontend/lib/screens/compliance_screen.dart:59:        Text('Privacy Policy', style: Theme.of(context).textTheme.titleLarge),
+sakina-frontend/lib/screens/compliance_screen.dart:65:        Text('Terms', style: Theme.of(context).textTheme.titleLarge),
+sakina-frontend/lib/screens/compliance_screen.dart:71:        Text('Islamic Advisory Disclaimer',
+sakina-frontend/lib/screens/compliance_screen.dart:78:        Text('Data Export and Deletion',
+sakina-frontend/lib/screens/compliance_screen.dart:90:              : 'Request account deletion'),
+sakina-frontend/lib/services/api_service.dart:293:  Future<AccountDeletionRequestResponse> requestAccountDeletion() async {
+sakina-frontend/lib/services/api_service.dart:294:    final res = await _post('/account/delete-request', const {});
+sakina-frontend/ios/Runner/Info.plist:10:	<string>Sakina AI</string>
+sakina-frontend/ios/Runner/Info.plist:18:	<string>Sakina AI</string>
+sakina-frontend/ios/Runner/Info.plist:29:	<key>NSCameraUsageDescription</key>
+sakina-frontend/ios/Runner/Info.plist:31:	<key>NSPhotoLibraryUsageDescription</key>
+sakina-frontend/android/app/src/main/AndroidManifest.xml:2:    <uses-permission android:name="android.permission.CAMERA" />
+sakina-frontend/android/app/src/main/AndroidManifest.xml:4:        android:label="Sakina AI"
+scripts/sakina/tech-data-retention-deletion-proof.sh:51:    'outbox.events'
+scripts/sakina/tech-data-retention-deletion-proof.sh:229:  INSERT INTO outbox.events (event_type, payload, status)
+scripts/sakina/tech-data-retention-deletion-proof.sh:283:  FROM outbox.events e
+scripts/sakina/tech-data-retention-deletion-proof.sh:303:         FROM outbox.events e
+scripts/sakina/tech-data-retention-deletion-proof.sh:322:rg -n "user_memory_entries|multimodal_assets|auth_sessions|audit_logs|outbox.events|data_deletion_requested|user_data_deleted" \
+sakina-backend/src/main.rs:757:                        web::post().to(handlers::phase2::request_account_deletion),
+sakina-backend/src/handlers/phase2.rs:5:use crate::services::authenticated_user_id;
+sakina-backend/src/handlers/phase2.rs:82:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:146:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:165:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:205:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:222:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:239:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src/handlers/phase2.rs:252:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src/handlers/phase2.rs:379:    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:388:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:398:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:414:    request.user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:425:    request.user_id = Some(authenticated_user_id(&req, repo.pool()).await?);
+sakina-backend/src/handlers/phase2.rs:441:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:463:    let auth_user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:486:pub async fn request_account_deletion(
+sakina-backend/src/handlers/phase2.rs:490:    let user_id = authenticated_user_id(&req, repo.pool()).await?;
+sakina-backend/src/handlers/phase2.rs:503:        VALUES ('account_deletion_requested', 'user', $1, $2, $3)
+sakina-backend/src/handlers/phase2.rs:520:        INSERT INTO outbox.events (event_type, payload, status)
+sakina-backend/src/handlers/phase2.rs:521:        VALUES ('account_deletion_requested', $1, 'Pending')
+{"error":{"code":"unauthorized","message":"authorization bearer token is required"}}
+Missing-auth delete request status: 401
+{
+  "audit_id": 116,
+  "outbox_event_id": "9db746cb-8d96-4b7a-b2c2-99b9d7a046d5",
+  "request_id": "store-compliance-1780691054-17216-delete",
+  "status": "queued"
+}
+Deletion audit rows=1 outbox rows=1
+STORE_COMPLIANCE_OK release APK/AAB builds exist, release config has no local/demo token blockers, mobile privacy/terms/disclaimer/account deletion UI is visible, Android/iOS permissions match enabled multimodal features, account deletion request requires JWT, and backend persists audit/outbox deletion request evidence.

@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-worker
+  namespace: sakina-mobile-prod
+  labels:
+    app.kubernetes.io/name: worker
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-worker
+  template:
+    metadata:
+      labels:
+        app: sakina-worker
+        app.kubernetes.io/name: worker
+        app.kubernetes.io/part-of: sakina-mobile
+        app.kubernetes.io/environment: production
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: worker
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          command:
+            - /usr/local/bin/sakina-ingest
+          env:
+            - name: SAKINA_ENV
+              value: production
+            - name: SERVICE_NAME
+              value: "sakina-worker"
+            - name: POSTGRES_HOST
+              value: sakina-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: QDRANT_URL
+              value: http://sakina-qdrant:6333
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

@@ -1,0 +1,44 @@
+########## SAKINA PRIORITY-1 DOCKER PROOF Mon Jun 22 18:24:57 UTC 2026 ##########
+=== image ===
+sakina-backend 9 minutes ago 177MB
+=== down -v + fresh stack ===
+postgres ready; init errors: 1
+=== clean migrate (expect 31) ===
+Sakina migrations applied: 31
+=== up api ===
+health: healthy  readiness: ready
+
+=== subscription schema (SAK-012) ===
+ plan_key | price_cents 
+----------+-------------
+ free     |           0
+ premium  |         999
+ family   |        1499
+(3 rows)
+
+ user_subscriptions
+
+
+=== register + login ===
+register user_id present: yes  login: 200
+
+=== SAK-011 rate limit: flood /auth/login 13x (auth bucket=10/min) ===
+login codes: 401 401 401 401 401 401 401 401 429 429 429 429 429
+429 seen: YES
+normal ask still works after flood (different bucket): 200
+
+=== SAK-012 gating: quran overview without entitlement (expect 402) ===
+GET /v1/modules/quran/overview -> 402
+-- grant quran_access entitlement --
+INSERT 0 1
+GET /v1/modules/quran/overview (entitled) -> 200
+
+=== SAK-013 secret scan: distributed compose ===
+hardcoded secrets in distributed.yml: 0
+tracked .env files (should be only examples): 
+
+=== regression: safe ask cited / fatwa escalate / dashboard / isolation ===
+wudu: ALLOWED_WITH_GUARDRAILS cited=True
+fatwa: ESCALATED_TO_HUMAN
+admin dashboard: 200
+########## END ##########

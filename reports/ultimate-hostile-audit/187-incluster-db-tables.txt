@@ -1,0 +1,61 @@
+# DB: sakina_mobile_staging on pod sakina-postgres-0 (PG 15.18)
+=== TASK 2a: tables per schema ===
+     schemaname     | count 
+--------------------+-------
+ information_schema |     4
+ outbox             |     1
+ pg_catalog         |    64
+ public             |    18
+ sakina_ai          |    25
+(5 rows)
+
+
+=== TASK 2b: full \dt *.* (application schemas only: public, sakina_ai, outbox) ===
+  schema   |           name            
+-----------+---------------------------
+ outbox    | events
+ public    | admin_audit_events
+ public    | audit_logs
+ public    | auth_identities
+ public    | auth_refresh_tokens
+ public    | auth_sessions
+ public    | chat_messages
+ public    | chat_threads
+ public    | module_lessons
+ public    | modules
+ public    | notifications
+ public    | password_credentials
+ public    | rag_chunks
+ public    | rag_documents
+ public    | rag_embeddings
+ public    | sync_state
+ public    | user_module_progress
+ public    | user_profiles
+ public    | users
+ sakina_ai | agent_feedback
+ sakina_ai | anonymous_learning_events
+ sakina_ai | ask_shaikh_answers
+ sakina_ai | brain_cache_metadata
+ sakina_ai | brain_decision_traces
+ sakina_ai | brain_evaluation_results
+ sakina_ai | brain_memory_events
+ sakina_ai | conversations
+ sakina_ai | islamic_chunks
+ sakina_ai | islamic_documents
+ sakina_ai | islamic_sources
+ sakina_ai | knowledge_graph_edges
+ sakina_ai | knowledge_graph_entities
+ sakina_ai | local_sunni_topics
+ sakina_ai | messages
+ sakina_ai | mobile_memory_sync
+ sakina_ai | multimodal_assets
+ sakina_ai | scholar_review_queue
+ sakina_ai | user_habit_signals
+ sakina_ai | user_interest_signals
+ sakina_ai | user_learning_preferences
+ sakina_ai | user_memory_entries
+ sakina_ai | user_memory_permissions
+ sakina_ai | waitlist
+ sakina_ai | workspaces
+(44 rows)
+

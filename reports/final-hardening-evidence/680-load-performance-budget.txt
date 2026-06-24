@@ -1,0 +1,4 @@
+/health/observability p95_seconds 0.014253
+/api/brain/health p95_seconds 0.002110
+/health p95_seconds 0.003428
+/health/ready p95_seconds 0.016865

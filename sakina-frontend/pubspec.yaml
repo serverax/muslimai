@@ -1,0 +1,60 @@
+name: sakina_frontend
+description: "Project Sakina - Islamic AI Mobile App"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.16.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management (stable; no codegen — providers written by hand to avoid
+  # the analyzer/meta version conflict the prerelease codegen packages caused)
+  flutter_riverpod: ^2.6.1
+
+  # Local storage
+  sqflite: ^2.3.0
+  sqflite_sqlcipher: any
+  path: ^1.8.3
+
+  # Encryption
+  encrypt: ^5.0.0
+  cryptography: any
+
+  # Networking
+  http: ^1.1.0
+  shared_preferences: ^2.5.3
+  flutter_secure_storage: ^9.2.4
+  image_picker: ^1.2.1
+  file_picker: ^11.0.2
+
+  # Internationalization
+  intl: ^0.20.2
+
+  # UI/Material
+  flutter_localizations:
+    sdk: flutter
+
+  # JSON serialization
+  json_serializable: ^6.7.0
+  json_annotation: ^4.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/translations/
+  # NOTE: custom fonts (Amiri/Inter) declarations removed until real .ttf files
+  # exist; the theme's fontFamily strings fall back to system fonts for now.

@@ -1,0 +1,5 @@
+Missing JWT status=401
+Bad type status=400
+Oversize status=400
+Own asset status=200 Cross-user status=404
+MULTIMODAL_SECURITY_OK auth, type/size validation, private metadata, and owner isolation proved.

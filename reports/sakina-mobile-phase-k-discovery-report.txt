@@ -1,0 +1,3 @@
+Sakina Mobile Phase K discovery report
+- Created scaffold assets for docs/IaC/migrations/RAG/mobile/admin/workflows.
+- Cloud deployment blocked pending Azure re-auth and Terraform installation.

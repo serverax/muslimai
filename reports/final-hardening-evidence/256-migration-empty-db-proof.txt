@@ -1,0 +1,38 @@
+NOTICE:  database "sakina_empty_migration_1780710429_6868" does not exist, skipping
+Temporary migration database=sakina_empty_migration_1780710429_6868
+Applying sakina-backend/db/migrations/001_init_extensions.sql
+Applying sakina-backend/db/migrations/002_users_profiles.sql
+Applying sakina-backend/db/migrations/003_modules_content.sql
+Applying sakina-backend/db/migrations/004_user_progress.sql
+Applying sakina-backend/db/migrations/005_chat_threads_messages.sql
+Applying sakina-backend/db/migrations/006_sync_state.sql
+Applying sakina-backend/db/migrations/007_rag_documents_chunks.sql
+Applying sakina-backend/db/migrations/008_rag_embeddings.sql
+Applying sakina-backend/db/migrations/009_notifications.sql
+Applying sakina-backend/db/migrations/010_admin_audit.sql
+Applying sakina-backend/db/migrations/011_indexes_perf.sql
+Applying sakina-backend/db/migrations/012_seed_reference.sql
+Applying sakina-backend/db/migrations/013_waitlist.sql
+Applying sakina-backend/db/migrations/014_brain_knowledge_graph.sql
+Applying sakina-backend/db/migrations/015_user_memory_multimodal.sql
+Applying sakina-backend/db/migrations/016_password_auth.sql
+Applying sakina-backend/db/migrations/017_rls_user_isolation.sql
+Applying sakina-backend/db/migrations/018_replace_fake_rag_seed_content.sql
+Applying sakina-backend/db/migrations/019_agent_feedback.sql
+Required table public.users exists=1
+Required table public.user_profiles exists=1
+Required table public.auth_sessions exists=1
+Required table public.auth_refresh_tokens exists=1
+Required table public.password_credentials exists=1
+Required table sakina_ai.conversations exists=1
+Required table sakina_ai.messages exists=1
+Required table sakina_ai.brain_decision_traces exists=1
+Required table sakina_ai.user_memory_entries exists=1
+Required table sakina_ai.multimodal_assets exists=1
+Required table sakina_ai.knowledge_graph_entities exists=1
+Required table sakina_ai.knowledge_graph_edges exists=1
+RLS helper functions after migration=2
+Required user-owned tables with RLS disabled=0
+Function-wired RLS policies after migration=54
+Seeded Islamic sources=1 chunks=12
+MIGRATION_EMPTY_DB_OK all backend DB migrations applied cleanly to an empty database with required tables, RLS functions, policies, and Islamic seed data verified.

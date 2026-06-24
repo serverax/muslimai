@@ -1,0 +1,6 @@
+.github/workflows/backend-ci.yml:71:          docker build -f Dockerfile.api -t sakina-backend-api:${{ github.sha }} .
+.github/workflows/sakina-admin-ci.yml:40:          docker build -f admin/Dockerfile -t sakina-admin-ci:${{ github.sha }} .
+.github/workflows/sakina-backend-ci.yml:47:          docker build -f sakina-backend/Dockerfile -t sakina-backend-ci:${{ github.sha }} .
+.github/workflows/sakina-backend-image.yml:69:          docker buildx imagetools create -t "${{ steps.meta.outputs.latest_tag }}" "${{ steps.meta.outputs.sha_tag }}"
+.github/workflows/sakina-rag-ci.yml:43:          docker build -f sakina-rag/Dockerfile -t sakina-rag-ci:${{ github.sha }} .
+sakina-infra/Makefile:38:	docker build -f ../sakina-backend/Dockerfile.api -t sakina-backend-api:latest ../sakina-backend

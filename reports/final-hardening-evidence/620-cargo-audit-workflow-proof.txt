@@ -1,0 +1,3 @@
+.github/workflows/dependency-scan.yml:19:      - name: Run cargo audit
+.github/workflows/dependency-scan.yml:24:          cargo audit --ignore RUSTSEC-2023-0071
+.github/workflows/backend-ci.yml:66:          cargo audit --ignore RUSTSEC-2023-0071

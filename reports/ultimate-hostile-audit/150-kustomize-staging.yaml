@@ -1,0 +1,1406 @@
+# Warning: 'commonLabels' is deprecated. Please use 'labels' instead. Run 'kustomize edit fix' to update your Kustomization automatically.
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-mobile-staging
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: admin
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-admin
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: sakina-admin
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-backend
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: sakina-backend
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: llm-gateway
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-llm-gateway
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 8087
+    targetPort: 8087
+  selector:
+    app: sakina-llm-gateway
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-ollama
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 11434
+    targetPort: 11434
+  selector:
+    app: sakina-ollama
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-postgres
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: 5432
+  selector:
+    app: sakina-postgres
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: qdrant
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-qdrant
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 6333
+    targetPort: 6333
+  selector:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: qdrant
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: rag
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-rag
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: sakina-rag-retrieval
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: rag-ingestion
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-rag-ingestion
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: sakina-rag-ingestion
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: rag-retrieval
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-rag-retrieval
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: sakina-rag-retrieval
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-redis
+  namespace: sakina-mobile-staging
+spec:
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: 6379
+  selector:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: sakina-mobile
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-ollama-models
+  namespace: sakina-mobile-staging
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: admin
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-admin
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-admin
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/part-of: sakina-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sakina-admin
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: admin
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - image: ghcr.io/serverax/sakina-frontend:qa-security-hardening
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        name: admin
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /var/cache/nginx
+          name: nginx-cache
+        - mountPath: /var/run
+          name: nginx-run
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      securityContext:
+        fsGroup: 101
+        runAsGroup: 101
+        runAsNonRoot: true
+        runAsUser: 101
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: nginx-cache
+      - emptyDir: {}
+        name: nginx-run
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-backend
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sakina-backend
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/part-of: sakina-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sakina-backend
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: backend
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - env:
+        - name: SAKINA_ENV
+          value: staging
+        - name: SAKINA_LLM_ENABLED
+          value: "true"
+        - name: SAKINA_LLM_GATEWAY_URL
+          value: http://sakina-llm-gateway:8087
+        - name: SAKINA_LLM_MODEL
+          value: tinyllama
+        - name: OLLAMA_CPU_MODE
+          value: "true"
+        - name: OLLAMA_DEFAULT_MODEL
+          value: tinyllama
+        - name: OLLAMA_TIMEOUT_SECONDS
+          value: "60"
+        - name: SAKINA_LLM_TIMEOUT_SECONDS
+          value: "60"
+        - name: SAKINA_MODEL_LEARNING
+          value: "false"
+        - name: SAKINA_PRIVATE_MEMORY
+          value: "false"
+        - name: SAKINA_ANONYMOUS_LEARNING
+          value: "true"
+        - name: POSTGRES_HOST
+          value: sakina-postgres
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_DB
+              name: sakina-postgres-secret
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: sakina-postgres-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: sakina-postgres-secret
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: jwt-secret
+              name: sakina-staging-secrets
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              key: encryption-key
+              name: sakina-staging-secrets
+        - name: QDRANT_URL
+          value: http://sakina-qdrant:6333
+        - name: QDRANT_COLLECTION
+          value: sakina_islamic_chunks_en
+        - name: ISLAMIC_QDRANT_COLLECTION
+          value: sakina_islamic_chunks_en
+        - name: SAKINA_REDIS_URL
+          value: redis://sakina-redis:6379
+        - name: SAKINA_AGENT_ROLLOUT_PROBE_ENABLED
+          value: "true"
+        - name: SAKINA_VALIDATOR_WASM_PATH
+          value: /opt/sakina/wasm/sakina_validator.wasm
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        name: backend
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /opt/sakina/wasm
+          name: agent-validator-wasm
+          readOnly: true
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - cp /usr/local/share/sakina/wasm/sakina_validator.wasm /agent-wasm/sakina_validator.wasm
+          && test -s /agent-wasm/sakina_validator.wasm
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        name: install-agent-validator-wasm
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /agent-wasm
+          name: agent-validator-wasm
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: agent-validator-wasm
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: llm-gateway
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-llm-gateway
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-llm-gateway
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/part-of: sakina-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sakina-llm-gateway
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: llm-gateway
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - command:
+        - sakina-llm-gateway
+        env:
+        - name: SAKINA_ENV
+          value: staging
+        - name: OLLAMA_BASE_URL
+          value: http://sakina-ollama:11434
+        - name: SAKINA_LLM_MODEL
+          value: tinyllama
+        - name: SAKINA_LLM_TIMEOUT_SECONDS
+          value: "60"
+        - name: SAKINA_LLM_GATEWAY_BIND
+          value: 0.0.0.0:8087
+        - name: RUST_LOG
+          value: info
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        name: llm-gateway
+        ports:
+        - containerPort: 8087
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-ollama
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-ollama
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/part-of: sakina-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sakina-ollama
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: ollama
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - env:
+        - name: OLLAMA_HOST
+          value: 0.0.0.0:11434
+        image: ollama/ollama
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /api/tags
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 5
+        name: ollama
+        ports:
+        - containerPort: 11434
+          name: http
+        readinessProbe:
+          failureThreshold: 12
+          httpGet:
+            path: /api/tags
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "2"
+            memory: 6Gi
+          requests:
+            cpu: 250m
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /root/.ollama
+          name: ollama-models
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - name: ollama-models
+        persistentVolumeClaim:
+          claimName: sakina-ollama-models
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: rag-ingestion
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-rag-ingestion
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-rag-ingestion
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/part-of: sakina-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sakina-rag-ingestion
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: rag-ingestion
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - env:
+        - name: SAKINA_ENV
+          value: staging
+        - name: SAKINA_LLM_ENABLED
+          value: "false"
+        - name: POSTGRES_HOST
+          value: sakina-postgres
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_DB
+              name: sakina-postgres-secret
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: sakina-postgres-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: sakina-postgres-secret
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: jwt-secret
+              name: sakina-staging-secrets
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              key: encryption-key
+              name: sakina-staging-secrets
+        - name: QDRANT_URL
+          value: http://sakina-qdrant:6333
+        - name: QDRANT_COLLECTION
+          value: sakina_islamic_chunks_en
+        - name: ISLAMIC_QDRANT_COLLECTION
+          value: sakina_islamic_chunks_en
+        - name: SAKINA_REDIS_URL
+          value: redis://sakina-redis:6379
+        - name: SAKINA_AGENT_ROLLOUT_PROBE_ENABLED
+          value: "true"
+        - name: SAKINA_VALIDATOR_WASM_PATH
+          value: /opt/sakina/wasm/sakina_validator.wasm
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        name: ingestion
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 750m
+            memory: 768Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /opt/sakina/wasm
+          name: agent-validator-wasm
+          readOnly: true
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - cp /usr/local/share/sakina/wasm/sakina_validator.wasm /agent-wasm/sakina_validator.wasm
+          && test -s /agent-wasm/sakina_validator.wasm
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        name: install-agent-validator-wasm
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /agent-wasm
+          name: agent-validator-wasm
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: agent-validator-wasm
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: rag-retrieval
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-rag-retrieval
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-rag-retrieval
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/part-of: sakina-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sakina-rag-retrieval
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: rag-retrieval
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - env:
+        - name: SAKINA_ENV
+          value: staging
+        - name: SAKINA_LLM_ENABLED
+          value: "false"
+        - name: POSTGRES_HOST
+          value: sakina-postgres
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_DB
+              name: sakina-postgres-secret
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: sakina-postgres-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: sakina-postgres-secret
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: jwt-secret
+              name: sakina-staging-secrets
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              key: encryption-key
+              name: sakina-staging-secrets
+        - name: QDRANT_URL
+          value: http://sakina-qdrant:6333
+        - name: QDRANT_COLLECTION
+          value: sakina_islamic_chunks_en
+        - name: ISLAMIC_QDRANT_COLLECTION
+          value: sakina_islamic_chunks_en
+        - name: SAKINA_REDIS_URL
+          value: redis://sakina-redis:6379
+        - name: SAKINA_AGENT_ROLLOUT_PROBE_ENABLED
+          value: "true"
+        - name: SAKINA_VALIDATOR_WASM_PATH
+          value: /opt/sakina/wasm/sakina_validator.wasm
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        name: retrieval
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 750m
+            memory: 768Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /opt/sakina/wasm
+          name: agent-validator-wasm
+          readOnly: true
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - cp /usr/local/share/sakina/wasm/sakina_validator.wasm /agent-wasm/sakina_validator.wasm
+          && test -s /agent-wasm/sakina_validator.wasm
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        name: install-agent-validator-wasm
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /agent-wasm
+          name: agent-validator-wasm
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: agent-validator-wasm
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-redis
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/part-of: sakina-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - command:
+        - redis-server
+        - --appendonly
+        - "yes"
+        image: redis:7-alpine
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /data
+          name: redis-data
+        - mountPath: /tmp
+          name: tmp
+      securityContext:
+        fsGroup: 999
+        runAsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - emptyDir: {}
+        name: redis-data
+      - emptyDir: {}
+        name: tmp
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-postgres
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-postgres
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/part-of: sakina-mobile
+  serviceName: sakina-postgres
+  template:
+    metadata:
+      labels:
+        app: sakina-postgres
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: postgres
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: sakina_mobile
+        - name: POSTGRES_USER
+          value: sakina
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgres-password
+              name: sakina-staging-secrets
+        image: postgres:16-alpine
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+        name: postgres
+        ports:
+        - containerPort: 5432
+          name: postgres
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-data
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /var/run/postgresql
+          name: postgres-run
+      securityContext:
+        fsGroup: 999
+        runAsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: postgres-run
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/part-of: sakina-mobile
+      name: postgres-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: qdrant
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-qdrant
+  namespace: sakina-mobile-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/environment: staging
+      app.kubernetes.io/name: qdrant
+      app.kubernetes.io/part-of: sakina-mobile
+  serviceName: sakina-qdrant
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: qdrant
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - env:
+        - name: QDRANT__STORAGE__STORAGE_PATH
+          value: /qdrant/storage
+        - name: QDRANT__STORAGE__SNAPSHOTS_PATH
+          value: /qdrant/storage/snapshots
+        image: qdrant/qdrant:v1.10.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        name: qdrant
+        ports:
+        - containerPort: 6333
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 750m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /qdrant/storage
+          name: qdrant-data
+        - mountPath: /tmp
+          name: tmp
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - emptyDir: {}
+        name: tmp
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/part-of: sakina-mobile
+      name: qdrant-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: db-migrations
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-db-migrations
+  namespace: sakina-mobile-staging
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: db-migrations
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - command:
+        - /usr/local/bin/sakina-migrate
+        env:
+        - name: POSTGRES_HOST
+          value: sakina-postgres
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_DB
+              name: sakina-postgres-secret
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: sakina-postgres-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: sakina-postgres-secret
+        image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+        imagePullPolicy: Always
+        name: db-migrations
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - emptyDir: {}
+        name: tmp
+  ttlSecondsAfterFinished: 600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app.kubernetes.io/environment: staging
+    app.kubernetes.io/name: ollama-preload
+    app.kubernetes.io/part-of: sakina-mobile
+  name: sakina-ollama-preload
+  namespace: sakina-mobile-staging
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/environment: staging
+        app.kubernetes.io/name: ollama-preload
+        app.kubernetes.io/part-of: sakina-mobile
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        - -ec
+        - |
+          set -euo pipefail
+          model="tinyllama"
+          attempts=0
+          until curl -fsS http://sakina-ollama:11434/api/tags >/tmp/ollama-tags.json; do
+            attempts=$((attempts + 1))
+            if [ "$attempts" -ge 60 ]; then
+              echo "sakina-ollama did not become reachable for model preload"
+              exit 1
+            fi
+            sleep 5
+          done
+          curl -fsS http://sakina-ollama:11434/api/pull \
+            -H "Content-Type: application/json" \
+            -d "{\"name\":\"${model}\",\"stream\":false}"
+          curl -fsS http://sakina-ollama:11434/api/tags | grep -i "${model}"
+        image: curlimages/curl:8.8.0
+        imagePullPolicy: IfNotPresent
+        name: preload
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 25m
+            memory: 32Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      volumes:
+      - emptyDir: {}
+        name: tmp
+  ttlSecondsAfterFinished: 3600

@@ -1,0 +1,54 @@
+=== register ===
+{
+  "user_id": "faea8517-b67f-469c-992a-b20cea5546cd",
+  "email": "sakina-proof-1780710400-24802@example.com",
+  "has_access_token": true,
+  "has_refresh_token": true
+}
+=== login ===
+{
+  "user_id": "faea8517-b67f-469c-992a-b20cea5546cd",
+  "email": "sakina-proof-1780710400-24802@example.com",
+  "access_token_format": true,
+  "has_refresh_token": true
+}
+=== wrong password ===
+status=401
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "invalid email or password"
+  }
+}
+=== auth me ===
+{
+  "user_id": "faea8517-b67f-469c-992a-b20cea5546cd",
+  "email": "sakina-proof-1780710400-24802@example.com"
+}
+=== protected route without token ===
+status=401
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "authorization bearer token is required"
+  }
+}
+=== logout ===
+{
+  "revoked": true,
+  "revoked_refresh_tokens": 1
+}
+=== revoked token rejected ===
+status=401
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "invalid or expired session token"
+  }
+}
+=== password hash proof ===
+                   email                   | hash_prefix | password_version | not_plaintext 
+-------------------------------------------+-------------+------------------+---------------
+ sakina-proof-1780710400-24802@example.com | $argon2id$  | argon2id-v1      | t
+(1 row)
+

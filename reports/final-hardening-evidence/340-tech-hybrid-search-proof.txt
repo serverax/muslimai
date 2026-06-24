@@ -1,0 +1,390 @@
+{
+  "result": {
+    "collections": [
+      {
+        "name": "sakina_islamic_chunks_en"
+      }
+    ]
+  },
+  "status": "ok",
+  "time": 0.0000092
+}
+{"indexed_chunks": 14, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+Approved Islamic chunks in DB: 14
+{
+  "result": {
+    "status": "green",
+    "optimizer_status": "ok",
+    "indexed_vectors_count": 0,
+    "points_count": 14,
+    "segments_count": 8,
+    "config": {
+      "params": {
+        "vectors": {
+          "size": 128,
+          "distance": "Cosine"
+        },
+        "shard_number": 1,
+        "replication_factor": 1,
+        "write_consistency_factor": 1,
+        "on_disk_payload": true
+      },
+      "hnsw_config": {
+        "m": 16,
+        "ef_construct": 100,
+        "full_scan_threshold": 10000,
+        "max_indexing_threads": 0,
+        "on_disk": false
+      },
+      "optimizer_config": {
+        "deleted_threshold": 0.2,
+        "vacuum_min_vector_number": 1000,
+        "default_segment_number": 0,
+        "max_segment_size": null,
+        "memmap_threshold": null,
+        "indexing_threshold": 20000,
+        "flush_interval_sec": 5,
+        "max_optimization_threads": null
+      },
+      "wal_config": {
+        "wal_capacity_mb": 32,
+        "wal_segments_ahead": 0
+      },
+      "quantization_config": null
+    },
+    "payload_schema": {}
+  },
+  "status": "ok",
+  "time": 0.002086317
+}
+   Compiling sakina-backend v1.0.0 (/mnt/f/SakinaAL/sakina-backend)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 44s
+{
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:201",
+      "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 1:1-7",
+      "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 864,
+  "compressed_tokens_before": 864,
+  "compression_ratio": 1.0,
+  "graph_path": [
+    "patience"
+  ],
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 1.0,
+      "graph_score": 0.0,
+      "keyword_score": 1.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 1.0
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.5343645811080933,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.29858797788619995
+    },
+    {
+      "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+      "citation": "Quran 1:1-7",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.21151645481586456,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4700365662574768
+    },
+    {
+      "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+      "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+      "citation": "Quran 2:201",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.1954708993434906,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.43437978625297546
+    },
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.1954389065504074,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4343086779117584
+    }
+  ],
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_ranking": [
+    "Quran Reference Guidance:1.00",
+    "Quran Reference Guidance:0.53",
+    "Quran Reference Guidance:0.21",
+    "Quran Reference Guidance:0.20",
+    "Quran Reference Guidance:0.20"
+  ],
+  "weak_evidence_blocked": false
+}
+{
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 16:90",
+      "id": "015995a1-5b41-4286-8468-593ee173f681",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 49:13",
+      "id": "0f3f481e-8a3a-4967-ae87-db77d4f0ada6",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 113:1-5",
+      "id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 813,
+  "compressed_tokens_before": 813,
+  "compression_ratio": 1.0,
+  "graph_path": [
+    "patience"
+  ],
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.5237542986869812,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.27500954270362854
+    },
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.28306278586387634,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.6290284395217896
+    },
+    {
+      "chunk_id": "33a64a1c-baf5-4524-9103-c977a2e1374e",
+      "chunk_text": "Surah Al-Falaq teaches seeking refuge in Allah from harms including darkness, malicious practices, and envy.",
+      "citation": "Quran 113:1-5",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.11181513220071793,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.24847808480262756
+    },
+    {
+      "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+      "chunk_text": "Quran 16:90 commands justice, excellence, and giving to relatives, and forbids immorality, bad conduct, and oppression.",
+      "citation": "Quran 16:90",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.09627260267734528,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.2139391154050827
+    },
+    {
+      "chunk_id": "0f3f481e-8a3a-4967-ae87-db77d4f0ada6",
+      "chunk_text": "Quran 49:13 teaches that people are made into nations and tribes so they may know one another, and that nobility is tied to taqwa.",
+      "citation": "Quran 49:13",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.09435426443815231,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.20967614650726318
+    }
+  ],
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_ranking": [
+    "Quran Reference Guidance:0.52",
+    "Quran Reference Guidance:0.28",
+    "Quran Reference Guidance:0.11",
+    "Quran Reference Guidance:0.10",
+    "Quran Reference Guidance:0.09"
+  ],
+  "weak_evidence_blocked": false
+}
+{
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "knowledge_graph",
+      "chapter": "Quran 2:153",
+      "id": "graph-0",
+      "title": "Quran 2:153"
+    }
+  ],
+  "compressed_tokens_after": 183,
+  "compressed_tokens_before": 183,
+  "compression_ratio": 1.0,
+  "graph_path": [
+    "patience"
+  ],
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 1.0,
+      "graph_score": 0.0,
+      "keyword_score": 1.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.0
+    }
+  ],
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_ranking": [
+    "Quran Reference Guidance:1.00"
+  ],
+  "weak_evidence_blocked": false
+}
+27:    pub final_score: f32,
+71:    async fn keyword_search(
+132:                final_score: keyword_score,
+138:    async fn vector_search(
+175:                chunk.final_score = (chunk.keyword_score * 0.55) + (*score * 0.45);
+228:                final_score: vector_score * 0.45,
+243:        let mut chunks = self.keyword_search(query, &language, keyword_limit).await?;
+244:        let vector_only_chunks = self.vector_search(query, &mut chunks).await?;
+245:        chunks.extend(vector_only_chunks);
+258:                chunk.final_score += 0.4;
+262:        let mut best_by_chunk: HashMap<Uuid, HybridRetrievedChunk> = HashMap::new();
+264:            match best_by_chunk.get(&chunk.chunk_id) {
+265:                Some(existing) if existing.final_score >= chunk.final_score => {}
+267:                    best_by_chunk.insert(chunk.chunk_id, chunk);
+271:        let mut chunks = best_by_chunk.into_values().collect::<Vec<_>>();
+274:            b.final_score
+275:                .partial_cmp(&a.final_score)
+321:        citations.dedup_by(|a, b| a.id == b.id);
+325:            .map(|chunk| format!("{}:{:.2}", chunk.title, chunk.final_score))
+331:                .map(|chunk| chunk.final_score < 0.25)
+337:            retrieval_strategy: "keyword+vector+graph".to_string(),
+359:            retrieval_strategy: "keyword+vector+graph".to_string(),
+HYBRID_SEARCH_OK mandatory hybrid search proof checks completed.

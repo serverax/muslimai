@@ -1,0 +1,535 @@
+                                List of relations
+       Schema       |              Name              |    Type     |    Owner    
+--------------------+--------------------------------+-------------+-------------
+ information_schema | sql_features                   | table       | sakina_user
+ information_schema | sql_implementation_info        | table       | sakina_user
+ information_schema | sql_parts                      | table       | sakina_user
+ information_schema | sql_sizing                     | table       | sakina_user
+ outbox             | dead_letters                   | table       | sakina_user
+ outbox             | events                         | table       | sakina_user
+ pg_catalog         | pg_aggregate                   | table       | sakina_user
+ pg_catalog         | pg_am                          | table       | sakina_user
+ pg_catalog         | pg_amop                        | table       | sakina_user
+ pg_catalog         | pg_amproc                      | table       | sakina_user
+ pg_catalog         | pg_attrdef                     | table       | sakina_user
+ pg_catalog         | pg_attribute                   | table       | sakina_user
+ pg_catalog         | pg_auth_members                | table       | sakina_user
+ pg_catalog         | pg_authid                      | table       | sakina_user
+ pg_catalog         | pg_cast                        | table       | sakina_user
+ pg_catalog         | pg_class                       | table       | sakina_user
+ pg_catalog         | pg_collation                   | table       | sakina_user
+ pg_catalog         | pg_constraint                  | table       | sakina_user
+ pg_catalog         | pg_conversion                  | table       | sakina_user
+ pg_catalog         | pg_database                    | table       | sakina_user
+ pg_catalog         | pg_db_role_setting             | table       | sakina_user
+ pg_catalog         | pg_default_acl                 | table       | sakina_user
+ pg_catalog         | pg_depend                      | table       | sakina_user
+ pg_catalog         | pg_description                 | table       | sakina_user
+ pg_catalog         | pg_enum                        | table       | sakina_user
+ pg_catalog         | pg_event_trigger               | table       | sakina_user
+ pg_catalog         | pg_extension                   | table       | sakina_user
+ pg_catalog         | pg_foreign_data_wrapper        | table       | sakina_user
+ pg_catalog         | pg_foreign_server              | table       | sakina_user
+ pg_catalog         | pg_foreign_table               | table       | sakina_user
+ pg_catalog         | pg_index                       | table       | sakina_user
+ pg_catalog         | pg_inherits                    | table       | sakina_user
+ pg_catalog         | pg_init_privs                  | table       | sakina_user
+ pg_catalog         | pg_language                    | table       | sakina_user
+ pg_catalog         | pg_largeobject                 | table       | sakina_user
+ pg_catalog         | pg_largeobject_metadata        | table       | sakina_user
+ pg_catalog         | pg_namespace                   | table       | sakina_user
+ pg_catalog         | pg_opclass                     | table       | sakina_user
+ pg_catalog         | pg_operator                    | table       | sakina_user
+ pg_catalog         | pg_opfamily                    | table       | sakina_user
+ pg_catalog         | pg_parameter_acl               | table       | sakina_user
+ pg_catalog         | pg_partitioned_table           | table       | sakina_user
+ pg_catalog         | pg_policy                      | table       | sakina_user
+ pg_catalog         | pg_proc                        | table       | sakina_user
+ pg_catalog         | pg_publication                 | table       | sakina_user
+ pg_catalog         | pg_publication_namespace       | table       | sakina_user
+ pg_catalog         | pg_publication_rel             | table       | sakina_user
+ pg_catalog         | pg_range                       | table       | sakina_user
+ pg_catalog         | pg_replication_origin          | table       | sakina_user
+ pg_catalog         | pg_rewrite                     | table       | sakina_user
+ pg_catalog         | pg_seclabel                    | table       | sakina_user
+ pg_catalog         | pg_sequence                    | table       | sakina_user
+ pg_catalog         | pg_shdepend                    | table       | sakina_user
+ pg_catalog         | pg_shdescription               | table       | sakina_user
+ pg_catalog         | pg_shseclabel                  | table       | sakina_user
+ pg_catalog         | pg_statistic                   | table       | sakina_user
+ pg_catalog         | pg_statistic_ext               | table       | sakina_user
+ pg_catalog         | pg_statistic_ext_data          | table       | sakina_user
+ pg_catalog         | pg_subscription                | table       | sakina_user
+ pg_catalog         | pg_subscription_rel            | table       | sakina_user
+ pg_catalog         | pg_tablespace                  | table       | sakina_user
+ pg_catalog         | pg_transform                   | table       | sakina_user
+ pg_catalog         | pg_trigger                     | table       | sakina_user
+ pg_catalog         | pg_ts_config                   | table       | sakina_user
+ pg_catalog         | pg_ts_config_map               | table       | sakina_user
+ pg_catalog         | pg_ts_dict                     | table       | sakina_user
+ pg_catalog         | pg_ts_parser                   | table       | sakina_user
+ pg_catalog         | pg_ts_template                 | table       | sakina_user
+ pg_catalog         | pg_type                        | table       | sakina_user
+ pg_catalog         | pg_user_mapping                | table       | sakina_user
+ pg_toast           | pg_toast_1213                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_1247                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_1255                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_1260                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_1262                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_13454                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_13459                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_13464                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_13469                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_1417                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_1418                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_16426                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16442                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16460                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16477                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16501                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16519                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16535                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16556                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16610                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16652                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16669                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16693                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16709                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16725                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16749                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16770                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16794                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16819                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16845                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16864                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16896                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16939                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16970                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_16987                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17005                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17054                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17076                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17109                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17122                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17145                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17170                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17196                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17225                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17256                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17289                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17314                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17341                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17356                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17393                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17411                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17424                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17455                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17469                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17485                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17511                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17537                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17556                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17582                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17602                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17623                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17640                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17674                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17695                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17719                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17743                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17756                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17774                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17788                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17806                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17819                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17831                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17844                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17855                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17869                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17883                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17905                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17921                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17939                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17959                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17978                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_17998                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18008                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18024                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18045                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18060                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18076                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18090                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18103                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18117                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18129                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18145                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18166                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18192                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18213                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18239                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18259                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18293                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18309                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18330                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18347                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18360                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18374                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18384                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18405                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18415                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18425                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18436                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18456                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_18473                 | TOAST table | sakina_user
+ pg_toast           | pg_toast_2328                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2396                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2600                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2604                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2606                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2609                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2612                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2615                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2618                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2619                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2620                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_2964                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3079                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3118                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3256                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3350                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3381                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3394                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3429                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3456                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3466                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3592                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3596                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_3600                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_6000                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_6100                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_6106                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_6243                  | TOAST table | sakina_user
+ pg_toast           | pg_toast_826                   | TOAST table | sakina_user
+ public             | abuse_reports                  | table       | sakina_user
+ public             | accessibility_preferences      | table       | sakina_user
+ public             | admin_actions                  | table       | sakina_user
+ public             | admin_audit_logs               | table       | sakina_user
+ public             | admin_events                   | table       | sakina_user
+ public             | admin_permissions              | table       | sakina_user
+ public             | admin_role_permissions         | table       | sakina_user
+ public             | admin_roles                    | table       | sakina_user
+ public             | admin_users                    | table       | sakina_user
+ public             | app_config                     | table       | sakina_user
+ public             | app_events                     | table       | sakina_user
+ public             | app_store_assets               | table       | sakina_user
+ public             | audit_logs                     | table       | sakina_user
+ public             | auth_identities                | table       | sakina_user
+ public             | auth_refresh_tokens            | table       | sakina_user
+ public             | auth_sessions                  | table       | sakina_user
+ public             | blog_posts                     | table       | sakina_user
+ public             | chat_events                    | table       | sakina_user
+ public             | child_profiles                 | table       | sakina_user
+ public             | contact_messages               | table       | sakina_user
+ public             | content_moderation_queue       | table       | sakina_user
+ public             | content_reports                | table       | sakina_user
+ public             | device_tokens                  | table       | sakina_user
+ public             | entitlements                   | table       | sakina_user
+ public             | family_profiles                | table       | sakina_user
+ public             | faq_items                      | table       | sakina_user
+ public             | feature_flags                  | table       | sakina_user
+ public             | iman_family_reminder_settings  | table       | sakina_user
+ public             | iman_journey_daily             | table       | sakina_user
+ public             | iman_journey_evidence_bundles  | table       | sakina_user
+ public             | iman_journey_privacy_settings  | table       | sakina_user
+ public             | iman_personal_dua_list         | table       | sakina_user
+ public             | invoices                       | table       | sakina_user
+ public             | landing_feature_cards          | table       | sakina_user
+ public             | landing_sections               | table       | sakina_user
+ public             | language_preferences           | table       | sakina_user
+ public             | legal_pages                    | table       | sakina_user
+ public             | maintenance_windows            | table       | sakina_user
+ public             | module_status                  | table       | sakina_user
+ public             | notification_delivery_attempts | table       | sakina_user
+ public             | notification_preferences       | table       | sakina_user
+ public             | notification_templates         | table       | sakina_user
+ public             | payment_customers              | table       | sakina_user
+ public             | payment_methods                | table       | sakina_user
+ public             | payment_providers              | table       | sakina_user
+ public             | payment_transactions           | table       | sakina_user
+ public             | privacy_preferences            | table       | sakina_user
+ public             | profile_preferences            | table       | sakina_user
+ public             | rag_events                     | table       | sakina_user
+ public             | refunds                        | table       | sakina_user
+ public             | release_flags                  | table       | sakina_user
+ public             | reminder_settings              | table       | sakina_user
+ public             | scholar_accounts               | table       | sakina_user
+ public             | scholar_review_assignments     | table       | sakina_user
+ public             | security_logs                  | table       | sakina_user
+ public             | seo_metadata                   | table       | sakina_user
+ public             | seo_pages                      | table       | sakina_user
+ public             | source_approval_queue          | table       | sakina_user
+ public             | subscription_events            | table       | sakina_user
+ public             | subscription_plans             | table       | sakina_user
+ public             | support_ticket_messages        | table       | sakina_user
+ public             | support_tickets                | table       | sakina_user
+ public             | user_bookmarks                 | table       | sakina_user
+ public             | user_chat_feedback             | table       | sakina_user
+ public             | user_dashboard_widgets         | table       | sakina_user
+ public             | user_dua_favourites            | table       | sakina_user
+ public             | user_entitlements              | table       | sakina_user
+ public             | user_learning_progress         | table       | sakina_user
+ public             | user_notifications             | table       | sakina_user
+ public             | user_profiles                  | table       | sakina_user
+ public             | user_quran_progress            | table       | sakina_user
+ public             | user_reported_answers          | table       | sakina_user
+ public             | user_saved_answers             | table       | sakina_user
+ public             | user_subscriptions             | table       | sakina_user
+ public             | users                          | table       | sakina_user
+ public             | waitlist_entries               | table       | sakina_user
+ sakina_ai          | brain_cache_metadata           | table       | sakina_user
+ sakina_ai          | brain_decision_traces          | table       | sakina_user
+ sakina_ai          | brain_evaluation_results       | table       | sakina_user
+ sakina_ai          | brain_memory_events            | table       | sakina_user
+ sakina_ai          | citation_verification_events   | table       | sakina_user
+ sakina_ai          | conversations                  | table       | sakina_user
+ sakina_ai          | entitlement_decisions          | table       | sakina_user
+ sakina_ai          | islamic_api_sync_items         | table       | sakina_user
+ sakina_ai          | islamic_api_sync_jobs          | table       | sakina_user
+ sakina_ai          | islamic_chunks                 | table       | sakina_user
+ sakina_ai          | islamic_documents              | table       | sakina_user
+ sakina_ai          | islamic_embeddings             | table       | sakina_user
+ sakina_ai          | islamic_source_licences        | table       | sakina_user
+ sakina_ai          | islamic_source_providers       | table       | sakina_user
+ sakina_ai          | islamic_source_reviews         | table       | sakina_user
+ sakina_ai          | islamic_sources                | table       | sakina_user
+ sakina_ai          | knowledge_graph_edges          | table       | sakina_user
+ sakina_ai          | knowledge_graph_entities       | table       | sakina_user
+ sakina_ai          | mastermind_decisions           | table       | sakina_user
+ sakina_ai          | messages                       | table       | sakina_user
+ sakina_ai          | multimodal_assets              | table       | sakina_user
+ sakina_ai          | rag_retrieval_audit            | table       | sakina_user
+ sakina_ai          | safety_classifications         | table       | sakina_user
+ sakina_ai          | scholar_review_queue           | table       | sakina_user
+ sakina_ai          | user_memory_entries            | table       | sakina_user
+ sakina_ai          | waitlist                       | table       | sakina_user
+ sakina_ai          | wasm_verification_events       | table       | sakina_user
+(312 rows)
+
+ table_schema |           table_name           
+--------------+--------------------------------
+ outbox       | dead_letters
+ outbox       | events
+ public       | abuse_reports
+ public       | accessibility_preferences
+ public       | admin_actions
+ public       | admin_audit_logs
+ public       | admin_events
+ public       | admin_permissions
+ public       | admin_role_permissions
+ public       | admin_roles
+ public       | admin_users
+ public       | app_config
+ public       | app_events
+ public       | app_store_assets
+ public       | audit_logs
+ public       | auth_identities
+ public       | auth_refresh_tokens
+ public       | auth_sessions
+ public       | blog_posts
+ public       | chat_events
+ public       | child_profiles
+ public       | contact_messages
+ public       | content_moderation_queue
+ public       | content_reports
+ public       | device_tokens
+ public       | entitlements
+ public       | family_profiles
+ public       | faq_items
+ public       | feature_flags
+ public       | iman_family_reminder_settings
+ public       | iman_journey_daily
+ public       | iman_journey_evidence_bundles
+ public       | iman_journey_privacy_settings
+ public       | iman_personal_dua_list
+ public       | invoices
+ public       | landing_feature_cards
+ public       | landing_sections
+ public       | language_preferences
+ public       | legal_pages
+ public       | maintenance_windows
+ public       | module_status
+ public       | notification_delivery_attempts
+ public       | notification_preferences
+ public       | notification_templates
+ public       | payment_customers
+ public       | payment_methods
+ public       | payment_providers
+ public       | payment_transactions
+ public       | privacy_preferences
+ public       | profile_preferences
+ public       | rag_events
+ public       | refunds
+ public       | release_flags
+ public       | reminder_settings
+ public       | scholar_accounts
+ public       | scholar_review_assignments
+ public       | security_logs
+ public       | seo_metadata
+ public       | seo_pages
+ public       | source_approval_queue
+ public       | subscription_events
+ public       | subscription_plans
+ public       | support_ticket_messages
+ public       | support_tickets
+ public       | user_bookmarks
+ public       | user_chat_feedback
+ public       | user_dashboard_widgets
+ public       | user_dua_favourites
+ public       | user_entitlements
+ public       | user_learning_progress
+ public       | user_notifications
+ public       | user_profiles
+ public       | user_quran_progress
+ public       | user_reported_answers
+ public       | user_saved_answers
+ public       | user_subscriptions
+ public       | users
+ public       | waitlist_entries
+ sakina_ai    | brain_cache_metadata
+ sakina_ai    | brain_decision_traces
+ sakina_ai    | brain_evaluation_results
+ sakina_ai    | brain_memory_events
+ sakina_ai    | citation_verification_events
+ sakina_ai    | conversations
+ sakina_ai    | entitlement_decisions
+ sakina_ai    | islamic_api_sync_items
+ sakina_ai    | islamic_api_sync_jobs
+ sakina_ai    | islamic_chunks
+ sakina_ai    | islamic_documents
+ sakina_ai    | islamic_embeddings
+ sakina_ai    | islamic_source_licences
+ sakina_ai    | islamic_source_providers
+ sakina_ai    | islamic_source_reviews
+ sakina_ai    | islamic_sources
+ sakina_ai    | knowledge_graph_edges
+ sakina_ai    | knowledge_graph_entities
+ sakina_ai    | mastermind_decisions
+ sakina_ai    | messages
+ sakina_ai    | multimodal_assets
+ sakina_ai    | rag_retrieval_audit
+ sakina_ai    | safety_classifications
+ sakina_ai    | scholar_review_queue
+ sakina_ai    | user_memory_entries
+ sakina_ai    | waitlist
+ sakina_ai    | wasm_verification_events
+(105 rows)
+
+ schemaname |           tablename            | rowsecurity 
+------------+--------------------------------+-------------
+ outbox     | dead_letters                   | f
+ outbox     | events                         | f
+ public     | abuse_reports                  | f
+ public     | accessibility_preferences      | f
+ public     | admin_actions                  | f
+ public     | admin_audit_logs               | f
+ public     | admin_events                   | f
+ public     | admin_permissions              | f
+ public     | admin_role_permissions         | f
+ public     | admin_roles                    | f
+ public     | admin_users                    | f
+ public     | app_config                     | f
+ public     | app_events                     | f
+ public     | app_store_assets               | f
+ public     | audit_logs                     | f
+ public     | auth_identities                | f
+ public     | auth_refresh_tokens            | f
+ public     | auth_sessions                  | f
+ public     | blog_posts                     | f
+ public     | chat_events                    | f
+ public     | child_profiles                 | f
+ public     | contact_messages               | f
+ public     | content_moderation_queue       | f
+ public     | content_reports                | f
+ public     | device_tokens                  | f
+ public     | entitlements                   | f
+ public     | family_profiles                | f
+ public     | faq_items                      | f
+ public     | feature_flags                  | f
+ public     | iman_family_reminder_settings  | f
+ public     | iman_journey_daily             | f
+ public     | iman_journey_evidence_bundles  | f
+ public     | iman_journey_privacy_settings  | f
+ public     | iman_personal_dua_list         | f
+ public     | invoices                       | f
+ public     | landing_feature_cards          | f
+ public     | landing_sections               | f
+ public     | language_preferences           | f
+ public     | legal_pages                    | f
+ public     | maintenance_windows            | f
+ public     | module_status                  | f
+ public     | notification_delivery_attempts | f
+ public     | notification_preferences       | f
+ public     | notification_templates         | f
+ public     | payment_customers              | f
+ public     | payment_methods                | f
+ public     | payment_providers              | f
+ public     | payment_transactions           | f
+ public     | privacy_preferences            | f
+ public     | profile_preferences            | f
+ public     | rag_events                     | f
+ public     | refunds                        | f
+ public     | release_flags                  | f
+ public     | reminder_settings              | f
+ public     | scholar_accounts               | f
+ public     | scholar_review_assignments     | f
+ public     | security_logs                  | f
+ public     | seo_metadata                   | f
+ public     | seo_pages                      | f
+ public     | source_approval_queue          | f
+ public     | subscription_events            | f
+ public     | subscription_plans             | f
+ public     | support_ticket_messages        | f
+ public     | support_tickets                | f
+ public     | user_bookmarks                 | f
+ public     | user_chat_feedback             | f
+ public     | user_dashboard_widgets         | f
+ public     | user_dua_favourites            | f
+ public     | user_entitlements              | f
+ public     | user_learning_progress         | f
+ public     | user_notifications             | f
+ public     | user_profiles                  | f
+ public     | user_quran_progress            | f
+ public     | user_reported_answers          | f
+ public     | user_saved_answers             | f
+ public     | user_subscriptions             | f
+ public     | users                          | f
+ public     | waitlist_entries               | f
+ sakina_ai  | brain_cache_metadata           | f
+ sakina_ai  | brain_decision_traces          | f
+ sakina_ai  | brain_evaluation_results       | f
+ sakina_ai  | brain_memory_events            | f
+ sakina_ai  | citation_verification_events   | f
+ sakina_ai  | conversations                  | f
+ sakina_ai  | entitlement_decisions          | f
+ sakina_ai  | islamic_api_sync_items         | f
+ sakina_ai  | islamic_api_sync_jobs          | f
+ sakina_ai  | islamic_chunks                 | f
+ sakina_ai  | islamic_documents              | f
+ sakina_ai  | islamic_embeddings             | f
+ sakina_ai  | islamic_source_licences        | f
+ sakina_ai  | islamic_source_providers       | f
+ sakina_ai  | islamic_source_reviews         | f
+ sakina_ai  | islamic_sources                | f
+ sakina_ai  | knowledge_graph_edges          | f
+ sakina_ai  | knowledge_graph_entities       | f
+ sakina_ai  | mastermind_decisions           | f
+ sakina_ai  | messages                       | f
+ sakina_ai  | multimodal_assets              | f
+ sakina_ai  | rag_retrieval_audit            | f
+ sakina_ai  | safety_classifications         | f
+ sakina_ai  | scholar_review_queue           | f
+ sakina_ai  | user_memory_entries            | f
+ sakina_ai  | waitlist                       | f
+ sakina_ai  | wasm_verification_events       | f
+(105 rows)
+

@@ -1,0 +1,105 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.api
+#1 transferring dockerfile: 1.31kB 0.0s done
+#1 DONE 0.1s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 ...
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 DONE 0.9s
+
+#4 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#4 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.1s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#5 ...
+
+#6 [auth] library/debian:pull token for registry-1.docker.io
+#6 DONE 0.0s
+
+#7 [auth] library/rust:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [internal] load metadata for docker.io/library/rust:1.88-slim
+#8 ...
+
+#5 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#5 DONE 0.8s
+
+#8 [internal] load metadata for docker.io/library/rust:1.88-slim
+#8 DONE 0.8s
+
+#9 [internal] load .dockerignore
+#9 transferring context: 525B 0.1s
+#9 transferring context: 527B 0.1s done
+#9 DONE 0.2s
+
+#10 [internal] load build context
+#10 DONE 0.0s
+
+#11 [stage-1 1/6] FROM docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb
+#11 resolve docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb 0.1s done
+#11 DONE 0.1s
+
+#12 [builder 1/8] FROM docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89
+#12 resolve docker.io/library/rust:1.88-slim@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89 0.1s done
+#12 DONE 0.1s
+
+#10 [internal] load build context
+#10 transferring context: 65.10kB 4.9s
+#10 transferring context: 134.56kB 10.0s
+#10 transferring context: 215.78kB 15.0s done
+#10 DONE 15.1s
+
+#13 [builder 3/8] COPY . .
+#13 CACHED
+
+#14 [builder 5/8] WORKDIR /app/sakina-backend
+#14 CACHED
+
+#15 [builder 6/8] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     cargo build --release --bin sakina-api --bin sakina-migrate
+#15 CACHED
+
+#16 [builder 7/8] WORKDIR /app/wasm
+#16 CACHED
+
+#17 [builder 2/8] WORKDIR /app
+#17 CACHED
+
+#18 [stage-1 3/6] RUN groupadd --system sakina && useradd --system --gid sakina --home-dir /nonexistent --shell /usr/sbin/nologin sakina
+#18 CACHED
+
+#19 [builder 4/8] RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev && rm -rf /var/lib/apt/lists/*
+#19 CACHED
+
+#20 [stage-1 4/6] COPY --from=builder /app/sakina-backend/target/release/sakina-api /usr/local/bin/
+#20 CACHED
+
+#21 [builder 8/8] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     rustup target add wasm32-unknown-unknown &&     cargo build --release --target wasm32-unknown-unknown
+#21 CACHED
+
+#22 [stage-1 5/6] COPY --from=builder /app/sakina-backend/target/release/sakina-migrate /usr/local/bin/
+#22 CACHED
+
+#23 [stage-1 2/6] RUN apt-get update && apt-get install -y --no-install-recommends libpq5 ca-certificates tesseract-ocr && rm -rf /var/lib/apt/lists/*
+#23 CACHED
+
+#24 [stage-1 6/6] COPY --from=builder /app/wasm/target/wasm32-unknown-unknown/release/sakina_validator.wasm /usr/local/share/sakina/wasm/sakina_validator.wasm
+#24 CACHED
+
+#25 exporting to image
+#25 exporting layers done
+#25 exporting manifest sha256:eba03b35f330197dbe8ac6b7beadb626a8ca4585174c91e6ebfef7f5f2b962ab done
+#25 exporting config sha256:c0ced14869188ad768b689ebd569d1ff1594a4ba035e5e31d4f6251129557947 done
+#25 exporting attestation manifest sha256:408a503b9bc19507ab9f2b4698da807986fd97367b70c4fc58b32175f022d18e 0.0s done
+#25 exporting manifest list sha256:c9fad31a90604bfbb73268bf4814a34802b66d0eac1e097096ab58338d9d7252
+#25 exporting manifest list sha256:c9fad31a90604bfbb73268bf4814a34802b66d0eac1e097096ab58338d9d7252 0.0s done
+#25 naming to docker.io/library/sakina-backend-api:multimodal-ocr-proof done
+#25 unpacking to docker.io/library/sakina-backend-api:multimodal-ocr-proof 0.0s done
+#25 DONE 0.2s

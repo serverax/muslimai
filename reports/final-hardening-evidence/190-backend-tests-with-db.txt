@@ -1,0 +1,162 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.87s
+     Running unittests src/lib.rs (sakina-backend/target/debug/deps/sakina_backend-e9c5005c4f4b74ce)
+
+running 98 tests
+test agent::orchestrator::tests::blocks_prompt_injection_before_researcher ... ok
+test agent::orchestrator::tests::p99_budget_is_enforced_for_local_router_path ... ok
+test agent::orchestrator::tests::rejects_empty_query ... ok
+test agent::orchestrator::tests::routes_islamic_question_to_researcher_and_validator ... ok
+test error::tests::error_response_uses_consistent_contract_shape ... ok
+test handlers::brain::tests::debug_agents_returns_registered_agent_list ... ok
+test handlers::brain::tests::test_route_returns_execution_trace ... ok
+test handlers::chat::tests::add_message_for_missing_conversation_uses_normalized_error ... ok
+test handlers::chat::tests::add_message_persists_user_and_assistant_messages_with_trace ... ok
+test handlers::chat::tests::create_conversation_returns_created_record ... ok
+test handlers::chat::tests::empty_message_is_rejected ... ok
+test handlers::chat::tests::get_conversation_returns_messages ... ok
+test handlers::chat::tests::unsafe_message_is_blocked_by_mother_brain ... ok
+test handlers::evaluation::tests::evaluation_check_fails_without_citations ... ok
+test handlers::evaluation::tests::evaluation_check_passes_for_grounded_answer ... ok
+test handlers::modules::tests::disabled_flag_blocks_module_access_with_standard_error_shape ... ok
+test handlers::modules::tests::enabled_community_returns_requires_review_without_fabricated_payload ... ok
+test handlers::modules::tests::enabled_flag_without_subscription_is_blocked ... ok
+test handlers::modules::tests::enabled_knowledge_returns_requires_review_without_fabricated_payload ... ok
+test handlers::modules::tests::enabled_prayer_returns_requires_review_without_fabricated_payload ... ok
+test handlers::modules::tests::enabled_quran_returns_requires_review_without_fabricated_payload ... ok
+test handlers::modules::tests::entitlement_bypass_with_free_tier_is_blocked ... ok
+test handlers::modules::tests::module_status_defaults_to_chat_active_and_others_coming_soon ... ok
+test handlers::modules::tests::modules_endpoints_exist_for_root_and_v1_paths ... ok
+test handlers::modules::tests::provenance_validation_rejects_missing_required_fields ... ok
+test handlers::modules::tests::provenance_validation_rejects_unsourced_religious_content ... ok
+test handlers::ops::tests::metrics_exposes_required_prometheus_keys ... ok
+test handlers::phase2::tests::auth_domain_wires_user_and_session_tables ... ok
+test handlers::phase2::tests::chat_rag_safety_and_admin_domains_wire_tables ... ok
+test handlers::phase2::tests::notifications_support_and_audit_domains_wire_tables ... ok
+test handlers::phase2::tests::profile_domain_wires_profile_and_family_tables ... ok
+test handlers::phase2::tests::register_session_profile_chain_is_fully_wired ... ok
+test handlers::phase2::tests::subscription_domain_wires_plan_payment_and_entitlement_tables ... ok
+test handlers::rag::contract_tests::disabled_module_cannot_query_rag ... ok
+test handlers::rag::contract_tests::missing_entitlement_blocks_rag ... ok
+test handlers::rag::contract_tests::rag_decide_accepts_null_safety_context ... ok
+test handlers::rag::contract_tests::rag_decide_accepts_object_safety_context ... ok
+test handlers::rag::contract_tests::rag_decide_accepts_omitted_safety_context ... ok
+test handlers::rag::contract_tests::rag_decide_accepts_string_safety_context ... ok
+test handlers::rag::contract_tests::rag_search_invalid_query_uses_standard_error_format ... ok
+test handlers::rag::contract_tests::rag_status_works ... ok
+test handlers::rag::contract_tests::verified_content_includes_citation_and_source_metadata ... ok
+test handlers::sync::tests::checksum_is_deterministic_sha256 ... ok
+test handlers::user::tests::pubkey_endpoint_returns_service_unavailable_when_unset ... ok
+test handlers::user::tests::pubkey_endpoint_returns_value_when_set ... ok
+test handlers::waitlist::tests::insert_and_duplicate_email_are_clean ... ok
+test handlers::waitlist::tests::invalid_body_returns_bad_request ... ok
+test handlers::waitlist::tests::invalid_email_returns_bad_request ... ok
+test handlers::waitlist::tests::limiter_blocks_after_threshold ... ok
+test services::ai_router::tests::agents_are_registered ... ok
+test services::ai_router::tests::arabic_question_detects_language_and_routes ... ok
+test services::ai_router::tests::complex_fiqh_routes_to_main_path ... ok
+test services::ai_router::tests::extremist_misuse_routes_to_escalation ... ok
+test services::ai_router::tests::safety_question_routes_to_escalation ... ok
+test services::ai_router::tests::simple_question_routes_to_lite_path ... ok
+test services::aia_orchestrator::tests::brain_trace_contains_full_execution_path ... ok
+test services::aia_orchestrator::tests::classify_routes_through_mother_brain_layer ... ok
+test services::aia_orchestrator::tests::decision_routes_through_mother_brain_layer ... ok
+test services::aia_orchestrator::tests::unsafe_question_is_blocked_centrally ... ok
+test services::brain_controller::cost_governor_tests::cost_governor_blocks_over_budget_free_request ... ok
+test services::brain_controller::cost_governor_tests::cost_governor_records_allow_decision_for_normal_request ... ok
+test services::context_compression::tests::compression_deduplicates_and_preserves_citations ... ok
+test services::decision_algorithm::tests::disabled_feature_does_not_call_rag_or_llm ... ok
+test services::decision_algorithm::tests::llm_cannot_answer_without_retrieved_evidence ... ok
+test services::decision_algorithm::tests::low_classifier_confidence_asks_clarification ... ok
+test services::decision_algorithm::tests::missing_citation_is_rejected ... ok
+test services::decision_algorithm::tests::missing_entitlement_blocks_algorithm ... ok
+test services::decision_algorithm::tests::response_contract_includes_safety_and_source_metadata ... ok
+test services::decision_algorithm::tests::sensitive_question_requires_stricter_policy ... ok
+test services::decision_algorithm::tests::unverified_source_is_rejected ... ok
+test services::decision_algorithm::tests::verified_source_is_returned ... ok
+test services::embeddings::tests::deterministic_test_embeddings_are_normalized ... ok
+test services::embeddings::tests::request_serializes ... ok
+test services::guardrails::tests::at_or_above_threshold_passes ... ok
+test services::guardrails::tests::below_threshold_is_blocked ... ok
+test services::guardrails::tests::check_uses_top_retrieval_score ... ok
+test services::hybrid_rag::tests::hybrid_result_serializes ... ok
+test services::ingestion_producer::tests::caps_window_to_max_words ... ok
+test services::ingestion_producer::tests::splits_paragraphs_and_skips_empty ... ok
+test services::knowledge_graph_service::tests::lookup_result_serializes ... ok
+test services::mcp_registry::tests::registry_is_disabled_by_default ... ok
+test services::memory_engine::tests::sensitive_payload_is_classified_as_high_risk ... ok
+test services::memory_engine::tests::sensitive_payload_is_not_written_without_consent ... ok
+test services::multimodal::tests::redaction_masks_sensitive_text ... ok
+test services::multimodal::tests::rejects_mismatched_media_type ... ok
+test services::offline_islamic_corpus::tests::adhkar_question_uses_starter_answer ... ok
+test services::offline_islamic_corpus::tests::crisis_question_refuses ... ok
+test services::offline_islamic_corpus::tests::fasting_questions_return_quran_citation ... ok
+test services::offline_islamic_corpus::tests::quran_and_starter_counts_are_loaded ... ok
+test services::pii_redaction::tests::redacts_email_and_phone_like_numbers ... ok
+test services::pii_redaction::tests::safe_text_is_unchanged ... ok
+test services::qdrant_client::tests::filters_points_below_threshold ... ok
+test services::qdrant_client::tests::filters_url_independent_payload_points ... ok
+test services::semantic_cache::tests::cache_key_depends_on_context ... ok
+test services::semantic_cache::tests::sensitive_payload_is_not_cacheable ... ok
+test services::semantic_router::tests::classify_detects_fiqh_query ... ok
+test services::semantic_router::tests::classify_detects_out_of_scope_query ... ok
+test tests::it_works ... ok
+
+test result: ok. 98 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 63.48s
+
+     Running unittests src/main.rs (sakina-backend/target/debug/deps/sakina_api-0c957a05109e7568)
+
+running 1 test
+test tests::route_aliases_are_wired_for_root_and_v1 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 300.11s
+
+     Running unittests src/bin/ingest.rs (sakina-backend/target/debug/deps/sakina_ingest-0b444f4b2677c2aa)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/migrate.rs (sakina-backend/target/debug/deps/sakina_migrate-8bcaf1eaf2f0d12d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/agent_integration_tests.rs (sakina-backend/target/debug/deps/agent_integration_tests-ebb898079c24ed12)
+
+running 1 test
+test redis_persists_agent_state_and_researcher_returns_rag_context ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/islamic_source_registry.rs (sakina-backend/target/debug/deps/islamic_source_registry-2e29c3c7cb8c3466)
+
+running 2 tests
+test islamic_source_registry_contains_core_sources ... ok
+test islamic_source_registry_is_present_and_well_formed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/offline_islamic_assets.rs (sakina-backend/target/debug/deps/offline_islamic_assets-2c6a5588cd0f92dc)
+
+running 4 tests
+test dua_adhkar_and_names_assets_are_loaded ... ok
+test quran_asset_is_loaded_and_citable ... ok
+test source_registry_contains_approved_quran_source ... ok
+test starter_bundle_and_categories_exist_for_fallback_ui ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/phase21_iman_journey_contract.rs (sakina-backend/target/debug/deps/phase21_iman_journey_contract-1787b9a320a946cc)
+
+running 1 test
+test phase21_core_flow_enforces_fallback_privacy_and_scope ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s
+
+   Doc-tests sakina_backend
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

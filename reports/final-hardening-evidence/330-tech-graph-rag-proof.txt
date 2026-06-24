@@ -1,0 +1,129 @@
+Graph entities=3 edges=2
+{
+  "status": "ok",
+  "entities_table": true,
+  "edges_table": true,
+  "ready": true
+}
+{
+  "query": "Ayat al-Kursi",
+  "focus_entity": {
+    "id": "336a95bd-d74e-497f-8ac1-552cd5ac0b57",
+    "entity_type": "ayah",
+    "entity_name": "Ayat al-Kursi",
+    "source_type": "quran",
+    "citation": "Quran 2:255",
+    "reliability_level": "verified",
+    "language": "ar",
+    "domain": "quran",
+    "metadata": {
+      "ayah_number": 255,
+      "surah": "Al-Baqarah",
+      "topics": [
+        "tawhid",
+        "protection"
+      ]
+    }
+  },
+  "connected_nodes": [
+    {
+      "id": "4784bf5e-1398-42ec-9985-3a21e602850d",
+      "entity_type": "surah",
+      "entity_name": "Al-Baqarah",
+      "source_type": "quran",
+      "citation": "Quran 2",
+      "reliability_level": "verified",
+      "language": "ar",
+      "domain": "quran",
+      "metadata": {
+        "topics": [
+          "guidance",
+          "law"
+        ]
+      }
+    },
+    {
+      "id": "80b79da0-e740-42b4-8ae9-9bb246cc5205",
+      "entity_type": "topic",
+      "entity_name": "patience",
+      "source_type": "tafsir",
+      "citation": "Quran 2:153",
+      "reliability_level": "verified",
+      "language": "en",
+      "domain": "support",
+      "metadata": {
+        "aliases": [
+          "sabr",
+          "steadfastness"
+        ]
+      }
+    }
+  ],
+  "graph_path": [
+    "Ayat al-Kursi",
+    "1:Al-Baqarah",
+    "1:patience"
+  ],
+  "related_topics": [
+    "patience"
+  ],
+  "related_hadith": [],
+  "citations": [
+    "Quran 2",
+    "Quran 2:153",
+    "Quran 2:255"
+  ]
+}
+{
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "knowledge_graph",
+      "chapter": "Quran 2",
+      "id": "graph-0",
+      "title": "Quran 2"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "knowledge_graph",
+      "chapter": "Quran 2:153",
+      "id": "graph-1",
+      "title": "Quran 2:153"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "knowledge_graph",
+      "chapter": "Quran 2:255",
+      "id": "graph-2",
+      "title": "Quran 2:255"
+    }
+  ],
+  "compressed_tokens_after": 0,
+  "compressed_tokens_before": 0,
+  "compression_ratio": 1.0,
+  "graph_path": [
+    "Ayat al-Kursi",
+    "1:Al-Baqarah",
+    "1:patience"
+  ],
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [],
+  "selected_agent": "General Chat Agent",
+  "selected_model": "lite_llm",
+  "selected_pipeline": "mother_brain>cached_or_cached_rag>evaluation",
+  "source_ranking": [],
+  "weak_evidence_blocked": true
+}
+sakina-backend/src/services/hybrid_rag.rs:10:    CompressedEvidenceChunk, ContextCompressionService, EmbeddingsService, KnowledgeGraphService,
+sakina-backend/src/services/hybrid_rag.rs:38:    pub graph_path: Vec<String>,
+sakina-backend/src/services/hybrid_rag.rs:50:    graph: KnowledgeGraphService,
+sakina-backend/src/services/hybrid_rag.rs:59:        graph: KnowledgeGraphService,
+sakina-backend/src/services/hybrid_rag.rs:190:        let graph_result = self.graph.lookup(query).await?;
+sakina-backend/src/services/hybrid_rag.rs:192:        let graph_path = graph_result.graph_path.clone();
+sakina-backend/src/services/hybrid_rag.rs:269:            retrieval_strategy: "keyword+vector+graph".to_string(),
+sakina-backend/src/services/hybrid_rag.rs:273:            graph_path,
+sakina-backend/src/services/hybrid_rag.rs:291:            retrieval_strategy: "keyword+vector+graph".to_string(),
+sakina-backend/src/services/hybrid_rag.rs:295:            graph_path: vec![],
+sakina-backend/src/services/hybrid_rag.rs:302:        assert!(json.contains("keyword+vector+graph"));
+sakina-backend/src/handlers/rag.rs:144:        "graph_path": result.graph_path,
+GRAPH_RAG_OK mandatory Graph RAG proof checks completed.

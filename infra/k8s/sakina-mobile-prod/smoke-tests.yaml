@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sakina-staging-smoke
+  namespace: sakina-mobile-prod
+  labels:
+    app.kubernetes.io/name: smoke-tests
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: production
+spec:
+  ttlSecondsAfterFinished: 300
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: smoke-tests
+        app.kubernetes.io/part-of: sakina-mobile
+        app.kubernetes.io/environment: production
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: smoke
+          image: curlimages/curl:8.8.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              echo "Checking sakina-backend readiness"
+              curl -fsS http://sakina-backend:8080/health/ready
+              echo "Checking sakina-rag-retrieval readiness"
+              curl -fsS http://sakina-rag-retrieval:8080/health/ready
+              echo "Checking sakina-llm-gateway readiness"
+              curl -fsS http://sakina-llm-gateway:8087/ready
+              echo "Checking sakina-admin root"
+              curl -fsS http://sakina-admin:80/
+          resources:
+            requests:
+              cpu: "25m"
+              memory: "32Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

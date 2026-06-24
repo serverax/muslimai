@@ -1,0 +1,26 @@
+Pager usage is off.
+DO
+INSERT 0 1
+Pager usage is off.
+CREATE TABLE
+DELETE 0
+Pager usage is off.
+        set_config         
+---------------------------
+ backup-dr-1780687573-1895
+(1 row)
+
+DO
+INSERT 0 1
+              proof               | restored_users | source_chunks | outbox_events 
+----------------------------------+----------------+---------------+---------------
+ postgres_backup_restore_verified |            100 |            35 |             1
+(1 row)
+
+DROP TABLE
+Schema backup: /tmp/sakina-backup-dr-backup-dr-1780687573-1895/postgres-schema.sql
+User data backup: /tmp/sakina-backup-dr-backup-dr-1780687573-1895/users.csv
+Qdrant metadata backup: /tmp/sakina-backup-dr-backup-dr-1780687573-1895/qdrant-collections.json
+Config reference backup: /tmp/sakina-backup-dr-backup-dr-1780687573-1895/k8s-config-refs.txt
+Asset archive: /tmp/sakina-backup-dr-backup-dr-1780687573-1895/uploaded-assets.tar
+BACKUP_DISASTER_RECOVERY_OK PostgreSQL export/restore checksum, Qdrant metadata export, config reference backup, outbox recovery event, and uploaded asset restore were verified.

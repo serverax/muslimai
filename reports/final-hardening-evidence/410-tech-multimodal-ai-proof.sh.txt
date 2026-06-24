@@ -1,0 +1,848 @@
+32:  image_picker: ^1.2.1
+33:  file_picker: ^11.0.2
+11:class MultimodalAnalysisScreen extends StatefulWidget {
+12:  MultimodalAnalysisScreen({
+30:  State<MultimodalAnalysisScreen> createState() =>
+31:      _MultimodalAnalysisScreenState();
+34:class _MultimodalAnalysisScreenState extends State<MultimodalAnalysisScreen> {
+41:    final file = await widget.imagePicker.pickImage(
+62:    final result = await FilePicker.pickFiles(
+98:      final response = await widget.api.analyzeMultimodal(
+146:                      _busy ? null : () => _analyzeImage(ImageSource.camera),
+152:                      _busy ? null : () => _analyzeImage(ImageSource.gallery),
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:37:  MultimodalAnalysisResponse? _result;
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:120:    if (text.contains('401')) return 'Please sign in again.';
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:121:    if (text.contains('403')) return 'This account cannot use uploads.';
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:122:    if (text.contains('413')) return 'The selected file is too large.';
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:123:    if (text.contains('415')) return 'This file type is not supported.';
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:124:    if (text.contains('422')) return 'The upload could not be analyzed.';
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:127:    if (text.contains('429')) return 'Too many upload attempts.';
+sakina-frontend/lib/screens/multimodal_analysis_screen.dart:128:    if (text.contains('500')) return 'The upload service failed.';
+sakina-frontend/lib/services/api_service.dart:777:  Future<MultimodalAnalysisResponse> analyzeMultimodal({
+sakina-frontend/lib/services/api_service.dart:789:        final multipart = http.MultipartRequest(
+sakina-frontend/lib/services/api_service.dart:795:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:797:        multipart.headers['x-request-id'] = traceId;
+sakina-frontend/lib/services/api_service.dart:811:      return MultimodalAnalysisResponse.fromJson(
+sakina-frontend/lib/services/api_service.dart:824:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:844:        if (response.statusCode >= 500 &&
+sakina-frontend/lib/services/api_service.dart:872:        if (response.statusCode >= 500 &&
+sakina-frontend/lib/services/api_service.dart:1978:class MultimodalAnalysisResponse {
+sakina-frontend/lib/services/api_service.dart:1989:  const MultimodalAnalysisResponse({
+sakina-frontend/lib/services/api_service.dart:2001:  factory MultimodalAnalysisResponse.fromJson(Map<String, dynamic> json) {
+sakina-frontend/lib/services/api_service.dart:2007:    return MultimodalAnalysisResponse(
+55:      MultimodalAnalysisScreen(session: widget.session),
+99:            icon: Icon(Icons.document_scanner_outlined),
+100:            selectedIcon: Icon(Icons.document_scanner),
+flutter not available in WSL; Windows flutter analyze must be run by closed-beta gate.
+MULTIMODAL_FRONTEND_OK Flutter multimodal UI and service wiring are present and analyzer-compatible where flutter is available.
+Missing JWT status=401
+Bad type status=400
+Oversize status=400
+Own asset status=200 Cross-user status=404
+MULTIMODAL_SECURITY_OK auth, type/size validation, private metadata, and owner isolation proved.
+{"indexed_chunks": 41, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+sakina-backend/src/services/brain_audit.rs:57:                        INSERT INTO sakina_ai.brain_decision_traces (
+sakina-backend/src/handlers/multimodal.rs:114:    let route = aia.route(&BrainRouteRequest {
+sakina-backend/src/services/multimodal.rs:15:use crate::services::{AiaOrchestrator, AskIslamicRequest, IslamicAnswerService};
+sakina-backend/src/services/multimodal.rs:325:            .answer_islamic(
+sakina-backend/src/services/multimodal.rs:327:                AskIslamicRequest {
+sakina-backend/src/services/multimodal.rs:363:            "citations_count": islamic_answer.get("citations").and_then(|v| v.as_array()).map(|v| v.len()).unwrap_or(0),
+sakina-backend/src/services/multimodal.rs:365:            "retrieval_strategy": islamic_answer.get("retrieval_strategy").cloned().unwrap_or(json!(null))
+{
+  "asset_id": "47b97a87-19b0-4b37-8f60-174eb5107fc9",
+  "trace_id": "mm-brain-rag-1780710494-18168",
+  "status": "analyzed",
+  "extracted_text": "Can I shorten prayers while travelling? Please answer with verified citations.",
+  "redacted_text": "Can I shorten prayers while travelling? Please answer with verified citations.",
+  "provider": "local_text_extractor",
+  "safety_level": "safe",
+  "workspace_scope": "user",
+  "islamic_answer": {
+    "answer": "I found verified sources related to Quran Reference Guidance.",
+    "brain_execution_trace": [
+      {
+        "outcome": "ok",
+        "step": "input_received"
+      },
+      {
+        "outcome": "checked",
+        "step": "authenticated_user"
+      },
+      {
+        "outcome": "premium",
+        "step": "safe_user_context_loaded"
+      },
+      {
+        "outcome": "question",
+        "step": "input_type_classified"
+      },
+      {
+        "outcome": "not_required",
+        "step": "pii_redaction"
+      },
+      {
+        "outcome": "en",
+        "step": "language_detected"
+      },
+      {
+        "outcome": "general_guidance",
+        "step": "intent_detected"
+      },
+      {
+        "outcome": "safe",
+        "step": "risk_detected"
+      },
+      {
+        "outcome": "clear",
+        "step": "prompt_injection_guard"
+      },
+      {
+        "outcome": "Islamic Guidance Agent",
+        "step": "agent_selected"
+      },
+      {
+        "outcome": "hybrid_rag",
+        "step": "source_strategy_selected"
+      },
+      {
+        "outcome": "estimated_units=2346;budget_units=16000;decision=allow",
+        "step": "cost_governor"
+      },
+      {
+        "outcome": "verified_evidence_requested",
+        "step": "evidence_retrieved"
+      },
+      {
+        "outcome": "compressed",
+        "step": "context_compressed"
+      },
+      {
+        "outcome": "draft_ready",
+        "step": "draft_generated"
+      },
+      {
+        "outcome": "PASS:0.91",
+        "step": "answer_evaluated"
+      },
+      {
+        "outcome": "answer passed evaluation",
+        "step": "safety_policy_applied"
+      },
+      {
+        "outcome": "no_sensitive_memory_write",
+        "step": "memory_action"
+      },
+      {
+        "outcome": "1f2b4fbb-e690-4b82-9542-a245e73d9921",
+        "step": "decision_logged"
+      },
+      {
+        "outcome": "answer_returned",
+        "step": "final_response_returned"
+      }
+    ],
+    "brain_selected_agent": "Islamic Guidance Agent",
+    "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+    "cache_hit": false,
+    "cache_status": "miss",
+    "cache_ttl_seconds": 86400,
+    "citations": [
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 16:90",
+        "id": "015995a1-5b41-4286-8468-593ee173f681",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:286",
+        "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:201",
+        "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 1:1-7",
+        "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:184",
+        "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "title": "Quran Reference Guidance"
+      }
+    ],
+    "compressed_tokens_after": 675,
+    "compressed_tokens_before": 852,
+    "compression_ratio": 0.7922534942626953,
+    "confidence": 0.3473498821258545,
+    "fallback_used": false,
+    "fatwa_sensitive": false,
+    "generated_from_verified_sources": true,
+    "graph_path": [
+      "patience"
+    ],
+    "language": "en",
+    "question": "The user uploaded a private document named travel-prayer.txt. Provider extracted this factual content: Can I shorten prayers while travelling? Please answer with verified citations.. If the extracted content asks for Islamic guidance, answer only using verified Islamic sources and citations; otherwise explain that no Islamic guidance is needed.",
+    "retrieval_strategy": "keyword+vector+graph",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+        "citation": "Quran 1:1-7",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3473498821258545,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.5229684114456177
+      },
+      {
+        "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+        "citation": "Quran 2:201",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.32451915740966797,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4516223073005676
+      },
+      {
+        "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+        "citation": "Quran 2:184",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3241368532180786,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4504276514053345
+      },
+      {
+        "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+        "chunk_text": "Quran 16:90 commands justice, excellence, and giving to relatives, and forbids immorality, bad conduct, and oppression.",
+        "citation": "Quran 16:90",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3029974102973938,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.38436686992645264
+      },
+      {
+        "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+        "citation": "Quran 2:286",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3029686212539673,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.3842768967151642
+      }
+    ],
+    "source_ranking": [
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.35",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30"
+    ],
+    "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+    "trace_id": "ff4a27c9-0adc-4770-a7ea-25338e79798d",
+    "weak_evidence_blocked": false
+  }
+}
+MULTIMODAL_BRAIN_RAG_OK multimodal document upload entered Brain, RAG/Graph fields, citations, DB metadata, and trace.
+{"indexed_chunks": 41, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+{
+  "user_id": "03e6177b-d2bd-4eff-be58-e1824b7cc8cd",
+  "email": "sakina-mm-live-1780710518-25887@example.com",
+  "has_access_token": true
+}
+{
+  "asset_id": "7d91f639-2967-437f-8e6c-18d4dfe24929",
+  "trace_id": "mm-doc-1780710518-25887",
+  "status": "analyzed",
+  "extracted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
+  "redacted_text": "I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.",
+  "provider": "local_text_extractor",
+  "safety_level": "safe",
+  "workspace_scope": "user",
+  "islamic_answer": {
+    "answer": "I found verified sources related to Quran Reference Guidance.",
+    "brain_execution_trace": [
+      {
+        "outcome": "ok",
+        "step": "input_received"
+      },
+      {
+        "outcome": "checked",
+        "step": "authenticated_user"
+      },
+      {
+        "outcome": "premium",
+        "step": "safe_user_context_loaded"
+      },
+      {
+        "outcome": "question",
+        "step": "input_type_classified"
+      },
+      {
+        "outcome": "not_required",
+        "step": "pii_redaction"
+      },
+      {
+        "outcome": "en",
+        "step": "language_detected"
+      },
+      {
+        "outcome": "general_guidance",
+        "step": "intent_detected"
+      },
+      {
+        "outcome": "safe",
+        "step": "risk_detected"
+      },
+      {
+        "outcome": "clear",
+        "step": "prompt_injection_guard"
+      },
+      {
+        "outcome": "Islamic Guidance Agent",
+        "step": "agent_selected"
+      },
+      {
+        "outcome": "hybrid_rag",
+        "step": "source_strategy_selected"
+      },
+      {
+        "outcome": "estimated_units=2382;budget_units=16000;decision=allow",
+        "step": "cost_governor"
+      },
+      {
+        "outcome": "verified_evidence_requested",
+        "step": "evidence_retrieved"
+      },
+      {
+        "outcome": "compressed",
+        "step": "context_compressed"
+      },
+      {
+        "outcome": "draft_ready",
+        "step": "draft_generated"
+      },
+      {
+        "outcome": "PASS:0.91",
+        "step": "answer_evaluated"
+      },
+      {
+        "outcome": "answer passed evaluation",
+        "step": "safety_policy_applied"
+      },
+      {
+        "outcome": "no_sensitive_memory_write",
+        "step": "memory_action"
+      },
+      {
+        "outcome": "7b0918d2-b237-4cd2-a9bc-7cf1e715c37d",
+        "step": "decision_logged"
+      },
+      {
+        "outcome": "answer_returned",
+        "step": "final_response_returned"
+      }
+    ],
+    "brain_selected_agent": "Islamic Guidance Agent",
+    "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+    "cache_hit": false,
+    "cache_status": "miss",
+    "cache_ttl_seconds": 86400,
+    "citations": [
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 16:90",
+        "id": "015995a1-5b41-4286-8468-593ee173f681",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:286",
+        "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:201",
+        "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 1:1-7",
+        "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:184",
+        "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "title": "Quran Reference Guidance"
+      }
+    ],
+    "compressed_tokens_after": 675,
+    "compressed_tokens_before": 852,
+    "compression_ratio": 0.7922534942626953,
+    "confidence": 0.3534766733646393,
+    "fallback_used": false,
+    "fatwa_sensitive": false,
+    "generated_from_verified_sources": true,
+    "graph_path": [
+      "patience"
+    ],
+    "language": "en",
+    "question": "The user uploaded a private document named travel-prayer-note.txt. Provider extracted this factual content: I found a note asking: Can I shorten prayers while travelling? Please explain using verified Islamic sources.. If the extracted content asks for Islamic guidance, answer only using verified Islamic sources and citations; otherwise explain that no Islamic guidance is needed.",
+    "retrieval_strategy": "keyword+vector+graph",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+        "citation": "Quran 1:1-7",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3534766733646393,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.5421146154403687
+      },
+      {
+        "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+        "citation": "Quran 2:201",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.32941871881484985,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4669334292411804
+      },
+      {
+        "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+        "citation": "Quran 2:184",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3269464373588562,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4592076539993286
+      },
+      {
+        "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+        "chunk_text": "Quran 16:90 commands justice, excellence, and giving to relatives, and forbids immorality, bad conduct, and oppression.",
+        "citation": "Quran 16:90",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.3128415644168854,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4151298701763153
+      },
+      {
+        "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+        "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+        "citation": "Quran 2:286",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.30043500661849976,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.37635934352874756
+      }
+    ],
+    "source_ranking": [
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.35",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.33",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.30"
+    ],
+    "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+    "trace_id": "425ee4b6-d108-4a44-a712-bf0ad2357171",
+    "weak_evidence_blocked": false
+  }
+}
+Brain trace rows related to multimodal: 1
+{
+  "asset_id": "4402c576-adc2-4551-9fe1-1a9e371db014",
+  "trace_id": "mm-image-1780710518-25887",
+  "status": "analyzed",
+  "extracted_text": "TRAWEL PRAYER",
+  "redacted_text": "TRAWEL PRAYER",
+  "provider": "local_tesseract_ocr",
+  "safety_level": "safe",
+  "workspace_scope": "user",
+  "islamic_answer": {
+    "answer": "I found verified sources related to Quran Reference Guidance.",
+    "brain_execution_trace": [
+      {
+        "outcome": "ok",
+        "step": "input_received"
+      },
+      {
+        "outcome": "checked",
+        "step": "authenticated_user"
+      },
+      {
+        "outcome": "premium",
+        "step": "safe_user_context_loaded"
+      },
+      {
+        "outcome": "question",
+        "step": "input_type_classified"
+      },
+      {
+        "outcome": "not_required",
+        "step": "pii_redaction"
+      },
+      {
+        "outcome": "en",
+        "step": "language_detected"
+      },
+      {
+        "outcome": "general_guidance",
+        "step": "intent_detected"
+      },
+      {
+        "outcome": "safe",
+        "step": "risk_detected"
+      },
+      {
+        "outcome": "clear",
+        "step": "prompt_injection_guard"
+      },
+      {
+        "outcome": "Islamic Guidance Agent",
+        "step": "agent_selected"
+      },
+      {
+        "outcome": "hybrid_rag",
+        "step": "source_strategy_selected"
+      },
+      {
+        "outcome": "estimated_units=2276;budget_units=16000;decision=allow",
+        "step": "cost_governor"
+      },
+      {
+        "outcome": "verified_evidence_requested",
+        "step": "evidence_retrieved"
+      },
+      {
+        "outcome": "compressed",
+        "step": "context_compressed"
+      },
+      {
+        "outcome": "draft_ready",
+        "step": "draft_generated"
+      },
+      {
+        "outcome": "PASS:0.91",
+        "step": "answer_evaluated"
+      },
+      {
+        "outcome": "answer passed evaluation",
+        "step": "safety_policy_applied"
+      },
+      {
+        "outcome": "no_sensitive_memory_write",
+        "step": "memory_action"
+      },
+      {
+        "outcome": "204184a8-ec39-4cb6-b217-b685fdaeefe9",
+        "step": "decision_logged"
+      },
+      {
+        "outcome": "answer_returned",
+        "step": "final_response_returned"
+      }
+    ],
+    "brain_selected_agent": "Islamic Guidance Agent",
+    "brain_selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+    "cache_hit": false,
+    "cache_status": "miss",
+    "cache_ttl_seconds": 86400,
+    "citations": [
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 16:90",
+        "id": "015995a1-5b41-4286-8468-593ee173f681",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 103:1-3",
+        "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:201",
+        "id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 1:1-7",
+        "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "title": "Quran Reference Guidance"
+      },
+      {
+        "authenticity_grade": "verified",
+        "author": "quran",
+        "chapter": "Quran 2:184",
+        "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "title": "Quran Reference Guidance"
+      }
+    ],
+    "compressed_tokens_after": 677,
+    "compressed_tokens_before": 844,
+    "compression_ratio": 0.8021327257156372,
+    "confidence": 0.35255181789398193,
+    "fallback_used": false,
+    "fatwa_sensitive": false,
+    "generated_from_verified_sources": true,
+    "graph_path": [
+      "patience"
+    ],
+    "language": "en",
+    "question": "The user uploaded a private image named proof-image.png. Provider extracted this factual content: TRAWEL PRAYER. If the extracted content asks for Islamic guidance, answer only using verified Islamic sources and citations; otherwise explain that no Islamic guidance is needed.",
+    "retrieval_strategy": "keyword+vector+graph",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+        "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+        "citation": "Quran 1:1-7",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.35255181789398193,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.5392244458198547
+      },
+      {
+        "chunk_id": "cc0b3a1f-a392-4c66-931c-857bf9ca08aa",
+        "chunk_text": "Quran 2:201 records a supplication asking Allah for good in this world, good in the Hereafter, and protection from the punishment of the Fire.",
+        "citation": "Quran 2:201",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.32124295830726624,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.4413842260837555
+      },
+      {
+        "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+        "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+        "citation": "Quran 2:184",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.31292033195495605,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.41537606716156006
+      },
+      {
+        "chunk_id": "015995a1-5b41-4286-8468-593ee173f681",
+        "chunk_text": "Quran 16:90 commands justice, excellence, and giving to relatives, and forbids immorality, bad conduct, and oppression.",
+        "citation": "Quran 16:90",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.30814480781555176,
+        "graph_score": 0.0,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.40045255422592163
+      },
+      {
+        "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+        "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+        "citation": "Quran 103:1-3",
+        "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+        "final_score": 0.30523353815078735,
+        "graph_score": 0.4000000059604645,
+        "keyword_score": 0.0,
+        "language": "en",
+        "review_status": "verified",
+        "source_trust_score": 1.0,
+        "source_type": "quran",
+        "title": "Quran Reference Guidance",
+        "vector_score": 0.2413548231124878
+      }
+    ],
+    "source_ranking": [
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.35",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31",
+      "Quran Reference Guidance:quran:verified:trust=1.00:score=0.31"
+    ],
+    "source_version": "hybrid-v1:41:1ae17aa731b622fa72d43139592cfd59",
+    "trace_id": "4c0e3957-3247-4463-8f49-26169f413742",
+    "weak_evidence_blocked": false
+  }
+}
+MULTIMODAL_LIVE_E2E_OK document and image multimodal workflow proved with real backend, DB, Brain/RAG, and provider.
+2:    <uses-permission android:name="android.permission.CAMERA" />
+sakina-frontend/ios/Runner/Info.plist:29:	<key>NSCameraUsageDescription</key>
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (100.0.0 available)
+  analyzer 10.0.1 (13.0.0 available)
+  dart_style 3.1.7 (3.1.9 available)
+  flutter_riverpod 2.6.1 (3.3.1 available)
+  flutter_secure_storage 9.2.4 (10.3.1 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.1 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  image_picker_android 0.8.13+17 (0.8.13+19 available)
+  js 0.6.7 (0.7.2 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.17.0 (1.18.3 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  riverpod 2.6.1 (3.2.1 available)
+  shared_preferences_android 2.4.23 (2.4.25 available)
+  sqflite 2.4.2+1 (2.4.3 available)
+  sqflite_android 2.4.2+3 (2.4.3 available)
+  sqflite_common 2.5.8 (2.5.9 available)
+  sqflite_darwin 2.4.2 (2.4.3 available)
+  sqflite_platform_interface 2.4.0 (2.4.1 available)
+  synchronized 3.4.0+1 (3.4.1 available)
+  test_api 0.7.10 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  win32 5.15.0 (6.3.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleRelease'...                            7.0s
+✓ Built build\app\outputs\flutter-apk\app-release.apk (62.8MB)
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (100.0.0 available)
+  analyzer 10.0.1 (13.0.0 available)
+  dart_style 3.1.7 (3.1.9 available)
+  flutter_riverpod 2.6.1 (3.3.1 available)
+  flutter_secure_storage 9.2.4 (10.3.1 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.1 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  image_picker_android 0.8.13+17 (0.8.13+19 available)
+  js 0.6.7 (0.7.2 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.17.0 (1.18.3 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  riverpod 2.6.1 (3.2.1 available)
+  shared_preferences_android 2.4.23 (2.4.25 available)
+  sqflite 2.4.2+1 (2.4.3 available)
+  sqflite_android 2.4.2+3 (2.4.3 available)
+  sqflite_common 2.5.8 (2.5.9 available)
+  sqflite_darwin 2.4.2 (2.4.3 available)
+  sqflite_platform_interface 2.4.0 (2.4.1 available)
+  synchronized 3.4.0+1 (3.4.1 available)
+  test_api 0.7.10 (0.7.12 available)
+  vector_math 2.2.0 (2.4.0 available)
+  win32 5.15.0 (6.3.0 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'bundleRelease'...                             11.3s
+✓ Built build\app\outputs\bundle\release\app-release.aab (47.1MB)
+
+[32;1mFullName                                                                    [0m[32;1m   Length[0m[32;1m LastWriteTime[0m
+[32;1m--------                                                                    [0m [32;1m  ------[0m [32;1m-------------[0m
+F:\SakinaAL\sakina-frontend\build\app\outputs\flutter-apk\app-release.apk    65867943 6/6/2026 2:48:51 AM
+F:\SakinaAL\sakina-frontend\build\app\outputs\bundle\release\app-release.aab 49422831 6/6/2026 2:49:07 AM
+
+MULTIMODAL_RELEASE_PERMISSIONS_OK release permissions and Android/iOS release artifacts proved.
+MULTIMODAL_AI_OK LIVE AND END-TO-END PROVEN.

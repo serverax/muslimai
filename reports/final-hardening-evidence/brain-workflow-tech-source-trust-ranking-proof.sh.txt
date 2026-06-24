@@ -1,0 +1,284 @@
+{"indexed_chunks": 35, "collection": "sakina_islamic_chunks_en", "dimension": 128}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
+{
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:286",
+      "id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:183",
+      "id": "54502981-a35a-4628-b2c5-244e9effd35c",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 103:1-3",
+      "id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 1:1-7",
+      "id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "title": "Quran Reference Guidance"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "Quran 2:184",
+      "id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "title": "Quran Reference Guidance"
+    }
+  ],
+  "compressed_tokens_after": 672,
+  "compressed_tokens_before": 817,
+  "compression_ratio": 0.822521448135376,
+  "graph_path": [
+    "patience"
+  ],
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "e12bc19e-02d7-418c-9d2b-203e1db6d236",
+      "chunk_text": "Quran 2:184 mentions allowances around fasting for a limited number of days and references concession for illness or travel with later make-up days.",
+      "citation": "Quran 2:184",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.4557950496673584,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.8618595600128174
+    },
+    {
+      "chunk_id": "ccc59682-80c9-40d6-8c14-999ae9d82594",
+      "chunk_text": "Al-Fatihah is the opening chapter of the Quran and centers worship, reliance, and asking Allah for guidance to the straight path.",
+      "citation": "Quran 1:1-7",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3244791030883789,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.45149722695350647
+    },
+    {
+      "chunk_id": "42368bdf-2d12-436b-98f5-61396ff67ac9",
+      "chunk_text": "Quran 2:286 teaches that Allah does not burden a soul beyond what it can bear and includes supplication for pardon, forgiveness, and mercy.",
+      "citation": "Quran 2:286",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3223314881324768,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4447858929634094
+    },
+    {
+      "chunk_id": "54502981-a35a-4628-b2c5-244e9effd35c",
+      "chunk_text": "Quran 2:183 establishes fasting as an obligation for believers and connects fasting with taqwa.",
+      "citation": "Quran 2:183",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.321382999420166,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.4418218731880188
+    },
+    {
+      "chunk_id": "9bc6d5a1-cbc4-4290-9deb-9f922f95c721",
+      "chunk_text": "Surah Al-Asr teaches that humankind is in loss except those who believe, do righteous deeds, counsel truth, and counsel patience.",
+      "citation": "Quran 103:1-3",
+      "document_id": "2a8181cc-eb71-4b86-8218-dd5c87a9bb7c",
+      "final_score": 0.3209981322288513,
+      "graph_score": 0.4000000059604645,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Quran Reference Guidance",
+      "vector_score": 0.2906191051006317
+    }
+  ],
+  "selected_agent": "Islamic Guidance Agent",
+  "selected_model": "main_llm",
+  "selected_pipeline": "mother_brain>hybrid_rag>wasm_policy>evaluation",
+  "source_ranking": [
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.46",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32",
+    "Quran Reference Guidance:quran:verified:trust=1.00:score=0.32"
+  ],
+  "weak_evidence_blocked": false
+}
+INSERT 0 1
+{
+  "citations": [
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "3b4677f4-da61-4c57-bb3b-b367e2b417c9",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "818ee0c7-375a-4def-9dac-71cf35d1ea66",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "99cc5de3-51a7-49de-a944-9f9aa8a83ab8",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "9daafa69-2ce0-46b6-9f80-c404baad587a",
+      "title": "Verified Source"
+    },
+    {
+      "authenticity_grade": "verified",
+      "author": "quran",
+      "chapter": "verified citation",
+      "id": "bb3fa3ae-ff9d-42ee-9124-0720a292a7f3",
+      "title": "Verified Source"
+    }
+  ],
+  "compressed_tokens_after": 255,
+  "compressed_tokens_before": 255,
+  "compression_ratio": 1.0,
+  "graph_path": [
+    "patience"
+  ],
+  "retrieval_strategy": "keyword+vector+graph",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "99cc5de3-51a7-49de-a944-9f9aa8a83ab8",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "a226803f-f0a7-4829-a9a5-d857e5c7ac1e",
+      "final_score": 0.2697197198867798,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
+    },
+    {
+      "chunk_id": "3b4677f4-da61-4c57-bb3b-b367e2b417c9",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "253fb94e-1e53-40df-b445-95fe1b8f895d",
+      "final_score": 0.2697197198867798,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
+    },
+    {
+      "chunk_id": "818ee0c7-375a-4def-9dac-71cf35d1ea66",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "610b8830-a6fa-424e-b7e8-975b8b4d122f",
+      "final_score": 0.2697197198867798,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
+    },
+    {
+      "chunk_id": "bb3fa3ae-ff9d-42ee-9124-0720a292a7f3",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "2d2be823-6d7c-4945-92e3-96831289cbe8",
+      "final_score": 0.2697197198867798,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
+    },
+    {
+      "chunk_id": "9daafa69-2ce0-46b6-9f80-c404baad587a",
+      "chunk_text": "verified chunk text",
+      "citation": "verified citation",
+      "document_id": "6e5be3f8-0853-4c9b-8c08-0d52ca824c23",
+      "final_score": 0.2697197198867798,
+      "graph_score": 0.0,
+      "keyword_score": 0.0,
+      "language": "en",
+      "review_status": "verified",
+      "source_trust_score": 1.0,
+      "source_type": "quran",
+      "title": "Verified Source",
+      "vector_score": 0.28037407994270325
+    }
+  ],
+  "selected_agent": "General Chat Agent",
+  "selected_model": "lite_llm",
+  "selected_pipeline": "mother_brain>cached_or_cached_rag>evaluation",
+  "source_ranking": [
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27",
+    "Verified Source:quran:verified:trust=1.00:score=0.27"
+  ],
+  "weak_evidence_blocked": false
+}
+27:    pub source_trust_score: f32,
+135:                source_trust_score: 0.0,
+138:            chunk.source_trust_score =
+139:                Self::source_trust_score(&chunk.source_type, &chunk.review_status);
+146:    fn source_trust_score(source_type: &str, review_status: &str) -> f32 {
+163:    fn recompute_final_score(chunk: &mut HybridRetrievedChunk) {
+167:            + (chunk.source_trust_score * 0.18);
+262:                source_trust_score: 0.0,
+265:            chunk.source_trust_score =
+266:                Self::source_trust_score(&chunk.source_type, &chunk.review_status);
+366:                    "{}:{}:{}:trust={:.2}:score={:.2}",
+370:                    chunk.source_trust_score,
+SOURCE_TRUST_RANKING_OK source trust scoring affects hybrid RAG output and unverified content is filtered.

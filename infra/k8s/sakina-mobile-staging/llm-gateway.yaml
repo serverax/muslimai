@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-llm-gateway
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: llm-gateway
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  selector:
+    app: sakina-llm-gateway
+  ports:
+    - name: http
+      port: 8087
+      targetPort: 8087
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-llm-gateway
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: llm-gateway
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: sakina-llm-gateway
+  template:
+    metadata:
+      labels:
+        app: sakina-llm-gateway
+        app.kubernetes.io/name: llm-gateway
+        app.kubernetes.io/part-of: sakina-mobile
+        app.kubernetes.io/environment: staging
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: llm-gateway
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          command:
+            - sakina-llm-gateway
+          ports:
+            - containerPort: 8087
+              name: http
+          env:
+            - name: SAKINA_ENV
+              value: staging
+            - name: OLLAMA_BASE_URL
+              value: http://sakina-ollama:11434
+            - name: SAKINA_LLM_MODEL
+              value: qwen2.5:3b
+            - name: SAKINA_LLM_TIMEOUT_SECONDS
+              value: "60"
+            - name: SAKINA_LLM_GATEWAY_BIND
+              value: 0.0.0.0:8087
+            - name: RUST_LOG
+              value: info
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL

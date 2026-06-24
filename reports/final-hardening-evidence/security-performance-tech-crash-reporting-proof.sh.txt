@@ -1,0 +1,10 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.56s
+Pager usage is off.
+DO
+INSERT 0 1
+      event_name       |         request_id          
+-----------------------+-----------------------------
+ crash_reporting_probe | crash-proof-1780688298-7388
+(1 row)
+
+CRASH_REPORTING_OK backend error contract, DB error event recording, and frontend/backend crash/error code paths were verified.

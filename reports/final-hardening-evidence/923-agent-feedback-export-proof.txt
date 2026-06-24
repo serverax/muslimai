@@ -1,0 +1,35 @@
+psql:sakina-backend/db/migrations/019_agent_feedback.sql:9: NOTICE:  relation "agent_feedback" already exists, skipping
+CREATE TABLE
+psql:sakina-backend/db/migrations/019_agent_feedback.sql:12: NOTICE:  relation "idx_agent_feedback_trace" already exists, skipping
+CREATE INDEX
+psql:sakina-backend/db/migrations/019_agent_feedback.sql:15: NOTICE:  relation "idx_agent_feedback_user" already exists, skipping
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+DROP POLICY
+CREATE POLICY
+DROP POLICY
+CREATE POLICY
+INSERT 0 1
+Missing-auth feedback status=401
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "authorization bearer token is required"
+  }
+}
+Cross-user feedback status=401 user_b=c5fbf6ec-08e2-4a8d-868c-d1bc69310d28 trace_owner=4f07884a-b27a-4220-8909-9139d88b08e1
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "trace does not belong to authenticated user"
+  }
+}
+{
+  "feedback_id": "61663217-2ca9-4cac-ab19-fb10f3bf923f",
+  "label": "positive",
+  "trace_id": "agent-feedback-1780699452-31191-trace"
+}
+Agent feedback DB rows=1
+GOLD_DATASET_EXPORTED path=reports/final-hardening-evidence/922-agent-gold-dataset.jsonl rows=2
+AGENT_FEEDBACK_EXPORT_OK feedback API requires JWT, blocks cross-user trace labels, persists DB feedback, and exports JSONL gold dataset evidence.

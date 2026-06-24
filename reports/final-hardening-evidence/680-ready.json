@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "auth": "ok",
+    "database": "ok",
+    "encryption": "ok",
+    "environment": "local",
+    "fake_mode": "disabled",
+    "llm_provider": "configured_or_disabled_closed",
+    "payments": "configured_or_disabled_closed",
+    "qdrant": "ok",
+    "redis_valkey": "ok",
+    "rls": "ok",
+    "storage": "configured_or_disabled_closed"
+  },
+  "status": "ready"
+}

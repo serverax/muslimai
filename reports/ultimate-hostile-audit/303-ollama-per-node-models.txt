@@ -1,0 +1,9 @@
+--- pod/sakina-ollama-m2clb @ talos-h93-b9x ---
+NAME          ID              SIZE      MODIFIED      
+qwen2.5:3b    357c53fb659c    1.9 GB    4 seconds ago    
+--- pod/sakina-ollama-v9gqq @ talos-5h3-83r ---
+NAME          ID              SIZE      MODIFIED           
+qwen2.5:3b    357c53fb659c    1.9 GB    About a minute ago    
+--- pod/sakina-ollama-zfppc @ talos-138-201-202-174 ---
+NAME          ID              SIZE      MODIFIED           
+qwen2.5:3b    357c53fb659c    1.9 GB    About a minute ago    

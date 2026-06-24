@@ -1,0 +1,16 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.62s
+Pager usage is off.
+DO
+INSERT 0 1
+              request_id              | priority | review_status |                  reviewer_notes                   
+--------------------------------------+----------+---------------+---------------------------------------------------
+ 06af2e62-2982-4a25-9883-b6df2c6da378 | high     | pending       | PII minimised high-risk religious/family question
+(1 row)
+
+              set_config              
+--------------------------------------
+ 06af2e62-2982-4a25-9883-b6df2c6da378
+(1 row)
+
+DO
+HUMAN_REVIEW_QUEUE_OK high-risk Brain trace and persisted scholar review queue item were verified.

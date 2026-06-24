@@ -1,0 +1,174 @@
+{
+  "_note": "Starter set of masnoon duas with Sahih source attribution. Authentic supplications from the Quran and prophetic sunnah. Header note: expand with verified content; review by qualified scholar before production release.",
+  "categories": [
+    { "id": "daily", "name_en": "Daily Life", "name_ar": "الحياة اليومية", "icon": "heart" },
+    { "id": "distress", "name_en": "Distress & Anxiety", "name_ar": "الكرب والقلق", "icon": "shield" },
+    { "id": "travel", "name_en": "Travel", "name_ar": "السفر", "icon": "compass" },
+    { "id": "food", "name_en": "Food & Drink", "name_ar": "الطعام والشراب", "icon": "heart" },
+    { "id": "knowledge", "name_en": "Seeking Knowledge", "name_ar": "طلب العلم", "icon": "bookOpen" },
+    { "id": "forgiveness", "name_en": "Repentance", "name_ar": "التوبة والاستغفار", "icon": "handsPraying" },
+    { "id": "guidance", "name_en": "Guidance", "name_ar": "الهداية", "icon": "star" }
+  ],
+  "items": [
+    {
+      "id": "d1",
+      "category": "daily",
+      "arabic": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+      "transliteration": "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar.",
+      "translation_en": "Our Lord, give us in this world good and in the Hereafter good, and protect us from the punishment of the Fire.",
+      "source": "Quran 2:201"
+    },
+    {
+      "id": "d2",
+      "category": "daily",
+      "arabic": "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+      "transliteration": "Allahumma a'inni 'ala dhikrika wa shukrika wa husni 'ibadatik.",
+      "translation_en": "O Allah, help me to remember You, to thank You, and to worship You in the best manner.",
+      "source": "Abu Dawud 1522 (Sahih)"
+    },
+    {
+      "id": "d3",
+      "category": "daily",
+      "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ",
+      "transliteration": "Allahumma inni as'alukal-'afwa wal-'afiyata fid-dunya wal-akhirah.",
+      "translation_en": "O Allah, I ask You for pardon and well-being in this world and the next.",
+      "source": "Ibn Majah 3871 (Sahih)"
+    },
+    {
+      "id": "ds1",
+      "category": "distress",
+      "arabic": "لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+      "transliteration": "La ilaha illa anta, subhanaka, inni kuntu minadh-dhalimeen.",
+      "translation_en": "There is no god but You, glory be to You, I have indeed been among the wrongdoers. (The dua of Yunus عليه السلام.)",
+      "source": "Quran 21:87"
+    },
+    {
+      "id": "ds2",
+      "category": "distress",
+      "arabic": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+      "transliteration": "Hasbunallahu wa ni'mal-wakeel.",
+      "translation_en": "Sufficient for us is Allah, and He is the best Disposer of affairs.",
+      "source": "Quran 3:173"
+    },
+    {
+      "id": "ds3",
+      "category": "distress",
+      "arabic": "اللَّهُمَّ رَحْمَتَكَ أَرْجُو فَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ، وَأَصْلِحْ لِي شَأْنِي كُلَّهُ، لَا إِلَهَ إِلَّا أَنْتَ",
+      "transliteration": "Allahumma rahmataka arju, fala takilni ila nafsi tarfata 'ayn, wa aslih li sha'ni kullah, la ilaha illa ant.",
+      "translation_en": "O Allah, I hope for Your mercy, so do not leave me to myself even for the blink of an eye, and rectify all of my affairs. There is no god but You.",
+      "source": "Abu Dawud 5090 (Hasan)"
+    },
+    {
+      "id": "ds4",
+      "category": "distress",
+      "arabic": "اللَّهُمَّ إِنِّي عَبْدُكَ، ابْنُ عَبْدِكَ، ابْنُ أَمَتِكَ، نَاصِيَتِي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ، أَسْأَلُكَ بِكُلِّ اسْمٍ هُوَ لَكَ، سَمَّيْتَ بِهِ نَفْسَكَ، أَوْ أَنْزَلْتَهُ فِي كِتَابِكَ، أَوْ عَلَّمْتَهُ أَحَدًا مِنْ خَلْقِكَ، أَوِ اسْتَأْثَرْتَ بِهِ فِي عِلْمِ الْغَيْبِ عِنْدَكَ، أَنْ تَجْعَلَ الْقُرْآنَ رَبِيعَ قَلْبِي، وَنُورَ صَدْرِي، وَجَلَاءَ حُزْنِي، وَذَهَابَ هَمِّي",
+      "transliteration": "Allahumma inni 'abduka, ibnu 'abdika, ibnu amatik. Nasiyati biyadik, madin fiyya hukmuk, 'adlun fiyya qada'uk. As'aluka bi kullismin huwa lak, sammayta bihi nafsak, aw anzaltahu fi kitabik, aw 'allamtahu ahadan min khalqik, awista'tharta bihi fi 'ilmil-ghaybi 'indak, an taj'alal-Qur'ana rabi'a qalbi, wa nura sadri, wa jala'a huzni, wa dhahaba hammi.",
+      "translation_en": "O Allah, I am Your servant, son of Your servant, son of Your maidservant. My forelock is in Your hand. Your judgement upon me is assured, and Your decree concerning me is just. I ask You by every name belonging to You, with which You have named Yourself, revealed in Your Book, taught to any of Your creation, or kept hidden with You in the unseen — that You make the Quran the spring of my heart, the light of my chest, the dispeller of my sorrow, and the remover of my anxiety.",
+      "source": "Ahmad 3712 (Sahih)"
+    },
+    {
+      "id": "t1",
+      "category": "travel",
+      "arabic": "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ",
+      "transliteration": "Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrineen, wa inna ila Rabbina la munqalibun.",
+      "translation_en": "Glory is to Him who has subjected this to us, and we could never have it (by our efforts). And to our Lord we shall surely return.",
+      "source": "Quran 43:13-14 (recited when boarding a vehicle)"
+    },
+    {
+      "id": "t2",
+      "category": "travel",
+      "arabic": "اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ",
+      "transliteration": "Allahumma inna nas'aluka fi safarina hadhal-birra wat-taqwa, wa minal-'amali ma tarda. Allahumma hawwin 'alayna safarana hadha watwi 'anna bu'dah.",
+      "translation_en": "O Allah, we ask You on this our journey for righteousness and piety, and for deeds that please You. O Allah, ease this journey for us, and fold up its distance for us.",
+      "source": "Sahih Muslim 1342"
+    },
+    {
+      "id": "f1",
+      "category": "food",
+      "arabic": "بِسْمِ اللَّهِ",
+      "transliteration": "Bismillah.",
+      "translation_en": "In the name of Allah. (Said before eating.)",
+      "source": "Sahih al-Bukhari 5376"
+    },
+    {
+      "id": "f2",
+      "category": "food",
+      "arabic": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+      "transliteration": "Alhamdulillahil-ladhi at'amani hadha wa razaqaneehi min ghayri hawlin minni wa la quwwah.",
+      "translation_en": "Praise is to Allah who has fed me this and provided it for me, with no power or might from myself.",
+      "source": "Abu Dawud 4023 (Sahih) — said after eating"
+    },
+    {
+      "id": "f3",
+      "category": "food",
+      "arabic": "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا وَقِنَا عَذَابَ النَّارِ",
+      "transliteration": "Allahumma barik lana fima razaqtana wa qina 'adhaban-nar.",
+      "translation_en": "O Allah, bless us in what You have provided for us, and protect us from the punishment of the Fire.",
+      "source": "Ibn al-Sunni 457 (Hasan)"
+    },
+    {
+      "id": "k1",
+      "category": "knowledge",
+      "arabic": "رَبِّ زِدْنِي عِلْمًا",
+      "transliteration": "Rabbi zidni 'ilma.",
+      "translation_en": "My Lord, increase me in knowledge.",
+      "source": "Quran 20:114"
+    },
+    {
+      "id": "k2",
+      "category": "knowledge",
+      "arabic": "اللَّهُمَّ انْفَعْنِي بِمَا عَلَّمْتَنِي، وَعَلِّمْنِي مَا يَنْفَعُنِي، وَزِدْنِي عِلْمًا",
+      "transliteration": "Allahumma infa'ni bima 'allamtani, wa 'allimni ma yanfa'uni, wa zidni 'ilma.",
+      "translation_en": "O Allah, benefit me by that which You have taught me, teach me that which will benefit me, and increase me in knowledge.",
+      "source": "Tirmidhi 3599 (Hasan)"
+    },
+    {
+      "id": "fo1",
+      "category": "forgiveness",
+      "arabic": "أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَأَتُوبُ إِلَيْهِ",
+      "transliteration": "Astaghfirullahal-ladhi la ilaha illa huwal-Hayyul-Qayyumu wa atubu ilayh.",
+      "translation_en": "I seek the forgiveness of Allah, besides whom there is no god — the Ever-Living, the Self-Sustaining — and I repent to Him.",
+      "source": "Abu Dawud 1517 (Sahih)"
+    },
+    {
+      "id": "fo2",
+      "category": "forgiveness",
+      "arabic": "رَبَّنَا ظَلَمْنَا أَنْفُسَنَا وَإِنْ لَمْ تَغْفِرْ لَنَا وَتَرْحَمْنَا لَنَكُونَنَّ مِنَ الْخَاسِرِينَ",
+      "transliteration": "Rabbana dhalamna anfusana, wa illam taghfir lana wa tarhamna la nakunanna minal-khasireen.",
+      "translation_en": "Our Lord, we have wronged ourselves, and if You do not forgive us and have mercy upon us, we will surely be among the losers. (The dua of Adam عليه السلام.)",
+      "source": "Quran 7:23"
+    },
+    {
+      "id": "fo3",
+      "category": "forgiveness",
+      "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+      "transliteration": "Allahumma anta Rabbi la ilaha illa anta, khalaqtani wa ana 'abduk, wa ana 'ala 'ahdika wa wa'dika mas-tata't, a'udhu bika min sharri ma sana't, abu'u laka bi ni'matika 'alayya, wa abu'u bi dhanbi faghfir li, fa innahu la yaghfirudh-dhunuba illa ant.",
+      "translation_en": "O Allah, You are my Lord, there is no god but You. You created me and I am Your servant. I keep Your covenant and pledge as best I can. I seek refuge in You from the evil I have done. I acknowledge Your blessing upon me and I acknowledge my sin, so forgive me — for none forgives sins but You. (Sayyid al-Istighfar.)",
+      "source": "Sahih al-Bukhari 6306"
+    },
+    {
+      "id": "g1",
+      "category": "guidance",
+      "arabic": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+      "transliteration": "Ihdinas-sirat al-mustaqeem.",
+      "translation_en": "Guide us to the straight path.",
+      "source": "Quran 1:6"
+    },
+    {
+      "id": "g2",
+      "category": "guidance",
+      "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى",
+      "transliteration": "Allahumma inni as'alukal-huda wat-tuqa wal-'afafa wal-ghina.",
+      "translation_en": "O Allah, I ask You for guidance, piety, chastity, and self-sufficiency.",
+      "source": "Sahih Muslim 2721"
+    },
+    {
+      "id": "g3",
+      "category": "guidance",
+      "arabic": "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+      "transliteration": "Ya muqallibal-qulubi thabbit qalbi 'ala deenik.",
+      "translation_en": "O Turner of hearts, keep my heart firm on Your religion.",
+      "source": "Tirmidhi 3522 (Sahih)"
+    }
+  ]
+}

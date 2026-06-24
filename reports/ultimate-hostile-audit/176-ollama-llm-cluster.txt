@@ -1,0 +1,18 @@
+aia-dev                  deployment.apps/aia-ollama-dev-cpu                      1/1     1            1           11d
+ns-agent-ayosh           deployment.apps/ayosh-wife-gateway                      1/1     1            1           5d17h
+ordinox-logging          deployment.apps/ordinox-loki-gateway                    1/1     1            1           7d6h
+ordinoxai-factory-dev    deployment.apps/ordinoxai-channel-gateway               1/1     1            1           4d6h
+sakina-mobile-staging    deployment.apps/ollama                                  1/1     1            1           8h
+sakina-mobile-staging    deployment.apps/sakina-llm-gateway                      1/1     1            1           5h58m
+sakina-mobile-staging    deployment.apps/sakina-ollama                           1/1     1            1           81m
+lawapp-ai              daemonset.apps/ollama-inference                              3         3         3       3            3           <none>                                        16h
+aia-dev                 service/aia-ollama-dev-cpu                                   ClusterIP      10.108.196.52    <none>        11434/TCP                                      11d
+lawapp-ai               service/llm-inference-service                                ClusterIP      10.99.72.225     <none>        11434/TCP                                      6h19m
+lawapp-ai               service/ollama-inference                                     ClusterIP      10.106.18.97     <none>        11434/TCP                                      16h
+ns-agent-ayosh          service/ayosh-wife-gateway                                   ClusterIP      10.99.74.24      <none>        8090/TCP                                       5d17h
+ordinox-logging         service/ordinox-loki-gateway                                 ClusterIP      10.101.217.137   <none>        80/TCP                                         7d6h
+ordinoxai-factory-dev   service/ordinoxai-channel-gateway                            ClusterIP      10.104.102.235   <none>        8030/TCP                                       4d6h
+sakina-mobile-staging   service/ollama                                               ClusterIP      10.109.193.54    <none>        11434/TCP                                      8h
+sakina-mobile-staging   service/ollama-inference                                     ClusterIP      10.97.109.141    <none>        11434/TCP                                      7h28m
+sakina-mobile-staging   service/sakina-llm-gateway                                   ClusterIP      10.108.89.233    <none>        8087/TCP                                       5h58m
+sakina-mobile-staging   service/sakina-ollama                                        ClusterIP      10.101.149.184   <none>        11434/TCP                                      81m

@@ -1,0 +1,34 @@
+sakina-frontend/lib\app\app_strings.dart:102:      AppLanguage.english: 'Coming soon',
+sakina-backend/src\bin\migrate.rs:102:            "018_replace_fake_rag_seed_content.sql",
+sakina-backend/src\bin\migrate.rs:103:            include_str!("../../db/migrations/018_replace_fake_rag_seed_content.sql"),
+sakina-frontend/lib\services\api_service.dart:1039:        confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+sakina-frontend/lib\services\api_service.dart:1269:        confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+sakina-frontend/lib\services\api_service.dart:2027:        confidenceScore: (json['confidence_score'] as num?)?.toDouble() ?? 0.0,
+sakina-backend/src\services\ai_router.rs:472:            "bypass safety",
+sakina-backend/src\services\ai_router.rs:473:            "bypass islamic safety",
+sakina-backend/src\handlers\sakina_ask.rs:81:        "bypass login",
+sakina-backend/src\main.rs:77:            && !value.to_ascii_lowercase().contains("demo")
+sakina-backend/src\main.rs:78:            && !value.to_ascii_lowercase().contains("dummy")
+sakina-backend/src\main.rs:83:fn fake_mode_disabled() -> bool {
+sakina-backend/src\main.rs:84:    !env_flag("ALLOW_DEMO_MODE")
+sakina-backend/src\main.rs:85:        && !env_flag("ALLOW_MOCK_AI")
+sakina-backend/src\main.rs:86:        && !env_flag("ALLOW_MOCK_RAG")
+sakina-backend/src\main.rs:87:        && !env_flag("ALLOW_MOCK_AUTH")
+sakina-backend/src\main.rs:88:        && !env_flag("ALLOW_MOCK_PAYMENTS")
+sakina-backend/src\main.rs:89:        && !env_flag("ALLOW_FAKE_CI_PASS")
+sakina-backend/src\main.rs:234:    if base.starts_with("mock://") {
+sakina-backend/src\main.rs:264:    let fake_disabled = fake_mode_disabled();
+sakina-backend/src\main.rs:276:        "fake_mode": if fake_disabled { "disabled" } else { "enabled" },
+sakina-backend/src\main.rs:300:        && snapshot["fake_mode"] == "disabled"
+sakina-backend/src\handlers\modules.rs:275:        message: "coming soon / under review".to_string(),
+sakina-backend/src\handlers\modules.rs:313:        message: "coming soon / under review".to_string(),
+sakina-backend/src\handlers\modules.rs:351:        message: "coming soon / under review".to_string(),
+sakina-backend/src\handlers\modules.rs:389:        message: "coming soon / under review".to_string(),
+sakina-backend/src\handlers\modules.rs:437:    async fn entitlement_bypass_with_free_tier_is_blocked() {
+sakina-backend/src\handlers\modules.rs:447:            .expect_err("forged tier header must not bypass JWT/session auth");
+sakina-frontend/lib\chat\chat_controller.dart:80:  static Map<String, String?> _citationToJson(Citation citation) => {
+sakina-backend/src\services\brain_controller.rs:392:        "bypass safety",
+sakina-backend/src\services\brain_controller.rs:393:        "bypass islamic safety",
+sakina-backend/src\services\embeddings.rs:80:        if self.base_url.starts_with("mock://") {
+sakina-backend/src\services\embeddings.rs:81:            return Err("mock embedding endpoints are not allowed in production paths".into());
+sakina-backend/src\services\embeddings.rs:121:        if self.base_url.starts_with("mock://") {

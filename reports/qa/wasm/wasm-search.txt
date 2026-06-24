@@ -1,0 +1,84 @@
+./reports/qa/brain/brain-algorithm-search.txt:3037:./reports/qa/evidence/brain-algorithm-search.txt:302:./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:660:            CHECK (lower(runtime_mode) IN ('wasm', 'fallback'));
+./reports/qa/brain/brain-algorithm-search.txt:6439:./reports/qa/wasm/wasm-search.txt:35:./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:660:            CHECK (lower(runtime_mode) IN ('wasm', 'fallback'));
+./reports/qa/brain/brain-algorithm-search.txt:6477:./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:660:            CHECK (lower(runtime_mode) IN ('wasm', 'fallback'));
+./reports/qa/evidence/authentic-api-provider-search.txt:4685:./reports/qa/wasm/wasm-search.txt:1:./reports/qa/evidence/authentic-api-provider-search.txt:2113:./reports/qa/wasm/wasm-search.txt:40:./sakina-backend/src/handlers/phase2.rs:180:pub async fn log_wasm_event(
+./reports/qa/evidence/authentic-api-provider-search.txt:4686:./reports/qa/wasm/wasm-search.txt:2:./reports/qa/evidence/authentic-api-provider-search.txt:2114:./reports/qa/wasm/wasm-search.txt:48:./sakina-backend/src/services/phase2.rs:941:    pub async fn log_wasm_verification(
+./reports/qa/evidence/authentic-api-provider-search.txt:4687:./reports/qa/wasm/wasm-search.txt:3:./reports/qa/evidence/authentic-api-provider-search.txt:2279:./sakina-backend/src/handlers/phase2.rs:180:pub async fn log_wasm_event(
+./reports/qa/evidence/authentic-api-provider-search.txt:4688:./reports/qa/wasm/wasm-search.txt:4:./reports/qa/evidence/authentic-api-provider-search.txt:2485:./sakina-backend/src/services/phase2.rs:941:    pub async fn log_wasm_verification(
+./reports/qa/evidence/authentic-api-provider-search.txt:4689:./reports/qa/wasm/wasm-search.txt:49:./sakina-backend/src/handlers/phase2.rs:180:pub async fn log_wasm_event(
+./reports/qa/evidence/authentic-api-provider-search.txt:4690:./reports/qa/wasm/wasm-search.txt:57:./sakina-backend/src/services/phase2.rs:941:    pub async fn log_wasm_verification(
+./reports/qa/evidence/authentic-api-provider-search.txt:4855:./sakina-backend/src/handlers/phase2.rs:180:pub async fn log_wasm_event(
+./reports/qa/evidence/authentic-api-provider-search.txt:5061:./sakina-backend/src/services/phase2.rs:941:    pub async fn log_wasm_verification(
+./reports/qa/evidence/brain-algorithm-search.txt:302:./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:660:            CHECK (lower(runtime_mode) IN ('wasm', 'fallback'));
+./reports/qa/evidence/file-inventory.txt:142:./reports/qa/wasm/SAKINA_WASM_REPORT.md
+./reports/qa/evidence/file-inventory.txt:143:./reports/qa/wasm/wasm-file-inventory.txt
+./reports/qa/evidence/file-inventory.txt:144:./reports/qa/wasm/wasm-search.txt
+./reports/qa/evidence/tool-verification.txt:17:wasm-pack=MISSING
+./reports/qa/evidence/tool-verification.txt:18:wasm-tools=MISSING
+./reports/qa/rag/rag-full-search.txt:4931:./reports/qa/evidence/authentic-api-provider-search.txt:4685:./reports/qa/wasm/wasm-search.txt:1:./reports/qa/evidence/authentic-api-provider-search.txt:2113:./reports/qa/wasm/wasm-search.txt:40:./sakina-backend/src/handlers/phase2.rs:180:pub async fn log_wasm_event(
+./reports/qa/rag/rag-full-search.txt:4932:./reports/qa/evidence/authentic-api-provider-search.txt:4686:./reports/qa/wasm/wasm-search.txt:2:./reports/qa/evidence/authentic-api-provider-search.txt:2114:./reports/qa/wasm/wasm-search.txt:48:./sakina-backend/src/services/phase2.rs:941:    pub async fn log_wasm_verification(
+./reports/qa/rag/rag-full-search.txt:4933:./reports/qa/evidence/authentic-api-provider-search.txt:4687:./reports/qa/wasm/wasm-search.txt:3:./reports/qa/evidence/authentic-api-provider-search.txt:2279:./sakina-backend/src/handlers/phase2.rs:180:pub async fn log_wasm_event(
+./reports/qa/rag/rag-full-search.txt:4934:./reports/qa/evidence/authentic-api-provider-search.txt:4688:./reports/qa/wasm/wasm-search.txt:4:./reports/qa/evidence/authentic-api-provider-search.txt:2485:./sakina-backend/src/services/phase2.rs:941:    pub async fn log_wasm_verification(
+./reports/qa/SAKINA_ULTIMATE_QA_REPORT.md:54:| wasm-pack | MISSING | not found | WASM build blocked |
+./reports/qa/SAKINA_ULTIMATE_QA_REPORT.md:55:| wasm-tools | MISSING | not found | WASM build blocked |
+./reports/qa/SAKINA_ULTIMATE_QA_REPORT.md:275:No wasm-pack/wasm-tools were available and no real .wasm build artifacts were found in this pass.
+./reports/qa/tools/tool-verification.txt:17:wasm-pack=MISSING
+./reports/qa/tools/tool-verification.txt:18:wasm-tools=MISSING
+./reports/qa/wasm/SAKINA_WASM_REPORT.md:6:- no wasm-pack
+./reports/qa/wasm/SAKINA_WASM_REPORT.md:7:- no wasm-tools
+./reports/qa/wasm/SAKINA_WASM_REPORT.md:8:- no compiled `.wasm` artifact found in this pass
+./reports/qa/wasm/wasm-file-inventory.txt:1:./reports/qa/wasm/wasm-file-inventory.txt
+./reports/qa/wasm/wasm-file-inventory.txt:2:./reports/qa/wasm/wasm-search.txt
+./sakina-backend/Cargo.lock:402: "wasm-bindgen",
+./sakina-backend/Cargo.lock:1049: "wasm-bindgen",
+./sakina-backend/Cargo.lock:1220: "wasm-bindgen",
+./sakina-backend/Cargo.lock:1777: "wasm-bindgen",
+./sakina-backend/Cargo.lock:1778: "wasm-bindgen-futures",
+./sakina-backend/Cargo.lock:2682: "wasm-bindgen",
+./sakina-backend/Cargo.lock:2743:name = "wasm-bindgen"
+./sakina-backend/Cargo.lock:2751: "wasm-bindgen-macro",
+./sakina-backend/Cargo.lock:2752: "wasm-bindgen-shared",
+./sakina-backend/Cargo.lock:2756:name = "wasm-bindgen-futures"
+./sakina-backend/Cargo.lock:2762: "wasm-bindgen",
+./sakina-backend/Cargo.lock:2766:name = "wasm-bindgen-macro"
+./sakina-backend/Cargo.lock:2772: "wasm-bindgen-macro-support",
+./sakina-backend/Cargo.lock:2776:name = "wasm-bindgen-macro-support"
+./sakina-backend/Cargo.lock:2785: "wasm-bindgen-shared",
+./sakina-backend/Cargo.lock:2789:name = "wasm-bindgen-shared"
+./sakina-backend/Cargo.lock:2798:name = "wasm-encoder"
+./sakina-backend/Cargo.lock:2804: "wasmparser",
+./sakina-backend/Cargo.lock:2808:name = "wasm-metadata"
+./sakina-backend/Cargo.lock:2815: "wasm-encoder",
+./sakina-backend/Cargo.lock:2816: "wasmparser",
+./sakina-backend/Cargo.lock:2820:name = "wasmparser"
+./sakina-backend/Cargo.lock:2838: "wasm-bindgen",
+./sakina-backend/Cargo.lock:2848: "wasm-bindgen",
+./sakina-backend/Cargo.lock:3123: "wasm-metadata",
+./sakina-backend/Cargo.lock:3156: "wasm-encoder",
+./sakina-backend/Cargo.lock:3157: "wasm-metadata",
+./sakina-backend/Cargo.lock:3158: "wasmparser",
+./sakina-backend/Cargo.lock:3177: "wasmparser",
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:507:CREATE TABLE IF NOT EXISTS sakina_ai.wasm_verification_events (
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:655:        WHERE conname = 'chk_wasm_verification_events_runtime_mode'
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:656:          AND conrelid = 'sakina_ai.wasm_verification_events'::regclass
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:658:        ALTER TABLE sakina_ai.wasm_verification_events
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:659:            ADD CONSTRAINT chk_wasm_verification_events_runtime_mode
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:660:            CHECK (lower(runtime_mode) IN ('wasm', 'fallback'));
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:678:CREATE INDEX IF NOT EXISTS idx_wasm_verification_events_request
+./sakina-backend/db/20260529_phase3_full_product_schema_revision2.sql:679:    ON sakina_ai.wasm_verification_events (request_id, created_at DESC);
+./sakina-backend/src/handlers/phase2.rs:180:pub async fn log_wasm_event(
+./sakina-backend/src/handlers/phase2.rs:184:    let id = repo.log_wasm_verification(body.into_inner()).await?;
+./sakina-backend/src/handlers/phase2.rs:692:                .route("/safety/wasm-events", web::post().to(log_wasm_event))
+./sakina-backend/src/handlers/phase2.rs:941:        let wasm_resp = test::call_service(
+./sakina-backend/src/handlers/phase2.rs:944:                .uri("/safety/wasm-events")
+./sakina-backend/src/handlers/phase2.rs:957:        assert_eq!(wasm_resp.status(), StatusCode::CREATED);
+./sakina-backend/src/main.rs:475:                                "/wasm-events",
+./sakina-backend/src/main.rs:476:                                web::post().to(handlers::phase2::log_wasm_event),
+./sakina-backend/src/services/phase2.rs:941:    pub async fn log_wasm_verification(
+./sakina-backend/src/services/phase2.rs:947:            INSERT INTO sakina_ai.wasm_verification_events (
+./sakina-backend/src/services/phase2.rs:973:        .map_err(|_| ApiError::internal("failed to log wasm verification event"))?;
+./sakina-local-qa-check.sh:21:mkdir -p reports/qa/wasm
+./sakina-local-qa-check.sh:143:find . -type f \( -name "*.wasm" -o -name "*.wat" -o -name "*wasm*" \) \
+./sakina-local-qa-check.sh:145:  | sort > reports/qa/wasm/wasm-file-inventory.txt
+./sakina-local-qa-check.sh:147:grep -RInE "wasm|wasmtime|wasmer|webassembly|WASI|sandbox" . \
+./sakina-local-qa-check.sh:154:  > reports/qa/wasm/wasm-search.txt || true

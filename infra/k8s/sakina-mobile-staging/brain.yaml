@@ -1,0 +1,134 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sakina-brain
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: brain
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  selector:
+    app: sakina-brain
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakina-brain
+  namespace: sakina-mobile-staging
+  labels:
+    app.kubernetes.io/name: brain
+    app.kubernetes.io/part-of: sakina-mobile
+    app.kubernetes.io/environment: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakina-brain
+  template:
+    metadata:
+      labels:
+        app: sakina-brain
+        app.kubernetes.io/name: brain
+        app.kubernetes.io/part-of: sakina-mobile
+        app.kubernetes.io/environment: staging
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: brain
+          image: ghcr.io/serverax/sakina-backend:qa-security-hardening
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SAKINA_ENV
+              value: staging
+            - name: SERVICE_NAME
+              value: "sakina-brain"
+            - name: SAKINA_RULES_ENGINE_URL
+              value: "http://sakina-rules-engine:8080"
+            - name: SAKINA_LLM_ENABLED
+              value: "false"
+            - name: QDRANT_URL
+              value: "http://sakina-qdrant:6333"
+            - name: POSTGRES_HOST
+              value: sakina-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: jwt-secret
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sakina-staging-secrets
+                  key: encryption-key
+            - name: SAKINA_REDIS_URL
+              value: redis://sakina-redis:6379
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

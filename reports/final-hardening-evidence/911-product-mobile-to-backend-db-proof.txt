@@ -1,0 +1,47 @@
+sakina-frontend/lib/screens/chat_screen.dart:109:    final response = await widget.api.createConversation(
+sakina-frontend/lib/screens/chat_screen.dart:131:      final stored = await widget.api.addConversationMessage(
+sakina-frontend/lib/services/auth_service.dart:45:      final current = await _api.currentUser();
+sakina-frontend/lib/services/auth_service.dart:55:          final refreshed = await _api.refreshWithToken(
+sakina-frontend/lib/services/auth_service.dart:73:    final response = await _api.registerWithPassword(
+sakina-frontend/lib/services/auth_service.dart:85:    final response = await _api.loginWithPassword(
+sakina-frontend/lib/services/auth_service.dart:100:  Future<void> logout() async {
+sakina-frontend/lib/services/auth_service.dart:104:      await _api.logout();
+sakina-frontend/lib/services/module_service.dart:358:      headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:25:  Future<PasswordAuthResponse> registerWithPassword({
+sakina-frontend/lib/services/api_service.dart:48:  Future<PasswordAuthResponse> loginWithPassword({
+sakina-frontend/lib/services/api_service.dart:66:  Future<PasswordAuthResponse> refreshWithToken({
+sakina-frontend/lib/services/api_service.dart:82:  Future<UserSummaryResponse> currentUser() async {
+sakina-frontend/lib/services/api_service.dart:92:  Future<void> logout() async {
+sakina-frontend/lib/services/api_service.dart:237:  Future<ProfileResponse> upsertProfile(
+sakina-frontend/lib/services/api_service.dart:407:  Future<CreateConversationResponse> createConversation({
+sakina-frontend/lib/services/api_service.dart:427:  Future<AddMessageResponse> addConversationMessage({
+sakina-frontend/lib/services/api_service.dart:718:  Future<MemoryWriteResponse> writeMemory(
+sakina-frontend/lib/services/api_service.dart:734:  Future<MemoryEntryResponse> readMemory({
+sakina-frontend/lib/services/api_service.dart:785:          multipart.headers['Authorization'] = 'Bearer $token';
+sakina-frontend/lib/services/api_service.dart:814:      headers['Authorization'] = 'Bearer $token';
+Unauthenticated auth/me status=401
+{
+  "profile_id": "0bbf572b-85e3-403f-8ed6-aef361427df5",
+  "user_id": "2d63a1bf-8820-43d2-bef6-9c78008fd2a6"
+}
+Cross-user profile update status=401
+{
+  "conversation_id": "fa0099a2-5b4e-46d7-91dd-605171203f05",
+  "user_message_id": "ae9099f0-888d-4259-bc2f-51ef5ad98494",
+  "assistant_message_id": "cd454607-3dd4-4e98-bdd5-bbd86796cf2b",
+  "response": "I found verified sources related to Quran 2:153.",
+  "trace_id": "092a74e1-60db-4b3b-9386-d584273c6105"
+}
+Cross-user conversation read status=404
+{
+  "stored": true,
+  "allowed": true,
+  "sensitivity_level": "safe",
+  "reason": "memory write allowed",
+  "memory_id": "29de1614-4d90-494b-97da-0b3bfb229fd8"
+}
+Cross-user memory read status=401
+DB profile=1 conversations=1 messages=2 memories=1 brain_traces=1 memory_audits=2
+Logout status=200
+Revoked token auth/me status=401
+MOBILE_BACKEND_DB_E2E_OK Flutter service contracts, real HTTP routes, auth/RLS guards, backend handlers, DB persistence, Brain trace, memory audit, frontend model fields, and negative isolation checks were proven.

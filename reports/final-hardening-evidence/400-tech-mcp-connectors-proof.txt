@@ -1,0 +1,46 @@
+   Compiling sakina-backend v1.0.0 (/mnt/f/SakinaAL/sakina-backend)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 19.44s
+     Running unittests src/lib.rs (/tmp/sakina-cargo-target/debug/deps/sakina_backend-f885c977b8524520)
+
+running 1 test
+test services::mcp_registry::tests::registry_is_disabled_by_default ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 88 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (/tmp/sakina-cargo-target/debug/deps/sakina_api-6aa47e90706b07e0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running unittests src/bin/ingest.rs (/tmp/sakina-cargo-target/debug/deps/sakina_ingest-0718a038832e02ca)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/islamic_source_registry.rs (/tmp/sakina-cargo-target/debug/deps/islamic_source_registry-1b191aed1d09e36f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/offline_islamic_assets.rs (/tmp/sakina-cargo-target/debug/deps/offline_islamic_assets-ed3376062514343f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase21_iman_journey_contract.rs (/tmp/sakina-cargo-target/debug/deps/phase21_iman_journey_contract-646d921fa6b8faf8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+19:        let enabled = std::env::var("SAKINA_MCP_ENABLED")
+79:                .any(|connector| connector.enabled && connector.name == name && connector.endpoint.is_some())
+84:            return Err("connector disabled by configuration".to_string());
+87:            "connector {name} has no production executor wired; failing closed"
+97:    fn registry_is_disabled_by_default() {
+98:        std::env::remove_var("SAKINA_MCP_ENABLED");
+MCP_CONNECTORS_OK MCP connectors are hidden and fail closed; not accepted as complete/live.

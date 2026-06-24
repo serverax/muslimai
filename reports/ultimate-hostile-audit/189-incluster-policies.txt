@@ -1,0 +1,106 @@
+# TASK 4: Policies
+## total count
+ total_policies 
+----------------
+             86
+(1 row)
+
+## per schema
+ schemaname | count 
+------------+-------
+ outbox     |     1
+ public     |    29
+ sakina_ai  |    56
+(3 rows)
+
+## detail (first 100)
+ schemaname |         tablename         |                      policyname                      |  cmd   
+------------+---------------------------+------------------------------------------------------+--------
+ outbox     | events                    | rls_outbox_events_service                            | ALL
+ public     | admin_audit_events        | rls_public_admin_audit_events_service                | ALL
+ public     | audit_logs                | rls_public_audit_logs_service                        | ALL
+ public     | auth_identities           | rls_public_auth_identities_service                   | ALL
+ public     | auth_identities           | rls_public_auth_identities_user_id                   | ALL
+ public     | auth_refresh_tokens       | rls_public_auth_refresh_tokens_user_id               | ALL
+ public     | auth_refresh_tokens       | rls_public_auth_refresh_tokens_service               | ALL
+ public     | auth_sessions             | rls_public_auth_sessions_user_id                     | ALL
+ public     | auth_sessions             | rls_public_auth_sessions_service                     | ALL
+ public     | chat_messages             | rls_public_chat_messages_service                     | ALL
+ public     | chat_threads              | rls_public_chat_threads_user_id                      | ALL
+ public     | chat_threads              | rls_public_chat_threads_service                      | ALL
+ public     | module_lessons            | rls_public_module_lessons_service                    | ALL
+ public     | modules                   | rls_public_modules_service                           | ALL
+ public     | notifications             | rls_public_notifications_user_id                     | ALL
+ public     | notifications             | rls_public_notifications_service                     | ALL
+ public     | password_credentials      | rls_public_password_credentials_self                 | ALL
+ public     | password_credentials      | rls_public_password_credentials_user_id              | ALL
+ public     | password_credentials      | rls_public_password_credentials_service              | ALL
+ public     | rag_chunks                | rls_public_rag_chunks_service                        | ALL
+ public     | rag_documents             | rls_public_rag_documents_service                     | ALL
+ public     | rag_embeddings            | rls_public_rag_embeddings_service                    | ALL
+ public     | sync_state                | rls_public_sync_state_service                        | ALL
+ public     | sync_state                | rls_public_sync_state_user_id                        | ALL
+ public     | user_module_progress      | rls_public_user_module_progress_user_id              | ALL
+ public     | user_module_progress      | rls_public_user_module_progress_service              | ALL
+ public     | user_profiles             | rls_public_user_profiles_user_id                     | ALL
+ public     | user_profiles             | rls_public_user_profiles_service                     | ALL
+ public     | users                     | rls_public_users_service                             | ALL
+ public     | users                     | rls_public_users_self                                | ALL
+ sakina_ai  | agent_feedback            | rls_sakina_agent_feedback_service                    | ALL
+ sakina_ai  | agent_feedback            | rls_sakina_agent_feedback_user                       | ALL
+ sakina_ai  | agent_feedback            | rls_sakina_ai_agent_feedback_service                 | ALL
+ sakina_ai  | agent_feedback            | rls_sakina_ai_agent_feedback_user_id                 | ALL
+ sakina_ai  | anonymous_learning_events | rls_sakina_ai_anonymous_learning_events_service      | ALL
+ sakina_ai  | ask_shaikh_answers        | rls_sakina_ai_ask_shaikh_answers_service             | ALL
+ sakina_ai  | ask_shaikh_answers        | rls_sakina_ai_ask_shaikh_answers_user                | ALL
+ sakina_ai  | ask_shaikh_answers        | rls_sakina_ai_ask_shaikh_answers_user_id             | ALL
+ sakina_ai  | brain_cache_metadata      | rls_sakina_ai_brain_cache_metadata_user_id           | ALL
+ sakina_ai  | brain_cache_metadata      | rls_sakina_ai_brain_cache_metadata_service           | ALL
+ sakina_ai  | brain_decision_traces     | rls_sakina_ai_brain_decision_traces_service          | ALL
+ sakina_ai  | brain_decision_traces     | rls_sakina_ai_brain_decision_traces_user_id_text     | ALL
+ sakina_ai  | brain_evaluation_results  | rls_sakina_ai_brain_evaluation_results_service       | ALL
+ sakina_ai  | brain_evaluation_results  | rls_sakina_ai_brain_evaluation_results_user_id       | ALL
+ sakina_ai  | brain_memory_events       | rls_sakina_ai_brain_memory_events_service            | ALL
+ sakina_ai  | brain_memory_events       | rls_sakina_ai_brain_memory_events_user_id            | ALL
+ sakina_ai  | conversations             | rls_sakina_ai_conversations_user_id                  | ALL
+ sakina_ai  | conversations             | rls_sakina_ai_conversations_service                  | ALL
+ sakina_ai  | islamic_chunks            | rls_sakina_ai_islamic_chunks_verified_read           | SELECT
+ sakina_ai  | islamic_chunks            | rls_sakina_ai_islamic_chunks_service                 | ALL
+ sakina_ai  | islamic_documents         | rls_sakina_ai_islamic_documents_verified_read        | SELECT
+ sakina_ai  | islamic_documents         | rls_sakina_ai_islamic_documents_service              | ALL
+ sakina_ai  | islamic_sources           | rls_sakina_ai_islamic_sources_verified_read          | SELECT
+ sakina_ai  | islamic_sources           | rls_sakina_ai_islamic_sources_service                | ALL
+ sakina_ai  | knowledge_graph_edges     | rls_sakina_ai_knowledge_graph_edges_service          | ALL
+ sakina_ai  | knowledge_graph_edges     | rls_sakina_ai_knowledge_graph_edges_verified_read    | SELECT
+ sakina_ai  | knowledge_graph_entities  | rls_sakina_ai_knowledge_graph_entities_verified_read | SELECT
+ sakina_ai  | knowledge_graph_entities  | rls_sakina_ai_knowledge_graph_entities_service       | ALL
+ sakina_ai  | local_sunni_topics        | rls_sakina_ai_local_sunni_topics_service             | ALL
+ sakina_ai  | messages                  | rls_sakina_ai_messages_user_id                       | ALL
+ sakina_ai  | messages                  | rls_sakina_ai_messages_service                       | ALL
+ sakina_ai  | messages                  | rls_sakina_messages_conversation_owner               | ALL
+ sakina_ai  | mobile_memory_sync        | rls_sakina_ai_mobile_memory_sync_service             | ALL
+ sakina_ai  | mobile_memory_sync        | rls_sakina_ai_mobile_memory_sync_user                | ALL
+ sakina_ai  | mobile_memory_sync        | rls_sakina_ai_mobile_memory_sync_user_id             | ALL
+ sakina_ai  | multimodal_assets         | rls_sakina_ai_multimodal_assets_service              | ALL
+ sakina_ai  | multimodal_assets         | rls_sakina_ai_multimodal_assets_user_id              | ALL
+ sakina_ai  | scholar_review_queue      | rls_sakina_ai_scholar_review_queue_service           | ALL
+ sakina_ai  | user_habit_signals        | rls_sakina_ai_user_habit_signals_user_id             | ALL
+ sakina_ai  | user_habit_signals        | rls_sakina_ai_user_habit_signals_user                | ALL
+ sakina_ai  | user_habit_signals        | rls_sakina_ai_user_habit_signals_service             | ALL
+ sakina_ai  | user_interest_signals     | rls_sakina_ai_user_interest_signals_user             | ALL
+ sakina_ai  | user_interest_signals     | rls_sakina_ai_user_interest_signals_user_id          | ALL
+ sakina_ai  | user_interest_signals     | rls_sakina_ai_user_interest_signals_service          | ALL
+ sakina_ai  | user_learning_preferences | rls_sakina_ai_user_learning_preferences_service      | ALL
+ sakina_ai  | user_learning_preferences | rls_sakina_ai_user_learning_preferences_user         | ALL
+ sakina_ai  | user_learning_preferences | rls_sakina_ai_user_learning_preferences_user_id      | ALL
+ sakina_ai  | user_memory_entries       | rls_sakina_ai_user_memory_entries_service            | ALL
+ sakina_ai  | user_memory_entries       | rls_sakina_ai_user_memory_entries_user_id            | ALL
+ sakina_ai  | user_memory_permissions   | rls_sakina_ai_user_memory_permissions_user           | ALL
+ sakina_ai  | user_memory_permissions   | rls_sakina_ai_user_memory_permissions_service        | ALL
+ sakina_ai  | user_memory_permissions   | rls_sakina_ai_user_memory_permissions_user_id        | ALL
+ sakina_ai  | waitlist                  | rls_sakina_ai_waitlist_service                       | ALL
+ sakina_ai  | workspaces                | rls_sakina_ai_workspaces_user_id                     | ALL
+ sakina_ai  | workspaces                | rls_sakina_ai_workspaces_service                     | ALL
+ sakina_ai  | workspaces                | rls_sakina_ai_workspaces_user                        | ALL
+(86 rows)
+
