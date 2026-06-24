@@ -27,8 +27,8 @@ services:
 
   ollama:
     image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
+    # No host port bind — avoids conflict with other local Ollama on :11434.
+    # llm-gateway reaches ollama via the compose network.
 
   llm-gateway:
     image: sakina-backend:latest
