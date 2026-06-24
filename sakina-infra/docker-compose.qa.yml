@@ -51,6 +51,7 @@ services:
       QDRANT_URL: http://qdrant:6333
       SAKINA_REDIS_URL: redis://redis:6379
       SAKINA_ENV: local
+      SAKINA_SEED_LOCAL_ADMIN: "true"
       # PHASE 6B: safe explicit local-test CORS allowlist (NO wildcard).
       # Override from host env to add the LAN origin, e.g.:
       #   CORS_ALLOWED_ORIGINS="http://localhost:8090,http://192.168.0.51:8090" docker compose ... up -d

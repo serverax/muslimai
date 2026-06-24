@@ -1,4 +1,4 @@
--- PHASE 6H: mobile app feature flags — owner/admin controlled gates.
+-- PHASE 6H/6I: mobile app feature flags — idempotent on fresh and existing DB.
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.app_feature_flags (
@@ -29,12 +29,30 @@ CREATE INDEX IF NOT EXISTS idx_app_feature_flags_order
 
 ALTER TABLE public.app_feature_flags ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY app_feature_flags_read ON public.app_feature_flags
-    FOR SELECT USING (true);
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'app_feature_flags'
+          AND policyname = 'app_feature_flags_read'
+    ) THEN
+        CREATE POLICY app_feature_flags_read ON public.app_feature_flags
+            FOR SELECT USING (true);
+    END IF;
+END $$;
 
-CREATE POLICY app_feature_flags_service ON public.app_feature_flags
-    FOR ALL USING (sakina_ai.rls_service_role())
-    WITH CHECK (sakina_ai.rls_service_role());
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'app_feature_flags'
+          AND policyname = 'app_feature_flags_service'
+    ) THEN
+        CREATE POLICY app_feature_flags_service ON public.app_feature_flags
+            FOR ALL USING (sakina_ai.rls_service_role())
+            WITH CHECK (sakina_ai.rls_service_role());
+    END IF;
+END $$;
 
 INSERT INTO public.app_feature_flags (
     feature_key, title_en, title_ar, description_en, description_ar,

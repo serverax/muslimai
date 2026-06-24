@@ -70,10 +70,14 @@ Use this checklist before any real store submission.
 
 ## Owner local test
 
-```bash
-./scripts/sakina-owner-local-test.sh
-# or
+```powershell
 pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk
 ```
+
+```bash
+BUILD_APK=1 ./scripts/sakina-owner-local-test.sh
+```
+
+**Local admin (QA only):** `owner@sakina.local` / `SakinaLocalOwner2026!` — seeded when `SAKINA_SEED_LOCAL_ADMIN=true`.
 
 Web at `localhost:8090` is **diagnostics only**. The product is the **Android APK**.

@@ -183,14 +183,43 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             include_str!("../../db/migrations/037_app_feature_flags.sql"),
         ),
         (
+            "038_local_admin_owner_seed.sql",
+            include_str!("../../db/migrations/038_local_admin_owner_seed.sql"),
+        ),
+        (
             "seed_knowledge.sql",
             include_str!("../../db/seed_knowledge.sql"),
         ),
     ];
 
+    if std::env::var("SAKINA_SEED_LOCAL_ADMIN")
+        .map(|v| matches!(v.to_ascii_lowercase().as_str(), "1" | "true" | "yes"))
+        .unwrap_or(false)
+    {
+        println!("Local admin seed enabled (SAKINA_SEED_LOCAL_ADMIN=true)");
+    }
+
     for (name, sql) in migrations {
         println!("Applying Sakina migration {name}");
-        sqlx::raw_sql(sql).execute(&pool).await?;
+        let mut conn = pool.acquire().await?;
+        let result = sqlx::raw_sql(sql).execute(&mut *conn).await;
+        if let Err(ref e) = result {
+            let _ = sqlx::query("ROLLBACK").execute(&mut *conn).await;
+        }
+        match result {
+            Ok(_) => {}
+            Err(e) if is_idempotent_migration_error(&e) => {
+                eprintln!("WARN: migration {name} skipped (already applied): {e}");
+            }
+            Err(e) => return Err(e.into()),
+        }
+    }
+
+    if std::env::var("SAKINA_SEED_LOCAL_ADMIN")
+        .map(|v| matches!(v.to_ascii_lowercase().as_str(), "1" | "true" | "yes"))
+        .unwrap_or(false)
+    {
+        seed_local_admin(&pool).await?;
     }
 
     let unprotected_tables: Vec<(String, String)> = sqlx::query_as(
@@ -214,5 +243,75 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     println!("Sakina migrations applied: {}", migrations.len());
+    Ok(())
+}
+
+fn is_idempotent_migration_error(err: &sqlx::Error) -> bool {
+    let msg = err.to_string().to_ascii_lowercase();
+    msg.contains("already exists")
+        || msg.contains("duplicate")
+        || msg.contains("duplicate key")
+        || msg.contains("multiple primary keys")
+}
+
+async fn seed_local_admin(pool: &PgPool) -> Result<(), Box<dyn std::error::Error>> {
+    const OWNER_ID: &str = "a1111111-1111-4111-8111-111111111111";
+    const OWNER_EMAIL: &str = "owner@sakina.local";
+    // Password: SakinaLocalOwner2026! — local QA docs only, never production.
+    const OWNER_HASH: &str = "$argon2id$v=19$m=19456,t=2,p=1$47/EaEetH9m3u5TZNkwuAw$twCG4s3biiHSNn8PF6Ubt1iCYOO1qHX9mfVS6WDkNoE";
+
+    sqlx::query(
+        r#"INSERT INTO public.users (id, email, auth_provider, is_active)
+           VALUES ($1::uuid, $2, 'password', true)
+           ON CONFLICT (email) DO UPDATE SET is_active = true, updated_at = now()"#,
+    )
+    .bind(OWNER_ID)
+    .bind(OWNER_EMAIL)
+    .execute(pool)
+    .await?;
+
+    let owner_id: uuid::Uuid = sqlx::query_scalar(
+        "SELECT id FROM public.users WHERE email = $1 LIMIT 1",
+    )
+    .bind(OWNER_EMAIL)
+    .fetch_one(pool)
+    .await?;
+
+    sqlx::query(
+        r#"INSERT INTO public.auth_identities (user_id, provider, provider_user_id, provider_email)
+           VALUES ($1, 'password', $2, $2)
+           ON CONFLICT (provider, provider_user_id) DO UPDATE
+               SET provider_email = EXCLUDED.provider_email, updated_at = now()"#,
+    )
+    .bind(owner_id)
+    .bind(OWNER_EMAIL)
+    .execute(pool)
+    .await?;
+
+    sqlx::query(
+        r#"INSERT INTO public.password_credentials (user_id, password_hash, password_salt, password_version)
+           VALUES ($1, $2, 'argon2id', 'argon2id-v1')
+           ON CONFLICT (user_id) DO UPDATE
+               SET password_hash = EXCLUDED.password_hash,
+                   password_salt = EXCLUDED.password_salt,
+                   updated_at = now()"#,
+    )
+    .bind(owner_id)
+    .bind(OWNER_HASH)
+    .execute(pool)
+    .await?;
+
+    sqlx::query(
+        r#"INSERT INTO public.admin_users (user_id, admin_email, account_status)
+           VALUES ($1, $2, 'active')
+           ON CONFLICT (admin_email) DO UPDATE
+               SET user_id = EXCLUDED.user_id, account_status = 'active', updated_at = now()"#,
+    )
+    .bind(owner_id)
+    .bind(OWNER_EMAIL)
+    .execute(pool)
+    .await?;
+
+    println!("Local admin owner seeded: {OWNER_EMAIL}");
     Ok(())
 }

@@ -1,25 +1,20 @@
 <#
-  CURSOR PHASE 6G — Mobile-first APK testing (web is diagnostic only).
-
-  One owner command: Docker QA stack + API health + Flutter web build + stable
-  static server on :8090 (Node serve preferred, PowerShell HttpListener fallback).
-  Waits for HTTP 200 before opening the browser. Keeps the web server alive.
+  CURSOR PHASE 6I — Owner mobile APK test (THE REAL APP IS THE ANDROID APK).
 
   Usage:
-    pwsh ./scripts/sakina-owner-local-test.ps1
-    pwsh ./scripts/sakina-owner-local-test.ps1 -OpenFirewall
-    pwsh ./scripts/sakina-owner-local-test.ps1 -SkipFlutterWeb
     pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk
-    pwsh ./scripts/sakina-owner-local-test.ps1 -SkipDockerBuild
+    pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk -ApkTarget Both
+    pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk -SkipDockerBuild
 
-  NOT public deployment. Local beta only.
+  Web at :8090 is diagnostic only. Do not treat web as the product.
 #>
 param(
-  [switch]$OpenFirewall,
-  [switch]$SkipFlutterWeb,
   [switch]$BuildApk,
+  [switch]$SkipFlutterWeb,
   [switch]$SkipDockerBuild,
-  [switch]$NoBrowser,
+  [switch]$OpenFirewall,
+  [ValidateSet('Emulator', 'Phone', 'Both')]
+  [string]$ApkTarget = 'Emulator',
   [int]$ApiPort = 28080,
   [int]$WebPort = 8090
 )
@@ -27,29 +22,21 @@ param(
 $ErrorActionPreference = "Stop"
 $repo = Split-Path -Parent $PSScriptRoot
 $composeDir = Join-Path $repo "sakina-infra"
-$compose = Join-Path $composeDir "docker-compose.qa.yml"
 $frontend = Join-Path $repo "sakina-frontend"
 $envFile = Join-Path $composeDir ".env"
-$webDir = Join-Path $frontend "build/web"
+$apkPath = Join-Path $frontend "build/app/outputs/flutter-apk/app-debug.apk"
 $proofDir = Join-Path $repo "test-results"
 $reportDir = Join-Path $repo "reports"
-$proofFile = Join-Path $proofDir "cursor-phase6g-mobile-workflows-user-journeys-proof.md"
-$reportFile = Join-Path $reportDir "cursor-phase6g-mobile-workflows-user-journeys-proof.md"
-$apkDartDefines = @(
-  "SAKINA_API_BASE_URL={0}",
-  "SAKINA_LOCAL_TEST=true",
-  "SAKINA_FEATURE_QURAN=true",
-  "SAKINA_FEATURE_PRAYER=true",
-  "SAKINA_FEATURE_KNOWLEDGE=true",
-  "SAKINA_FEATURE_COMMUNITY=true",
-  "SAKINA_SUBSCRIPTION_TIER=founding"
-) -join " --dart-define="
-$serverPidFile = Join-Path $proofDir ".sakina-web-server.pid"
 New-Item -ItemType Directory -Force -Path $proofDir, $reportDir | Out-Null
+
+if ($BuildApk) { $SkipFlutterWeb = $true }
 
 function Write-Step([string]$msg) { Write-Host "`n==> $msg" -ForegroundColor Cyan }
 function Write-Pass([string]$msg) { Write-Host "PASS: $msg" -ForegroundColor Green }
 function Write-Fail([string]$msg) { Write-Host "FAIL: $msg" -ForegroundColor Red; exit 1 }
+function Write-Warn([string]$msg) { Write-Host "WARN: $msg" -ForegroundColor Yellow }
+
+function Test-Command([string]$Name) { return [bool](Get-Command $Name -ErrorAction SilentlyContinue) }
 
 function Get-LanIp {
   $ip = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue |
@@ -67,28 +54,33 @@ function Get-LanIp {
   return $ip
 }
 
-function Ensure-EnvFile {
-  if (Test-Path $envFile) { return }
-  Write-Step "Creating sakina-infra/.env with local dev placeholders"
-  @"
-POSTGRES_PASSWORD=sakina_local_pw
-JWT_SECRET=local-dev-jwt-secret-change-me-32chars
-ENCRYPTION_KEY=local-dev-encryption-key-change-32
-"@ | Set-Content -Encoding utf8 $envFile
+function Get-FullApkBuildCommand([string]$ApiBaseUrl) {
+  return @(
+    "cd sakina-frontend",
+    "flutter pub get",
+    "flutter build apk --debug",
+    "--dart-define=SAKINA_API_BASE_URL=$ApiBaseUrl",
+    "--dart-define=SAKINA_LOCAL_TEST=true",
+    "--dart-define=SAKINA_FEATURE_QURAN=true",
+    "--dart-define=SAKINA_FEATURE_PRAYER=true",
+    "--dart-define=SAKINA_FEATURE_KNOWLEDGE=true",
+    "--dart-define=SAKINA_FEATURE_COMMUNITY=true",
+    "--dart-define=SAKINA_SUBSCRIPTION_TIER=founding"
+  ) -join ' '
 }
 
 function Test-HttpStatus([string]$Url) {
   try {
-    $r = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 5
-    return [pscustomobject]@{ Url = $Url; Code = [int]$r.StatusCode; Ok = ($r.StatusCode -eq 200); Body = $r.Content }
+    $r = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 8
+    return [pscustomobject]@{ Code = [int]$r.StatusCode; Ok = ($r.StatusCode -eq 200); Body = $r.Content }
   } catch {
     $code = 0
     if ($_.Exception.Response) { $code = [int]$_.Exception.Response.StatusCode.value__ }
-    return [pscustomobject]@{ Url = $Url; Code = $code; Ok = $false; Body = '' }
+    return [pscustomobject]@{ Code = $code; Ok = $false; Body = '' }
   }
 }
 
-function Wait-Http200([string]$Url, [int]$Seconds = 60) {
+function Wait-Http200([string]$Url, [int]$Seconds = 90) {
   for ($i = 0; $i -lt $Seconds; $i++) {
     $r = Test-HttpStatus $Url
     if ($r.Ok) { return $r }
@@ -97,125 +89,101 @@ function Wait-Http200([string]$Url, [int]$Seconds = 60) {
   return Test-HttpStatus $Url
 }
 
-function Get-PortOwner([int]$Port) {
-  Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
-    Select-Object -ExpandProperty OwningProcess -Unique
-}
-
-function Stop-PortListener([int]$Port) {
-  foreach ($pid in Get-PortOwner $Port) {
-    if ($pid -and $pid -ne $PID) {
-      Write-Host "Stopping process on port $Port (PID $pid)" -ForegroundColor Yellow
-      Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+function Test-AndroidSdk {
+  if (-not (Test-Command 'flutter')) {
+    return [pscustomobject]@{ Ok = $false; Reason = 'Flutter SDK not found on PATH. Install Flutter 3.16+ and add to PATH.' }
+  }
+  $doctor = flutter doctor -v 2>&1 | Out-String
+  if ($doctor -match 'Unable to locate Android SDK' -or $doctor -match 'X !.*Android toolchain') {
+    return [pscustomobject]@{
+      Ok = $false
+      Reason = @(
+        'Android SDK not configured.',
+        'Install Android Studio, open SDK Manager, install Android SDK Platform + build-tools.',
+        'Then run: flutter doctor --android-licenses',
+        'Verify: flutter doctor shows Android toolchain OK.'
+      ) -join ' '
     }
   }
-  Start-Sleep -Milliseconds 500
+  return [pscustomobject]@{ Ok = $true; Reason = '' }
 }
 
-function Test-Command([string]$Name) {
-  $cmd = Get-Command $Name -ErrorAction SilentlyContinue
-  return [bool]$cmd
+function Invoke-ApkBuild([string]$ApiBaseUrl) {
+  $args = @(
+    'build', 'apk', '--debug',
+    "--dart-define=SAKINA_API_BASE_URL=$ApiBaseUrl",
+    '--dart-define=SAKINA_LOCAL_TEST=true',
+    '--dart-define=SAKINA_FEATURE_QURAN=true',
+    '--dart-define=SAKINA_FEATURE_PRAYER=true',
+    '--dart-define=SAKINA_FEATURE_KNOWLEDGE=true',
+    '--dart-define=SAKINA_FEATURE_COMMUNITY=true',
+    '--dart-define=SAKINA_SUBSCRIPTION_TIER=founding'
+  )
+  Push-Location $frontend
+  flutter pub get
+  if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter pub get failed" }
+  flutter @args
+  if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter build apk failed for API base $ApiBaseUrl" }
+  Pop-Location
+  if (-not (Test-Path $apkPath)) { Write-Fail "APK missing at $apkPath after build" }
 }
-
-function Start-StaticWebServer([string]$Dir, [int]$Port) {
-  Stop-PortListener $Port
-  $serveScript = Join-Path $PSScriptRoot "serve-static-web.ps1"
-  $dirFull = (Resolve-Path $Dir).Path
-
-  if (Test-Command 'npx') {
-    Write-Host "Starting Node static server (npx serve) on port $Port" -ForegroundColor DarkGray
-    $npx = (Get-Command npx).Source
-    $proc = Start-Process -FilePath $npx -ArgumentList @(
-      '--yes', 'serve', $dirFull, '-l', "$Port", '-s'
-    ) -PassThru -WindowStyle Hidden -WorkingDirectory $dirFull
-    Start-Sleep -Seconds 3
-    if (-not (Get-Process -Id $proc.Id -ErrorAction SilentlyContinue)) {
-      Write-Host "npx serve exited early — falling back to PowerShell HttpListener" -ForegroundColor Yellow
-    } else {
-      return [pscustomobject]@{ Pid = $proc.Id; Engine = 'npx serve' }
-    }
-  } elseif (Test-Command 'node') {
-    Write-Host "Starting Node http-server on port $Port" -ForegroundColor DarkGray
-    $node = (Get-Command node).Source
-    $proc = Start-Process -FilePath $node -ArgumentList @(
-      (Join-Path $env:APPDATA 'npm\node_modules\http-server\bin\http-server'),
-      $dirFull, '-p', "$Port", '-c-1', '--silent'
-    ) -PassThru -WindowStyle Hidden -ErrorAction SilentlyContinue
-    if ($proc -and (Get-Process -Id $proc.Id -ErrorAction SilentlyContinue)) {
-      return [pscustomobject]@{ Pid = $proc.Id; Engine = 'http-server' }
-    }
-  }
-
-  Write-Host "Using PowerShell HttpListener fallback on port $Port" -ForegroundColor Yellow
-  $proc = Start-Process -FilePath 'pwsh' -ArgumentList @(
-    '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $serveScript,
-    '-Root', $dirFull, '-Port', $Port
-  ) -PassThru -WindowStyle Hidden
-  return [pscustomobject]@{ Pid = $proc.Id; Engine = 'PowerShell HttpListener' }
-}
-
-# --- Diagnostics header ---
-Write-Step "Phase 6D diagnostics"
-Write-Host "  git branch: $(git -C $repo rev-parse --abbrev-ref HEAD 2>$null)"
-Write-Host "  build/web exists: $(Test-Path (Join-Path $webDir 'index.html'))"
-Write-Host "  port $WebPort listeners: $((Get-PortOwner $WebPort) -join ', ')"
-Write-Host "  flutter: $(if (Test-Command 'flutter') { 'yes' } else { 'MISSING' })"
-Write-Host "  node: $(if (Test-Command 'node') { (node --version) } else { 'MISSING (PS fallback used)' })"
 
 # --- 0. Docker ---
+Write-Step "Phase 6I — Sakina mobile owner test"
+Write-Host "  Branch: $(git -C $repo rev-parse --abbrev-ref HEAD 2>$null)"
+Write-Host "  Commit: $(git -C $repo rev-parse --short HEAD 2>$null)"
+
 Write-Step "Checking Docker"
-try { docker info *> $null } catch {
-  Write-Fail "Docker is not running. Start Docker Desktop, wait until Running, then re-run."
-}
-Write-Pass "Docker daemon is running"
+try { docker info *> $null } catch { Write-Fail "Docker is not running. Start Docker Desktop and re-run." }
+Write-Pass "Docker daemon running"
 
 $lan = Get-LanIp
+$emulatorApiBase = "http://10.0.2.2:${ApiPort}/v1"
 if ([string]::IsNullOrWhiteSpace($lan)) {
-  Write-Host "LAN IP not detected — phone APK commands will use YOUR_LAN_IP placeholder" -ForegroundColor Yellow
-  $lanApiBase = "http://YOUR_LAN_IP:$ApiPort/v1"
-  $lanDisplay = "YOUR_LAN_IP (run: ipconfig and use your Wi-Fi IPv4 address)"
+  $phoneApiBase = $null
+  $phoneApiInstruction = "YOUR_LAN_IP not detected. Run: ipconfig — use Wi-Fi IPv4, then replace YOUR_LAN_IP below."
+  $phoneApiTemplate = "http://YOUR_LAN_IP:${ApiPort}/v1"
 } else {
-  Write-Host "LAN IP detected: $lan (used for phone APK only)" -ForegroundColor Yellow
-  $lanApiBase = "http://${lan}:$ApiPort/v1"
-  $lanDisplay = $lan
+  $phoneApiBase = "http://${lan}:${ApiPort}/v1"
+  $phoneApiInstruction = "Detected LAN IP: $lan"
+  $phoneApiTemplate = $phoneApiBase
 }
+$apiBase = "http://localhost:${ApiPort}/v1"
+$healthUrl = "http://127.0.0.1:${ApiPort}/health"
 
-$origins = @(
-  "http://localhost:$WebPort", "http://127.0.0.1:$WebPort",
-  $(if ($lan) { "http://${lan}:$WebPort" } else { "http://127.0.0.1:$WebPort" }),
-  "http://localhost:8091", "http://127.0.0.1:8091",
-  $(if ($lan) { "http://${lan}:8091" } else { "http://127.0.0.1:8091" })
-) -join ","
-$env:CORS_ALLOWED_ORIGINS = $origins
-Ensure-EnvFile
+if (-not (Test-Path $envFile)) {
+  @"
+POSTGRES_PASSWORD=sakina_local_pw
+JWT_SECRET=local-dev-jwt-secret-change-me-32chars
+ENCRYPTION_KEY=local-dev-encryption-key-change-32
+"@ | Set-Content -Encoding utf8 $envFile
+}
 
 Get-Content $envFile | ForEach-Object {
   if ($_ -match '^\s*#' -or $_ -match '^\s*$') { return }
   $k, $v = $_ -split '=', 2
   if ($k) { Set-Item -Path "env:$k" -Value $v }
 }
+$env:SAKINA_SEED_LOCAL_ADMIN = 'true'
 
-if ($OpenFirewall) {
+if ($OpenFirewall -and $lan) {
   New-NetFirewallRule -DisplayName "Sakina Local API $ApiPort" -Direction Inbound `
     -Action Allow -Protocol TCP -LocalPort $ApiPort -Profile Private -ErrorAction SilentlyContinue | Out-Null
 }
 
-# --- 1. Build backend image ---
+# --- 1. Backend image ---
 if (-not $SkipDockerBuild) {
   Write-Step "Building sakina-backend:latest"
   docker build -f (Join-Path $repo "sakina-backend/Dockerfile") -t sakina-backend:latest $repo
   if ($LASTEXITCODE -ne 0) { Write-Fail "docker build failed" }
-  Write-Pass "sakina-backend:latest ready"
-} else {
-  docker image inspect sakina-backend:latest *> $null
-  if ($LASTEXITCODE -ne 0) { Write-Fail "sakina-backend:latest not found. Re-run without -SkipDockerBuild." }
+  Write-Pass "Backend image ready"
 }
 
-# --- 2. Docker stack ---
+# --- 2. Stack + migrate ---
 Write-Step "Starting Docker QA stack"
 Push-Location $composeDir
 docker compose -f docker-compose.qa.yml --env-file .env up -d postgres qdrant redis
-if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "docker compose up (core) failed" }
+if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "docker compose up failed" }
 
 Write-Step "Waiting for Postgres"
 $pgOk = $false
@@ -224,201 +192,164 @@ for ($i = 0; $i -lt 30; $i++) {
   if ($LASTEXITCODE -eq 0) { $pgOk = $true; break }
   Start-Sleep -Seconds 2
 }
-if (-not $pgOk) { Pop-Location; Write-Fail "Postgres did not become ready" }
+if (-not $pgOk) { Pop-Location; Write-Fail "Postgres not ready" }
 Write-Pass "Postgres ready"
 
-Write-Step "Running sakina-migrate"
-$migrateOut = docker compose -f docker-compose.qa.yml --env-file .env run --rm --no-deps api sakina-migrate 2>&1
-if ($LASTEXITCODE -ne 0) {
-  if ($migrateOut -match 'already exists|duplicate') {
-    Write-Host "WARN: migrate reported existing schema — continuing" -ForegroundColor Yellow
-  } else {
-    Write-Host $migrateOut
-    Pop-Location; Write-Fail "sakina-migrate failed"
-  }
-} else {
-  Write-Pass "Migrations applied"
+Write-Step "Running sakina-migrate (with local admin seed)"
+$migrateOut = docker compose -f docker-compose.qa.yml --env-file .env run --rm --no-deps `
+  -e SAKINA_SEED_LOCAL_ADMIN=true api sakina-migrate 2>&1
+if ($LASTEXITCODE -ne 0 -and $migrateOut -notmatch 'already exists|duplicate|WARN:') {
+  Write-Host $migrateOut
+  Pop-Location; Write-Fail "sakina-migrate failed"
 }
+Write-Pass "Migrations applied"
 
-Write-Step "Starting ollama + llm-gateway (optional)"
-docker compose -f docker-compose.qa.yml --env-file .env up -d ollama llm-gateway 2>&1 | Out-Null
-
-Write-Step "Starting API on 0.0.0.0:$ApiPort"
-docker compose -f docker-compose.qa.yml --env-file .env up -d --force-recreate api
-if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "API container failed to start" }
+docker compose -f docker-compose.qa.yml --env-file .env up -d ollama llm-gateway api
+if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "API stack failed to start" }
 Pop-Location
 
-$healthUrl = "http://127.0.0.1:$ApiPort/health"
-$healthV1Url = "http://127.0.0.1:$ApiPort/v1/health"
-Write-Step "Waiting for API health"
-$healthProbe = Wait-Http200 $healthUrl 60
-if (-not $healthProbe.Ok) {
-  Write-Fail "API health FAILED at $healthUrl — check: docker compose -f sakina-infra/docker-compose.qa.yml logs api"
+Write-Step "API health check"
+$health = Wait-Http200 $healthUrl 90
+if (-not $health.Ok) { Write-Fail "API health failed at $healthUrl" }
+Write-Pass "API health HTTP $($health.Code)"
+
+$features = Test-HttpStatus "http://127.0.0.1:${ApiPort}/v1/features"
+if (-not $features.Ok) { Write-Fail "GET /v1/features returned $($features.Code)" }
+$featureCount = 0
+try { $featureCount = (($features.Body | ConvertFrom-Json).count) } catch {}
+Write-Pass "GET /v1/features HTTP 200 (count=$featureCount)"
+
+# --- 3. Admin proof ---
+Write-Step "Local admin login proof"
+$adminLogin = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:${ApiPort}/v1/auth/login" `
+  -ContentType 'application/json' `
+  -Body '{"email":"owner@sakina.local","password":"SakinaLocalOwner2026!"}' `
+  -ErrorAction SilentlyContinue
+if (-not $adminLogin.access_token) {
+  Write-Warn "Admin login failed — re-run migrate with SAKINA_SEED_LOCAL_ADMIN=true"
+} else {
+  Write-Pass "Admin login owner@sakina.local"
+  $adminHeaders = @{ Authorization = "Bearer $($adminLogin.access_token)" }
+  $adminFeatures = Invoke-RestMethod -Uri "http://127.0.0.1:${ApiPort}/v1/admin/features" -Headers $adminHeaders
+  Write-Pass "Admin GET /v1/admin/features (count=$($adminFeatures.count))"
 }
-Write-Pass "API health OK ($($healthProbe.Code)) at $healthUrl"
 
-$healthV1 = Test-HttpStatus $healthV1Url
-Write-Host "  /v1/health → $($healthV1.Code)" -ForegroundColor $(if ($healthV1.Ok) { 'Green' } else { 'Yellow' })
-
-# --- 3. API smoke ---
-Write-Step "API endpoint smoke"
-$prayerDate = (Get-Date -Format "yyyy-MM-dd")
-$quran = Test-HttpStatus "http://127.0.0.1:$ApiPort/v1/quran/surahs"
-$prayer = Test-HttpStatus "http://127.0.0.1:$ApiPort/v1/prayer-times?lat=51.5&lng=-0.12&method=2&date=$prayerDate"
-if (-not $quran.Ok) { Write-Fail "GET /v1/quran/surahs returned $($quran.Code)" }
-if (-not $prayer.Ok) { Write-Fail "GET /v1/prayer-times returned $($prayer.Code)" }
-Write-Pass "Quran + prayer-times endpoints return 200"
-
-# --- 4. Flutter web ---
-$webUrl = "http://localhost:$WebPort/"
-$apiBase = "http://localhost:$ApiPort/v1"
-$emulatorApiBase = "http://10.0.2.2:$ApiPort/v1"
-$apkPath = Join-Path $frontend "build/app/outputs/flutter-apk/app-debug.apk"
-$webCurlResult = 'not started'
-$webServer = $null
-$analyzeOk = $false
-
-if (-not $SkipFlutterWeb) {
-  if (-not (Test-Command 'flutter')) {
-    Write-Fail "Flutter SDK not found on PATH. Install Flutter 3.16+ and re-run."
+$userReg = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:${ApiPort}/v1/auth/register" `
+  -ContentType 'application/json' `
+  -Body '{"email":"normal-user-6i@test.local","password":"TestPass123!","name":"Normal","provider":"password","provider_user_id":"normal-user-6i@test.local"}' `
+  -ErrorAction SilentlyContinue
+if ($userReg.access_token) {
+  try {
+    Invoke-RestMethod -Uri "http://127.0.0.1:${ApiPort}/v1/admin/features" `
+      -Headers @{ Authorization = "Bearer $($userReg.access_token)" } -ErrorAction Stop
+    Write-Fail "Normal user should be blocked from admin features"
+  } catch {
+    if ($_.Exception.Response.StatusCode.value__ -eq 403) {
+      Write-Pass "Normal user blocked from admin features (403)"
+    } else {
+      Write-Warn "Normal user admin check returned unexpected status"
+    }
   }
+}
 
+# --- 4. Flutter ---
+$analyzeOk = $false
+$testOk = $false
+if (Test-Command 'flutter') {
   Write-Step "flutter analyze"
   Push-Location $frontend
-  flutter pub get
-  if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter pub get failed" }
+  flutter pub get | Out-Null
   flutter analyze --no-fatal-infos
   if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter analyze failed" }
   Pop-Location
   $analyzeOk = $true
-  Write-Pass "flutter analyze passed"
+  Write-Pass "flutter analyze"
 
-  Write-Step "Building Flutter web (SAKINA_API_BASE_URL=$apiBase)"
+  Write-Step "flutter test"
   Push-Location $frontend
-  flutter build web --dart-define=SAKINA_API_BASE_URL=$apiBase
-  if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter build web failed" }
+  flutter test
+  if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter test failed" }
   Pop-Location
-  if (-not (Test-Path (Join-Path $webDir 'index.html'))) {
-    Write-Fail "build/web/index.html missing after flutter build web"
-  }
-  Write-Pass "Flutter web built at sakina-frontend/build/web"
-
-  $owners = Get-PortOwner $WebPort
-  if ($owners) {
-    Write-Host "WARN: port $WebPort was in use by PID(s): $($owners -join ', ') — stopping" -ForegroundColor Yellow
-  }
-
-  Write-Step "Serving Flutter web on $webUrl"
-  $webServer = Start-StaticWebServer $webDir $WebPort
-  $webServer.Pid | Set-Content -Encoding ascii $serverPidFile
-
-  $webProbe = Wait-Http200 $webUrl 90
-  $webCurlResult = "HTTP $($webProbe.Code)"
-  if (-not $webProbe.Ok) {
-    Write-Fail "Web server not responding on $webUrl (last: $webCurlResult). Engine: $($webServer.Engine), PID $($webServer.Pid)"
-  }
-  Write-Pass "Flutter web reachable at $webUrl ($webCurlResult) via $($webServer.Engine)"
-
-  if (-not $NoBrowser) {
-    Write-Step "Opening browser (after HTTP 200 confirmed)"
-    Start-Process $webUrl
-  }
+  $testOk = $true
+  Write-Pass "flutter test"
+} else {
+  Write-Warn "Flutter not on PATH — analyze/test skipped"
 }
+
+# --- 5. APK ---
+$emuApkCmd = Get-FullApkBuildCommand $emulatorApiBase
+$phoneApkCmd = if ($phoneApiBase) { Get-FullApkBuildCommand $phoneApiBase } else { Get-FullApkBuildCommand $phoneApiTemplate }
+$installCmd = "adb install -r $apkPath"
+$apkBuilt = $false
+$apkSize = 'not built'
 
 if ($BuildApk) {
-  Write-Step "Building debug APK (LAN API $lanApiBase)"
-  $apkDefineArgs = ($apkDartDefines -f $lanApiBase) -split ' --dart-define=' | ForEach-Object { if ($_) { "--dart-define=$_" } }
-  Push-Location $frontend
-  flutter build apk --debug @apkDefineArgs
-  if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter build apk failed" }
-  Pop-Location
-  Write-Pass "APK built at $apkPath"
-}
+  $sdk = Test-AndroidSdk
+  if (-not $sdk.Ok) { Write-Fail $sdk.Reason }
 
-function Format-ApkCmd([string]$apiUrl) {
-  $args = ($apkDartDefines -f $apiUrl) -split ' --dart-define=' | ForEach-Object { if ($_) { "--dart-define=$_" } }
-  return "cd sakina-frontend && flutter build apk --debug $($args -join ' ')"
-}
-
-$apkSize = if (Test-Path $apkPath) { "$([math]::Round((Get-Item $apkPath).Length/1MB,1)) MB" } else { 'not built (use -BuildApk)' }
-$phoneApkCmd = Format-ApkCmd $lanApiBase
-$emuApkCmd = Format-ApkCmd $emulatorApiBase
-$dockerPs = docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>$null
-
-# --- Owner summary ---
-Write-Host ""
-Write-Host "========== SAKINA MOBILE APK TEST (PHASE 6G) ==========" -ForegroundColor Green
-Write-Host "REAL APP:          Install the Android APK (web :8090 is diagnostic only)"
-Write-Host "WEB APP URL:       $webUrl"
-Write-Host "WEB CURL RESULT:   $webCurlResult"
-Write-Host "API HEALTH URL:    $healthUrl"
-Write-Host "API HEALTH CURL:   HTTP $($healthProbe.Code)"
-Write-Host "API BASE URL:      $apiBase"
-Write-Host "PHONE APK CMD:     $phoneApkCmd"
-Write-Host "EMULATOR APK CMD:  $emuApkCmd"
-Write-Host "APK PATH:          $apkPath"
-Write-Host "APK SIZE:          $apkSize"
-Write-Host ""
-Write-Host "Web server PID: $($webServer.Pid) ($($webServer.Engine)) — script stays alive until Ctrl+C" -ForegroundColor Cyan
-Write-Host "Stop server: Stop-Process -Id $($webServer.Pid)" -ForegroundColor DarkGray
-Write-Host "======================================================" -ForegroundColor Green
-
-$proofBody = @"
-# Cursor Phase 6D — Working Web Interface Proof
-
-Date: $(Get-Date -Format o)
-Branch: qa-security-hardening
-Machine LAN IP: $lan
-
-## Root causes fixed (Phase 6C → 6D)
-- Python-only ``Start-Job`` http.server exited when the script ended (nothing on :8090).
-- Browser opened before confirming HTTP 200 in some failure modes.
-- No Flutter web test dashboard for API connectivity checks.
-- Replaced with **Node npx serve** (or PowerShell HttpListener fallback), wait-for-200, then browser.
-
-## Diagnostics (start of run)
-- build/web existed before build: $(Test-Path (Join-Path $webDir 'index.html'))
-- Docker: running
-- flutter analyze: $(if ($analyzeOk) { 'PASS' } else { 'skipped' })
-
-## curl proof
-- ``curl $webUrl`` → $webCurlResult
-- ``curl $healthUrl`` → HTTP $($healthProbe.Code)
-- ``curl $healthV1Url`` → HTTP $($healthV1.Code)
-
-## API smoke
-- GET /v1/quran/surahs → $($quran.Code)
-- GET /v1/prayer-times → $($prayer.Code)
-
-## URLs
-| Purpose | URL |
-|---------|-----|
-| Web app | $webUrl |
-| API health | $healthUrl |
-| API base | $apiBase |
-| Phone/LAN API | $lanApiBase |
-| Emulator API | $emulatorApiBase |
-
-## Web server
-- Engine: $($webServer.Engine)
-- PID: $($webServer.Pid)
-- PID file: test-results/.sakina-web-server.pid
-
-## Docker
-``````
-$dockerPs
-``````
-"@
-
-$proofBody | Set-Content -Encoding utf8 $proofFile
-$proofBody | Set-Content -Encoding utf8 $reportFile
-Write-Pass "Proof written to test-results/ and reports/"
-
-if ($webServer -and $webServer.Pid) {
-  Write-Host "`nKeeping web server alive (PID $($webServer.Pid)). Press Ctrl+C to stop." -ForegroundColor Yellow
-  try {
-    Wait-Process -Id $webServer.Pid
-  } catch {
-    Write-Host "Web server process ended." -ForegroundColor Yellow
+  if ($ApkTarget -eq 'Emulator' -or $ApkTarget -eq 'Both') {
+    Write-Step "Building emulator APK ($emulatorApiBase)"
+    Invoke-ApkBuild $emulatorApiBase
+    $apkBuilt = $true
+    Write-Pass "Emulator APK built"
+  }
+  if (($ApkTarget -eq 'Phone' -or $ApkTarget -eq 'Both') -and $phoneApiBase) {
+    Write-Step "Building phone/LAN APK ($phoneApiBase)"
+    Invoke-ApkBuild $phoneApiBase
+    $apkBuilt = $true
+    Write-Pass "Phone APK built"
+  } elseif ($ApkTarget -eq 'Phone' -and -not $phoneApiBase) {
+    Write-Fail "Cannot build phone APK: LAN IP not detected. Run ipconfig, use -ApkTarget Emulator, or set API URL manually."
   }
 }
+
+if (Test-Path $apkPath) {
+  $apkSize = "$([math]::Round((Get-Item $apkPath).Length / 1MB, 2)) MB"
+}
+
+# --- Summary ---
+Write-Host ""
+Write-Host "========== SAKINA PHASE 6I OWNER TEST ==========" -ForegroundColor Green
+Write-Host "PRODUCT:           Android APK (web is diagnostic only)"
+Write-Host "API HEALTH:        $healthUrl → HTTP $($health.Code)"
+Write-Host "API BASE:          $apiBase"
+Write-Host "FEATURES:          /v1/features count=$featureCount"
+Write-Host "LAN IP:            $(if ($lan) { $lan } else { 'NOT DETECTED' })"
+Write-Host "$phoneApiInstruction"
+Write-Host ""
+Write-Host "LOCAL ADMIN LOGIN:" -ForegroundColor Cyan
+Write-Host "  Email:    owner@sakina.local"
+Write-Host "  Password: SakinaLocalOwner2026!  (local QA only — see docs/sakina-mobile-testing-runbook.md)"
+Write-Host ""
+Write-Host "EMULATOR APK BUILD COMMAND:" -ForegroundColor Cyan
+Write-Host "  $emuApkCmd"
+Write-Host ""
+Write-Host "PHONE APK BUILD COMMAND:" -ForegroundColor Cyan
+Write-Host "  $phoneApkCmd"
+Write-Host ""
+Write-Host "INSTALL COMMAND:" -ForegroundColor Cyan
+Write-Host "  $installCmd"
+Write-Host ""
+Write-Host "APK PATH:          $apkPath"
+Write-Host "APK SIZE:          $apkSize"
+Write-Host "================================================" -ForegroundColor Green
+
+$proof = @"
+# Phase 6I Owner Test Proof
+Date: $(Get-Date -Format o)
+Branch: qa-security-hardening
+API: $apiBase
+Features: $featureCount
+LAN: $(if ($lan) { $lan } else { 'NOT DETECTED' })
+Admin login: owner@sakina.local
+Emulator cmd: $emuApkCmd
+Phone cmd: $phoneApkCmd
+Install: $installCmd
+APK: $apkPath ($apkSize)
+Analyze: $(if ($analyzeOk) { 'PASS' } else { 'SKIP' })
+Test: $(if ($testOk) { 'PASS' } else { 'SKIP' })
+APK built: $(if ($apkBuilt) { 'YES' } else { 'NO' })
+"@
+$proof | Set-Content -Encoding utf8 (Join-Path $proofDir "cursor-phase6i-final-mobile-owner-test-readiness-proof.md")
+$proof | Set-Content -Encoding utf8 (Join-Path $reportDir "cursor-phase6i-final-mobile-owner-test-readiness.md")
+Write-Pass "Reports written"

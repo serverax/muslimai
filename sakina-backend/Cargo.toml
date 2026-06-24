@@ -47,6 +47,10 @@ name = "sakina-migrate"
 path = "src/bin/migrate.rs"
 
 [[bin]]
+name = "hash_password"
+path = "src/bin/hash_password.rs"
+
+[[bin]]
 name = "sakina-llm-gateway"
 path = "src/bin/llm_gateway.rs"
 

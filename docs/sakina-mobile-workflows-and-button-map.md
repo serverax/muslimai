@@ -185,3 +185,13 @@ Mobile loads `GET /v1/features` on dashboard init. Each tile uses gate logic:
 **25 admin-managed features:** ask_ai_shaikh, quran_reader, quran_search, tafsir, hadith, islamic_sources, dua_library, prayer_times, qibla, adhan_preferences, islamic_calendar, zakat, mirath, masjid_near_me, new_muslim_guide, wudu_guide, salah_guide, ramadan_guide, hajj_umrah_guide, halal_haram_guidance, scholar_review, bookmarks, reminders, kids_learning, subscription.
 
 Design system: deep navy, emerald, gold, cream — `lib/design/` + `lib/widgets/luxury/`.
+
+---
+
+## Phase 6I — owner test steps
+
+1. `git pull origin qa-security-hardening`
+2. `pwsh ./scripts/sakina-owner-local-test.ps1 -BuildApk`
+3. Install APK: `adb install -r sakina-frontend/build/app/outputs/flutter-apk/app-debug.apk`
+4. Login admin: `owner@sakina.local` / `SakinaLocalOwner2026!` (local QA only)
+5. Test guest flow, normal user register, admin feature toggles, scholar if seeded
