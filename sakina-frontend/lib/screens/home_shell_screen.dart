@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../app/app_state.dart';
 import '../services/auth_service.dart';
-import '../services/module_service.dart';
-import 'calculators_screen.dart';
 import 'chat_screen.dart';
-import 'daily_essentials_screen.dart';
-import 'compliance_screen.dart';
-import 'iman_journey_screen.dart';
-import 'islamic_library_screen.dart';
-import 'kids_quran_screen.dart';
-import 'mental_wellness_screen.dart';
-import 'module_read_only_state_screen.dart';
-import 'multimodal_analysis_screen.dart';
-import 'scholar_reviews_screen.dart';
-import 'tajweed_coach_screen.dart';
+import 'guest_home_dashboard_screen.dart';
+import 'mobile_home_dashboard_screen.dart';
+import 'more_menu_screen.dart';
+import 'prayer_hub_screen.dart';
+import 'study_hub_screen.dart';
+import '../services/sakina_api.dart';
 
+/// Mobile shell — 5-tab navigation with guest or logged-in home.
 class HomeShellScreen extends StatefulWidget {
-  const HomeShellScreen({super.key, required this.appState, this.session});
+  const HomeShellScreen({
+    super.key,
+    required this.appState,
+    this.session,
+  });
 
   final AppState appState;
   final AuthSession? session;
@@ -28,124 +27,94 @@ class HomeShellScreen extends StatefulWidget {
 
 class _HomeShellScreenState extends State<HomeShellScreen> {
   int _index = 0;
-  late final ModuleService _moduleService;
+  AuthSession? _session;
 
   @override
   void initState() {
     super.initState();
-    _moduleService = ModuleService(
-      apiClient: ModuleApiClient(authToken: widget.session?.accessToken),
-      entitlementGate: EntitlementGate(),
-    );
+    _session = widget.session;
+  }
+
+  void _onLoggedIn(AuthSession session) {
+    setState(() => _session = session);
+  }
+
+  void _onLogout() {
+    setState(() {
+      _session = null;
+      _index = 0;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final app = widget.appState;
-    final screens = [
-      ChatScreen(session: widget.session),
-      ModuleReadOnlyStateScreen(
-        title: app.t('quran'),
-        load: _moduleService.quran,
-      ),
-      ModuleReadOnlyStateScreen(
-        title: app.t('prayer'),
-        load: _moduleService.prayer,
-      ),
-      const IslamicLibraryScreen(),
-      MentalWellnessScreen(session: widget.session),
-      KidsQuranScreen(session: widget.session),
-      TajweedCoachScreen(session: widget.session),
-      ImanJourneyScreen(),
-      MultimodalAnalysisScreen(session: widget.session),
-      ComplianceScreen(session: widget.session),
-      CalculatorsScreen(),
-      ScholarReviewsScreen(session: widget.session),
-      DailyEssentialsScreen(session: widget.session),
-    ];
+    final session = _session;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(app.t('appTitle')),
-      ),
-      body: screens[_index],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.chat_bubble_outline),
-            selectedIcon: const Icon(Icons.chat_bubble),
-            label: app.t('chat'),
+    final home = session != null
+        ? MobileHomeDashboardScreen(
+            appState: app,
+            session: session,
+            onLogout: _onLogout,
+          )
+        : GuestHomeDashboardScreen(
+            appState: app,
+            onLoggedIn: _onLoggedIn,
+          );
+
+    return FutureBuilder(
+      future: SakinaApi.create(session: session),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Scaffold(
+            appBar: AppBar(title: Text(app.t('appTitle'))),
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
+        final api = snapshot.data!;
+        final screens = [
+          home,
+          ChatScreen(session: session, api: api),
+          StudyHubScreen(api: api, session: session),
+          PrayerHubScreen(api: api, session: session),
+          MoreMenuScreen(appState: app, session: session, onLogout: _onLogout),
+        ];
+
+        return Scaffold(
+          body: IndexedStack(index: _index, children: screens),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: _index,
+            onDestinationSelected: (i) => setState(() => _index = i),
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.chat_bubble_outline),
+                selectedIcon: Icon(Icons.chat_bubble),
+                label: 'Ask AI',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.menu_book_outlined),
+                selectedIcon: Icon(Icons.menu_book),
+                label: 'Study',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.access_time),
+                selectedIcon: Icon(Icons.access_time_filled),
+                label: 'Daily',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.more_horiz),
+                selectedIcon: Icon(Icons.more_horiz),
+                label: 'More',
+              ),
+            ],
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.menu_book_outlined),
-            selectedIcon: const Icon(Icons.menu_book),
-            label: app.t('quran'),
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.access_time),
-            selectedIcon: const Icon(Icons.access_time_filled),
-            label: app.t('prayer'),
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.school_outlined),
-            selectedIcon: const Icon(Icons.school),
-            label: app.t('knowledge'),
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.favorite_outline),
-            selectedIcon: Icon(Icons.favorite),
-            label: 'Support',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.child_care),
-            selectedIcon: Icon(Icons.child_care),
-            label: 'Kids',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.record_voice_over),
-            selectedIcon: Icon(Icons.record_voice_over),
-            label: 'Tajweed',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.auto_graph_outlined),
-            selectedIcon: Icon(Icons.auto_graph),
-            label: 'Journey',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.document_scanner_outlined),
-            selectedIcon: Icon(Icons.document_scanner),
-            label: 'Analyze',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.privacy_tip_outlined),
-            selectedIcon: Icon(Icons.privacy_tip),
-            label: 'Privacy',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.calculate_outlined),
-            selectedIcon: Icon(Icons.calculate),
-            label: 'Tools',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.gavel_outlined),
-            selectedIcon: Icon(Icons.gavel),
-            label: 'Reviews',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.mosque_outlined),
-            selectedIcon: Icon(Icons.mosque),
-            label: 'Daily',
-          ),
-        ],
-      ),
+        );
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    _moduleService.close();
-    super.dispose();
   }
 }

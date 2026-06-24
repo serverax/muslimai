@@ -272,17 +272,24 @@ class ModuleFeatureGate {
 }
 
 class EntitlementGate {
-  EntitlementGate({String? tier})
-      : _tier = (tier ??
-                const String.fromEnvironment(
-                  'SAKINA_SUBSCRIPTION_TIER',
-                  defaultValue: 'free',
-                ))
-            .toLowerCase();
+  EntitlementGate({String? tier}) : _tier = (tier ?? _defaultTier()).toLowerCase();
 
   final String _tier;
 
+  static String _defaultTier() {
+    const localTest =
+        bool.fromEnvironment('SAKINA_LOCAL_TEST', defaultValue: false);
+    if (localTest) return 'founding';
+    return const String.fromEnvironment(
+      'SAKINA_SUBSCRIPTION_TIER',
+      defaultValue: 'free',
+    );
+  }
+
   bool canAccess(ModuleKey module) {
+    const localTest =
+        bool.fromEnvironment('SAKINA_LOCAL_TEST', defaultValue: false);
+    if (localTest) return true;
     switch (module) {
       case ModuleKey.quran:
       case ModuleKey.prayer:

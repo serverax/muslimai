@@ -4,9 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/app_state.dart';
 import 'config/theme.dart';
-import 'screens/account_intro_screen.dart';
 import 'screens/sakina_test_dashboard_screen.dart';
-import 'screens/welcome_screen.dart';
+import 'screens/splash_environment_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,12 +71,7 @@ class _SakinaAppState extends State<SakinaApp> {
       darkTheme: SakinaTheme.buildDarkTheme(state.isArabic),
       home: AnimatedBuilder(
         animation: state,
-        builder: (_, __) {
-          if (state.onboardingComplete) {
-            return AccountIntroScreen(appState: state);
-          }
-          return WelcomeScreen(appState: state);
-        },
+        builder: (_, __) => SplashEnvironmentScreen(appState: state),
       ),
     );
   }

@@ -6,34 +6,54 @@ import '../services/api_service.dart';
 /// Public Islamic calculators (Zakat, Inheritance, Qibla) wired to the real
 /// backend `/api/tools/*` endpoints. No login required, no fabricated data.
 class CalculatorsScreen extends StatefulWidget {
-  CalculatorsScreen({super.key, ApiService? api})
+  CalculatorsScreen({super.key, ApiService? api, this.initialTab = 0})
       : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl);
 
   final ApiService api;
+  final int initialTab;
 
   @override
   State<CalculatorsScreen> createState() => _CalculatorsScreenState();
 }
 
-class _CalculatorsScreenState extends State<CalculatorsScreen> {
+class _CalculatorsScreenState extends State<CalculatorsScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    final tab = widget.initialTab.clamp(0, 2);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: tab);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Islamic Calculators'),
-          bottom: const TabBar(tabs: [
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Islamic Calculators'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
             Tab(text: 'Zakat'),
             Tab(text: 'Inheritance'),
             Tab(text: 'Qibla'),
-          ]),
+          ],
         ),
-        body: TabBarView(children: [
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
           _ZakatTab(api: widget.api),
           _InheritanceTab(api: widget.api),
           _QiblaTab(api: widget.api),
-        ]),
+        ],
       ),
     );
   }

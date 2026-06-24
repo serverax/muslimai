@@ -83,4 +83,9 @@ class PendingReviewStore {
     final items = await list();
     return items.where((r) => r.status == 'scholar_answered').length;
   }
+
+  Future<int> pendingCount() async {
+    final items = await list();
+    return items.where((r) => r.status != 'scholar_answered').length;
+  }
 }

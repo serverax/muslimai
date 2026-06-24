@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app/app_state.dart';
-import 'account_intro_screen.dart';
+import 'home_shell_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, required this.appState});
@@ -99,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 if (!mounted) return;
                 navigator.pushReplacement(
                   MaterialPageRoute(
-                    builder: (_) => AccountIntroScreen(appState: app),
+                    builder: (_) => HomeShellScreen(appState: app),
                   ),
                 );
               },

@@ -1,5 +1,5 @@
 <#
-  CURSOR PHASE 6D — Fix broken localhost:8090 web testing interface (Windows).
+  CURSOR PHASE 6G — Mobile-first APK testing (web is diagnostic only).
 
   One owner command: Docker QA stack + API health + Flutter web build + stable
   static server on :8090 (Node serve preferred, PowerShell HttpListener fallback).
@@ -33,8 +33,17 @@ $envFile = Join-Path $composeDir ".env"
 $webDir = Join-Path $frontend "build/web"
 $proofDir = Join-Path $repo "test-results"
 $reportDir = Join-Path $repo "reports"
-$proofFile = Join-Path $proofDir "cursor-phase6d-working-web-interface-proof.md"
-$reportFile = Join-Path $reportDir "cursor-phase6d-working-web-interface-proof.md"
+$proofFile = Join-Path $proofDir "cursor-phase6g-mobile-workflows-user-journeys-proof.md"
+$reportFile = Join-Path $reportDir "cursor-phase6g-mobile-workflows-user-journeys-proof.md"
+$apkDartDefines = @(
+  "SAKINA_API_BASE_URL={0}",
+  "SAKINA_LOCAL_TEST=true",
+  "SAKINA_FEATURE_QURAN=true",
+  "SAKINA_FEATURE_PRAYER=true",
+  "SAKINA_FEATURE_KNOWLEDGE=true",
+  "SAKINA_FEATURE_COMMUNITY=true",
+  "SAKINA_SUBSCRIPTION_TIER=founding"
+) -join " --dart-define="
 $serverPidFile = Join-Path $proofDir ".sakina-web-server.pid"
 New-Item -ItemType Directory -Force -Path $proofDir, $reportDir | Out-Null
 
@@ -309,20 +318,28 @@ if (-not $SkipFlutterWeb) {
 
 if ($BuildApk) {
   Write-Step "Building debug APK (LAN API $lanApiBase)"
+  $apkDefineArgs = ($apkDartDefines -f $lanApiBase) -split ' --dart-define=' | ForEach-Object { if ($_) { "--dart-define=$_" } }
   Push-Location $frontend
-  flutter build apk --debug --dart-define=SAKINA_API_BASE_URL=$lanApiBase
+  flutter build apk --debug @apkDefineArgs
   if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Fail "flutter build apk failed" }
   Pop-Location
+  Write-Pass "APK built at $apkPath"
 }
 
-$apkSize = if (Test-Path $apkPath) { "$([math]::Round((Get-Item $apkPath).Length/1MB,1)) MB" } else { 'not built' }
-$phoneApkCmd = "cd sakina-frontend && flutter build apk --debug --dart-define=SAKINA_API_BASE_URL=$lanApiBase"
-$emuApkCmd = "cd sakina-frontend && flutter build apk --debug --dart-define=SAKINA_API_BASE_URL=$emulatorApiBase"
+function Format-ApkCmd([string]$apiUrl) {
+  $args = ($apkDartDefines -f $apiUrl) -split ' --dart-define=' | ForEach-Object { if ($_) { "--dart-define=$_" } }
+  return "cd sakina-frontend && flutter build apk --debug $($args -join ' ')"
+}
+
+$apkSize = if (Test-Path $apkPath) { "$([math]::Round((Get-Item $apkPath).Length/1MB,1)) MB" } else { 'not built (use -BuildApk)' }
+$phoneApkCmd = Format-ApkCmd $lanApiBase
+$emuApkCmd = Format-ApkCmd $emulatorApiBase
 $dockerPs = docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>$null
 
 # --- Owner summary ---
 Write-Host ""
-Write-Host "========== SAKINA LOCAL WEB TEST (PHASE 6D) ==========" -ForegroundColor Green
+Write-Host "========== SAKINA MOBILE APK TEST (PHASE 6G) ==========" -ForegroundColor Green
+Write-Host "REAL APP:          Install the Android APK (web :8090 is diagnostic only)"
 Write-Host "WEB APP URL:       $webUrl"
 Write-Host "WEB CURL RESULT:   $webCurlResult"
 Write-Host "API HEALTH URL:    $healthUrl"

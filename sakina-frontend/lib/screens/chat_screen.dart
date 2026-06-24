@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 
 import '../config/api_config.dart';
+import '../config/brand_config.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../services/pending_review_store.dart';
+import 'scholar_reviews_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({
     super.key,
     ApiService? api,
     String? userId,
-    AuthSession? session,
+    this.session,
   })  : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl),
         userId = session?.userId ??
             userId ??
             const String.fromEnvironment('SAKINA_USER_ID') {
-    if (session != null && api == null) {
-      this.api.setAuthToken(session.accessToken);
+    if (session != null) {
+      this.api.setAuthToken(session!.accessToken);
     }
   }
 
   final ApiService api;
   final String userId;
+  final AuthSession? session;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -29,75 +32,59 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final TextEditingController _supportController = TextEditingController();
   final List<ChatItem> _messages = [];
   bool _sending = false;
-  bool _notificationBusy = false;
-  bool _supportBusy = false;
-  String? _lastMessageId;
   String _status = '';
   bool _contractWarning = false;
+  String? _lastSafetyState;
   final PendingReviewStore _pendingReviews = PendingReviewStore();
 
-  Future<void> _sendNotificationFlow() async {
-    if (_notificationBusy) return;
-    setState(() => _notificationBusy = true);
-    try {
-      final id = await widget.api.createNotificationTemplate(
-        templateKey:
-            'mobile-chat-update-${DateTime.now().millisecondsSinceEpoch}',
-        subjectTemplate: 'Sakina update',
-        bodyTemplate: 'A chat update is available.',
-      );
-      await widget.api.sendNotification(
-        userId: widget.userId,
-        templateId: id,
-        title: 'Sakina Notification',
-        body: 'Evidence-only answer ready.',
-      );
-      if (!mounted) return;
-      setState(() {
-        _status = 'Notifications endpoint wired successfully.';
-      });
-    } catch (error) {
-      if (!mounted) return;
-      setState(() => _status = _humanizeError(error));
-    } finally {
-      if (mounted) {
-        setState(() => _notificationBusy = false);
-      }
-    }
+  void _clearChat() {
+    setState(() {
+      _messages.clear();
+      _status = '';
+      _contractWarning = false;
+      _lastSafetyState = null;
+    });
   }
 
-  Future<void> _submitSupportTicket() async {
-    final body = _supportController.text.trim();
-    if (body.isEmpty || _supportBusy) return;
-    setState(() => _supportBusy = true);
-    try {
-      final ticket = await widget.api.createSupportTicket(
-        userId: widget.userId,
-        subject: 'Mobile support request',
-        messageBody: body,
-      );
-      await widget.api.appendSupportMessage(
-        ticketId: ticket.ticketId,
-        messageBody: 'Follow-up from mobile client.',
-      );
-      final snapshot = await widget.api.getSupportTicket(ticket.ticketId);
-      if (!mounted) return;
-      setState(() {
-        _status =
-            'Support ticket ${snapshot.ticketId} synced (${snapshot.messages.length} messages).';
-        _supportController.clear();
-      });
-    } catch (error) {
-      if (!mounted) return;
-      setState(() => _status = _humanizeError(error));
-    } finally {
-      if (mounted) {
-        setState(() => _supportBusy = false);
+  void _viewCitations() {
+    ChatItem? last;
+    for (final m in _messages.reversed) {
+      if (m.evidence.isNotEmpty) {
+        last = m;
+        break;
       }
     }
+    if (last == null) {
+      setState(() => _status = 'No citations in the latest answer yet.');
+      return;
+    }
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          children: [
+            const Text('Citations', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            const SizedBox(height: 8),
+            for (final source in last!.evidence)
+              ListTile(
+                title: Text(source.title),
+                subtitle: Text('${source.chapter} · ${source.authenticityGrade}'),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _viewReviewStatus() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ScholarReviewsScreen(session: widget.session),
+      ),
+    );
   }
 
   Future<void> _sendMessage() async {
@@ -108,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.add(ChatItem.user(text));
       _controller.clear();
       _sending = true;
-      _status = '';
+      _status = 'Asking with guardrails…';
       _contractWarning = false;
     });
 
@@ -121,7 +108,6 @@ class _ChatScreenState extends State<ChatScreen> {
           preferredLanguage: 'auto',
         ),
       );
-      _lastMessageId = null;
       final verifiedSources =
           response.citations.where((source) => source.isVerifiedShape).toList();
       final malformedDetected = response.citations.isNotEmpty &&
@@ -129,17 +115,12 @@ class _ChatScreenState extends State<ChatScreen> {
       if (!mounted) return;
       setState(() {
         _contractWarning = malformedDetected;
-        _messages.add(
-          ChatItem.evidence(
-            response.answer,
-            verifiedSources,
-          ),
-        );
-        _status =
-            'Trace ${response.traceId} | ${response.sourcePath['answer_source'] ?? 'unknown'} | ${response.modelProvider}';
+        _lastSafetyState = response.safetyState;
+        _messages.add(ChatItem.evidence(response.answer, verifiedSources));
+        _status = response.safetyState == 'ESCALATED_TO_HUMAN'
+            ? 'Escalated to scholar review — safe general guidance shown.'
+            : 'Answered with guardrails · ${response.modelProvider}';
       });
-      // PHASE 1B: high-risk question escalated to a scholar — track it locally so
-      // the user can return to the Reviews screen and poll for the final answer.
       if (response.safetyState == 'ESCALATED_TO_HUMAN' &&
           response.traceId.isNotEmpty) {
         await _pendingReviews.add(PendingReview(
@@ -150,7 +131,8 @@ class _ChatScreenState extends State<ChatScreen> {
         if (mounted) {
           setState(() {
             _messages.add(ChatItem.system(
-                'This question was escalated to a scholar for review. Open the Reviews tab to see the answer when it is ready.'));
+              'This question was escalated to a scholar for review. Tap "View review status" to follow progress.',
+            ));
           });
         }
       }
@@ -158,53 +140,10 @@ class _ChatScreenState extends State<ChatScreen> {
       if (!mounted) return;
       setState(() {
         _messages.add(ChatItem.system(_humanizeError(error)));
+        _status = '';
       });
     } finally {
-      if (mounted) {
-        setState(() => _sending = false);
-      }
-    }
-  }
-
-  Future<void> _sendFeedback(String type) async {
-    final messageId = _lastMessageId;
-    if (messageId == null) {
-      setState(() {
-        _status = 'No message available for feedback yet.';
-      });
-      return;
-    }
-    try {
-      await widget.api.sendChatFeedback(
-        messageId: messageId,
-        feedbackType: type,
-        feedbackScore: type == 'thumbs_up' ? 5 : 1,
-      );
-      if (!mounted) return;
-      setState(() => _status = 'Feedback submitted.');
-    } catch (error) {
-      if (!mounted) return;
-      setState(() => _status = _humanizeError(error));
-    }
-  }
-
-  Future<void> _reportMessage() async {
-    final messageId = _lastMessageId;
-    if (messageId == null) {
-      setState(() => _status = 'No message available to report.');
-      return;
-    }
-    try {
-      await widget.api.reportMessage(
-        messageId: messageId,
-        reason: 'citation_missing',
-        details: 'Verified evidence could not be validated in UI.',
-      );
-      if (!mounted) return;
-      setState(() => _status = 'Report submitted.');
-    } catch (error) {
-      if (!mounted) return;
-      setState(() => _status = _humanizeError(error));
+      if (mounted) setState(() => _sending = false);
     }
   }
 
@@ -215,7 +154,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (error is ApiException) {
       final code = error.errorCode ?? '';
       if (error.statusCode == 401 || error.statusCode == 403) {
-        return 'Unauthorized request. Please sign in again.';
+        return 'Please sign in to use Ask AI Shaikh with your account.';
       }
       if (error.statusCode == 402 || code == 'subscription_required') {
         return 'Premium entitlement required for this action.';
@@ -232,14 +171,21 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Project Sakina'),
+        title: const Text('Ask AI Shaikh'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home_outlined),
+            tooltip: 'Back home',
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
       ),
       body: Column(
         children: [
           if (_status.isNotEmpty)
             Container(
               width: double.infinity,
-              color: Colors.blueGrey.shade50,
+              color: const Color(SakinaBrand.colorAccent),
               padding: const EdgeInsets.all(8),
               child: Text(_status),
             ),
@@ -247,122 +193,107 @@ class _ChatScreenState extends State<ChatScreen> {
             const Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                'Some backend evidence items were malformed and were safely discarded.',
+                'Some citations could not be verified and were safely discarded.',
                 style: TextStyle(color: Colors.deepOrange),
               ),
             ),
-          Wrap(
-            spacing: 8,
-            children: [
-              OutlinedButton(
-                onPressed: _notificationBusy ? null : _sendNotificationFlow,
-                child: Text(_notificationBusy ? 'Sending...' : 'Notify'),
+          if (_lastSafetyState == 'ESCALATED_TO_HUMAN')
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: OutlinedButton.icon(
+                onPressed: _viewReviewStatus,
+                icon: const Icon(Icons.gavel),
+                label: const Text('View scholar review status'),
               ),
-              OutlinedButton(
-                onPressed: _sendFeedbackUpDownDisabled()
-                    ? null
-                    : () => _sendFeedback('thumbs_up'),
-                child: const Text('Feedback +'),
-              ),
-              OutlinedButton(
-                onPressed: _sendFeedbackUpDownDisabled()
-                    ? null
-                    : () => _sendFeedback('thumbs_down'),
-                child: const Text('Feedback -'),
-              ),
-              OutlinedButton(
-                onPressed:
-                    _sendFeedbackUpDownDisabled() ? null : _reportMessage,
-                child: const Text('Report'),
-              ),
-            ],
-          ),
+            ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Wrap(
+              spacing: 8,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _supportController,
-                    decoration: const InputDecoration(
-                      hintText: 'Create support ticket...',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
+                FilledButton(
+                  onPressed: _sending ? null : _sendMessage,
+                  child: Text(_sending ? 'Asking…' : 'Ask'),
                 ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: _supportBusy ? null : _submitSupportTicket,
-                  child: Text(_supportBusy ? '...' : 'Support'),
-                ),
+                OutlinedButton(onPressed: _clearChat, child: const Text('Clear')),
+                OutlinedButton(onPressed: _viewCitations, child: const Text('View citations')),
+                OutlinedButton(onPressed: _viewReviewStatus, child: const Text('Review status')),
               ],
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return Align(
-                  alignment: message.role == ChatRole.user
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: message.role == ChatRole.user
-                          ? Colors.blue
-                          : Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
+            child: _messages.isEmpty
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: Text(
+                        'Ask a question such as "How do I make wudu?" for grounded guidance with citations.',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(message.text),
-                        if (message.evidence.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          for (final source in message.evidence)
-                            Text(
-                              '- ${source.title} | ${source.chapter} | ${source.authenticityGrade}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                        ],
-                      ],
-                    ),
+                  )
+                : ListView.builder(
+                    itemCount: _messages.length,
+                    itemBuilder: (context, index) {
+                      final message = _messages[index];
+                      final isUser = message.role == ChatRole.user;
+                      return Align(
+                        alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                        child: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(12),
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.85,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isUser
+                                ? const Color(SakinaBrand.colorPrimary)
+                                : Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                message.text,
+                                style: TextStyle(color: isUser ? Colors.white : Colors.black87),
+                              ),
+                              if (message.evidence.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                for (final source in message.evidence)
+                                  Text(
+                                    '• ${source.title} (${source.authenticityGrade})',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: isUser ? Colors.white70 : Colors.black54,
+                                    ),
+                                  ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Row(
               children: [
                 Expanded(
-                  child: Semantics(
-                    label: 'chat-message-input',
-                    textField: true,
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        hintText: 'Ask your question...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: 'Type your question…',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                     ),
+                    onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
                 const SizedBox(width: 8),
-                Semantics(
-                  button: true,
-                  label: 'send-message-button',
-                  child: FloatingActionButton(
-                    tooltip: 'Send message',
-                    onPressed: _sending ? null : _sendMessage,
-                    child: const Icon(Icons.send),
-                  ),
+                FloatingActionButton(
+                  onPressed: _sending ? null : _sendMessage,
+                  child: const Icon(Icons.send),
                 ),
               ],
             ),
@@ -375,12 +306,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _controller.dispose();
-    _supportController.dispose();
-    widget.api.close();
     super.dispose();
   }
-
-  bool _sendFeedbackUpDownDisabled() => _lastMessageId == null;
 }
 
 enum ChatRole { user, system, evidence }

@@ -256,6 +256,17 @@ class _SakinaTestDashboardScreenState extends State<SakinaTestDashboardScreen> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 32),
         children: [
+          MaterialBanner(
+            content: const Text(
+              'Diagnostic only — install the Android APK for the real Sakina app. '
+              'See docs/sakina-mobile-testing-runbook.md',
+            ),
+            leading: const Icon(Icons.phone_android),
+            backgroundColor: Colors.amber.shade100,
+            actions: [
+              TextButton(onPressed: () {}, child: const Text('OK')),
+            ],
+          ),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),

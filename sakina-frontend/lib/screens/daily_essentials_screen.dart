@@ -4,6 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_config.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import '../app/app_state.dart';
+import '../app/app_strings.dart';
+import '../widgets/workflow_states.dart';
 import 'phase4_screens.dart';
 import 'quran_corpus_screen.dart';
 import 'subscription_screen.dart';
@@ -11,13 +14,14 @@ import 'subscription_screen.dart';
 /// PHASE 2 hub: Prayer Times, Islamic Calendar, Dua Library (public),
 /// Bookmarks + Reminders (login required), Adhan settings (local-only).
 class DailyEssentialsScreen extends StatelessWidget {
-  DailyEssentialsScreen({super.key, ApiService? api, this.session})
+  DailyEssentialsScreen({super.key, ApiService? api, this.session, this.appState})
       : api = api ?? ApiService(baseUrl: ApiConfig.baseUrl) {
     if (session != null) this.api.setAuthToken(session!.accessToken);
   }
 
   final ApiService api;
   final AuthSession? session;
+  final AppState? appState;
 
   void _go(BuildContext c, Widget s) =>
       Navigator.of(c).push(MaterialPageRoute(builder: (_) => s));
@@ -45,7 +49,7 @@ class DailyEssentialsScreen extends StatelessWidget {
             loggedIn ? 'Your saved items' : 'Login required',
             () => loggedIn
                 ? _go(context, BookmarksScreen(api: api))
-                : _loginNeeded(context)),
+                : _loginNeeded(context, 'Bookmarks')),
         _tile(
             context,
             Icons.notifications,
@@ -53,7 +57,7 @@ class DailyEssentialsScreen extends StatelessWidget {
             loggedIn ? 'Your reminders' : 'Login required',
             () => loggedIn
                 ? _go(context, RemindersScreen(api: api))
-                : _loginNeeded(context)),
+                : _loginNeeded(context, 'Reminders')),
         _tile(context, Icons.volume_up, 'Adhan Settings', 'On this device',
             () => _go(context, const AdhanSettingsScreen())),
         _tile(context, Icons.article_outlined, 'Guides', 'Wudu, Salah, Ramadan, Hajj, New Muslim',
@@ -68,8 +72,18 @@ class DailyEssentialsScreen extends StatelessWidget {
     );
   }
 
-  void _loginNeeded(BuildContext c) => ScaffoldMessenger.of(c).showSnackBar(
-      const SnackBar(content: Text('Please log in to use this feature.')));
+  void _loginNeeded(BuildContext context, String feature) {
+    final state = appState ??
+        AppState(language: AppLanguage.english, onboardingComplete: true);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => LoginRequiredScreen(
+          appState: state,
+          featureName: feature,
+        ),
+      ),
+    );
+  }
 
   Widget _tile(BuildContext c, IconData i, String t, String s, VoidCallback tap) =>
       Card(

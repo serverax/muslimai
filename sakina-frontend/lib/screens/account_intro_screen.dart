@@ -5,9 +5,19 @@ import '../services/auth_service.dart';
 import 'home_shell_screen.dart';
 
 class AccountIntroScreen extends StatefulWidget {
-  const AccountIntroScreen({super.key, required this.appState});
+  const AccountIntroScreen({
+    super.key,
+    required this.appState,
+    this.initialLoginMode = false,
+    this.onAuthenticated,
+    this.returnSessionOnSuccess = false,
+  });
 
   final AppState appState;
+  final bool initialLoginMode;
+  final void Function(AuthSession session)? onAuthenticated;
+  /// When true (e.g. opened from LoginRequiredScreen), pop with session instead of replacing stack.
+  final bool returnSessionOnSuccess;
 
   @override
   State<AccountIntroScreen> createState() => _AccountIntroScreenState();
@@ -18,8 +28,14 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _submitting = false;
-  bool _loginMode = false;
+  late bool _loginMode;
   String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    _loginMode = widget.initialLoginMode;
+  }
 
   @override
   void dispose() {
@@ -55,6 +71,11 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
           ? await auth.login(email: email, password: password)
           : await auth.register(email: email, password: password, name: name);
       if (!mounted) return;
+      widget.onAuthenticated?.call(session);
+      if (widget.returnSessionOnSuccess) {
+        Navigator.of(context).pop(session);
+        return;
+      }
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => HomeShellScreen(appState: app, session: session),
@@ -62,13 +83,36 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
       );
     } catch (error) {
       if (!mounted) return;
-      setState(() => _errorText = error.toString());
+      setState(() => _errorText = _friendlyError(error));
     } finally {
       auth.close();
       if (mounted) {
         setState(() => _submitting = false);
       }
     }
+  }
+
+  String _friendlyError(Object error) {
+    final text = error.toString();
+    if (text.contains('401') || text.contains('403')) {
+      return 'Invalid email or password. Please try again.';
+    }
+    if (text.contains('409') || text.toLowerCase().contains('exists')) {
+      return 'An account with this email already exists. Try signing in.';
+    }
+    return 'Could not complete sign-in. Please check your details and try again.';
+  }
+
+  void _continueAsGuest() {
+    if (widget.returnSessionOnSuccess) {
+      Navigator.of(context).pop();
+      return;
+    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => HomeShellScreen(appState: widget.appState),
+      ),
+    );
   }
 
   @override
@@ -108,14 +152,15 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
             ),
             const SizedBox(height: 16),
             if (_errorText != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Text(
-                  _errorText!,
-                  style: const TextStyle(color: Colors.red),
+              Card(
+                color: Theme.of(context).colorScheme.errorContainer,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(_errorText!),
                 ),
               ),
-            ElevatedButton(
+            const SizedBox(height: 8),
+            FilledButton(
               onPressed: _submitting ? null : _submitAuth,
               child: _submitting
                   ? const SizedBox(
@@ -123,7 +168,7 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
                       width: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(_loginMode ? 'Sign in' : 'Create account'),
+                  : Text(_loginMode ? 'Login' : 'Register'),
             ),
             const SizedBox(height: 12),
             OutlinedButton(
@@ -135,14 +180,8 @@ class _AccountIntroScreenState extends State<AccountIntroScreen> {
             ),
             const SizedBox(height: 12),
             TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => HomeShellScreen(appState: app),
-                  ),
-                );
-              },
-              child: const Text('Continue without private sync'),
+              onPressed: _submitting ? null : _continueAsGuest,
+              child: const Text('Continue as guest'),
             ),
           ],
         ),

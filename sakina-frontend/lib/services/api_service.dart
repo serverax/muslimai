@@ -302,6 +302,87 @@ class ApiService {
     throw _apiException('checkout failed', res);
   }
 
+  Future<Map<String, dynamic>> checkHealth() async {
+    final healthUrl = ApiConfig.healthUrlFor(baseUrl);
+    final res = await _client.get(Uri.parse(healthUrl)).timeout(ApiConfig.timeout);
+    if (res.statusCode == 200) {
+      try {
+        return jsonDecode(res.body) as Map<String, dynamic>;
+      } catch (_) {
+        return {'status': 'ok'};
+      }
+    }
+    throw ApiException(
+      'health check failed',
+      statusCode: res.statusCode,
+      backendMessage: res.body,
+    );
+  }
+
+  Future<List<dynamic>> scholarQueue() async {
+    final res = await _get('/scholar/queue');
+    if (res.statusCode == 200) {
+      final json = jsonDecode(res.body);
+      if (json is List) return json;
+      if (json is Map && json['items'] is List) return json['items'] as List;
+      if (json is Map && json['queue'] is List) return json['queue'] as List;
+      return const [];
+    }
+    throw _apiException('scholar queue failed', res);
+  }
+
+  Future<Map<String, dynamic>> resolveScholarReview({
+    required String queueId,
+    required String finalAnswer,
+    String status = 'scholar_answered',
+  }) async {
+    final res = await _post('/scholar-reviews/resolve', {
+      'scholar_review_queue_id': queueId,
+      'final_answer': finalAnswer,
+      'status': status,
+    });
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('resolve scholar review failed', res);
+  }
+
+  Future<Map<String, dynamic>> adminGrantEntitlement({
+    required String userId,
+    required String entitlementKey,
+  }) async {
+    final res = await _post('/admin/entitlements/grant', {
+      'user_id': userId,
+      'entitlement_key': entitlementKey,
+    });
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('admin grant failed', res);
+  }
+
+  Future<Map<String, dynamic>> adminRevokeEntitlement({
+    required String userId,
+    required String entitlementKey,
+  }) async {
+    final res = await _post('/admin/entitlements/revoke', {
+      'user_id': userId,
+      'entitlement_key': entitlementKey,
+    });
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('admin revoke failed', res);
+  }
+
+  Future<Map<String, dynamic>> modulesStatus() async {
+    final res = await _get('/modules');
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    }
+    throw _apiException('modules status failed', res);
+  }
+
   Future<UserLearningProfileResponse> getUserLearningProfile() async {
     final res = await _get('/api/user-learning/profile');
     if (res.statusCode == 200) {
